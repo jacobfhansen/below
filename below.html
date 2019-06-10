@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Below</title>
+<link rel="stylesheet" type="text/css" href="below.css" />
+<script type="text/javascript" src="below.js"></script>
+</head>
+<body onload="startGame()">
+    <div class="title-container" id="titleScreen">
+        <div class="below-title">Below</div>
+        <div class="below-front-menu-item" onclick="switchPage('newGameDiv')">New Game</div>
+        <div class="below-front-menu-item" onclick="switchPage('resumeGameDiv')">Continue</div>
+    </div>
+    <div class="" id="cutSceneDiv" style="display: none;">
+        Cut scene!
+    </div>
+    <div class="title-container" id="newGameDiv" style="display: none;">
+        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 1</div>
+        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 2</div>
+        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 3</div>
+    </div>
+    <div class="title-container" id="resumeGameDiv" style="display: none;">
+        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 1</div>
+        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 2</div>
+        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 3</div>
+    </div>
+    <div class="below-game-container" id="gameDiv" style="display: none;">
+        <div class="below-game-left-panel">
+            Lorem ipsum dolor sit amet, rutrum vitae morbi felis vitae interdum volutpat, vel eget pede, wisi praesent taciti venenatis dolor nulla, autem eget, posuere a. Dictum donec tempor magna tortor fermentum congue, nec tincidunt, at volutpat morbi, odio amet tortor. Sem luctus vulputate hymenaeos facilisis sodales. Nunc ac fringilla nonummy amet, pellentesque nullam est dis nec. Proin velit felis tristique vivamus proident, amet duis nam posuere. Urna egestas, mattis feugiat volutpat augue, risus nam eu amet sodales in felis. Sodales felis velit euismod nec vitae, morbi fusce scelerisque erat. Proin sodales aliquet pellentesque, integer quis purus mauris sint voluptas aliquam, diam sit sapien semper rutrum.
+        </div>
+        <div class="below-game-center-panel" id="gameDivCenter">
+            <canvas class="map-canvas" id="mapCanvas"></canvas>
+        </div>        
+    </div>
+    <div class="modal-outer" id="modal" style="display: none;">
+        <div class="modal-inner">
+            Lorem ipsum dolor sit amet, rutrum vitae morbi felis vitae interdum volutpat, vel eget pede, wisi praesent taciti venenatis dolor nulla, autem eget, posuere a. Dictum donec tempor magna tortor fermentum congue, nec tincidunt, at volutpat morbi, odio amet tortor. Sem luctus vulputate hymenaeos facilisis sodales. Nunc ac fringilla nonummy amet, pellentesque nullam est dis nec. Proin velit felis tristique vivamus proident, amet duis nam posuere. Urna egestas, mattis feugiat volutpat augue, risus nam eu amet sodales in felis. Sodales felis velit euismod nec vitae, morbi fusce scelerisque erat. Proin sodales aliquet pellentesque, integer quis purus mauris sint voluptas aliquam, diam sit sapien semper rutrum.
+        </div>
+    </div>
+</body>
+</html>
