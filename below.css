@@ -79,6 +79,17 @@ html, body {
     border-radius: 10px;
     background: var(--cyan);
 }
+.below-game-left-paragraph-current {
+    margin: 10px 10px 0px 10px;
+    color: var(--white)
+}
+.below-game-left-paragraph {
+    margin: 10px 10px 0px 10px;
+    color: var(--grey)
+}
+.below-game-left-paragraph:hover {
+    color: var(--light-grey)
+}
 
 .below-game-center-panel {
     height: 90%;

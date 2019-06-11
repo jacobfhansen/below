@@ -4,6 +4,7 @@ const below = {
                 "#6F4F25","#433900","#9A6759","#444444","#6C6C6C","#9AD284","#6C5EB5","#959595"],
     pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv"],
     gameData: {
+        mapLog: [],
         player: {
             currentMap: 0,
             currentLocation: {
@@ -13,45 +14,38 @@ const below = {
         },
         maps: [
             {
-                name: 'Start',
-                tiles: [
-                    {
-                        x: 0,
-                        y: 0
-                    },
-                    {
-                        x: 1,
-                        y: 0
-                    },
-                    {
-                        x: 2,
-                        y: 0
-                    },
-                    {
-                        x: 0,
-                        y: 1
-                    },
-                    {
-                        x: 1,
-                        y: 1
-                    },
-                    {
-                        x: 2,
-                        y: 1
-                    },
-                    {
-                        x: 0,
-                        y: 2
-                    },
-                    {
-                        x: 1,
-                        y: 2
-                    },
-                    {
-                        x: 2,
-                        y: 2
-                    }
-                ]
+                name: "Start",
+                tiles: {
+                    xm1y0: { x: -1, y: 0 },
+                    xm1y1: { x: -1, y: 1 },
+                    xm1y2: { x: -1, y: 2 },
+                    xm1y3: { x: -1, y: 3 },
+                    xm1y4: { x: -1, y: 4 },
+                    x0y0: { x: 0, y: 0 },
+                    x0y1: { x: 0, y: 1 },
+                    x0y2: { x: 0, y: 2 },
+                    x0y3: { x: 0, y: 3 },
+                    x0y4: { x: 0, y: 4 },
+                    x1y0: { x: 1, y: 0, text: "There are claw marks on the floor" },
+                    x1y1: { x: 1, y: 1 },                                        
+                    x1y2: { x: 1, y: 2 },
+                    x1y3: { x: 1, y: 3 },
+                    x1y4: { x: 1, y: 4, text: "There is light from above" },
+                    x2y0: { x: 2, y: 0 },                    
+                    x2y1: { x: 2, y: 1 },
+                    x2y2: { x: 2, y: 2 },
+                    x2y3: { x: 2, y: 3 },
+                    x2y4: { x: 2, y: 4 },
+                    x3y0: { x: 3, y: 0 },
+                    x3y1: { x: 3, y: 1 },
+                    x3y2: { x: 3, y: 2 },
+                    x3y3: { x: 3, y: 3 },
+                    x3y4: { x: 3, y: 4 },
+                    x1ym1: { x: 1, y: -1 },
+                    x1ym2: { x: 1, y: -2 },
+                    x1ym3: { x: 1, y: -3 },
+                    x2ym3: { x: 2, y: -3 }
+                }
             }
         ]
     }
@@ -68,30 +62,7 @@ function checkKey(e) {
     e = e || window.event;
     // Map div
     if (document.getElementById("gameDiv").style.display !== 'none') {
-        var curY = below.gameData.player.currentLocation.y,
-            curX = below.gameData.player.currentLocation.x;
-        
-        foundTile = function(x, y) {
-            return below.gameData.maps[below.gameData.player.currentMap].tiles.find(function(element) {
-                return (element.x === x && element.y === y);
-            });
-        }
-        if (e.keyCode == '38' && foundTile(curX, curY -1)) {
-            below.gameData.player.currentLocation.y -= 1;
-            drawMapCanvas();
-        }
-        else if (e.keyCode == '40' && foundTile(curX, curY +1)) {
-            below.gameData.player.currentLocation.y += 1;
-            drawMapCanvas();
-        }
-        else if (e.keyCode == '37' && foundTile(curX -1, curY)) {
-           below.gameData.player.currentLocation.x -= 1;
-           drawMapCanvas();
-        }
-        else if (e.keyCode == '39' && foundTile(curX +1, curY)) {
-           below.gameData.player.currentLocation.x += 1;
-           drawMapCanvas();
-        }
+        moveOnMap(e);
     }
 }
 
@@ -127,6 +98,68 @@ function loadGame(game) {
     below.gameData = localstorageBelow.saves[game];
 }
 
+function moveOnMap(e) {
+    var curY = below.gameData.player.currentLocation.y,
+        curX = below.gameData.player.currentLocation.x,
+        playerMoved = false;
+    
+    foundTile = function(x, y) {
+        var index = 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
+        return below.gameData.maps[below.gameData.player.currentMap].tiles[index];
+        //return below.gameData.maps[below.gameData.player.currentMap].tiles.find(function(element) {
+        //    return (element.x === x && element.y === y);
+        //});
+    }
+    
+    if (e.keyCode == '38' && foundTile(curX, curY -1)) {
+        below.gameData.player.currentLocation.y -= 1;
+        playerMoved = true;
+    }
+    else if (e.keyCode == '40' && foundTile(curX, curY +1)) {
+        below.gameData.player.currentLocation.y += 1;
+        playerMoved = true;
+    }
+    else if (e.keyCode == '37' && foundTile(curX -1, curY)) {
+       below.gameData.player.currentLocation.x -= 1;
+       playerMoved = true;
+    }
+    else if (e.keyCode == '39' && foundTile(curX +1, curY)) {
+       below.gameData.player.currentLocation.x += 1;
+       playerMoved = true;
+    }
+    if (playerMoved) {        
+        var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
+        console.log(1, tile);
+        if (tile['text']) {
+            below.gameData.mapLog.push(tile['text']);
+            maintainMapLog();
+        }
+    }
+    
+    drawMapCanvas();
+}
+
+function maintainMapLog() {
+    var gameLogDiv = document.getElementById("gameLogDiv");
+    while (gameLogDiv.firstChild) {
+        gameLogDiv.removeChild(gameLogDiv.firstChild);
+    }
+    console.log(1,gameLogDiv);
+    below.gameData.mapLog.slice().reverse().forEach(function(log, index) {
+        var node = document.createElement("P");
+        if (index === 0) {
+            node.className = "below-game-left-paragraph-current";
+        }
+        else {
+            node.className = "below-game-left-paragraph";
+        }
+        
+        var textnode = document.createTextNode(log);
+        node.appendChild(textnode);
+        gameLogDiv.appendChild(node);
+    });
+}
+
 function drawMapCanvas() {
     var gameDivCenter = document.getElementById("gameDivCenter");
     var canvas = document.getElementById("mapCanvas");
@@ -139,13 +172,22 @@ function drawMapCanvas() {
     var thickness = 1;
     var width = 50;    
     var horisontalCenter = canvas.height / 2;
-    var verticalCenter = canvas.width / 2;    
-    below.gameData.maps[0].tiles.forEach(function(tile) {
-        context.fillStyle = "#959595";
-        context.fillRect( (tile.x * width) + verticalCenter, (tile.y * width) + (horisontalCenter) , width, width);
-        context.fillStyle = "#6C6C6C";
-        context.fillRect( (tile.x * width) + (thickness + verticalCenter), (tile.y * width) + (thickness + horisontalCenter), width - (thickness * 2), width - (thickness * 2));
-    });
+    var verticalCenter = canvas.width / 2;
+    for (var k in below.gameData.maps[0].tiles) {
+        if (typeof below.gameData.maps[0].tiles[k] !== 'function') {
+            var tile = below.gameData.maps[0].tiles[k];
+            context.fillStyle = "#959595";
+            context.fillRect( (tile.x * width) + verticalCenter, (tile.y * width) + (horisontalCenter) , width, width);
+            context.fillStyle = "#6C6C6C";
+            context.fillRect( (tile.x * width) + (thickness + verticalCenter), (tile.y * width) + (thickness + horisontalCenter), width - (thickness * 2), width - (thickness * 2));
+        }
+    }
+    //below.gameData.maps[0].tiles.forEach(function(tile) {
+        //context.fillStyle = "#959595";
+        //context.fillRect( (tile.x * width) + verticalCenter, (tile.y * width) + (horisontalCenter) , width, width);
+        //context.fillStyle = "#6C6C6C";
+        //context.fillRect( (tile.x * width) + (thickness + verticalCenter), (tile.y * width) + (thickness + horisontalCenter), width - (thickness * 2), width - (thickness * 2));
+    //});
     
     // Draw player and monster sprites
     context.fillStyle = "#9A6759";
@@ -164,7 +206,7 @@ function drawMapCanvas() {
         });
 
     }, false);
-    console.log(123,canvas);
+    
     gameDivCenter.appendChild(canvas);
 }
 
