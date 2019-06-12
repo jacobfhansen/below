@@ -4,13 +4,11 @@ const below = {
                 "#6F4F25","#433900","#9A6759","#444444","#6C6C6C","#9AD284","#6C5EB5","#959595"],
     pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv"],
     gameData: {
+        mapZoom: 50,
         mapLog: [],
         player: {
             currentMap: 0,
-            currentLocation: {
-                x: 2,
-                y: 2
-            }
+            currentLocation: { x: 2, y: 2 }
         },
         maps: [
             {
@@ -57,6 +55,18 @@ function confirmExit() {
 }
 
 document.onkeydown = checkKey;
+document.onwheel = checkWheel;
+
+function checkWheel(e) {
+    e = e || window.event;
+    const delta = Math.sign(e.deltaY);
+    if (document.getElementById("gameDiv").style.display !== 'none') {
+        below.gameData.mapZoom += (4*delta);
+        if (below.gameData.mapZoom < 25) below.gameData.mapZoom = 25;
+        if (below.gameData.mapZoom > 75) below.gameData.mapZoom = 75;
+        drawMapCanvas();
+    }
+}
 
 function checkKey(e) {
     e = e || window.event;
@@ -170,16 +180,19 @@ function drawMapCanvas() {
     
     // Draw tiles
     var thickness = 1;
-    var width = 50;    
+    var width = below.gameData.mapZoom;    
     var horisontalCenter = canvas.height / 2;
     var verticalCenter = canvas.width / 2;
+    var verticalOffset = below.gameData.player.currentLocation.y * width;
+    var horisontalOffset = below.gameData.player.currentLocation.x * width;
+    console.log('offset: ', verticalOffset, horisontalOffset);
     for (var k in below.gameData.maps[0].tiles) {
         if (typeof below.gameData.maps[0].tiles[k] !== 'function') {
             var tile = below.gameData.maps[0].tiles[k];
             context.fillStyle = "#959595";
-            context.fillRect( (tile.x * width) + verticalCenter, (tile.y * width) + (horisontalCenter) , width, width);
+            context.fillRect( (tile.x * width) - (width/2) + verticalCenter - horisontalOffset, (tile.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
             context.fillStyle = "#6C6C6C";
-            context.fillRect( (tile.x * width) + (thickness + verticalCenter), (tile.y * width) + (thickness + horisontalCenter), width - (thickness * 2), width - (thickness * 2));
+            context.fillRect( (tile.x * width) - (width/2) + (thickness + verticalCenter) - horisontalOffset, (tile.y * width) - (width/2) + (thickness + horisontalCenter) - verticalOffset, width - (thickness * 2), width - (thickness * 2));
         }
     }
     //below.gameData.maps[0].tiles.forEach(function(tile) {
@@ -192,7 +205,8 @@ function drawMapCanvas() {
     // Draw player and monster sprites
     context.fillStyle = "#9A6759";
     context.beginPath();
-    context.arc( (below.gameData.player.currentLocation.x * width) + (width / 2) + verticalCenter, (below.gameData.player.currentLocation.y * width) + (width / 2) + horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
+    //context.arc( (below.gameData.player.currentLocation.x * width) + (width / 2) + verticalCenter, (below.gameData.player.currentLocation.y * width) + (width / 2) + horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
+    context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
     context.fill();
     
     canvas.addEventListener('click', function(event) {
