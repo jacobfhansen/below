@@ -1,4 +1,6 @@
 const below = {
+    tick: undefined,
+    tickSpeed: 5,
     version: '0.0.1',
     c64Colors: ["#000000","#FFFFFF","#68372B","#70A4B2","#6F3D86","#588D43","352879","#B8C76F",
                 "#6F4F25","#433900","#9A6759","#444444","#6C6C6C","#9AD284","#6C5EB5","#959595"],
@@ -8,18 +10,22 @@ const below = {
         mapLog: [],
         player: {
             currentMap: 0,
-            currentLocation: { x: 2, y: 2 }
+            currentLocation: { x: 2, y: 2 },
+            destinationLocation:  { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
         },
         monsterTypes: {
             1: {
                     name: "Giant rat",
                     fraction: 2,
-                    movement: 0.05,
+                    movement: 0.3,
                     color: "#9A6759"
             },
             2:  {
                     name: "Bat",
-                    fraction: 1
+                    fraction: 1,
+                    movement: 0.60,
+                    color: "#433900",
+                    icon: "bat.png"
             },
             3: {
                     name: "Centipede",
@@ -75,13 +81,71 @@ const below = {
                     x4y2: { x: 4, y: 2 },
                     x5y2: { x: 5, y: 2 },
                     x6y2: { x: 6, y: 2 },
-                    x7y2: { x: 7, y: 2 }
+                    x7y2: { x: 7, y: 2 },
+                    x8y2: { x: 8, y: 2 },
+                    x9y2: { x: 9, y: 2 },
+                    x9y3: { x: 9, y: 3 },
+                    x9y4: { x: 9, y: 4 },
+                    x10y2: { x: 10, y: 2 },
+                    x10y3: { x: 10, y: 3 },
+                    x10y4: { x: 10, y: 4 },
+                    x11y2: { x: 11, y: 2 },
+                    x11y3: { x: 11, y: 3 },
+                    x11y4: { x: 11, y: 4 },
+                    x11y1: { x: 11, y: 1 },
+                    x11y0: { x: 11, y: 0 },
+                    x11ym1: { x: 11, y: -1 },
+                    x11ym2: { x: 11, y: -2 },
+                    x11ym3: { x: 11, y: -3 },
+                    x11ym4: { x: 11, y: -4 },
+                    x11ym5: { x: 11, y: -5 },
+                    x11ym6: { x: 11, y: -6 },
+                    x10ym2: { x: 10, y: -2 },
+                    x9ym2: { x: 9, y: -2 },
+                    x8ym2: { x: 8, y: -2 },
+                    x7ym2: { x: 7, y: -2 },
+                    x9ym1: { x: 9, y: -1 },
+                    x8ym1: { x: 8, y: -1 },
+                    x7ym1: { x: 7, y: -1 },
+                    x9y0: { x: 9, y: 0 },
+                    x8y0: { x: 8, y: 0 },
+                    x7y0: { x: 7, y: 0 },
+                    x9ym3: { x: 9, y: -3 },
+                    x8ym3: { x: 8, y: -3 },
+                    x7ym3: { x: 7, y: -3 },
+                    x3ym3: { x: 3, y: -3 },
+                    x9ym4: { x: 9, y: -4 },
+                    x8ym4: { x: 8, y: -4 },
+                    x7ym4: { x: 7, y: -4 },
+                    x10ym6: { x: 10, y: -6 },
+                    x9ym6: { x: 9, y: -6 },
+                    x8ym6: { x: 8, y: -6 },
+                    x7ym6: { x: 7, y: -6 },
+                    x6ym6: { x: 6, y: -6 },
+                    x5ym6: { x: 5, y: -6 },
+                    x4ym6: { x: 4, y: -6 },
+                    x5ym7: { x: 4, y: -7 },
+                    x5ym5: { x: 5, y: -5 },
+                    x4ym5: { x: 4, y: -5 },
+                    x5ym4: { x: 5, y: -4 },
+                    x4ym4: { x: 4, y: -4 },
+                    x5ym3: { x: 5, y: -3 },
+                    x4ym3: { x: 4, y: -3 },
+                    x5ym2: { x: 5, y: -2 },
+                    x4ym2: { x: 4, y: -2 },
                 },
                 monsters: [
                     {
                         type: 1,
                         position: { x: -6, y: 2 },
-                        status: 1
+                        status: 1,
+                        destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
+                    },
+                    {
+                        type: 2,
+                        position: { x: 7, y: 2 },
+                        status: 1,
+                        destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
                     }
                 ],
                 npcs: [ 1 ]
@@ -89,6 +153,12 @@ const below = {
         ]
     }
 }
+
+var boss2Img = new Image();
+boss2Img.src = "images/boss2.png";
+
+var batImg = new Image();
+batImg.src = "images/bat.png";
 
 window.onbeforeunload = confirmExit;
 function confirmExit() {
@@ -104,8 +174,8 @@ function checkWheel(e) {
     if (document.getElementById("gameDiv").style.display !== 'none') {
         below.gameData.mapZoom += (4*delta);
         if (below.gameData.mapZoom < 25) below.gameData.mapZoom = 25;
-        if (below.gameData.mapZoom > 75) below.gameData.mapZoom = 75;
-        //drawMapCanvas();
+        if (below.gameData.mapZoom > 100) below.gameData.mapZoom = 100;
+        drawMapCanvas();
     }
 }
 
@@ -162,14 +232,6 @@ function moveOnMap(e) {
         curX = below.gameData.player.currentLocation.x,
         playerMoved = false;
     
-    //foundTile = function(x, y) {
-        //var index = 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
-        //return below.gameData.maps[below.gameData.player.currentMap].tiles[index];
-        //return below.gameData.maps[below.gameData.player.currentMap].tiles.find(function(element) {
-            //return (element.x === x && element.y === y);
-        //});
-    //}
-    //console.log(1,e.keyCode);
     if (e.keyCode == '69') {
         console.log('Interact');
     }
@@ -177,20 +239,24 @@ function moveOnMap(e) {
         console.log('Inventory');
     }
     if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1)) {
-        below.gameData.player.currentLocation.y -= 1;
+        below.gameData.player.destinationLocation.yVelocity = -1;
+        below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y - 1;
         playerMoved = true;
     }
     else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1)) {
-        below.gameData.player.currentLocation.y += 1;
+        below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y + 1;
+        below.gameData.player.destinationLocation.yVelocity = 1;
         playerMoved = true;
     }
     else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY)) {
-       below.gameData.player.currentLocation.x -= 1;
-       playerMoved = true;
+        below.gameData.player.destinationLocation.xVelocity = -1;
+        below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x - 1;
+        playerMoved = true;
     }
     else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY)) {
-       below.gameData.player.currentLocation.x += 1;
-       playerMoved = true;
+        below.gameData.player.destinationLocation.xVelocity = 1;
+        below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x + 1;
+        playerMoved = true;
     }
     if (playerMoved) {        
         var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
@@ -251,27 +317,25 @@ function drawMapCanvas() {
             context.fillRect( (tile.x * width) - (width/2) + (thickness + verticalCenter) - horisontalOffset, (tile.y * width) - (width/2) + (thickness + horisontalCenter) - verticalOffset, width - (thickness * 2), width - (thickness * 2));
         }
     }
-    //below.gameData.maps[curMap].tiles.forEach(function(tile) {
-        //context.fillStyle = "#959595";
-        //context.fillRect( (tile.x * width) + verticalCenter, (tile.y * width) + (horisontalCenter) , width, width);
-        //context.fillStyle = "#6C6C6C";
-        //context.fillRect( (tile.x * width) + (thickness + verticalCenter), (tile.y * width) + (thickness + horisontalCenter), width - (thickness * 2), width - (thickness * 2));
-    //});
     
     // Draw player and monster sprites
     // PLAYER
     context.fillStyle = "#B8C76F";
     context.beginPath();
-    //context.arc( (below.gameData.player.currentLocation.x * width) + (width / 2) + verticalCenter, (below.gameData.player.currentLocation.y * width) + (width / 2) + horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
     context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
     context.fill();
     // MONSTERS
     below.gameData.maps[curMap].monsters.forEach(function(monster) {
         var type = below.gameData.monsterTypes[monster.type];
-        context.fillStyle = type.color;
-        context.beginPath();
-        context.arc( (monster.position.x * width) + verticalCenter - horisontalOffset, (monster.position.y * width) + horisontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
-        context.fill();
+        if (type["icon"]) {
+            context.drawImage(batImg, (monster.position.x * width) + verticalCenter - horisontalOffset - (width/2), (monster.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
+        }
+        else {
+            context.fillStyle = type.color;
+            context.beginPath();        
+            context.arc( (monster.position.x * width) + verticalCenter - horisontalOffset, (monster.position.y * width) + horisontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
+            context.fill();
+        }
     });
     
     canvas.addEventListener('click', function(event) {
@@ -291,38 +355,111 @@ function drawMapCanvas() {
 
 function mapGameLoop() {
     // This one loops and loops
-    var tick = window.requestAnimationFrame(mapGameLoop);
+    below.tick = window.requestAnimationFrame(mapGameLoop);
+    //console.log(below.tick % below.tickSpeed);
     //console.log(tick, below.tick);
-    // Calculate monster movement
     var curMap = below.gameData.player.currentMap;
-    below.gameData.maps[curMap].monsters.forEach(function(monster) {
-        // First, do moster move?
-        var type = below.gameData.monsterTypes[monster.type];
-        if (Math.random() < type.movement) {
-            // What direction do it move?
-            var dir = (Math.floor(Math.random() * 4)) + 1;
-            console.log('foundTile',foundTile(monster.position.x, monster.position.y - 1));
-            if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) { monster.position.y-- }
-            else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1)) { monster.position.y++ }
-            else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y)) { monster.position.x-- }
-            else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y)) { monster.position.x++ }
-            console.log(dir, monster.position);
+    if (below.tick % below.tickSpeed === 1) {
+        // Calculate new monster movement
+        below.gameData.maps[curMap].monsters.forEach(function(monster) {
+            // First, do monster move?
+            var type = below.gameData.monsterTypes[monster.type];
+            if (Math.random() < type.movement) {
+                // What direction do it move?
+                var dir = (Math.floor(Math.random() * 4)) + 1;
+                //console.log('foundTile',foundTile(monster.position.x, monster.position.y - 1));
+                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) {
+                    monster.destPos.yVelocity = -1;
+                    monster.destPos.y = monster.position.y - 1;
+                    //monster.position.y-- 
+                }
+                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1)) {
+                    monster.destPos.yVelocity = 1;
+                    monster.destPos.y = monster.position.y + 1;
+                    //monster.position.y++ 
+                }
+                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y)) {
+                    monster.destPos.xVelocity = -1;
+                    monster.destPos.x = monster.position.x -1;
+                    //monster.position.x--
+                }
+                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y)) {
+                    monster.destPos.xVelocity = 1;
+                    monster.destPos.x = monster.position.x + 1;
+                    //monster.position.x++
+                }
+                //console.log(dir, monster.position);
+            }
+        });
+    }
+    var moving = false;
+    // Player moving?
+    if (below.gameData.player.destinationLocation.xVelocity || below.gameData.player.destinationLocation.yVelocity) moving = true;
+    // Monster moving?
+    if (!moving) {
+        // Check monsters
+        below.gameData.maps[curMap].monsters.forEach(function(monster) {
+            if (monster.destPos.xVelocity || monster.destPos.yVelocity) {
+                moving = true;
+                return;
+            }
+        });
+    }
+    // Figure out if anything is moving and move it
+    if (moving) {
+        if (below.gameData.player.destinationLocation.xVelocity) {
+            // Continue here, subtract/add a fraction of currentLocation
+            below.gameData.player.currentLocation.x += (below.gameData.player.destinationLocation.xVelocity/below.tickSpeed);
+            //console.log(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
+            if (below.tick % below.tickSpeed === 0) {
+                below.gameData.player.currentLocation.x = below.gameData.player.destinationLocation.x;
+                below.gameData.player.destinationLocation.xVelocity = null;
+            }
         }
-    })
-    below.tick = tick;
-    // Then draw
-    drawMapCanvas();
+        if (below.gameData.player.destinationLocation.yVelocity) {
+            below.gameData.player.currentLocation.y += (below.gameData.player.destinationLocation.yVelocity/below.tickSpeed);
+            //console.log(below.gameData.player.currentLocation.y, below.gameData.player.destinationLocation.y);
+            if (below.tick % below.tickSpeed === 0) {
+                below.gameData.player.currentLocation.y = below.gameData.player.destinationLocation.y;
+                below.gameData.player.destinationLocation.yVelocity = null;
+            }
+        }
+        below.gameData.maps[curMap].monsters.forEach(function(monster) {
+            if (monster.destPos.xVelocity) {
+                monster.position.x += (monster.destPos.xVelocity/below.tickSpeed);
+                if (below.tick % below.tickSpeed === 0) {
+                    monster.position.x = monster.destPos.x;
+                    monster.destPos.xVelocity = null;
+                }
+            }
+            if (monster.destPos.yVelocity) {
+                monster.position.y += (monster.destPos.yVelocity/below.tickSpeed);
+                if (below.tick % below.tickSpeed === 0) {
+                    monster.position.y = monster.destPos.y;
+                    monster.destPos.yVelocity = null;
+                }
+            }
+        });
+        // Then draw current map
+        console.log();
+        drawMapCanvas();
+        //window.cancelAnimationFrame(below.tick);
+    }
+    
+    // To stop, somehow: 
+    //window.cancelAnimationFrame(below.tick);
+    //below.tick = undefined;
 }
 
 function startGame() {
     respondToVisibility(document.getElementById("gameDiv"), visible => {
         const feedbackEl = document.getElementById("visibilityFeedback");
         if(visible) {
-            //drawMapCanvas();
+            drawMapCanvas();
             mapGameLoop();
         }
         else {
-            console.log(2);
+            
         }
     });
 }
