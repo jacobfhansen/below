@@ -20,7 +20,8 @@ const below = {
                     fraction: 2,
                     movement: 0.3,
                     color: "#9A6759",
-                    blocking: true
+                    blocking: true,
+                    description: "A giant rat blocks your way"
             },
             2:  {
                     name: "Bat",
@@ -28,12 +29,14 @@ const below = {
                     movement: 0.60,
                     color: "#433900",
                     icon: "bat.png",
-                    blocking: true
+                    blocking: true,
+                    description: "A bat is in your way"
             },
             3: {
                     name: "Centipede",
                     fraction: 1,
-                    blocking: true
+                    blocking: true,
+                    description: "A centipede blocks the path"
             }
         },
         obstacleTypes: {
@@ -336,6 +339,25 @@ function isBlocked(x, y) {
     return blockedByObstacle;
 }
 
+function getBlockedMessage(x, y) {
+    var curMap = below.gameData.player.currentMap;
+    // Check monsters
+    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+        return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
+    });
+    if (monster) {
+        return below.gameData.monsterTypes[monster.type].description || "Not sure what good that would do";
+    }
+    // Check obstacles
+    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+        return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
+    });
+    if (obstacle) {
+        return below.gameData.obstacleTypes[obstacle.type].description || "Not sure what good that would do";
+    }
+    return null;
+}
+
 function moveOnMap(e) {
     var curY = below.gameData.player.currentLocation.y,
         curX = below.gameData.player.currentLocation.x,
@@ -347,25 +369,57 @@ function moveOnMap(e) {
     if (e.keyCode == '81') {
         console.log('Inventory');
     }
-    if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1) && !isBlocked(curX, curY -1)) {
-        below.gameData.player.destinationLocation.yVelocity = -1;
-        below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y - 1;
-        playerMoved = true;
+    if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1)) {
+        if (!isBlocked(curX, curY -1)) {
+            below.gameData.player.destinationLocation.yVelocity = -1;
+            below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y - 1;
+            playerMoved = true;
+        } else {
+            var msg = getBlockedMessage(curX, curY -1);
+            if (msg) {
+                below.gameData.mapLog.push(msg);
+                maintainMapLog();
+            }
+        }
     }
-    else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1) && !isBlocked(curX, curY +1)) {
-        below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y + 1;
-        below.gameData.player.destinationLocation.yVelocity = 1;
-        playerMoved = true;
+    else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1)) {
+        if (!isBlocked(curX, curY +1)) {
+            below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y + 1;
+            below.gameData.player.destinationLocation.yVelocity = 1;
+            playerMoved = true;
+        } else {
+            var msg = getBlockedMessage(curX, curY +1);
+            if (msg) {
+                below.gameData.mapLog.push(msg);
+                maintainMapLog();
+            }
+        }
     }
-    else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY) && !isBlocked(curX -1, curY)) {
-        below.gameData.player.destinationLocation.xVelocity = -1;
-        below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x - 1;
-        playerMoved = true;
+    else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY)) {
+        if (!isBlocked(curX -1, curY)) {
+            below.gameData.player.destinationLocation.xVelocity = -1;
+            below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x - 1;
+            playerMoved = true;
+        } else {
+            var msg = getBlockedMessage(curX -1, curY);
+            if (msg) {
+                below.gameData.mapLog.push(msg);
+                maintainMapLog();
+            }
+        }
     }
-    else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY) && !isBlocked(curX +1, curY)) {
-        below.gameData.player.destinationLocation.xVelocity = 1;
-        below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x + 1;
-        playerMoved = true;
+    else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY)) {
+        if (!isBlocked(curX +1, curY)) {
+            below.gameData.player.destinationLocation.xVelocity = 1;
+            below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x + 1;
+            playerMoved = true;
+        } else {
+            var msg = getBlockedMessage(curX +1, curY);
+            if (msg) {
+                below.gameData.mapLog.push(msg);
+                maintainMapLog();
+            }
+        }
     }
     if (playerMoved) {        
         var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
