@@ -19,18 +19,29 @@ const below = {
                     name: "Giant rat",
                     fraction: 2,
                     movement: 0.3,
-                    color: "#9A6759"
+                    color: "#9A6759",
+                    blocking: true
             },
             2:  {
                     name: "Bat",
                     fraction: 1,
                     movement: 0.60,
                     color: "#433900",
-                    icon: "bat.png"
+                    icon: "bat.png",
+                    blocking: true
             },
             3: {
                     name: "Centipede",
-                    fraction: 1
+                    fraction: 1,
+                    blocking: true
+            }
+        },
+        obstacleTypes: {
+            1: {
+                name: "Rock",
+                description: "A rock blocking your way",
+                color: "#433900",
+                blocking: true
             }
         },
         maps: [
@@ -148,6 +159,12 @@ const below = {
                         status: 1,
                         destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
                     }
+                ],
+                obstacles: [
+                    {
+                        type: 1,
+                        position: { x: 6, y: 2 },                        
+                    }                        
                 ],
                 npcs: [ 1 ]
             }
@@ -305,6 +322,20 @@ function foundTile(x, y) {
     //});
 }
 
+function isBlocked(x, y) {
+    var curMap = below.gameData.player.currentMap;
+    // Check monsters
+    var blockedByMonster = below.gameData.maps[curMap].monsters.some(function(monster) {
+        return monster.position.x === x && monster.position.y === y && below.gameData.monsterTypes[monster.type].blocking;
+    });
+    if (blockedByMonster) return true;
+    // Check obstacles
+    var blockedByObstacle = below.gameData.maps[curMap].obstacles.some(function(obstacle) {
+        return obstacle.position.x === x && obstacle.position.y === y && below.gameData.obstacleTypes[obstacle.type].blocking;
+    });
+    return blockedByObstacle;
+}
+
 function moveOnMap(e) {
     var curY = below.gameData.player.currentLocation.y,
         curX = below.gameData.player.currentLocation.x,
@@ -316,22 +347,22 @@ function moveOnMap(e) {
     if (e.keyCode == '81') {
         console.log('Inventory');
     }
-    if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1)) {
+    if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1) && !isBlocked(curX, curY -1)) {
         below.gameData.player.destinationLocation.yVelocity = -1;
         below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y - 1;
         playerMoved = true;
     }
-    else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1)) {
+    else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1) && !isBlocked(curX, curY +1)) {
         below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y + 1;
         below.gameData.player.destinationLocation.yVelocity = 1;
         playerMoved = true;
     }
-    else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY)) {
+    else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY) && !isBlocked(curX -1, curY)) {
         below.gameData.player.destinationLocation.xVelocity = -1;
         below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x - 1;
         playerMoved = true;
     }
-    else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY)) {
+    else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY) && !isBlocked(curX +1, curY)) {
         below.gameData.player.destinationLocation.xVelocity = 1;
         below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x + 1;
         playerMoved = true;
@@ -410,10 +441,16 @@ function drawMapCanvas() {
         }
         else {
             context.fillStyle = type.color;
-            context.beginPath();        
+            context.beginPath();
             context.arc( (monster.position.x * width) + verticalCenter - horisontalOffset, (monster.position.y * width) + horisontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
             context.fill();
         }
+    });
+    // OBSTACLES
+    below.gameData.maps[curMap].obstacles.forEach(function(obstacle) {
+        var type = below.gameData.obstacleTypes[obstacle.type];
+        context.fillStyle = type.color || "#433900";
+        context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
     });
     
     canvas.addEventListener('click', function(event) {
@@ -446,22 +483,22 @@ function mapGameLoop() {
                 // What direction do it move?
                 var dir = (Math.floor(Math.random() * 4)) + 1;
                 //console.log('foundTile',foundTile(monster.position.x, monster.position.y - 1));
-                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) {
+                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1) && !isBlocked(monster.position.x, monster.position.y - 1)) {
                     monster.destPos.yVelocity = -1;
                     monster.destPos.y = monster.position.y - 1;
-                    //monster.position.y-- 
+                    //monster.position.y--
                 }
-                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1)) {
+                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1) && !isBlocked(monster.position.x, monster.position.y + 1)) {
                     monster.destPos.yVelocity = 1;
                     monster.destPos.y = monster.position.y + 1;
-                    //monster.position.y++ 
+                    //monster.position.y++
                 }
-                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y)) {
+                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y) && !isBlocked(monster.position.x - 1, monster.position.y)) {
                     monster.destPos.xVelocity = -1;
                     monster.destPos.x = monster.position.x -1;
                     //monster.position.x--
                 }
-                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y)) {
+                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y) && !isBlocked(monster.position.x + 1, monster.position.y)) {
                     monster.destPos.xVelocity = 1;
                     monster.destPos.x = monster.position.x + 1;
                     //monster.position.x++
