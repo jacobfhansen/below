@@ -50,6 +50,11 @@ html, body {
     color: var(--white);
     cursor: pointer;
 }
+.below-front-menu-item.menu-selected {
+    font-weight: bold;
+    color: var(--yellow);
+    cursor: pointer;
+}
 .below-front-menu-item.slot-initiated {
     color: var(--yellow);
 }

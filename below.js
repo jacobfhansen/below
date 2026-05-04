@@ -233,6 +233,14 @@ function updateSlotColors(menuId) {
             slotEl.classList.remove('slot-initiated');
         }
     });
+    // Select first item
+    slots.forEach(function(slotEl, index) {
+        if (index === 0) {
+            slotEl.classList.add('menu-selected');
+        } else {
+            slotEl.classList.remove('menu-selected');
+        }
+    });
 }
 
 function startNewGame(slotIndex) {
@@ -297,12 +305,57 @@ function checkWheel(e) {
 
 function checkKey(e) {
     e = e || window.event;
+    // Menu screens
+    if (document.getElementById("titleScreen").style.display !== 'none') {
+        handleMenuKey(e, 'titleScreen');
+    }
+    else if (document.getElementById("newGameDiv").style.display !== 'none') {
+        handleMenuKey(e, 'newGameDiv');
+    }
+    else if (document.getElementById("resumeGameDiv").style.display !== 'none') {
+        handleMenuKey(e, 'resumeGameDiv');
+    }
     // Map div
-    if (document.getElementById("gameDiv").style.display !== 'none') {
+    else if (document.getElementById("gameDiv").style.display !== 'none') {
         if (below.choiceEvent) {
             handleChoiceEventKey(e);
         } else {
             moveOnMap(e);
+        }
+    }
+}
+
+function handleMenuKey(e, menuId) {
+    var menu = document.getElementById(menuId);
+    var items = menu.querySelectorAll('.below-front-menu-item');
+    var curIndex = -1;
+    
+    // Find currently selected item
+    items.forEach(function(item, index) {
+        if (item.classList.contains('menu-selected')) {
+            curIndex = index;
+        }
+    });
+    
+    if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 87 || e.keyCode === 83) {
+        e.preventDefault();
+        // Remove old selection
+        if (curIndex >= 0) {
+            items[curIndex].classList.remove('menu-selected');
+        }
+        // Calculate new index
+        if (e.keyCode === 40 || e.keyCode === 83) { // Down
+            curIndex = (curIndex + 1) % items.length;
+        } else { // Up
+            curIndex = (curIndex - 1 + items.length) % items.length;
+        }
+        items[curIndex].classList.add('menu-selected');
+        items[curIndex].scrollIntoView({ block: 'nearest' });
+    }
+    else if (e.keyCode === 13 || e.keyCode === 69) { // Enter or E
+        e.preventDefault();
+        if (curIndex >= 0) {
+            items[curIndex].click();
         }
     }
 }
@@ -425,6 +478,16 @@ function switchPage(page) {
             pageEl.style.display = "flex";
             if (curPage === 'newGameDiv' || curPage === 'resumeGameDiv') {
                 updateSlotColors(curPage);
+            } else if (curPage === 'titleScreen') {
+                // Select first item in title screen
+                var items = pageEl.querySelectorAll('.below-front-menu-item');
+                items.forEach(function(item, index) {
+                    if (index === 0) {
+                        item.classList.add('menu-selected');
+                    } else {
+                        item.classList.remove('menu-selected');
+                    }
+                });
             }
         }
         else {
