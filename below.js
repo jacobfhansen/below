@@ -5,6 +5,7 @@ const below = {
     c64Colors: ["#000000","#FFFFFF","#68372B","#70A4B2","#6F3D86","#588D43","352879","#B8C76F",
                 "#6F4F25","#433900","#9A6759","#444444","#6C6C6C","#9AD284","#6C5EB5","#959595"],
     pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv"],
+    currentSlot: undefined,
     gameData: {
         mapZoom: 50,
         mapLog: [],
@@ -18,18 +19,29 @@ const below = {
                     name: "Giant rat",
                     fraction: 2,
                     movement: 0.3,
-                    color: "#9A6759"
+                    color: "#9A6759",
+                    blocking: true
             },
             2:  {
                     name: "Bat",
                     fraction: 1,
                     movement: 0.60,
                     color: "#433900",
-                    icon: "bat.png"
+                    icon: "bat.png",
+                    blocking: true
             },
             3: {
                     name: "Centipede",
-                    fraction: 1
+                    fraction: 1,
+                    blocking: true
+            }
+        },
+        obstacleTypes: {
+            1: {
+                name: "Rock",
+                description: "A rock blocking your way",
+                color: "#433900",
+                blocking: true
             }
         },
         maps: [
@@ -148,9 +160,88 @@ const below = {
                         destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
                     }
                 ],
+                obstacles: [
+                    {
+                        type: 1,
+                        position: { x: 6, y: 2 },                        
+                    }                        
+                ],
                 npcs: [ 1 ]
             }
         ]
+    }
+}
+
+// Save slot utility functions
+function getSaveObject() {
+    var saveObj = localStorage["below"];
+    if (!saveObj) {
+        var initial = { saves: [null, null, null] };
+        localStorage["below"] = JSON.stringify(initial);
+        return initial;
+    }
+    var parsed = JSON.parse(saveObj);
+    if (!parsed.saves || parsed.saves.length !== 3) {
+        parsed.saves = [null, null, null];
+        localStorage["below"] = JSON.stringify(parsed);
+    }
+    return parsed;
+}
+
+function saveToSlot(slotIndex, gameData) {
+    var saveObj = getSaveObject();
+    saveObj.saves[slotIndex] = JSON.parse(JSON.stringify(gameData));
+    localStorage["below"] = JSON.stringify(saveObj);
+}
+
+function loadFromSlot(slotIndex) {
+    var saveObj = getSaveObject();
+    return saveObj.saves[slotIndex];
+}
+
+function updateSlotColors(menuId) {
+    var menu = document.getElementById(menuId);
+    if (!menu) return;
+    var slots = menu.querySelectorAll('.below-front-menu-item');
+    slots.forEach(function(slotEl) {
+        var slotIndex = parseInt(slotEl.getAttribute('data-slot'));
+        var saved = loadFromSlot(slotIndex);
+        if (saved) {
+            slotEl.classList.add('slot-initiated');
+        } else {
+            slotEl.classList.remove('slot-initiated');
+        }
+    });
+}
+
+function startNewGame(slotIndex) {
+    var existing = loadFromSlot(slotIndex);
+    if (existing) {
+        if (!confirm('This slot already has saved data. Overwrite?')) {
+            return;
+        }
+    }
+    var initialData = JSON.parse(JSON.stringify(below.gameData));
+    saveToSlot(slotIndex, initialData);
+    below.gameData = JSON.parse(JSON.stringify(initialData));
+    below.currentSlot = slotIndex;
+    switchPage('gameDiv');
+}
+
+function continueGame(slotIndex) {
+    var saved = loadFromSlot(slotIndex);
+    if (!saved) {
+        alert('No saved game in this slot.');
+        return;
+    }
+    below.gameData = JSON.parse(JSON.stringify(saved));
+    below.currentSlot = slotIndex;
+    switchPage('gameDiv');
+}
+
+function saveCurrentGame() {
+    if (below.currentSlot !== undefined) {
+        saveToSlot(below.currentSlot, below.gameData);
     }
 }
 
@@ -162,6 +253,7 @@ batImg.src = "images/bat.png";
 
 window.onbeforeunload = confirmExit;
 function confirmExit() {
+    saveCurrentGame();
     return "You have attempted to leave this page.  If you have made any changes to the fields without clicking the Save button, your changes will be lost.  Are you sure you want to exit this page?";
 }
 
@@ -207,6 +299,9 @@ function switchPage(page) {
         var pageEl = document.getElementById(curPage);
         if (page === curPage) {
             pageEl.style.display = "flex";
+            if (curPage === 'newGameDiv' || curPage === 'resumeGameDiv') {
+                updateSlotColors(curPage);
+            }
         }
         else {
             pageEl.style.display = "none";
@@ -227,6 +322,20 @@ function foundTile(x, y) {
     //});
 }
 
+function isBlocked(x, y) {
+    var curMap = below.gameData.player.currentMap;
+    // Check monsters
+    var blockedByMonster = below.gameData.maps[curMap].monsters.some(function(monster) {
+        return monster.position.x === x && monster.position.y === y && below.gameData.monsterTypes[monster.type].blocking;
+    });
+    if (blockedByMonster) return true;
+    // Check obstacles
+    var blockedByObstacle = below.gameData.maps[curMap].obstacles.some(function(obstacle) {
+        return obstacle.position.x === x && obstacle.position.y === y && below.gameData.obstacleTypes[obstacle.type].blocking;
+    });
+    return blockedByObstacle;
+}
+
 function moveOnMap(e) {
     var curY = below.gameData.player.currentLocation.y,
         curX = below.gameData.player.currentLocation.x,
@@ -238,22 +347,22 @@ function moveOnMap(e) {
     if (e.keyCode == '81') {
         console.log('Inventory');
     }
-    if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1)) {
+    if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1) && !isBlocked(curX, curY -1)) {
         below.gameData.player.destinationLocation.yVelocity = -1;
         below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y - 1;
         playerMoved = true;
     }
-    else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1)) {
+    else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1) && !isBlocked(curX, curY +1)) {
         below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y + 1;
         below.gameData.player.destinationLocation.yVelocity = 1;
         playerMoved = true;
     }
-    else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY)) {
+    else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY) && !isBlocked(curX -1, curY)) {
         below.gameData.player.destinationLocation.xVelocity = -1;
         below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x - 1;
         playerMoved = true;
     }
-    else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY)) {
+    else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY) && !isBlocked(curX +1, curY)) {
         below.gameData.player.destinationLocation.xVelocity = 1;
         below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x + 1;
         playerMoved = true;
@@ -332,10 +441,16 @@ function drawMapCanvas() {
         }
         else {
             context.fillStyle = type.color;
-            context.beginPath();        
+            context.beginPath();
             context.arc( (monster.position.x * width) + verticalCenter - horisontalOffset, (monster.position.y * width) + horisontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
             context.fill();
         }
+    });
+    // OBSTACLES
+    below.gameData.maps[curMap].obstacles.forEach(function(obstacle) {
+        var type = below.gameData.obstacleTypes[obstacle.type];
+        context.fillStyle = type.color || "#433900";
+        context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
     });
     
     canvas.addEventListener('click', function(event) {
@@ -368,22 +483,22 @@ function mapGameLoop() {
                 // What direction do it move?
                 var dir = (Math.floor(Math.random() * 4)) + 1;
                 //console.log('foundTile',foundTile(monster.position.x, monster.position.y - 1));
-                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) {
+                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1) && !isBlocked(monster.position.x, monster.position.y - 1)) {
                     monster.destPos.yVelocity = -1;
                     monster.destPos.y = monster.position.y - 1;
-                    //monster.position.y-- 
+                    //monster.position.y--
                 }
-                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1)) {
+                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1) && !isBlocked(monster.position.x, monster.position.y + 1)) {
                     monster.destPos.yVelocity = 1;
                     monster.destPos.y = monster.position.y + 1;
-                    //monster.position.y++ 
+                    //monster.position.y++
                 }
-                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y)) {
+                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y) && !isBlocked(monster.position.x - 1, monster.position.y)) {
                     monster.destPos.xVelocity = -1;
                     monster.destPos.x = monster.position.x -1;
                     //monster.position.x--
                 }
-                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y)) {
+                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y) && !isBlocked(monster.position.x + 1, monster.position.y)) {
                     monster.destPos.xVelocity = 1;
                     monster.destPos.x = monster.position.x + 1;
                     //monster.position.x++
@@ -414,6 +529,7 @@ function mapGameLoop() {
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.x = below.gameData.player.destinationLocation.x;
                 below.gameData.player.destinationLocation.xVelocity = null;
+                saveCurrentGame();
             }
         }
         if (below.gameData.player.destinationLocation.yVelocity) {
@@ -422,6 +538,7 @@ function mapGameLoop() {
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.y = below.gameData.player.destinationLocation.y;
                 below.gameData.player.destinationLocation.yVelocity = null;
+                saveCurrentGame();
             }
         }
         below.gameData.maps[curMap].monsters.forEach(function(monster) {
@@ -430,6 +547,7 @@ function mapGameLoop() {
                 if (below.tick % below.tickSpeed === 0) {
                     monster.position.x = monster.destPos.x;
                     monster.destPos.xVelocity = null;
+                    saveCurrentGame();
                 }
             }
             if (monster.destPos.yVelocity) {
@@ -437,6 +555,7 @@ function mapGameLoop() {
                 if (below.tick % below.tickSpeed === 0) {
                     monster.position.y = monster.destPos.y;
                     monster.destPos.yVelocity = null;
+                    saveCurrentGame();
                 }
             }
         });

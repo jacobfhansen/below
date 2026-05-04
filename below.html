@@ -16,14 +16,14 @@
         Cut scene!
     </div>
     <div class="title-container" id="newGameDiv" style="display: none;">
-        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 1</div>
-        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 2</div>
-        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 3</div>
+        <div class="below-front-menu-item" data-slot="0" onclick="startNewGame(0)">Slot 1</div>
+        <div class="below-front-menu-item" data-slot="1" onclick="startNewGame(1)">Slot 2</div>
+        <div class="below-front-menu-item" data-slot="2" onclick="startNewGame(2)">Slot 3</div>
     </div>
     <div class="title-container" id="resumeGameDiv" style="display: none;">
-        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 1</div>
-        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 2</div>
-        <div class="below-front-menu-item" onclick="switchPage('gameDiv')">Slot 3</div>
+        <div class="below-front-menu-item" data-slot="0" onclick="continueGame(0)">Slot 1</div>
+        <div class="below-front-menu-item" data-slot="1" onclick="continueGame(1)">Slot 2</div>
+        <div class="below-front-menu-item" data-slot="2" onclick="continueGame(2)">Slot 3</div>
     </div>
     <div class="below-game-container" id="gameDiv" style="display: none;">
         <div class="below-game-left-panel" id="gameLogDiv">
