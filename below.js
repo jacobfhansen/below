@@ -4,7 +4,7 @@ const below = {
     version: '0.0.1',
     c64Colors: ["#000000","#FFFFFF","#68372B","#70A4B2","#6F3D86","#588D43","352879","#B8C76F",
                 "#6F4F25","#433900","#9A6759","#444444","#6C6C6C","#9AD284","#6C5EB5","#959595"],
-    pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv"],
+    pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv", "characterSelectDiv"],
     currentSlot: undefined,
     choiceEvent: null,
     gameData: {
@@ -13,7 +13,8 @@ const below = {
         player: {
             currentMap: 0,
             currentLocation: { x: 2, y: 2 },
-            destinationLocation:  { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
+            destinationLocation:  { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined },
+            icon: null
         },
         monsterTypes: {
             1: {
@@ -21,6 +22,7 @@ const below = {
                     fraction: 2,
                     movement: 0.3,
                     color: "#9A6759",
+                    icon: "rat.png",
                     blocking: true,
                     aloof: true,
                     description: "A giant rat blocks your way",
@@ -250,9 +252,16 @@ function startNewGame(slotIndex) {
             return;
         }
     }
+    below.newGameSlot = slotIndex;
+    switchPage('characterSelectDiv');
+}
+
+function selectCharacter(character) {
+    var slotIndex = below.newGameSlot;
     var initialData = JSON.parse(JSON.stringify(below.gameData));
+    initialData.player.icon = character + ".png";
     saveToSlot(slotIndex, initialData);
-    below.gameData = JSON.parse(JSON.stringify(initialData));
+    below.gameData = initialData;
     below.currentSlot = slotIndex;
     switchPage('gameDiv');
 }
@@ -279,6 +288,15 @@ boss2Img.src = "images/boss2.png";
 
 var batImg = new Image();
 batImg.src = "images/bat.png";
+
+var ratImg = new Image();
+ratImg.src = "images/rat.png";
+
+var boyImg = new Image();
+boyImg.src = "images/boy.png";
+
+var girlImg = new Image();
+girlImg.src = "images/girl.png";
 
 var rockImg = new Image();
 rockImg.src = "images/rock.png";
@@ -308,6 +326,9 @@ function checkKey(e) {
     // Menu screens
     if (document.getElementById("titleScreen").style.display !== 'none') {
         handleMenuKey(e, 'titleScreen');
+    }
+    else if (document.getElementById("characterSelectDiv").style.display !== 'none') {
+        handleMenuKey(e, 'characterSelectDiv');
     }
     else if (document.getElementById("newGameDiv").style.display !== 'none') {
         handleMenuKey(e, 'newGameDiv');
@@ -844,15 +865,23 @@ function drawMapCanvas() {
     
     // Draw player and monster sprites
     // PLAYER
-    context.fillStyle = "#B8C76F";
-    context.beginPath();
-    context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
-    context.fill();
+    if (below.gameData.player.icon) {
+        var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
+        if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
+        context.drawImage(playerImg, verticalCenter - (width/2), horisontalCenter - (width/2), width, width);
+    } else {
+        context.fillStyle = "#B8C76F";
+        context.beginPath();
+        context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
+        context.fill();
+    }
     // MONSTERS
     below.gameData.maps[curMap].monsters.forEach(function(monster) {
         var type = below.gameData.monsterTypes[monster.type];
         if (type["icon"]) {
-            context.drawImage(batImg, (monster.position.x * width) + verticalCenter - horisontalOffset - (width/2), (monster.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
+            var img = type.icon === "bat.png" ? batImg : (type.icon === "rat.png" ? ratImg : new Image());
+            if (!img.complete) img.src = "images/" + type.icon;
+            context.drawImage(img, (monster.position.x * width) + verticalCenter - horisontalOffset - (width/2), (monster.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
         }
         else {
             context.fillStyle = type.color;
