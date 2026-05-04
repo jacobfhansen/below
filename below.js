@@ -22,7 +22,10 @@ const below = {
                     movement: 0.3,
                     color: "#9A6759",
                     blocking: true,
-                    description: "A giant rat blocks your way"
+                    aloof: true,
+                    description: "A giant rat blocks your way",
+                    beholdDesc: "A large rat with sharp teeth",
+                    choiceEvents: [4, 5, 3]
             },
             2:  {
                     name: "Bat",
@@ -31,13 +34,19 @@ const below = {
                     color: "#433900",
                     icon: "bat.png",
                     blocking: true,
-                    description: "A bat is in your way"
+                    aloof: true,
+                    description: "A bat is in your way",
+                    beholdDesc: "A screeching bat with sharp claws",
+                    choiceEvents: [4, 5, 3]
             },
             3: {
                     name: "Centipede",
                     fraction: 1,
                     blocking: true,
-                    description: "A centipede blocks the path"
+                    aloof: true,
+                    description: "A centipede blocks the path",
+                    beholdDesc: "A multi-segmented centipede",
+                    choiceEvents: [4, 5, 3]
             }
         },
         obstacleTypes: {
@@ -45,6 +54,7 @@ const below = {
                 name: "Rock",
                 description: "A rock blocking your way",
                 color: "#433900",
+                icon: "rock.png",
                 blocking: true,
                 choiceEvents: [1, 2, 3]
             }
@@ -403,14 +413,33 @@ function foundTile(x, y) {
 
 function isBlocked(x, y) {
     var curMap = below.gameData.player.currentMap;
-    // Check monsters
-    var blockedByMonster = below.gameData.maps[curMap].monsters.some(function(monster) {
-        return monster.position.x === x && monster.position.y === y && below.gameData.monsterTypes[monster.type].blocking;
+    // Check monsters - only block if monster is aloof
+    var blockedByMonster = below.gameData.maps[curMap].monsters.some(function(m) {
+        var isAloof = m.aloof !== undefined ? m.aloof : below.gameData.monsterTypes[m.type].aloof;
+        return m.position.x === x && m.position.y === y && 
+               below.gameData.monsterTypes[m.type].blocking && 
+               isAloof;
     });
     if (blockedByMonster) return true;
     // Check obstacles
-    var blockedByObstacle = below.gameData.maps[curMap].obstacles.some(function(obstacle) {
-        return obstacle.position.x === x && obstacle.position.y === y && below.gameData.obstacleTypes[obstacle.type].blocking;
+    var blockedByObstacle = below.gameData.maps[curMap].obstacles.some(function(o) {
+        return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
+    });
+    return blockedByObstacle;
+}
+
+function isBlocked(x, y) {
+    var curMap = below.gameData.player.currentMap;
+    // Check monsters - only block if monster is aloof
+    var blockedByMonster = below.gameData.maps[curMap].monsters.some(function(m) {
+        return m.position.x === x && m.position.y === y && 
+               below.gameData.monsterTypes[m.type].blocking && 
+               isMonsterAloof(m);
+    });
+    if (blockedByMonster) return true;
+    // Check obstacles
+    var blockedByObstacle = below.gameData.maps[curMap].obstacles.some(function(o) {
+        return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
     });
     return blockedByObstacle;
 }
@@ -435,21 +464,49 @@ function getBlockedMessage(x, y) {
 }
 
 function getChoiceEventOptions(choiceEventIds) {
-    var actions = {
-        1: function() { below.gameData.mapLog.push("It's a rock"); maintainMapLog(); },
-        2: function() { below.gameData.mapLog.push("You push the rock..."); maintainMapLog(); },
-        3: function() { below.gameData.mapLog.push("You move on..."); maintainMapLog(); }
-    };
     var texts = {
         1: "Search rock",
         2: "Push rock",
-        3: "Move on"
+        3: "Move on",
+        4: "Behold",
+        5: "Attack"
     };
     return choiceEventIds.map(function(id) {
-        return {
-            text: texts[id],
-            action: actions[id]
-        };
+        var option = { text: texts[id] };
+        if (id === 1) {
+            option.action = function() { below.gameData.mapLog.push("It's a rock"); maintainMapLog(); };
+        } else if (id === 2) {
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.obstaclePos) {
+                    pushObstacle(below.choiceEvent.obstaclePos);
+                }
+            };
+        } else if (id === 3) {
+            option.action = function() { };
+        } else if (id === 4) {
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.monsterType) {
+                    var desc = below.gameData.monsterTypes[below.choiceEvent.monsterType].beholdDesc || "A creature";
+                    below.gameData.mapLog.push(desc);
+                    maintainMapLog();
+                }
+            };
+        } else if (id === 5) {
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.monsterPos) {
+                    var curMap = below.gameData.player.currentMap;
+                    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+                        return m.position.x === below.choiceEvent.monsterPos.x && m.position.y === below.choiceEvent.monsterPos.y;
+                    });
+                    if (monster) {
+                        monster.aloof = false;
+                        below.gameData.mapLog.push("You attack!");
+                        maintainMapLog();
+                    }
+                }
+            };
+        }
+        return option;
     });
 }
 
@@ -477,11 +534,18 @@ function getBlockedChoiceEvents(x, y) {
 
 function handleBlockedInteraction(x, y) {
     var msg = getBlockedMessage(x, y);
-    var choiceEvents = getBlockedChoiceEvents(x, y);
+    var curMap = below.gameData.player.currentMap;
+    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+        return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
+    });
+    var choiceEvents = getBlockedChoiceEvents(x, y, monster);
     if (choiceEvents) {
         below.choiceEvent = {
             selectedIndex: 0,
             message: msg,
+            obstaclePos: { x: x, y: y },
+            monsterPos: monster ? { x: x, y: y } : null,
+            monsterType: monster ? monster.type : null,
             options: choiceEvents
         };
         renderChoiceEvent();
@@ -489,6 +553,67 @@ function handleBlockedInteraction(x, y) {
         below.gameData.mapLog.push(msg);
         maintainMapLog();
     }
+}
+
+function getBlockedChoiceEvents(x, y, monster) {
+    // Check monsters - only if aloof
+    if (monster && isMonsterAloof(monster) && below.gameData.monsterTypes[monster.type].choiceEvents) {
+        return getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents);
+    }
+    // Check obstacles
+    var curMap = below.gameData.player.currentMap;
+    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+        return o.position.x === x && o.position.y === y;
+    });
+    if (obstacle) {
+        var obstacleType = below.gameData.obstacleTypes[obstacle.type];
+        if (obstacleType && obstacleType.blocking && obstacleType.choiceEvents) {
+            return getChoiceEventOptions(obstacleType.choiceEvents);
+        }
+    }
+    return null;
+}
+
+function isMonsterAloof(m) {
+    // Check instance first (set after attack), then fall back to type definition
+    if (m.aloof !== undefined) return m.aloof;
+    return below.gameData.monsterTypes[m.type].aloof;
+}
+
+function pushObstacle(obstaclePos) {
+    var curMap = below.gameData.player.currentMap;
+    var playerX = below.gameData.player.currentLocation.x;
+    var playerY = below.gameData.player.currentLocation.y;
+    // Calculate push direction (from player to obstacle)
+    var dirX = obstaclePos.x - playerX;
+    var dirY = obstaclePos.y - playerY;
+    var newX = obstaclePos.x + dirX;
+    var newY = obstaclePos.y + dirY;
+    // Check if new position is valid
+    if (!foundTile(newX, newY)) {
+        below.gameData.mapLog.push("Cannot push the rock that way.");
+        maintainMapLog();
+        return false;
+    }
+    // Check if new position is blocked by another blocking object
+    if (isBlocked(newX, newY)) {
+        below.gameData.mapLog.push("Something is blocking the way.");
+        maintainMapLog();
+        return false;
+    }
+    // Find and move the obstacle
+    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+        return o.position.x === obstaclePos.x && o.position.y === obstaclePos.y;
+    });
+    if (obstacle) {
+        obstacle.position.x = newX;
+        obstacle.position.y = newY;
+        below.gameData.mapLog.push("You push the rock.");
+        maintainMapLog();
+        drawMapCanvas();
+        return true;
+    }
+    return false;
 }
 
 function moveOnMap(e) {
@@ -625,8 +750,16 @@ function drawMapCanvas() {
     // OBSTACLES
     below.gameData.maps[curMap].obstacles.forEach(function(obstacle) {
         var type = below.gameData.obstacleTypes[obstacle.type];
-        context.fillStyle = type.color || "#433900";
-        context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
+        if (type.icon) {
+            var img = new Image();
+            img.onload = function() {
+                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset - (width/2), width, width);
+            };
+            img.src = "images/" + type.icon;
+        } else {
+            context.fillStyle = type.color || "#433900";
+            context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
+        }
     });
     
     canvas.addEventListener('click', function(event) {
