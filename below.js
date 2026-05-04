@@ -24,6 +24,8 @@ const below = {
                     blocking: true,
                     aloof: true,
                     description: "A giant rat blocks your way",
+                    aloofTrueMsg: "A giant rat. It ignores you.",
+                    aloofFalseMsg: "An angry giant rat attacks you!",
                     beholdDesc: "A large rat with sharp teeth",
                     choiceEvents: [4, 5, 3]
             },
@@ -36,6 +38,8 @@ const below = {
                     blocking: true,
                     aloof: true,
                     description: "A bat is in your way",
+                    aloofTrueMsg: "A bat screeches and ignores you.",
+                    aloofFalseMsg: "A furious bat dives at you!",
                     beholdDesc: "A screeching bat with sharp claws",
                     choiceEvents: [4, 5, 3]
             },
@@ -45,6 +49,8 @@ const below = {
                     blocking: true,
                     aloof: true,
                     description: "A centipede blocks the path",
+                    aloofTrueMsg: "A centipede crawls right past you.",
+                    aloofFalseMsg: "A centipede strikes at your ankles!",
                     beholdDesc: "A multi-segmented centipede",
                     choiceEvents: [4, 5, 3]
             }
@@ -266,6 +272,9 @@ boss2Img.src = "images/boss2.png";
 var batImg = new Image();
 batImg.src = "images/bat.png";
 
+var rockImg = new Image();
+rockImg.src = "images/rock.png";
+
 window.onbeforeunload = confirmExit;
 function confirmExit() {
     saveCurrentGame();
@@ -314,12 +323,34 @@ function renderChoiceEvent() {
     while (gameLogDiv.firstChild) {
         gameLogDiv.removeChild(gameLogDiv.firstChild);
     }
-    if (below.choiceEvent.message) {
+    // Add gray overlay to map
+    var gameDivCenter = document.getElementById("gameDivCenter");
+    gameDivCenter.style.opacity = "0.5";
+    gameDivCenter.style.pointerEvents = "none";
+    
+    // Show appropriate message based on aloof status
+    if (below.choiceEvent.monsterType !== null) {
+        var monsterType = below.gameData.monsterTypes[below.choiceEvent.monsterType];
+        var msgNode = document.createElement("P");
+        msgNode.className = "below-game-left-paragraph-current";
+        if (below.choiceEvent.monsterPos) {
+            var monster = below.gameData.maps[below.gameData.player.currentMap].monsters.find(function(m) {
+                return m.position.x === below.choiceEvent.monsterPos.x && m.position.y === below.choiceEvent.monsterPos.y;
+            });
+            if (monster && !isMonsterAloof(monster)) {
+                msgNode.textContent = monsterType.aloofFalseMsg || "An angry monster attacks you!";
+            } else {
+                msgNode.textContent = monsterType.aloofTrueMsg || "A monster. It ignores you.";
+            }
+        }
+        gameLogDiv.appendChild(msgNode);
+    } else if (below.choiceEvent.message) {
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
         msgNode.textContent = below.choiceEvent.message;
         gameLogDiv.appendChild(msgNode);
     }
+    
     var titleNode = document.createElement("P");
     titleNode.className = "below-game-left-paragraph";
     titleNode.textContent = "Choose an action:";
@@ -365,6 +396,10 @@ function selectChoiceOption(index) {
 
 function closeChoiceEvent() {
     below.choiceEvent = null;
+    // Restore map appearance
+    var gameDivCenter = document.getElementById("gameDivCenter");
+    gameDivCenter.style.opacity = "1";
+    gameDivCenter.style.pointerEvents = "auto";
     maintainMapLog();
 }
 
@@ -533,13 +568,23 @@ function getBlockedChoiceEvents(x, y) {
 }
 
 function handleBlockedInteraction(x, y) {
-    var msg = getBlockedMessage(x, y);
     var curMap = below.gameData.player.currentMap;
     var monster = below.gameData.maps[curMap].monsters.find(function(m) {
         return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
     });
     var choiceEvents = getBlockedChoiceEvents(x, y, monster);
     if (choiceEvents) {
+        var msg = "";
+        if (monster) {
+            var monsterType = below.gameData.monsterTypes[monster.type];
+            if (isMonsterAloof(monster)) {
+                msg = monsterType.aloofTrueMsg || "A monster. It ignores you.";
+            } else {
+                msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
+            }
+        } else {
+            msg = getBlockedMessage(x, y);
+        }
         below.choiceEvent = {
             selectedIndex: 0,
             message: msg,
@@ -549,9 +594,12 @@ function handleBlockedInteraction(x, y) {
             options: choiceEvents
         };
         renderChoiceEvent();
-    } else if (msg) {
-        below.gameData.mapLog.push(msg);
-        maintainMapLog();
+    } else {
+        var msg = getBlockedMessage(x, y);
+        if (msg) {
+            below.gameData.mapLog.push(msg);
+            maintainMapLog();
+        }
     }
 }
 
@@ -617,6 +665,9 @@ function pushObstacle(obstaclePos) {
 }
 
 function moveOnMap(e) {
+    // Don't process movement if choice event is active
+    if (below.choiceEvent) return;
+    
     var curY = below.gameData.player.currentLocation.y,
         curX = below.gameData.player.currentLocation.x,
         playerMoved = false;
@@ -751,11 +802,9 @@ function drawMapCanvas() {
     below.gameData.maps[curMap].obstacles.forEach(function(obstacle) {
         var type = below.gameData.obstacleTypes[obstacle.type];
         if (type.icon) {
-            var img = new Image();
-            img.onload = function() {
-                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset - (width/2), width, width);
-            };
-            img.src = "images/" + type.icon;
+            var img = type.icon === "rock.png" ? rockImg : new Image();
+            if (!img.complete) img.src = "images/" + type.icon;
+            context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset - (width/2), width, width);
         } else {
             context.fillStyle = type.color || "#433900";
             context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
@@ -783,6 +832,9 @@ function mapGameLoop() {
     //console.log(below.tick % below.tickSpeed);
     //console.log(tick, below.tick);
     var curMap = below.gameData.player.currentMap;
+    // Don't process any movement if choice event is active
+    if (below.choiceEvent) return;
+    
     if (below.tick % below.tickSpeed === 1) {
         // Calculate new monster movement
         below.gameData.maps[curMap].monsters.forEach(function(monster) {
@@ -792,25 +844,89 @@ function mapGameLoop() {
                 // What direction do it move?
                 var dir = (Math.floor(Math.random() * 4)) + 1;
                 //console.log('foundTile',foundTile(monster.position.x, monster.position.y - 1));
-                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1) && !isBlocked(monster.position.x, monster.position.y - 1)) {
-                    monster.destPos.yVelocity = -1;
-                    monster.destPos.y = monster.position.y - 1;
-                    //monster.position.y--
+                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) {
+                    // Check if monster bumps into player
+                    if (monster.position.x === below.gameData.player.currentLocation.x && monster.position.y - 1 === below.gameData.player.currentLocation.y) {
+                        // Monster bumps into player - activate monster's choice event if not aloof
+                        if (!isMonsterAloof(monster)) {
+                            var monsterType = below.gameData.monsterTypes[monster.type];
+                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
+                            below.choiceEvent = {
+                                selectedIndex: 0,
+                                message: msg,
+                                monsterPos: { x: monster.position.x, y: monster.position.y },
+                                monsterType: monster.type,
+                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
+                            };
+                            renderChoiceEvent();
+                        }
+                    } else if (!isBlocked(monster.position.x, monster.position.y - 1)) {
+                        monster.destPos.yVelocity = -1;
+                        monster.destPos.y = monster.position.y - 1;
+                    }
                 }
-                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1) && !isBlocked(monster.position.x, monster.position.y + 1)) {
-                    monster.destPos.yVelocity = 1;
-                    monster.destPos.y = monster.position.y + 1;
-                    //monster.position.y++
+                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1)) {
+                    // Check if monster bumps into player
+                    if (monster.position.x === below.gameData.player.currentLocation.x && monster.position.y + 1 === below.gameData.player.currentLocation.y) {
+                        // Monster bumps into player - activate monster's choice event if not aloof
+                        if (!isMonsterAloof(monster)) {
+                            var monsterType = below.gameData.monsterTypes[monster.type];
+                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
+                            below.choiceEvent = {
+                                selectedIndex: 0,
+                                message: msg,
+                                monsterPos: { x: monster.position.x, y: monster.position.y },
+                                monsterType: monster.type,
+                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
+                            };
+                            renderChoiceEvent();
+                        }
+                    } else if (!isBlocked(monster.position.x, monster.position.y + 1)) {
+                        monster.destPos.yVelocity = 1;
+                        monster.destPos.y = monster.position.y + 1;
+                    }
                 }
-                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y) && !isBlocked(monster.position.x - 1, monster.position.y)) {
-                    monster.destPos.xVelocity = -1;
-                    monster.destPos.x = monster.position.x -1;
-                    //monster.position.x--
+                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y)) {
+                    // Check if monster bumps into player
+                    if (monster.position.x - 1 === below.gameData.player.currentLocation.x && monster.position.y === below.gameData.player.currentLocation.y) {
+                        // Monster bumps into player - activate monster's choice event if not aloof
+                        if (!isMonsterAloof(monster)) {
+                            var monsterType = below.gameData.monsterTypes[monster.type];
+                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
+                            below.choiceEvent = {
+                                selectedIndex: 0,
+                                message: msg,
+                                monsterPos: { x: monster.position.x, y: monster.position.y },
+                                monsterType: monster.type,
+                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
+                            };
+                            renderChoiceEvent();
                 }
-                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y) && !isBlocked(monster.position.x + 1, monster.position.y)) {
-                    monster.destPos.xVelocity = 1;
-                    monster.destPos.x = monster.position.x + 1;
-                    //monster.position.x++
+                } else if (!isBlocked(monster.position.x - 1, monster.position.y)) {
+                        monster.destPos.xVelocity = -1;
+                        monster.destPos.x = monster.position.x -1;
+                    }
+                }
+                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y)) {
+                    // Check if monster bumps into player
+                    if (monster.position.x + 1 === below.gameData.player.currentLocation.x && monster.position.y === below.gameData.player.currentLocation.y) {
+                        // Monster bumps into player - activate monster's choice event if not aloof
+                        if (!isMonsterAloof(monster)) {
+                            var monsterType = below.gameData.monsterTypes[monster.type];
+                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
+                            below.choiceEvent = {
+                                selectedIndex: 0,
+                                message: msg,
+                                monsterPos: { x: monster.position.x, y: monster.position.y },
+                                monsterType: monster.type,
+                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
+                            };
+                            renderChoiceEvent();
+                        }
+                    } else if (!isBlocked(monster.position.x + 1, monster.position.y)) {
+                        monster.destPos.xVelocity = 1;
+                        monster.destPos.x = monster.position.x + 1;
+                    }
                 }
                 //console.log(dir, monster.position);
             }
