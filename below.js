@@ -6,6 +6,7 @@ const below = {
                 "#6F4F25","#433900","#9A6759","#444444","#6C6C6C","#9AD284","#6C5EB5","#959595"],
     pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv"],
     currentSlot: undefined,
+    choiceEvent: null,
     gameData: {
         mapZoom: 50,
         mapLog: [],
@@ -44,7 +45,8 @@ const below = {
                 name: "Rock",
                 description: "A rock blocking your way",
                 color: "#433900",
-                blocking: true
+                blocking: true,
+                choiceEvents: [1, 2, 3]
             }
         },
         maps: [
@@ -278,8 +280,82 @@ function checkKey(e) {
     e = e || window.event;
     // Map div
     if (document.getElementById("gameDiv").style.display !== 'none') {
-        moveOnMap(e);
+        if (below.choiceEvent) {
+            handleChoiceEventKey(e);
+        } else {
+            moveOnMap(e);
+        }
     }
+}
+
+function showChoiceEvent() {
+    below.choiceEvent = {
+        selectedIndex: 0,
+        options: [
+            { text: "Search", action: function() { below.gameData.mapLog.push("You search the area..."); maintainMapLog(); } },
+            { text: "Move on", action: function() { below.gameData.mapLog.push("You move on..."); maintainMapLog(); } }
+        ]
+    };
+    renderChoiceEvent();
+}
+
+function renderChoiceEvent() {
+    var gameLogDiv = document.getElementById("gameLogDiv");
+    while (gameLogDiv.firstChild) {
+        gameLogDiv.removeChild(gameLogDiv.firstChild);
+    }
+    if (below.choiceEvent.message) {
+        var msgNode = document.createElement("P");
+        msgNode.className = "below-game-left-paragraph-current";
+        msgNode.textContent = below.choiceEvent.message;
+        gameLogDiv.appendChild(msgNode);
+    }
+    var titleNode = document.createElement("P");
+    titleNode.className = "below-game-left-paragraph";
+    titleNode.textContent = "Choose an action:";
+    gameLogDiv.appendChild(titleNode);
+
+    below.choiceEvent.options.forEach(function(option, index) {
+        var node = document.createElement("P");
+        node.className = "below-game-left-paragraph";
+        if (index === below.choiceEvent.selectedIndex) {
+            node.classList.add("below-choice-selected");
+        }
+        node.textContent = option.text;
+        node.onclick = function() { selectChoiceOption(index); };
+        gameLogDiv.appendChild(node);
+    });
+}
+
+function handleChoiceEventKey(e) {
+    if (e.keyCode === 38 || e.keyCode === 87) { // Up
+        e.preventDefault();
+        below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex - 1 + below.choiceEvent.options.length) % below.choiceEvent.options.length;
+        renderChoiceEvent();
+    }
+    else if (e.keyCode === 40 || e.keyCode === 83) { // Down
+        e.preventDefault();
+        below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex + 1) % below.choiceEvent.options.length;
+        renderChoiceEvent();
+    }
+    else if (e.keyCode === 13 || e.keyCode === 69) { // Enter or E
+        e.preventDefault();
+        selectChoiceOption(below.choiceEvent.selectedIndex);
+    }
+    else if (e.keyCode === 27) { // Escape
+        e.preventDefault();
+        closeChoiceEvent();
+    }
+}
+
+function selectChoiceOption(index) {
+    below.choiceEvent.options[index].action();
+    closeChoiceEvent();
+}
+
+function closeChoiceEvent() {
+    below.choiceEvent = null;
+    maintainMapLog();
 }
 
 respondToVisibility = function(element, callback) {
@@ -358,67 +434,113 @@ function getBlockedMessage(x, y) {
     return null;
 }
 
+function getChoiceEventOptions(choiceEventIds) {
+    var actions = {
+        1: function() { below.gameData.mapLog.push("It's a rock"); maintainMapLog(); },
+        2: function() { below.gameData.mapLog.push("You push the rock..."); maintainMapLog(); },
+        3: function() { below.gameData.mapLog.push("You move on..."); maintainMapLog(); }
+    };
+    var texts = {
+        1: "Search rock",
+        2: "Push rock",
+        3: "Move on"
+    };
+    return choiceEventIds.map(function(id) {
+        return {
+            text: texts[id],
+            action: actions[id]
+        };
+    });
+}
+
+function getBlockedChoiceEvents(x, y) {
+    var curMap = below.gameData.player.currentMap;
+    // Check monsters
+    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+        return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
+    });
+    if (monster && below.gameData.monsterTypes[monster.type].choiceEvents) {
+        return getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents);
+    }
+    // Check obstacles
+    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+        return o.position.x === x && o.position.y === y;
+    });
+    if (obstacle) {
+        var obstacleType = below.gameData.obstacleTypes[obstacle.type];
+        if (obstacleType && obstacleType.blocking && obstacleType.choiceEvents) {
+            return getChoiceEventOptions(obstacleType.choiceEvents);
+        }
+    }
+    return null;
+}
+
+function handleBlockedInteraction(x, y) {
+    var msg = getBlockedMessage(x, y);
+    var choiceEvents = getBlockedChoiceEvents(x, y);
+    if (choiceEvents) {
+        below.choiceEvent = {
+            selectedIndex: 0,
+            message: msg,
+            options: choiceEvents
+        };
+        renderChoiceEvent();
+    } else if (msg) {
+        below.gameData.mapLog.push(msg);
+        maintainMapLog();
+    }
+}
+
 function moveOnMap(e) {
     var curY = below.gameData.player.currentLocation.y,
         curX = below.gameData.player.currentLocation.x,
         playerMoved = false;
     
-    if (e.keyCode == '69') {
+    if (e.keyCode === 69) {
         console.log('Interact');
     }
-    if (e.keyCode == '81') {
+    if (e.keyCode === 81) {
         console.log('Inventory');
     }
-    if ((e.keyCode == '38' || e.keyCode == '87') && foundTile(curX, curY -1)) {
+    if (e.keyCode === 13) {
+        e.preventDefault();
+        showChoiceEvent();
+        return;
+    }
+    if ((e.keyCode === 38 || e.keyCode === 87) && foundTile(curX, curY -1)) {
         if (!isBlocked(curX, curY -1)) {
             below.gameData.player.destinationLocation.yVelocity = -1;
             below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y - 1;
             playerMoved = true;
         } else {
-            var msg = getBlockedMessage(curX, curY -1);
-            if (msg) {
-                below.gameData.mapLog.push(msg);
-                maintainMapLog();
-            }
+            handleBlockedInteraction(curX, curY -1);
         }
     }
-    else if ((e.keyCode == '40' || e.keyCode == '83') && foundTile(curX, curY +1)) {
+    else if ((e.keyCode === 40 || e.keyCode === 83) && foundTile(curX, curY +1)) {
         if (!isBlocked(curX, curY +1)) {
             below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y + 1;
             below.gameData.player.destinationLocation.yVelocity = 1;
             playerMoved = true;
         } else {
-            var msg = getBlockedMessage(curX, curY +1);
-            if (msg) {
-                below.gameData.mapLog.push(msg);
-                maintainMapLog();
-            }
+            handleBlockedInteraction(curX, curY +1);
         }
     }
-    else if ((e.keyCode == '37' || e.keyCode == '65') && foundTile(curX -1, curY)) {
+    else if ((e.keyCode === 37 || e.keyCode === 65) && foundTile(curX -1, curY)) {
         if (!isBlocked(curX -1, curY)) {
             below.gameData.player.destinationLocation.xVelocity = -1;
             below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x - 1;
             playerMoved = true;
         } else {
-            var msg = getBlockedMessage(curX -1, curY);
-            if (msg) {
-                below.gameData.mapLog.push(msg);
-                maintainMapLog();
-            }
+            handleBlockedInteraction(curX -1, curY);
         }
     }
-    else if ((e.keyCode == '39' || e.keyCode == '68') && foundTile(curX +1, curY)) {
+    else if ((e.keyCode === 39 || e.keyCode === 68) && foundTile(curX +1, curY)) {
         if (!isBlocked(curX +1, curY)) {
             below.gameData.player.destinationLocation.xVelocity = 1;
             below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x + 1;
             playerMoved = true;
         } else {
-            var msg = getBlockedMessage(curX +1, curY);
-            if (msg) {
-                below.gameData.mapLog.push(msg);
-                maintainMapLog();
-            }
+            handleBlockedInteraction(curX +1, curY);
         }
     }
     if (playerMoved) {        

@@ -93,6 +93,10 @@ html, body {
 .below-game-left-paragraph:hover {
     color: var(--light-grey)
 }
+.below-choice-selected {
+    color: var(--light-grey) !important;
+    font-weight: bold;
+}
 
 .below-game-center-panel {
     height: 90%;
