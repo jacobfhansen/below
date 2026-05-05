@@ -84,14 +84,32 @@ const below = {
                 icon: "table.png",
                 blocking: true,
                 itemType: 4,
-                choiceEvents: [6, 3]
+                 choiceEvents: [6, 3]
             },
+            4: {
+                name: "Door",
+                description: "A locked door",
+                color: "#8B4513",
+                icon: "door_closed.png",
+                blocking: true,
+                closed: true,
+                keyId: 4, // Key item type ID needed to unlock
+                choiceEvents: [7, 3], // Default: locked door events
+                openChoiceEvents: [8, 3], // Open door events
+                closedChoiceEvents: [7, 3] // Closed door events
+            }
         },
         itemTypes: {
             4: {
                 name: "Key",
                 description: "A rusty key",
                 icon: "key1.png",
+                choiceEvents: []
+            },
+            5: {
+                name: "Key",
+                description: "A rusty key",
+                icon: "key2.png",
                 choiceEvents: []
             }
         },
@@ -222,12 +240,16 @@ const below = {
                         type: 2,
                         position: { x: 1, y: 0 },                        
                     },
-                    {
-                        type: 3,
-                        position: { x: -6, y: 2 },                        
-                    }    
-                ],
-                npcs: [ 1 ]
+                     {
+                         type: 3,
+                         position: { x: -6, y: 2 },                        
+                     },
+                     {
+                         type: 4, // Door
+                         position: { x: 1, y: -1 }    
+                     }    
+                 ],
+                 npcs: [ 1 ]
             }
         ]
     }
@@ -350,6 +372,12 @@ bloodImg.src = "images/blood.png";
 
 var rockImg = new Image();
 rockImg.src = "images/rock.png";
+
+var doorClosedImg = new Image();
+doorClosedImg.src = "images/door_closed.png";
+
+var doorOpenImg = new Image();
+doorOpenImg.src = "images/door_open.png";
 
 window.onbeforeunload = confirmExit;
 function confirmExit() {
@@ -703,7 +731,9 @@ function getChoiceEventOptions(choiceEventIds) {
         3: "Move on",
         4: "Behold",
         5: "Attack",
-        6: "Search"
+        6: "Search",
+        7: "Unlock door",
+        8: "Pass through"
     };
     return choiceEventIds.map(function(id) {
         var option = { text: texts[id] };
@@ -759,6 +789,71 @@ function getChoiceEventOptions(choiceEventIds) {
                             maintainMapLog();
                         } else {
                             below.gameData.mapLog.push("The table is empty.");
+                            maintainMapLog();
+                        }
+                    }
+                }
+            };
+        } else if (id === 7) {
+            // Unlock door with key
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.obstaclePos) {
+                    var curMap = below.gameData.player.currentMap;
+                    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
+                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                    });
+                    if (obstacle) {
+                        var obstacleType = below.gameData.obstacleTypes[obstacle.type];
+                        // Instance overrides type (keyId, closed, blocking, etc.)
+                        var keyId = obstacle.keyId || obstacleType.keyId;
+                        var isClosed = obstacle.closed !== undefined ? obstacle.closed : obstacleType.closed;
+                        
+                        if (keyId) {
+                            // Check if player has the key
+                            var hasKey = below.gameData.player.inventory.some(function(itemId) {
+                                return itemId === keyId;
+                            });
+                            if (hasKey && isClosed) {
+                                // Unlock the door - update instance and type
+                                obstacle.closed = false;
+                                obstacleType.closed = false;
+                                obstacleType.icon = "door_open.png";
+                                obstacleType.blocking = false;
+                                // Update instance choiceEvents to open door events
+                                obstacle.choiceEvents = obstacle.openChoiceEvents || obstacleType.openChoiceEvents;
+                                below.gameData.mapLog.push("You unlocked the door!");
+                                maintainMapLog();
+                            } else if (!isClosed) {
+                                below.gameData.mapLog.push("The door is already open.");
+                                maintainMapLog();
+                            } else {
+                                below.gameData.mapLog.push("You need a key to unlock this door.");
+                                maintainMapLog();
+                            }
+                        }
+                    }
+                }
+            };
+        } else if (id === 8) {
+            // Pass through open door
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.obstaclePos) {
+                    var curMap = below.gameData.player.currentMap;
+                    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
+                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                    });
+                    if (obstacle) {
+                        var obstacleType = below.gameData.obstacleTypes[obstacle.type];
+                        // Instance overrides type for closed property
+                        var isClosed = obstacle.closed !== undefined ? obstacle.closed : obstacleType.closed;
+                        if (!isClosed) {
+                            // Move player to the door's position (pass through)
+                            below.gameData.player.currentLocation.x = obstacle.position.x;
+                            below.gameData.player.currentLocation.y = obstacle.position.y;
+                            below.gameData.mapLog.push("You pass through the door.");
+                            maintainMapLog();
+                        } else {
+                            below.gameData.mapLog.push("The door is locked.");
                             maintainMapLog();
                         }
                     }
@@ -1080,7 +1175,14 @@ function drawMapCanvas() {
         if (distance <= visionPixels) {
             var type = below.gameData.obstacleTypes[obstacle.type];
         if (type.icon) {
-                var img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : (type.icon === "table.png" ? tableImg : (type.icon === "key1.png" ? keyImg : new Image())));
+                // Handle door states - instance overrides type
+                var img = null;
+                if (type.icon === "door_closed.png" || type.icon === "door_open.png") {
+                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+                    img = isClosed ? doorClosedImg : doorOpenImg;
+                } else {
+                    img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : (type.icon === "table.png" ? tableImg : (type.icon === "key1.png" ? keyImg : new Image())));
+                }
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
             } else {
