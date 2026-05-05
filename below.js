@@ -202,7 +202,8 @@ const below = {
                         type: 1,
                         position: { x: -5, y: 2 },
                         status: 1,
-                        destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
+                        destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined },
+                        allowedTiles: [ { x: -6, y: 1 }, { x: -5, y: 1 }, { x: -4, y: 1 }, { x: -5, y: 2 }, { x: -4, y: 2 }, { x: -7, y: 3 }, { x: -6, y: 3 }, { x: -5, y: 3 }, { x: -4, y: 3 } ]
                     },
                     {
                         type: 2,
@@ -767,6 +768,15 @@ function getChoiceEventOptions(choiceEventIds) {
     });
 }
 
+function isTileAllowed(monster, x, y) {
+    // If no allowedTiles defined, all tiles are allowed
+    if (!monster.allowedTiles) return true;
+    // Check if the tile is in the allowedTiles list
+    return monster.allowedTiles.some(function(tile) {
+        return tile.x === x && tile.y === y;
+    });
+}
+
 function getBlockedChoiceEvents(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check monsters
@@ -1120,7 +1130,7 @@ function mapGameLoop() {
                             };
                             renderChoiceEvent();
                         }
-                    } else if (!isBlocked(monster.position.x, monster.position.y - 1)) {
+                    } else if (!isBlocked(monster.position.x, monster.position.y - 1) && isTileAllowed(monster, monster.position.x, monster.position.y - 1)) {
                         monster.destPos.yVelocity = -1;
                         monster.destPos.y = monster.position.y - 1;
                     }
@@ -1141,7 +1151,7 @@ function mapGameLoop() {
                             };
                             renderChoiceEvent();
                         }
-                    } else if (!isBlocked(monster.position.x, monster.position.y + 1)) {
+                    } else if (!isBlocked(monster.position.x, monster.position.y + 1) && isTileAllowed(monster, monster.position.x, monster.position.y + 1)) {
                         monster.destPos.yVelocity = 1;
                         monster.destPos.y = monster.position.y + 1;
                     }
@@ -1162,7 +1172,7 @@ function mapGameLoop() {
                             };
                             renderChoiceEvent();
                 }
-                } else if (!isBlocked(monster.position.x - 1, monster.position.y)) {
+                    } else if (!isBlocked(monster.position.x - 1, monster.position.y) && isTileAllowed(monster, monster.position.x - 1, monster.position.y)) {
                         monster.destPos.xVelocity = -1;
                         monster.destPos.x = monster.position.x -1;
                     }
@@ -1183,7 +1193,7 @@ function mapGameLoop() {
                             };
                             renderChoiceEvent();
                         }
-                    } else if (!isBlocked(monster.position.x + 1, monster.position.y)) {
+                    } else if (!isBlocked(monster.position.x + 1, monster.position.y) && isTileAllowed(monster, monster.position.x + 1, monster.position.y)) {
                         monster.destPos.xVelocity = 1;
                         monster.destPos.x = monster.position.x + 1;
                     }
