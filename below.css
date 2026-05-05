@@ -148,3 +148,50 @@ html, body {
     border-radius: 10px;
     background: var(--dark-grey);
 }
+
+.inventory-outer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+.inventory-inner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 66vw;
+    height: 66vh;
+    color: var(--black);
+    background: var(--cyan);
+    border-radius: 10px;
+    border: 2px solid var(--black);
+    padding: 20px;
+    z-index: 1001;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+}
+.inventory-inner h2 {
+    text-align: center;
+    margin-top: 0;
+}
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.inventory-table td {
+    padding: 10px;
+    vertical-align: middle;
+}
+.inventory-table img {
+    width: 32px;
+    height: 32px;
+}
+.inventory-empty {
+    text-align: center;
+    color: var(--dark-grey);
+    font-style: italic;
+}

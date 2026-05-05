@@ -13,7 +13,7 @@ const below = {
         showCoordinates: true,
         player: {
             currentMap: 0,
-            currentLocation: { x: 1, y: 2 },
+            currentLocation: { x: 2, y: 2 },
             destinationLocation:  { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined },
             icon: null,
             vision: 3,
@@ -86,6 +86,8 @@ const below = {
                 itemType: 4,
                 choiceEvents: [6, 3]
             },
+        },
+        itemTypes: {
             4: {
                 name: "Key",
                 description: "A rusty key",
@@ -386,6 +388,11 @@ function checkKey(e) {
     else if (document.getElementById("gameDiv").style.display !== 'none') {
         if (below.choiceEvent) {
             handleChoiceEventKey(e);
+        } else if (document.getElementById("inventoryDiv").style.display !== 'none') {
+            // Close inventory on Escape or Q
+            if (e.keyCode === 27 || e.keyCode === 81) {
+                closeInventory();
+            }
         } else {
             moveOnMap(e);
         }
@@ -521,6 +528,65 @@ function closeChoiceEvent() {
     gameDivCenter.style.opacity = "1";
     gameDivCenter.style.pointerEvents = "auto";
     maintainMapLog();
+}
+
+function toggleInventory() {
+    var inventoryDiv = document.getElementById("inventoryDiv");
+    if (inventoryDiv.style.display === 'none') {
+        showInventory();
+    } else {
+        closeInventory();
+    }
+}
+
+function closeInventory() {
+    var inventoryDiv = document.getElementById("inventoryDiv");
+    inventoryDiv.style.display = 'none';
+    // Restore game appearance
+    var gameDiv = document.getElementById("gameDiv");
+    gameDiv.style.opacity = "1";
+    gameDiv.style.pointerEvents = "auto";
+}
+
+function showInventory() {
+    var inventoryDiv = document.getElementById("inventoryDiv");
+    var inventoryTable = document.getElementById("inventoryTable");
+    var inventory = below.gameData.player.inventory;
+    
+    // Clear table
+    inventoryTable.innerHTML = '';
+    
+    if (inventory.length === 0) {
+        var row = inventoryTable.insertRow();
+        var cell = row.insertCell();
+        cell.colSpan = 2;
+        cell.className = 'inventory-empty';
+        cell.textContent = 'Your inventory is empty';
+    } else {
+        inventory.forEach(function(itemTypeId) {
+            var itemType = below.gameData.itemTypes[itemTypeId];
+            if (itemType) {
+                var row = inventoryTable.insertRow();
+                
+                // Icon cell
+                var iconCell = row.insertCell();
+                var img = document.createElement('img');
+                img.src = "images/" + itemType.icon;
+                iconCell.appendChild(img);
+                
+                // Name cell
+                var nameCell = row.insertCell();
+                nameCell.textContent = itemType.name;
+            }
+        });
+    }
+    
+    inventoryDiv.style.display = 'block';
+}
+
+function closeInventory() {
+    var inventoryDiv = document.getElementById("inventoryDiv");
+    inventoryDiv.style.display = 'none';
 }
 
 respondToVisibility = function(element, callback) {
@@ -683,11 +749,14 @@ function getChoiceEventOptions(choiceEventIds) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
                         if (obstacleType.itemType) {
                             // Add item to inventory
-                            below.gameData.player.inventory.push(obstacleType.itemType);
-                            below.gameData.mapLog.push("You found a " + below.gameData.obstacleTypes[obstacleType.itemType].name + "!");
+                            var itemTypeId = obstacleType.itemType;
+                            below.gameData.player.inventory.push(itemTypeId);
+                            below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
+                            // Remove item from obstacle
+                            obstacleType.itemType = null;
                             maintainMapLog();
                         } else {
-                            below.gameData.mapLog.push("You search but find nothing.");
+                            below.gameData.mapLog.push("The table is empty.");
                             maintainMapLog();
                         }
                     }
@@ -829,7 +898,7 @@ function moveOnMap(e) {
         console.log('Interact');
     }
     if (e.keyCode === 81) {
-        console.log('Inventory');
+        toggleInventory();
     }
     if (e.keyCode === 13) {
         e.preventDefault();
@@ -992,7 +1061,7 @@ function drawMapCanvas() {
         if (distance <= visionPixels) {
             var type = below.gameData.obstacleTypes[obstacle.type];
         if (type.icon) {
-                var img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : (type.icon === "table.png" ? tableImg : (type.icon === "key.png" ? keyImg : new Image())));
+                var img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : (type.icon === "table.png" ? tableImg : (type.icon === "key1.png" ? keyImg : new Image())));
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
             } else {
