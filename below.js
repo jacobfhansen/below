@@ -67,7 +67,7 @@ const below = {
                 color: "#433900",
                 icon: "rock.png",
                 blocking: true,
-                choiceEvents: [1, 2, 3]
+                choiceEvents: [1, 3]
             },
             2: {
                 name: "Blood",
@@ -95,7 +95,7 @@ const below = {
                 choiceEvents: []
             }
         },
-        maps: [
+        mapData: [
             {
                 id: 0,
                 name: "Start",
@@ -215,7 +215,8 @@ const below = {
                  obstacles: [
                     {
                         type: 1,
-                        position: { x: 6, y: 2 },                        
+                        position: { x: 6, y: 2 },
+                        choiceEvents: [1, 2, 3]
                     },
                     {
                         type: 2,
@@ -462,7 +463,7 @@ function renderChoiceEvent() {
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
         if (below.choiceEvent.monsterPos) {
-            var monster = below.gameData.maps[below.gameData.player.currentMap].monsters.find(function(m) {
+            var monster = below.gameData.mapData[below.gameData.player.currentMap].monsters.find(function(m) {
                 return m.position.x === below.choiceEvent.monsterPos.x && m.position.y === below.choiceEvent.monsterPos.y;
             });
             if (monster && !isMonsterAloof(monster)) {
@@ -637,8 +638,8 @@ function loadGame(game) {
 
 function foundTile(x, y) {
     var index = 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
-    return below.gameData.maps[below.gameData.player.currentMap].tiles[index];
-    //return below.gameData.maps[below.gameData.player.currentMap].tiles.find(function(element) {
+    return below.gameData.mapData[below.gameData.player.currentMap].tiles[index];
+    //return below.gameData.mapData[below.gameData.player.currentMap].tiles.find(function(element) {
     //    return (element.x === x && element.y === y);
     //});
 }
@@ -646,7 +647,7 @@ function foundTile(x, y) {
 function isBlocked(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check monsters - only block if monster is aloof
-    var blockedByMonster = below.gameData.maps[curMap].monsters.some(function(m) {
+    var blockedByMonster = below.gameData.mapData[curMap].monsters.some(function(m) {
         var isAloof = m.aloof !== undefined ? m.aloof : below.gameData.monsterTypes[m.type].aloof;
         return m.position.x === x && m.position.y === y && 
                below.gameData.monsterTypes[m.type].blocking && 
@@ -654,7 +655,7 @@ function isBlocked(x, y) {
     });
     if (blockedByMonster) return true;
     // Check obstacles
-    var blockedByObstacle = below.gameData.maps[curMap].obstacles.some(function(o) {
+    var blockedByObstacle = below.gameData.mapData[curMap].obstacles.some(function(o) {
         return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
     });
     return blockedByObstacle;
@@ -663,14 +664,14 @@ function isBlocked(x, y) {
 function isBlocked(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check monsters - only block if monster is aloof
-    var blockedByMonster = below.gameData.maps[curMap].monsters.some(function(m) {
+    var blockedByMonster = below.gameData.mapData[curMap].monsters.some(function(m) {
         return m.position.x === x && m.position.y === y && 
                below.gameData.monsterTypes[m.type].blocking && 
                isMonsterAloof(m);
     });
     if (blockedByMonster) return true;
     // Check obstacles
-    var blockedByObstacle = below.gameData.maps[curMap].obstacles.some(function(o) {
+    var blockedByObstacle = below.gameData.mapData[curMap].obstacles.some(function(o) {
         return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
     });
     return blockedByObstacle;
@@ -679,14 +680,14 @@ function isBlocked(x, y) {
 function getBlockedMessage(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check monsters
-    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
         return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
     });
     if (monster) {
         return below.gameData.monsterTypes[monster.type].description || "Not sure what good that would do";
     }
     // Check obstacles
-    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
         return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
     });
     if (obstacle) {
@@ -728,7 +729,7 @@ function getChoiceEventOptions(choiceEventIds) {
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.monsterPos) {
                     var curMap = below.gameData.player.currentMap;
-                    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+                    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
                         return m.position.x === below.choiceEvent.monsterPos.x && m.position.y === below.choiceEvent.monsterPos.y;
                     });
                     if (monster) {
@@ -743,7 +744,7 @@ function getChoiceEventOptions(choiceEventIds) {
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
-                    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+                    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
                         return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
                     });
                     if (obstacle) {
@@ -780,20 +781,24 @@ function isTileAllowed(monster, x, y) {
 function getBlockedChoiceEvents(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check monsters
-    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
         return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
     });
     if (monster && below.gameData.monsterTypes[monster.type].choiceEvents) {
         return getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents);
     }
     // Check obstacles
-    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
         return o.position.x === x && o.position.y === y;
     });
     if (obstacle) {
         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
-        if (obstacleType && obstacleType.blocking && obstacleType.choiceEvents) {
-            return getChoiceEventOptions(obstacleType.choiceEvents);
+        if (obstacleType && obstacleType.blocking) {
+            // Instance choiceEvents override type choiceEvents
+            var choiceEvents = obstacle.choiceEvents || obstacleType.choiceEvents;
+            if (choiceEvents) {
+                return getChoiceEventOptions(choiceEvents);
+            }
         }
     }
     return null;
@@ -801,7 +806,7 @@ function getBlockedChoiceEvents(x, y) {
 
 function handleBlockedInteraction(x, y) {
     var curMap = below.gameData.player.currentMap;
-    var monster = below.gameData.maps[curMap].monsters.find(function(m) {
+    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
         return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
     });
     var choiceEvents = getBlockedChoiceEvents(x, y, monster);
@@ -842,13 +847,17 @@ function getBlockedChoiceEvents(x, y, monster) {
     }
     // Check obstacles
     var curMap = below.gameData.player.currentMap;
-    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
         return o.position.x === x && o.position.y === y;
     });
     if (obstacle) {
         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
-        if (obstacleType && obstacleType.blocking && obstacleType.choiceEvents) {
-            return getChoiceEventOptions(obstacleType.choiceEvents);
+        if (obstacleType && obstacleType.blocking) {
+            // Instance choiceEvents override type choiceEvents
+            var choiceEvents = obstacle.choiceEvents || obstacleType.choiceEvents;
+            if (choiceEvents) {
+                return getChoiceEventOptions(choiceEvents);
+            }
         }
     }
     return null;
@@ -882,7 +891,7 @@ function pushObstacle(obstaclePos) {
         return false;
     }
     // Find and move the obstacle
-    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
         return o.position.x === obstaclePos.x && o.position.y === obstaclePos.y;
     });
     if (obstacle) {
@@ -1002,9 +1011,9 @@ function drawMapCanvas() {
     var visionPixels = vision * width;
     
     // Draw all tiles first
-    for (var k in below.gameData.maps[curMap].tiles) {
-        if (typeof below.gameData.maps[curMap].tiles[k] !== 'function') {
-            var tile = below.gameData.maps[curMap].tiles[k];
+    for (var k in below.gameData.mapData[curMap].tiles) {
+        if (typeof below.gameData.mapData[curMap].tiles[k] !== 'function') {
+            var tile = below.gameData.mapData[curMap].tiles[k];
             context.fillStyle = "#959595";
             context.fillRect( (tile.x * width) - (width/2) + verticalCenter - horisontalOffset, (tile.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
             context.fillStyle = "#6C6C6C";
@@ -1042,7 +1051,7 @@ function drawMapCanvas() {
     }
     
     // MONSTERS
-    below.gameData.maps[curMap].monsters.forEach(function(monster) {
+    below.gameData.mapData[curMap].monsters.forEach(function(monster) {
         // Check if monster is within vision radius (circular)
         var distX = (monster.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
         var distY = (monster.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
@@ -1063,7 +1072,7 @@ function drawMapCanvas() {
         }
     });
     // OBSTACLES
-    below.gameData.maps[curMap].obstacles.forEach(function(obstacle) {
+    below.gameData.mapData[curMap].obstacles.forEach(function(obstacle) {
         // Check if obstacle is within vision radius (circular)
         var distX = (obstacle.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
         var distY = (obstacle.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
@@ -1107,7 +1116,7 @@ function mapGameLoop() {
     
     if (below.tick % below.tickSpeed === 1) {
         // Calculate new monster movement
-        below.gameData.maps[curMap].monsters.forEach(function(monster) {
+        below.gameData.mapData[curMap].monsters.forEach(function(monster) {
             // First, do monster move?
             var type = below.gameData.monsterTypes[monster.type];
             if (Math.random() < type.movement) {
@@ -1208,7 +1217,7 @@ function mapGameLoop() {
     // Monster moving?
     if (!moving) {
         // Check monsters
-        below.gameData.maps[curMap].monsters.forEach(function(monster) {
+        below.gameData.mapData[curMap].monsters.forEach(function(monster) {
             if (monster.destPos.xVelocity || monster.destPos.yVelocity) {
                 moving = true;
                 return;
@@ -1248,7 +1257,7 @@ function mapGameLoop() {
                 saveCurrentGame();
             }
         }
-        below.gameData.maps[curMap].monsters.forEach(function(monster) {
+        below.gameData.mapData[curMap].monsters.forEach(function(monster) {
             if (monster.destPos.xVelocity) {
                 monster.position.x += (monster.destPos.xVelocity/below.tickSpeed);
                 if (below.tick % below.tickSpeed === 0) {
