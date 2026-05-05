@@ -10,12 +10,14 @@ const below = {
     gameData: {
         mapZoom: 50,
         mapLog: [],
+        showCoordinates: true,
         player: {
             currentMap: 0,
-            currentLocation: { x: 2, y: 2 },
+            currentLocation: { x: 1, y: 2 },
             destinationLocation:  { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined },
             icon: null,
-            vision: 3
+            vision: 3,
+            inventory: []
         },
         monsterTypes: {
             1: {
@@ -73,6 +75,21 @@ const below = {
                 color: "#433900",
                 icon: "blood.png",
                 blocking: false,
+                choiceEvents: []
+            },
+            3: {
+                name: "Table",
+                description: "A sturdy wooden table",
+                color: "#433900",
+                icon: "table.png",
+                blocking: true,
+                itemType: 4,
+                choiceEvents: [6, 3]
+            },
+            4: {
+                name: "Key",
+                description: "A rusty key",
+                icon: "key1.png",
                 choiceEvents: []
             }
         },
@@ -181,7 +198,7 @@ const below = {
                 monsters: [
                     {
                         type: 1,
-                        position: { x: -6, y: 2 },
+                        position: { x: -5, y: 2 },
                         status: 1,
                         destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
                     },
@@ -192,7 +209,7 @@ const below = {
                         destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
                     }
                 ],
-                obstacles: [
+                 obstacles: [
                     {
                         type: 1,
                         position: { x: 6, y: 2 },                        
@@ -200,6 +217,10 @@ const below = {
                     {
                         type: 2,
                         position: { x: 1, y: 0 },                        
+                    },
+                    {
+                        type: 3,
+                        position: { x: -6, y: 2 },                        
                     }    
                 ],
                 npcs: [ 1 ]
@@ -313,6 +334,12 @@ girlImg.src = "images/girl.png";
 
 var centipedeImg = new Image();
 centipedeImg.src = "images/centipede.png";
+
+var tableImg = new Image();
+tableImg.src = "images/table.png";
+
+var keyImg = new Image();
+keyImg.src = "images/key1.png";
 
 var bloodImg = new Image();
 bloodImg.src = "images/blood.png";
@@ -607,7 +634,8 @@ function getChoiceEventOptions(choiceEventIds) {
         2: "Push rock",
         3: "Move on",
         4: "Behold",
-        5: "Attack"
+        5: "Attack",
+        6: "Search"
     };
     return choiceEventIds.map(function(id) {
         var option = { text: texts[id] };
@@ -640,6 +668,28 @@ function getChoiceEventOptions(choiceEventIds) {
                         monster.aloof = false;
                         below.gameData.mapLog.push("You attack!");
                         maintainMapLog();
+                    }
+                }
+            };
+        } else if (id === 6) {
+            // Search - find items and add to inventory
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.obstaclePos) {
+                    var curMap = below.gameData.player.currentMap;
+                    var obstacle = below.gameData.maps[curMap].obstacles.find(function(o) {
+                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                    });
+                    if (obstacle) {
+                        var obstacleType = below.gameData.obstacleTypes[obstacle.type];
+                        if (obstacleType.itemType) {
+                            // Add item to inventory
+                            below.gameData.player.inventory.push(obstacleType.itemType);
+                            below.gameData.mapLog.push("You found a " + below.gameData.obstacleTypes[obstacleType.itemType].name + "!");
+                            maintainMapLog();
+                        } else {
+                            below.gameData.mapLog.push("You search but find nothing.");
+                            maintainMapLog();
+                        }
                     }
                 }
             };
@@ -902,6 +952,16 @@ function drawMapCanvas() {
         context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
         context.fill();
     }
+    
+    // Show coordinates if enabled
+    if (below.gameData.showCoordinates) {
+        context.fillStyle = "#FFFFFF";
+        context.font = "16px Courier New";
+        var coordText = "x: " + below.gameData.player.currentLocation.x + ", y: " + below.gameData.player.currentLocation.y;
+        var textWidth = context.measureText(coordText).width;
+        context.fillText(coordText, canvas.width - textWidth - 10, canvas.height - 10);
+    }
+    
     // MONSTERS
     below.gameData.maps[curMap].monsters.forEach(function(monster) {
         // Check if monster is within vision radius (circular)
@@ -931,10 +991,10 @@ function drawMapCanvas() {
         var distance = Math.sqrt(distX * distX + distY * distY);
         if (distance <= visionPixels) {
             var type = below.gameData.obstacleTypes[obstacle.type];
-            if (type.icon) {
-                var img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : new Image());
+        if (type.icon) {
+                var img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : (type.icon === "table.png" ? tableImg : (type.icon === "key.png" ? keyImg : new Image())));
                 if (!img.complete) img.src = "images/" + type.icon;
-                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset - (width/2), width, width);
+                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
             } else {
                 context.fillStyle = type.color || "#433900";
                 context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
@@ -1132,10 +1192,6 @@ function mapGameLoop() {
         drawMapCanvas();
         //window.cancelAnimationFrame(below.tick);
     }
-    
-    // To stop, somehow: 
-    //window.cancelAnimationFrame(below.tick);
-    //below.tick = undefined;
 }
 
 function startGame() {
@@ -1150,31 +1206,3 @@ function startGame() {
         }
     });
 }
-
-//var myGameArea = {
-    //canvas : document.createElement("canvas"),
-    //start : function() {
-        //var me=this;
-        //me.canvas.width = window.innerWidth - 120;
-        //me.canvas.height = window.innerHeight - 120;
-        //me.canvas.clickableElements = [];
-        //me.context = me.canvas.getContext("2d");
-        
-        //me.context.font = "30px Courier";
-        //me.context.fillText("Below",(me.canvas.width/2)-50,(me.canvas.height/2)-50);
-        
-        //document.body.insertBefore(me.canvas, document.body.childNodes[0]);
-        
-        //me.canvas.addEventListener('click', function(event) {
-            //var x = event.pageX,
-                //y = event.pageY;
-            //console.log(x, y);
-            //me.canvas.clickableElements.forEach(function(element) {
-                //if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
-                    //alert('clicked an element: ' + element);
-                //}
-            //});
-
-        //}, false);
-    //}
-//}
