@@ -14,7 +14,8 @@ const below = {
             currentMap: 0,
             currentLocation: { x: 2, y: 2 },
             destinationLocation:  { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined },
-            icon: null
+            icon: null,
+            vision: 3
         },
         monsterTypes: {
             1: {
@@ -65,6 +66,14 @@ const below = {
                 icon: "rock.png",
                 blocking: true,
                 choiceEvents: [1, 2, 3]
+            },
+            2: {
+                name: "Blood",
+                description: "Blood",
+                color: "#433900",
+                icon: "blood.png",
+                blocking: false,
+                choiceEvents: []
             }
         },
         maps: [
@@ -94,7 +103,7 @@ const below = {
                     x0y2: { x: 0, y: 2 },
                     x0y3: { x: 0, y: 3 },
                     x0y4: { x: 0, y: 4 },
-                    x1y0: { x: 1, y: 0, text: "There are claw marks on the floor" },
+                    x1y0: { x: 1, y: 0, text: "There are blood on the floor" },
                     x1y1: { x: 1, y: 1 },                                        
                     x1y2: { x: 1, y: 2 },
                     x1y3: { x: 1, y: 3 },
@@ -187,7 +196,11 @@ const below = {
                     {
                         type: 1,
                         position: { x: 6, y: 2 },                        
-                    }                        
+                    },
+                    {
+                        type: 2,
+                        position: { x: 1, y: 0 },                        
+                    }    
                 ],
                 npcs: [ 1 ]
             }
@@ -297,6 +310,12 @@ boyImg.src = "images/boy.png";
 
 var girlImg = new Image();
 girlImg.src = "images/girl.png";
+
+var centipedeImg = new Image();
+centipedeImg.src = "images/centipede.png";
+
+var bloodImg = new Image();
+bloodImg.src = "images/blood.png";
 
 var rockImg = new Image();
 rockImg.src = "images/rock.png";
@@ -804,12 +823,7 @@ function moveOnMap(e) {
         }
     }
     if (playerMoved) {        
-        var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
-        console.log(1, tile);
-        if (tile['text']) {
-            below.gameData.mapLog.push(tile['text']);
-            maintainMapLog();
-        }
+        // Tile text will be shown when player arrives at destination
     }
     
     //drawMapCanvas();
@@ -853,6 +867,12 @@ function drawMapCanvas() {
     var verticalOffset = below.gameData.player.currentLocation.y * width;
     var horisontalOffset = below.gameData.player.currentLocation.x * width;
     
+    var vision = below.gameData.player.vision || 2;
+    var playerX = below.gameData.player.currentLocation.x;
+    var playerY = below.gameData.player.currentLocation.y;
+    var visionPixels = vision * width;
+    
+    // Draw all tiles first
     for (var k in below.gameData.maps[curMap].tiles) {
         if (typeof below.gameData.maps[curMap].tiles[k] !== 'function') {
             var tile = below.gameData.maps[curMap].tiles[k];
@@ -862,6 +882,13 @@ function drawMapCanvas() {
             context.fillRect( (tile.x * width) - (width/2) + (thickness + verticalCenter) - horisontalOffset, (tile.y * width) - (width/2) + (thickness + horisontalCenter) - verticalOffset, width - (thickness * 2), width - (thickness * 2));
         }
     }
+    
+    // Add radial gradient overlay for vision
+    var gradient = context.createRadialGradient(verticalCenter, horisontalCenter, visionPixels * 0.6, verticalCenter, horisontalCenter, visionPixels);
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
     
     // Draw player and monster sprites
     // PLAYER
@@ -877,29 +904,41 @@ function drawMapCanvas() {
     }
     // MONSTERS
     below.gameData.maps[curMap].monsters.forEach(function(monster) {
-        var type = below.gameData.monsterTypes[monster.type];
-        if (type["icon"]) {
-            var img = type.icon === "bat.png" ? batImg : (type.icon === "rat.png" ? ratImg : new Image());
-            if (!img.complete) img.src = "images/" + type.icon;
-            context.drawImage(img, (monster.position.x * width) + verticalCenter - horisontalOffset - (width/2), (monster.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
-        }
-        else {
-            context.fillStyle = type.color;
-            context.beginPath();
-            context.arc( (monster.position.x * width) + verticalCenter - horisontalOffset, (monster.position.y * width) + horisontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
-            context.fill();
+        // Check if monster is within vision radius (circular)
+        var distX = (monster.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
+        var distY = (monster.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
+        var distance = Math.sqrt(distX * distX + distY * distY);
+        if (distance <= visionPixels) {
+            var type = below.gameData.monsterTypes[monster.type];
+            if (type["icon"]) {
+                var img = type.icon === "bat.png" ? batImg : (type.icon === "rat.png" ? ratImg : (type.icon === "centipede.png" ? centipedeImg : new Image()));
+                if (!img.complete) img.src = "images/" + type.icon;
+                context.drawImage(img, (monster.position.x * width) + verticalCenter - horisontalOffset - (width/2), (monster.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
+            }
+            else {
+                context.fillStyle = type.color;
+                context.beginPath();
+                context.arc( (monster.position.x * width) + verticalCenter - horisontalOffset, (monster.position.y * width) + horisontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
+                context.fill();
+            }
         }
     });
     // OBSTACLES
     below.gameData.maps[curMap].obstacles.forEach(function(obstacle) {
-        var type = below.gameData.obstacleTypes[obstacle.type];
-        if (type.icon) {
-            var img = type.icon === "rock.png" ? rockImg : new Image();
-            if (!img.complete) img.src = "images/" + type.icon;
-            context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset - (width/2), width, width);
-        } else {
-            context.fillStyle = type.color || "#433900";
-            context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
+        // Check if obstacle is within vision radius (circular)
+        var distX = (obstacle.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
+        var distY = (obstacle.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
+        var distance = Math.sqrt(distX * distX + distY * distY);
+        if (distance <= visionPixels) {
+            var type = below.gameData.obstacleTypes[obstacle.type];
+            if (type.icon) {
+                var img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : new Image());
+                if (!img.complete) img.src = "images/" + type.icon;
+                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset - (width/2), width, width);
+            } else {
+                context.fillStyle = type.color || "#433900";
+                context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
+            }
         }
     });
     
@@ -1046,6 +1085,12 @@ function mapGameLoop() {
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.x = below.gameData.player.destinationLocation.x;
                 below.gameData.player.destinationLocation.xVelocity = null;
+                // Show tile text when player arrives
+                var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
+                if (tile && tile['text']) {
+                    below.gameData.mapLog.push(tile['text']);
+                    maintainMapLog();
+                }
                 saveCurrentGame();
             }
         }
@@ -1055,6 +1100,12 @@ function mapGameLoop() {
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.y = below.gameData.player.destinationLocation.y;
                 below.gameData.player.destinationLocation.yVelocity = null;
+                // Show tile text when player arrives
+                var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
+                if (tile && tile['text']) {
+                    below.gameData.mapLog.push(tile['text']);
+                    maintainMapLog();
+                }
                 saveCurrentGame();
             }
         }
