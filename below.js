@@ -130,6 +130,9 @@ bloodImg.src = "images/blood.png";
 var rockImg = new Image();
 rockImg.src = "images/rock.png";
 
+var cupboardImg = new Image();
+cupboardImg.src = "images/cupboard.png";
+
 var doorClosedImg = new Image();
 doorClosedImg.src = "images/door_closed.png";
 
@@ -674,25 +677,11 @@ function isBlocked(x, y) {
                isAloof;
     });
     if (blockedByMonster) return true;
-    // Check obstacles
+    // Check obstacles - instance blocking overrides type
     var blockedByObstacle = below.gameData.mapData[curMap].obstacles.some(function(o) {
-        return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
-    });
-    return blockedByObstacle;
-}
-
-function isBlocked(x, y) {
-    var curMap = below.gameData.player.currentMap;
-    // Check monsters - only block if monster is aloof
-    var blockedByMonster = below.gameData.mapData[curMap].monsters.some(function(m) {
-        return m.position.x === x && m.position.y === y && 
-               below.gameData.monsterTypes[m.type].blocking && 
-               isMonsterAloof(m);
-    });
-    if (blockedByMonster) return true;
-    // Check obstacles
-    var blockedByObstacle = below.gameData.mapData[curMap].obstacles.some(function(o) {
-        return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
+        var obsType = below.gameData.obstacleTypes[o.type];
+        var isBlocking = o.blocking !== undefined ? o.blocking : obsType.blocking;
+        return o.position.x === x && o.position.y === y && isBlocking;
     });
     return blockedByObstacle;
 }
@@ -1099,17 +1088,17 @@ function drawMapCanvas() {
     // Draw tiles
     var thickness = 1;
     var width = below.gameData.mapZoom;    
-    var horisontalCenter = canvas.height / 2;
+    var horizontalCenter = canvas.height / 2;
     var verticalCenter = canvas.width / 2;
     
     // In editor mode, show full map (with pan offset). In game mode, center on player
-    var verticalOffset, horisontalOffset;
+    var verticalOffset, horizontalOffset;
     if (below.editorMode) {
         verticalOffset = -below.editorPanY;
-        horisontalOffset = -below.editorPanX;
+        horizontalOffset = -below.editorPanX;
     } else {
         verticalOffset = below.gameData.player.currentLocation.y * width;
-        horisontalOffset = below.gameData.player.currentLocation.x * width;
+        horizontalOffset = below.gameData.player.currentLocation.x * width;
     }
     
     var vision = below.gameData.player.vision || 2;
@@ -1121,8 +1110,8 @@ function drawMapCanvas() {
         if (typeof below.gameData.mapData[curMap].tiles[k] !== 'function') {
             tileCount++;
             var tile = below.gameData.mapData[curMap].tiles[k];
-            var x = (tile.x * width) - (width/2) + verticalCenter - horisontalOffset;
-            var y = (tile.y * width) - (width/2) + horisontalCenter - verticalOffset;
+            var x = (tile.x * width) - (width/2) + verticalCenter - horizontalOffset;
+            var y = (tile.y * width) - (width/2) + horizontalCenter - verticalOffset;
             context.fillStyle = "#959595";
             context.fillRect(x, y, width, width);
             context.fillStyle = "#6C6C6C";
@@ -1132,7 +1121,7 @@ function drawMapCanvas() {
     
     // Add radial gradient overlay for vision (only in game mode)
     if (!below.editorMode) {
-        var gradient = context.createRadialGradient(verticalCenter, horisontalCenter, visionPixels * 0.6, verticalCenter, horisontalCenter, visionPixels);
+        var gradient = context.createRadialGradient(verticalCenter, horizontalCenter, visionPixels * 0.6, verticalCenter, horizontalCenter, visionPixels);
         gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
         gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
         context.fillStyle = gradient;
@@ -1145,11 +1134,11 @@ function drawMapCanvas() {
         if (below.gameData.player.icon) {
             var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
             if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
-            context.drawImage(playerImg, verticalCenter - (width/2), horisontalCenter - (width/2), width, width);
+            context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
         } else {
             context.fillStyle = "#B8C76F";
             context.beginPath();
-            context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
+            context.arc( verticalCenter, horizontalCenter, (width-2)/2, 0, 2 * Math.PI);
             context.fill();
         }
     }
@@ -1166,8 +1155,8 @@ function drawMapCanvas() {
     // MONSTERS
     below.gameData.mapData[curMap].monsters.forEach(function(monster) {
         // Calculate distance for vision check
-        var distXM = (monster.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
-        var distYM = (monster.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
+        var distXM = (monster.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
+        var distYM = (monster.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceM = Math.sqrt(distXM * distXM + distYM * distYM);
         
         // In editor mode, show all monsters. In game mode, check vision
@@ -1176,12 +1165,12 @@ function drawMapCanvas() {
             if (type["icon"]) {
                 var img = type.icon === "bat.png" ? batImg : (type.icon === "rat.png" ? ratImg : (type.icon === "centipede.png" ? centipedeImg : new Image()));
                 if (!img.complete) img.src = "images/" + type.icon;
-                context.drawImage(img, (monster.position.x * width) + verticalCenter - horisontalOffset - (width/2), (monster.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
+                context.drawImage(img, (monster.position.x * width) + verticalCenter - horizontalOffset - (width/2), (monster.position.y * width) + horizontalCenter - verticalOffset  - (width/2), width, width);
             }
             else {
                 context.fillStyle = type.color;
                 context.beginPath();
-                context.arc( (monster.position.x * width) + verticalCenter - horisontalOffset, (monster.position.y * width) + horisontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
+                context.arc( (monster.position.x * width) + verticalCenter - horizontalOffset, (monster.position.y * width) + horizontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
                 context.fill();
             }
         }
@@ -1189,27 +1178,29 @@ function drawMapCanvas() {
     // OBSTACLES
     below.gameData.mapData[curMap].obstacles.forEach(function(obstacle) {
         // Calculate distance for vision check
-        var distXO = (obstacle.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
-        var distYO = (obstacle.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
+        var distXO = (obstacle.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
+        var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
         
         // In editor mode, show all obstacles. In game mode, check vision
         if (below.editorMode || distanceO <= visionPixels) {
             var type = below.gameData.obstacleTypes[obstacle.type];
-        if (type.icon) {
+            if (type.icon) {
                 // Handle door states - instance overrides type
                 var img = null;
-                if (type.icon === "door_closed.png" || type.icon === "door_open.png") {
+                var iconName = obstacle.icon || type.icon;
+                if (iconName === "door_closed.png" || iconName === "door_open.png") {
                     var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
                     img = isClosed ? doorClosedImg : doorOpenImg;
                 } else {
-                    img = type.icon === "rock.png" ? rockImg : (type.icon === "blood.png" ? bloodImg : (type.icon === "table.png" ? tableImg : (type.icon === "key1.png" ? keyImg : new Image())));
+                    var iconImg = iconName === "rock.png" ? rockImg : (iconName === "blood.png" ? bloodImg : (iconName === "table.png" ? tableImg : (iconName === "key1.png" ? keyImg : (iconName === "cupboard.png" ? cupboardImg : new Image()))));
+                    img = iconImg;
                 }
-                if (!img.complete) img.src = "images/" + type.icon;
-                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horisontalOffset - (width/2), (obstacle.position.y * width) + horisontalCenter - verticalOffset  - (width/2), width, width);
+                if (!img.complete) img.src = "images/" + iconName;
+                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2), (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
                 context.fillStyle = type.color || "#433900";
-                context.fillRect( (obstacle.position.x * width) - (width/2) + verticalCenter - horisontalOffset, (obstacle.position.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
+                context.fillRect((obstacle.position.x * width) - (width/2) + verticalCenter - horizontalOffset, (obstacle.position.y * width) - (width/2) + horizontalCenter - verticalOffset, width, width);
             }
         }
     });

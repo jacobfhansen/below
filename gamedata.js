@@ -90,7 +90,16 @@ var belowGameData = {
             choiceEvents: [7, 3], // Default: locked door events
             openChoiceEvents: [8, 3], // Open door events
             closedChoiceEvents: [7, 3] // Closed door events
-        }
+        },
+         5: {
+            name: "Cupboard",
+            description: "A large wooden cupboard",
+            color: "#433900",
+            icon: "cupboard.png",
+            blocking: true,
+            itemType: 5, // Contains key2
+             choiceEvents: [6, 3]
+        },
     },
     itemTypes: {
         4: {
@@ -685,29 +694,34 @@ var belowGameData = {
                     destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
                 }
             ],
-              obstacles: [
-                 {
-                     type: 1,
-                     position: { x: 6, y: 2 },
-                     choiceEvents: [1, 2, 3]
-                 },
-                 {
-                     type: 2,
-                     position: { x: 1, y: 0 },                        
-                 },
+               obstacles: [
                   {
-                       type: 3,
-                       position: { x: -6, y: 2 },                        
+                      type: 1,
+                      position: { x: 6, y: 2 },
+                      choiceEvents: [1, 2, 3]
+                  },
+                  {
+                      type: 2,
+                      position: { x: 1, y: 0 },                        
+                  },
+                   {
+                        type: 3,
+                        position: { x: -6, y: 2 },                        
                    },
                    {
-                       type: 4, // Door
-                       position: { x: 1, y: -1 }    
+                        type: 4, // Door
+                        position: { x: 1, y: -1 }    
                    },
                    {
-                       type: 4, // Locked door with key2
-                       position: { x: -7, y: 3 },
-                       keyId: 5,
-                       closed: true
+                        type: 4, // Locked door with key2
+                        position: { x: -7, y: 3 },
+                        keyId: 5,
+                        closed: true
+                   },
+                   {
+                        type: 5, // Cupboard with key2
+                        position: { x: -1, y: -8 },
+                        itemType: 5
                    }    
                ],
               npcs: [ 1 ]
