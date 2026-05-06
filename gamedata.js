@@ -127,6 +127,32 @@ var belowGameData = {
             choiceEvents: []
         }
     },
+    npcTypes: {
+        1: {
+            name: "Hermit",
+            description: "An old man living in solitude",
+            icon: "hermit.png",
+            dialog: {
+                greeting: "Welcome traveler. I don't get many visitors here.",
+                agitated: "Back off! I want to be left alone!"
+            },
+            choiceEvents: [9, 10, 11], // Talk, Trade, Intimidate
+            agenda: "The hermit offers you some herbs in exchange for a key.",
+            personality: "grumpy"
+        },
+        2: {
+            name: "Merchant",
+            description: "A traveling trader with goods to sell",
+            icon: "merchant.png",
+            dialog: {
+                greeting: "Welcome! Have a look at my wares.",
+                agitated: "Best be on your way, friend."
+            },
+            choiceEvents: [9, 10, 11], // Talk, Trade, Intimidate
+            agenda: "The merchant has rare items for trade.",
+            personality: "friendly"
+        }
+    },
     mapData: [
         {
             id: 0,
@@ -742,7 +768,12 @@ var belowGameData = {
                          position: { x: 1, y: 4 }
                    }    
                ],
-              npcs: [ 1 ]
-        }
+               npcs: [
+                   {
+                       type: 1, // Hermit
+                       position: { x: 3, y: 3 }
+                   }
+               ]
+         }
     ]
 };

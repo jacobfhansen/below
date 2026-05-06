@@ -134,6 +134,12 @@ girlImg.src = "images/girl.png";
 var centipedeImg = new Image();
 centipedeImg.src = "images/centipede.png";
 
+var hermitImg = new Image();
+hermitImg.src = "images/hermit.png";
+
+var merchantImg = new Image();
+merchantImg.src = "images/merchant.png";
+
 var tableImg = new Image();
 tableImg.src = "images/table.png";
 
@@ -568,8 +574,16 @@ function renderChoiceEvent() {
     gameDivCenter.style.opacity = "0.5";
     gameDivCenter.style.pointerEvents = "none";
     
-    // Show appropriate message based on aloof status
-    if (below.choiceEvent.monsterType !== null) {
+    // Show appropriate message based on entity type
+    if (below.choiceEvent.npcType !== null && below.choiceEvent.npcType !== undefined) {
+        // NPC interaction
+        var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
+        var msgNode = document.createElement("P");
+        msgNode.className = "below-game-left-paragraph-current";
+        msgNode.textContent = (below.choiceEvent.npcAgitated ? npcType.dialog.agitated : npcType.dialog.greeting) || "A character blocks your path.";
+        gameLogDiv.appendChild(msgNode);
+    } else if (below.choiceEvent.monsterType !== null && below.choiceEvent.monsterType !== undefined) {
+        // Monster interaction
         var monsterType = below.gameData.monsterTypes[below.choiceEvent.monsterType];
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
@@ -585,6 +599,7 @@ function renderChoiceEvent() {
         }
         gameLogDiv.appendChild(msgNode);
     } else if (below.choiceEvent.message) {
+        // Obstacle or other interaction
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
         msgNode.textContent = below.choiceEvent.message;
@@ -774,18 +789,28 @@ function foundTile(x, y) {
 
 function isBlocked(x, y) {
     var curMap = below.gameData.player.currentMap;
+    // Check NPCs - they always block (unless attacked/intimidated)
+    var blockedByNPC = below.gameData.mapData[curMap].npcs.some(function(n) {
+        return n.position && n.position.x === x && n.position.y === y;
+    });
+    if (blockedByNPC) return true;
     // Check monsters - only block if monster is aloof
     var blockedByMonster = below.gameData.mapData[curMap].monsters.some(function(m) {
-        var isAloof = m.aloof !== undefined ? m.aloof : below.gameData.monsterTypes[m.type].aloof;
+        if (!m.position) return false;
+        var type = below.gameData.monsterTypes[m.type];
+        if (!type) return false; // Skip if monster type undefined (e.g., NPC in monster array)
+        var isAloof = m.aloof !== undefined ? m.aloof : type.aloof;
         return m.position.x === x && m.position.y === y && 
-               below.gameData.monsterTypes[m.type].blocking && 
+               type.blocking && 
                isAloof;
     });
     if (blockedByMonster) return true;
     // Check obstacles - instance blocking overrides type
-    var blockedByObstacle = below.gameData.mapData[curMap].obstacles.some(function(o) {
+    var obstacles = below.gameData.mapData[curMap].obstacles || [];
+    var blockedByObstacle = obstacles.some(function(o) {
+        if (!o.position) return false;
         var obsType = below.gameData.obstacleTypes[o.type];
-        var isBlocking = o.blocking !== undefined ? o.blocking : obsType.blocking;
+        var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
         return o.position.x === x && o.position.y === y && isBlocking;
     });
     return blockedByObstacle;
@@ -793,19 +818,33 @@ function isBlocked(x, y) {
 
 function getBlockedMessage(x, y) {
     var curMap = below.gameData.player.currentMap;
+    // Check NPCs
+    var npc = (below.gameData.mapData[curMap].npcs || []).find(function(n) {
+        return n.position && n.position.x === x && n.position.y === y;
+    });
+    if (npc) {
+        var npcType = below.gameData.npcTypes[npc.type];
+        return (npcType ? npcType.description : "") || "The character blocks your path.";
+    }
     // Check monsters
-    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
-        return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
+    var monster = (below.gameData.mapData[curMap].monsters || []).find(function(m) {
+        if (!m.position) return false;
+        var mType = below.gameData.monsterTypes[m.type];
+        return m.position.x === x && m.position.y === y && mType && mType.blocking;
     });
     if (monster) {
-        return below.gameData.monsterTypes[monster.type].description || "Not sure what good that would do";
+        var mType = below.gameData.monsterTypes[monster.type];
+        return (mType ? mType.description : "") || "Not sure what good that would do";
     }
     // Check obstacles
-    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-        return o.position.x === x && o.position.y === y && below.gameData.obstacleTypes[o.type].blocking;
+    var obstacle = (below.gameData.mapData[curMap].obstacles || []).find(function(o) {
+        if (!o.position) return false;
+        var oType = below.gameData.obstacleTypes[o.type];
+        return o.position.x === x && o.position.y === y && oType && oType.blocking;
     });
     if (obstacle) {
-        return below.gameData.obstacleTypes[obstacle.type].description || "Not sure what good that would do";
+        var obsType = below.gameData.obstacleTypes[obstacle.type];
+        return (obsType ? obsType.description : "") || "Not sure what good that would do";
     }
     // Empty tile - check for searchMsg on tile first, then return random default message
     var tileIndex = 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
@@ -832,7 +871,10 @@ function getChoiceEventOptions(choiceEventIds) {
         5: "Attack",
         6: "Search",
         7: "Unlock door",
-        8: "Pass through"
+        8: "Pass through",
+        9: "Talk",
+        10: "Trade",
+        11: "Intimidate"
     };
     return choiceEventIds.map(function(id) {
         var option = { text: texts[id] };
@@ -863,13 +905,14 @@ function getChoiceEventOptions(choiceEventIds) {
                     });
                     if (monster) {
                         monster.aloof = false;
-                        below.gameData.mapLog.push("You attack!");
+                        var monsterType = below.gameData.monsterTypes[monster.type];
+                        var msg = monsterType.aloofFalseMsg || "The creature becomes agitated!";
+                        below.gameData.mapLog.push(msg);
                         maintainMapLog();
                     }
                 }
             };
         } else if (id === 6) {
-            // Search - find items and add to inventory
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
@@ -879,13 +922,10 @@ function getChoiceEventOptions(choiceEventIds) {
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
                         if (obstacleType.itemType) {
-                            // Add item to inventory
                             var itemTypeId = obstacleType.itemType;
                             below.gameData.player.inventory.push(itemTypeId);
                             below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
-                            // Remove item from obstacle and add a default message to the tile
                             delete obstacleType.itemType;
-                            // Add random default message to the tile
                             var defaultMessages = [
                                 "You searched here before - nothing but dust.",
                                 "You rummage through it - empty.",
@@ -900,7 +940,6 @@ function getChoiceEventOptions(choiceEventIds) {
                             }
                             maintainMapLog();
                         } else {
-                            // Already searched - show tile's stored message or default
                             var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
                             var tile = below.gameData.mapData[curMap].tiles[tileIndex];
                             if (tile && tile.text) {
@@ -922,16 +961,13 @@ function getChoiceEventOptions(choiceEventIds) {
                     });
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
-                        // Instance overrides type (keyId, closed, blocking, etc.)
                         var keyId = obstacle.keyId || obstacleType.keyId;
                         var isClosed = obstacle.closed !== undefined ? obstacle.closed : obstacleType.closed;
-                        
                         if (keyId) {
                             var hasKey = below.gameData.player.inventory.some(function(itemId) {
                                 return itemId === keyId;
                             });
                             if (hasKey && isClosed) {
-                                // Unlock the door - update instance only (not type!)
                                 obstacle.closed = false;
                                 obstacle.icon = "door_open.png";
                                 obstacle.blocking = false;
@@ -974,11 +1010,49 @@ function getChoiceEventOptions(choiceEventIds) {
                     }
                 }
             };
+        } else if (id === 9) {
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.npcType) {
+                    var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
+                    var msg = (below.choiceEvent.npcAgitated ? npcType.dialog.agitated : npcType.dialog.greeting) || "The character remains silent.";
+                    below.gameData.mapLog.push(msg);
+                    maintainMapLog();
+                }
+            };
+        } else if (id === 10) {
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.npcType) {
+                    var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
+                    below.gameData.mapLog.push(npcType.agenda || "The merchant sizes you up...");
+                    maintainMapLog();
+                }
+            };
+        } else if (id === 11) {
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.npcType) {
+                    var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
+                    if (below.choiceEvent.npcPos) {
+                        var curMap = below.gameData.player.currentMap;
+                        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+                            return n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+                        });
+                        if (npc) {
+                            npc.agitated = true;
+                        }
+                    }
+                    var msg = npcType.dialog.agitated || "The character looks intimidated!";
+                    below.gameData.mapLog.push(msg);
+                    maintainMapLog();
+                }
+            };
         }
         return option;
     });
-}
 
+                    var desc = below.gameData.monsterTypes[below.choiceEvent.monsterType].beholdDesc || "A creature";
+                    below.gameData.mapLog.push(desc);
+                    maintainMapLog();
+                }
 function isTileAllowed(monster, x, y) {
     // If no allowedTiles defined, all tiles are allowed
     if (!monster.allowedTiles) return true;
@@ -990,6 +1064,13 @@ function isTileAllowed(monster, x, y) {
 
 function getBlockedChoiceEvents(x, y) {
     var curMap = below.gameData.player.currentMap;
+    // Check NPCs first (they block and have interactions)
+    var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+        return n.position.x === x && n.position.y === y;
+    });
+    if (npc && below.gameData.npcTypes[npc.type].choiceEvents) {
+        return getChoiceEventOptions(below.gameData.npcTypes[npc.type].choiceEvents);
+    }
     // Check monsters
     var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
         return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
@@ -1016,13 +1097,21 @@ function getBlockedChoiceEvents(x, y) {
 
 function handleBlockedInteraction(x, y) {
     var curMap = below.gameData.player.currentMap;
+    // Check for NPC first
+    var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+        return n.position.x === x && n.position.y === y;
+    });
+    // Check for monster
     var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
         return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
     });
-    var choiceEvents = getBlockedChoiceEvents(x, y, monster);
+    var choiceEvents = getBlockedChoiceEvents(x, y);
     if (choiceEvents) {
         var msg = "";
-        if (monster) {
+        if (npc) {
+            var npcType = below.gameData.npcTypes[npc.type];
+            msg = (npc.agitated ? npcType.dialog.agitated : npcType.dialog.greeting) || "A character blocks your path.";
+        } else if (monster) {
             var monsterType = below.gameData.monsterTypes[monster.type];
             if (isMonsterAloof(monster)) {
                 msg = monsterType.aloofTrueMsg || "A monster. It ignores you.";
@@ -1038,6 +1127,9 @@ function handleBlockedInteraction(x, y) {
             obstaclePos: { x: x, y: y },
             monsterPos: monster ? { x: x, y: y } : null,
             monsterType: monster ? monster.type : null,
+            npcPos: npc ? { x: x, y: y } : null,
+            npcType: npc ? npc.type : null,
+            npcAgitated: npc ? npc.agitated : false,
             options: choiceEvents
         };
         renderChoiceEvent();
@@ -1050,28 +1142,7 @@ function handleBlockedInteraction(x, y) {
     }
 }
 
-function getBlockedChoiceEvents(x, y, monster) {
-    // Check monsters - only if aloof
-    if (monster && isMonsterAloof(monster) && below.gameData.monsterTypes[monster.type].choiceEvents) {
-        return getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents);
-    }
-    // Check obstacles
-    var curMap = below.gameData.player.currentMap;
-    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-        return o.position.x === x && o.position.y === y;
-    });
-    if (obstacle) {
-        var obstacleType = below.gameData.obstacleTypes[obstacle.type];
-        if (obstacleType && obstacleType.blocking) {
-            // Instance choiceEvents override type choiceEvents
-            var choiceEvents = obstacle.choiceEvents || obstacleType.choiceEvents;
-            if (choiceEvents) {
-                return getChoiceEventOptions(choiceEvents);
-            }
-        }
-    }
-    return null;
-}
+
 
 function isMonsterAloof(m) {
     // Check instance first (set after attack), then fall back to type definition
@@ -1294,7 +1365,7 @@ function drawMapCanvas() {
     }
     
     // MONSTERS
-    below.gameData.mapData[curMap].monsters.forEach(function(monster) {
+    (below.gameData.mapData[curMap].monsters || []).forEach(function(monster) {
         // Calculate distance for vision check
         var distXM = (monster.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
         var distYM = (monster.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
@@ -1303,6 +1374,7 @@ function drawMapCanvas() {
         // In editor mode, show all monsters. In game mode, check vision
         if (below.editorMode || distanceM <= visionPixels) {
             var type = below.gameData.monsterTypes[monster.type];
+            if (!type) return; // Skip if monster type is undefined
             if (type["icon"]) {
                 var img = type.icon === "bat.png" ? batImg : (type.icon === "rat.png" ? ratImg : (type.icon === "centipede.png" ? centipedeImg : new Image()));
                 if (!img.complete) img.src = "images/" + type.icon;
@@ -1316,9 +1388,37 @@ function drawMapCanvas() {
             }
         }
     });
+    // NPCs
+    (below.gameData.mapData[curMap].npcs || []).forEach(function(npc) {
+        // Skip if no position
+        if (!npc.position) return;
+        
+        // Calculate distance for vision check
+        var distXN = (npc.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
+        var distYN = (npc.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
+        var distanceN = Math.sqrt(distXN * distXN + distYN * distYN);
+        
+        // In editor mode, show all NPCs. In game mode, check vision
+        if (below.editorMode || distanceN <= visionPixels) {
+            var type = below.gameData.npcTypes[npc.type];
+            if (!type) return; // Skip if NPC type is undefined
+            if (type.icon) {
+                var img = new Image();
+                if (type.icon === "hermit.png") img = hermitImg || new Image();
+                else if (type.icon === "merchant.png") img = merchantImg || new Image();
+                if (!img.complete) img.src = "images/" + type.icon;
+                context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
+            } else {
+                context.fillStyle = type.color || "#00aa00";
+                context.beginPath();
+                context.arc((npc.position.x * width) + verticalCenter - horizontalOffset, (npc.position.y * width) + horizontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
+                context.fill();
+            }
+        }
+    });
     // OBSTACLES - Draw in two passes: below player (drawOrder=1), then on top (drawOrder=2)
     // First pass: draw obstacles with drawOrder=1 (below player)
-    below.gameData.mapData[curMap].obstacles.forEach(function(obstacle) {
+    (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {
         var type = below.gameData.obstacleTypes[obstacle.type];
         var drawOrder = type.drawOrder || 1; // Default: draw below player
         if (drawOrder !== 1) return; // Skip for now
@@ -1362,7 +1462,7 @@ function drawMapCanvas() {
     }
     
     // Second pass: draw obstacles with drawOrder=2 (on top of player)
-    below.gameData.mapData[curMap].obstacles.forEach(function(obstacle) {
+    (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {
         var type = below.gameData.obstacleTypes[obstacle.type];
         var drawOrder = type.drawOrder || 1;
         if (drawOrder !== 2) return; // Skip - only draw top-layer obstacles
@@ -1442,8 +1542,11 @@ function mapGameLoop() {
     if (below.tick % below.tickSpeed === 1) {
         // Calculate new monster movement
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
+            // Initialize destPos if missing
+            if (!monster.destPos) monster.destPos = { x: null, y: null, xVelocity: null, yVelocity: null };
             // First, do monster move?
             var type = below.gameData.monsterTypes[monster.type];
+            if (!type) return; // Skip if monster type is undefined (e.g., NPC in monster array)
             if (Math.random() < type.movement) {
                 // What direction do it move?
                 var dir = (Math.floor(Math.random() * 4)) + 1;
@@ -1541,7 +1644,7 @@ function mapGameLoop() {
     if (!moving) {
         // Check monsters
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
-            if (monster.destPos.xVelocity || monster.destPos.yVelocity) {
+            if (monster.destPos && (monster.destPos.xVelocity || monster.destPos.yVelocity)) {
                 moving = true;
                 return;
             }
@@ -1579,7 +1682,7 @@ function mapGameLoop() {
             }
         }
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
-            if (monster.destPos.xVelocity) {
+            if (monster.destPos && monster.destPos.xVelocity) {
                 monster.position.x += (monster.destPos.xVelocity/below.tickSpeed);
                 if (below.tick % below.tickSpeed === 0) {
                     monster.position.x = monster.destPos.x;
@@ -1587,7 +1690,7 @@ function mapGameLoop() {
                     saveCurrentGame();
                 }
             }
-            if (monster.destPos.yVelocity) {
+            if (monster.destPos && monster.destPos.yVelocity) {
                 monster.position.y += (monster.destPos.yVelocity/below.tickSpeed);
                 if (below.tick % below.tickSpeed === 0) {
                     monster.position.y = monster.destPos.y;
