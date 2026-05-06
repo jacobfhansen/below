@@ -9,254 +9,7 @@ const below = {
     choiceEvent: null,
     editorMode: false,
     selectedMap: 0,
-    gameData: {
-        mapZoom: 50,
-        mapLog: [],
-        showCoordinates: true,
-        player: {
-            currentMap: 0,
-            currentLocation: { x: 2, y: 2 },
-            destinationLocation:  { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined },
-            icon: null,
-            vision: 3,
-            inventory: []
-        },
-        monsterTypes: {
-            1: {
-                    name: "Giant rat",
-                    fraction: 2,
-                    movement: 0.3,
-                    color: "#9A6759",
-                    icon: "rat.png",
-                    blocking: true,
-                    aloof: true,
-                    description: "A giant rat blocks your way",
-                    aloofTrueMsg: "A giant rat. It ignores you.",
-                    aloofFalseMsg: "An angry giant rat attacks you!",
-                    beholdDesc: "A large rat with sharp teeth",
-                    choiceEvents: [4, 5, 3]
-            },
-            2:  {
-                    name: "Bat",
-                    fraction: 1,
-                    movement: 0.60,
-                    color: "#433900",
-                    icon: "bat.png",
-                    blocking: true,
-                    aloof: true,
-                    description: "A bat is in your way",
-                    aloofTrueMsg: "A bat screeches and ignores you.",
-                    aloofFalseMsg: "A furious bat dives at you!",
-                    beholdDesc: "A screeching bat with sharp claws",
-                    choiceEvents: [4, 5, 3]
-            },
-            3: {
-                    name: "Centipede",
-                    fraction: 1,
-                    blocking: true,
-                    aloof: true,
-                    description: "A centipede blocks the path",
-                    aloofTrueMsg: "A centipede crawls right past you.",
-                    aloofFalseMsg: "A centipede strikes at your ankles!",
-                    beholdDesc: "A multi-segmented centipede",
-                    choiceEvents: [4, 5, 3]
-            }
-        },
-        obstacleTypes: {
-            1: {
-                name: "Rock",
-                description: "A rock blocking your way",
-                color: "#433900",
-                icon: "rock.png",
-                blocking: true,
-                choiceEvents: [1, 3]
-            },
-            2: {
-                name: "Blood",
-                description: "Blood",
-                color: "#433900",
-                icon: "blood.png",
-                blocking: false,
-                choiceEvents: []
-            },
-            3: {
-                name: "Table",
-                description: "A sturdy wooden table",
-                color: "#433900",
-                icon: "table.png",
-                blocking: true,
-                itemType: 4,
-                 choiceEvents: [6, 3]
-            },
-            4: {
-                name: "Door",
-                description: "A locked door",
-                color: "#8B4513",
-                icon: "door_closed.png",
-                blocking: true,
-                closed: true,
-                keyId: 4, // Key item type ID needed to unlock
-                choiceEvents: [7, 3], // Default: locked door events
-                openChoiceEvents: [8, 3], // Open door events
-                closedChoiceEvents: [7, 3] // Closed door events
-            }
-        },
-        itemTypes: {
-            4: {
-                name: "Key",
-                description: "A rusty key",
-                icon: "key1.png",
-                choiceEvents: []
-            },
-            5: {
-                name: "Key",
-                description: "A rusty key",
-                icon: "key2.png",
-                choiceEvents: []
-            }
-        },
-        mapData: [
-            {
-                id: 0,
-                name: "Start",
-                tiles: {
-                    xm7y3: { x: -7, y: 3 },
-                    xm6y1: { x: -6, y: 1 },
-                    xm6y2: { x: -6, y: 2 },
-                    xm6y3: { x: -6, y: 3 },
-                    xm5y1: { x: -5, y: 1 },
-                    xm5y2: { x: -5, y: 2 },
-                    xm5y3: { x: -5, y: 3 },
-                    xm4y1: { x: -4, y: 1 },
-                    xm4y2: { x: -4, y: 2 },
-                    xm4y3: { x: -4, y: 3 },
-                    xm3y2: { x: -3, y: 2 },
-                    xm2y2: { x: -2, y: 2 },
-                    xm1y0: { x: -1, y: 0 },
-                    xm1y1: { x: -1, y: 1 },
-                    xm1y2: { x: -1, y: 2 },
-                    xm1y3: { x: -1, y: 3 },
-                    xm1y4: { x: -1, y: 4 },
-                    x0y0: { x: 0, y: 0 },
-                    x0y1: { x: 0, y: 1 },
-                    x0y2: { x: 0, y: 2 },
-                    x0y3: { x: 0, y: 3 },
-                    x0y4: { x: 0, y: 4 },
-                    x1y0: { x: 1, y: 0, text: "There are blood on the floor" },
-                    x1y1: { x: 1, y: 1 },                                        
-                    x1y2: { x: 1, y: 2 },
-                    x1y3: { x: 1, y: 3 },
-                    x1ym1: { x: 1, y: -1 },
-                    x1ym2: { x: 1, y: -2 },
-                    x1ym3: { x: 1, y: -3 },
-                    x2ym3: { x: 2, y: -3 },
-                    x1y4: { x: 1, y: 4, text: "There is light from above" },
-                    x2y0: { x: 2, y: 0 },                    
-                    x2y1: { x: 2, y: 1 },
-                    x2y2: { x: 2, y: 2 },
-                    x2y3: { x: 2, y: 3 },
-                    x2y4: { x: 2, y: 4 },
-                    x3y0: { x: 3, y: 0 },
-                    x3y1: { x: 3, y: 1 },
-                    x3y2: { x: 3, y: 2 },
-                    x3y3: { x: 3, y: 3 },
-                    x3y4: { x: 3, y: 4 },
-                    x4y2: { x: 4, y: 2 },
-                    x5y2: { x: 5, y: 2 },
-                    x6y2: { x: 6, y: 2 },
-                    x7y2: { x: 7, y: 2 },
-                    x8y2: { x: 8, y: 2 },
-                    x9y2: { x: 9, y: 2 },
-                    x9y3: { x: 9, y: 3 },
-                    x9y4: { x: 9, y: 4 },
-                    x10y2: { x: 10, y: 2 },
-                    x10y3: { x: 10, y: 3 },
-                    x10y4: { x: 10, y: 4 },
-                    x11y2: { x: 11, y: 2 },
-                    x11y3: { x: 11, y: 3 },
-                    x11y4: { x: 11, y: 4 },
-                    x11y1: { x: 11, y: 1 },
-                    x11y0: { x: 11, y: 0 },
-                    x11ym1: { x: 11, y: -1 },
-                    x11ym2: { x: 11, y: -2 },
-                    x11ym3: { x: 11, y: -3 },
-                    x11ym4: { x: 11, y: -4 },
-                    x11ym5: { x: 11, y: -5 },
-                    x11ym6: { x: 11, y: -6 },
-                    x10ym2: { x: 10, y: -2 },
-                    x9ym2: { x: 9, y: -2 },
-                    x8ym2: { x: 8, y: -2 },
-                    x7ym2: { x: 7, y: -2 },
-                    x9ym1: { x: 9, y: -1 },
-                    x8ym1: { x: 8, y: -1 },
-                    x7ym1: { x: 7, y: -1 },
-                    x9y0: { x: 9, y: 0 },
-                    x8y0: { x: 8, y: 0 },
-                    x7y0: { x: 7, y: 0 },
-                    x9ym3: { x: 9, y: -3 },
-                    x8ym3: { x: 8, y: -3 },
-                    x7ym3: { x: 7, y: -3 },
-                    x3ym3: { x: 3, y: -3 },
-                    x9ym4: { x: 9, y: -4 },
-                    x8ym4: { x: 8, y: -4 },
-                    x7ym4: { x: 7, y: -4 },
-                    x10ym6: { x: 10, y: -6 },
-                    x9ym6: { x: 9, y: -6 },
-                    x8ym6: { x: 8, y: -6 },
-                    x7ym6: { x: 7, y: -6 },
-                    x6ym6: { x: 6, y: -6 },
-                    x5ym6: { x: 5, y: -6 },
-                    x4ym6: { x: 4, y: -6 },
-                    x4ym7: { x: 4, y: -7 },
-                    x4ym8: { x: 4, y: -8 },
-                    x3ym8: { x: 3, y: -8 },
-                    x5ym5: { x: 5, y: -5 },
-                    x4ym5: { x: 4, y: -5 },
-                    x5ym4: { x: 5, y: -4 },
-                    x4ym4: { x: 4, y: -4 },
-                    x5ym3: { x: 5, y: -3 },
-                    x4ym3: { x: 4, y: -3 },
-                    x5ym2: { x: 5, y: -2 },
-                    x4ym2: { x: 4, y: -2 },
-                },
-                monsters: [
-                    {
-                        type: 1,
-                        position: { x: -5, y: 2 },
-                        status: 1,
-                        destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined },
-                        allowedTiles: [ { x: -6, y: 1 }, { x: -5, y: 1 }, { x: -4, y: 1 }, { x: -5, y: 2 }, { x: -4, y: 2 }, { x: -7, y: 3 }, { x: -6, y: 3 }, { x: -5, y: 3 }, { x: -4, y: 3 } ]
-                    },
-                    {
-                        type: 2,
-                        position: { x: 7, y: 2 },
-                        status: 1,
-                        destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
-                    }
-                ],
-                 obstacles: [
-                    {
-                        type: 1,
-                        position: { x: 6, y: 2 },
-                        choiceEvents: [1, 2, 3]
-                    },
-                    {
-                        type: 2,
-                        position: { x: 1, y: 0 },                        
-                    },
-                     {
-                         type: 3,
-                         position: { x: -6, y: 2 },                        
-                     },
-                     {
-                         type: 4, // Door
-                         position: { x: 1, y: -1 }    
-                     }    
-                 ],
-                 npcs: [ 1 ]
-            }
-        ]
-    }
+    gameData: null // Loaded from gamedata.js
 };
 
 // Save slot utility functions
@@ -542,11 +295,46 @@ function attachEditorClickHandler() {
 // Test function to add a tile at (0,0)
 function testAddTile() {
     // Add a grass tile at (0,0) for testing
-    below.gameData.mapData[below.selectedMap].tiles.push({x: 0, y: 0, type: 1});
+    var tileIndex = 'x0y0';
+    below.gameData.mapData[below.selectedMap].tiles[tileIndex] = { x: 0, y: 0, type: 1 };
+}
+
+// Export map data to file (for developers to copy back to gamedata.js)
+function exportMapData() {
+    // Create a clean copy without function references
+    var exportObj = JSON.parse(JSON.stringify(below.gameData));
+    var jsonStr = JSON.stringify(exportObj, null, 4);
+    var fullContent = 'var belowGameData = ' + jsonStr + ';';
+    
+    // Create a Blob and download link
+    var blob = new Blob([fullContent], { type: 'text/javascript' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'gamedata.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    var status = document.getElementById("editorStatus");
+    if (status) {
+        status.textContent = "Exported! Copy content to gamedata.js";
+        setTimeout(function() {
+            status.textContent = "Editor mode: ON";
+        }, 3000);
+    }
 }
 
 // Add event listeners for menu buttons (called once on DOMContentLoaded)
 document.addEventListener("DOMContentLoaded", function() {
+    // Initialize gameData from gamedata.js
+    if (typeof belowGameData !== 'undefined') {
+        below.gameData = JSON.parse(JSON.stringify(belowGameData));
+        console.log('Game data loaded from gamedata.js');
+    } else {
+        console.error('gamedata.js not loaded!');
+    }
     
     // Show title screen immediately
     var titleScreen = document.getElementById("titleScreen");
@@ -576,6 +364,15 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     } else {
+    }
+    
+    // Editor button (opens editor without starting a game)
+    var editorBtn = document.getElementById("editorBtn");
+    if (editorBtn) {
+        editorBtn.addEventListener("click", function() {
+            toggleEditorMode();
+            switchPage('gameDiv'); // Editor works on gameDiv canvas
+        });
     }
     
     // Character selection
@@ -1613,5 +1410,6 @@ function startGame() {
 // Test function to add a tile at (0,0)
 function testAddTile() {
     // Add a grass tile at (0,0) for testing
-    below.gameData.mapData[below.selectedMap].tiles.push({x: 0, y: 0, type: 1});
+    var tileIndex = 'x0y0';
+    below.gameData.mapData[below.selectedMap].tiles[tileIndex] = { x: 0, y: 0, type: 1 };
 }

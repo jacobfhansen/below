@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Below</title>
     <link rel="stylesheet" type="text/css" href="below.css" />
+    <script type="text/javascript" src="gamedata.js" defer></script>
     <script type="text/javascript" src="below.js" defer></script>
 </head>
 <body>
@@ -11,6 +12,7 @@
         <div class="below-title">Below</div>
         <div class="below-front-menu-item" id="newGameBtn">New Game</div>
         <div class="below-front-menu-item" id="resumeGameBtn">Continue</div>
+        <div class="below-front-menu-item" id="editorBtn">Map Editor</div>
     </div>
     <div class="title-container" id="characterSelectDiv" style="display: none;">
         <div class="below-title">Choose Character</div>
@@ -60,6 +62,7 @@
                 <p>Click on canvas to toggle tiles</p>
                 <p id="editorStatus">Editor mode: OFF</p>
                 <button onclick="testAddTile()">Test Add Tile at (0,0)</button>
+                <button onclick="exportMapData()">Export to File</button>
             </div>
         </div>
         <div class="inventory-outer" id="inventoryDiv" style="display: none;">
