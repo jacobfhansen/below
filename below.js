@@ -575,8 +575,14 @@ function renderChoiceEvent() {
     gameDivCenter.style.pointerEvents = "none";
     
     // Show appropriate message based on entity type
-    if (below.choiceEvent.npcType !== null && below.choiceEvent.npcType !== undefined) {
-        // NPC interaction
+    if (below.choiceEvent.isDialog) {
+        // New dialog system for NPCs
+        var msgNode = document.createElement("P");
+        msgNode.className = "below-game-left-paragraph-current";
+        msgNode.textContent = below.choiceEvent.message;
+        gameLogDiv.appendChild(msgNode);
+    } else if (below.choiceEvent.npcType !== null && below.choiceEvent.npcType !== undefined) {
+        // NPC interaction (old system)
         var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
@@ -608,10 +614,12 @@ function renderChoiceEvent() {
     
     var titleNode = document.createElement("P");
     titleNode.className = "below-game-left-paragraph";
-    titleNode.textContent = "Choose an action:";
+    titleNode.textContent = below.choiceEvent.isDialog ? "Your response:" : "Choose an action:";
     gameLogDiv.appendChild(titleNode);
-
-    below.choiceEvent.options.forEach(function(option, index) {
+    
+    // Use dialogOptions for new dialog system, options for old system
+    var optionsToShow = below.choiceEvent.isDialog ? below.choiceEvent.dialogOptions : below.choiceEvent.options;
+    optionsToShow.forEach(function(option, index) {
         var node = document.createElement("P");
         node.className = "below-game-left-paragraph";
         if (index === below.choiceEvent.selectedIndex) {
@@ -624,14 +632,17 @@ function renderChoiceEvent() {
 }
 
 function handleChoiceEventKey(e) {
+    // Use the correct options array for navigation
+    var optionsArray = below.choiceEvent.isDialog ? below.choiceEvent.dialogOptions : below.choiceEvent.options;
+    
     if (e.keyCode === 38 || e.keyCode === 87) { // Up
         e.preventDefault();
-        below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex - 1 + below.choiceEvent.options.length) % below.choiceEvent.options.length;
+        below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex - 1 + optionsArray.length) % optionsArray.length;
         renderChoiceEvent();
     }
     else if (e.keyCode === 40 || e.keyCode === 83) { // Down
         e.preventDefault();
-        below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex + 1) % below.choiceEvent.options.length;
+        below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex + 1) % optionsArray.length;
         renderChoiceEvent();
     }
     else if (e.keyCode === 13 || e.keyCode === 69) { // Enter or E
@@ -645,7 +656,61 @@ function handleChoiceEventKey(e) {
 }
 
 function selectChoiceOption(index) {
-    below.choiceEvent.options[index].action();
+    // Use the correct options array
+    var optionsArray = below.choiceEvent.isDialog ? below.choiceEvent.dialogOptions : below.choiceEvent.options;
+    var selectedOption = optionsArray[index];
+    
+    // Handle new dialog system
+    if (below.choiceEvent.isDialog && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        
+        if (npc && npc.dialogOptions) {
+            // Process "closes" - set available to false
+            if (selectedOption.closes) {
+                selectedOption.closes.forEach(function(id) {
+                    var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
+                    if (dialog) dialog.available = false;
+                });
+            }
+            
+            // Process "opens" - set available to true
+            if (selectedOption.opens) {
+                selectedOption.opens.forEach(function(id) {
+                    var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
+                    if (dialog) dialog.available = true;
+                });
+            }
+            
+            // Process "chains" - show next dialog
+            if (selectedOption.chains) {
+                var nextDialogId = selectedOption.chains;
+                var nextDialog = npc.dialogOptions.find(function(d) { return d.id === nextDialogId; });
+                if (nextDialog && nextDialog.available) {
+                    below.choiceEvent = {
+                        selectedIndex: 0,
+                        message: nextDialog.text,
+                        npcPos: below.choiceEvent.npcPos,
+                        npcType: below.choiceEvent.npcType,
+                        npcAgitated: below.choiceEvent.npcAgitated,
+                        dialogId: nextDialog.id,
+                        dialogOptions: nextDialog.options.filter(function(o) { return o.available !== false; }),
+                        isDialog: true
+                    };
+                    renderChoiceEvent();
+                    return; // Don't close the dialog
+                }
+            }
+        }
+    } else {
+        // Old system - just run the action
+        if (selectedOption.action) {
+            selectedOption.action();
+        }
+    }
+    
     closeChoiceEvent();
 }
 
@@ -1099,12 +1164,35 @@ function handleBlockedInteraction(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check for NPC first
     var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
-        return n.position.x === x && n.position.y === y;
+        return n.position && n.position.x === x && n.position.y === y;
     });
     // Check for monster
     var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
+        if (!m.position) return false;
         return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
     });
+    
+    // Handle NPC dialog system
+    if (npc && npc.dialogOptions) {
+        // Find first available dialog option
+        var availableDialog = npc.dialogOptions.find(function(d) { return d.available; });
+        if (availableDialog) {
+            below.choiceEvent = {
+                selectedIndex: 0,
+                message: availableDialog.text,
+                npcPos: { x: x, y: y },
+                npcType: npc.type,
+                npcAgitated: npc.agitated || false,
+                dialogId: availableDialog.id,
+                dialogOptions: availableDialog.options.filter(function(o) { return o.available !== false; }),
+                isDialog: true
+            };
+            renderChoiceEvent();
+            return;
+        }
+    }
+    
+    // Fall back to old choice events system
     var choiceEvents = getBlockedChoiceEvents(x, y);
     if (choiceEvents) {
         var msg = "";
