@@ -30,6 +30,8 @@ function getSaveObject() {
 
 function saveToSlot(slotIndex, gameData) {
     var saveObj = getSaveObject();
+    // Add save date
+    gameData.saveDate = new Date().toISOString();
     saveObj.saves[slotIndex] = JSON.parse(JSON.stringify(gameData));
     localStorage["below"] = JSON.stringify(saveObj);
 }
@@ -46,10 +48,22 @@ function updateSlotColors(menuId) {
     slots.forEach(function(slotEl) {
         var slotIndex = parseInt(slotEl.getAttribute('data-slot'));
         var saved = loadFromSlot(slotIndex);
+        // Clear existing content
+        var slotText = slotEl.getAttribute('data-original-text') || slotEl.textContent;
+        slotEl.setAttribute('data-original-text', slotText);
+        
         if (saved) {
             slotEl.classList.add('slot-initiated');
+            // Show save date if available
+            if (saved.saveDate) {
+                var date = new Date(saved.saveDate);
+                slotEl.textContent = slotText + ' (' + date.toLocaleDateString() + ')';
+            } else {
+                slotEl.textContent = slotText + ' (Saved)';
+            }
         } else {
             slotEl.classList.remove('slot-initiated');
+            slotEl.textContent = slotText;
         }
     });
     // Select first item
@@ -69,6 +83,8 @@ function startNewGame(slotIndex) {
             return;
         }
     }
+    // Set save date for new game
+    below.gameData.saveDate = new Date().toISOString();
     below.newGameSlot = slotIndex;
     switchPage('characterSelectDiv');
 }
@@ -330,6 +346,69 @@ function exportMapData() {
             status.textContent = "Editor mode: ON";
         }, 3000);
     }
+}
+
+// Export current save to JSON file
+function exportSave() {
+    if (below.currentSlot === undefined) {
+        alert('No active game to export!');
+        return;
+    }
+    var saveObj = getSaveObject();
+    var saveData = saveObj.saves[below.currentSlot];
+    if (!saveData) {
+        alert('No saved game in current slot!');
+        return;
+    }
+    var jsonStr = JSON.stringify(saveData, null, 4);
+    var blob = new Blob([jsonStr], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'below-save-slot-' + below.currentSlot + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Import save from JSON file
+function importSave() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                var saveData = JSON.parse(e.target.result);
+                // Validate save data
+                if (!saveData.player || !saveData.mapData) {
+                    alert('Invalid save file!');
+                    return;
+                }
+                // Ask which slot to import to
+                var slotStr = prompt('Which slot to import to? (0, 1, or 2)', '0');
+                var slotIndex = parseInt(slotStr);
+                if (isNaN(slotIndex) || slotIndex < 0 || slotIndex > 2) {
+                    alert('Invalid slot!');
+                    return;
+                }
+                saveToSlot(slotIndex, saveData);
+                alert('Save imported to slot ' + slotIndex + '!');
+                // Update UI
+                updateSlotColors('newGameDiv');
+                updateSlotColors('resumeGameDiv');
+            } catch(err) {
+                alert('Error reading save file: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
 }
 
 // Add event listeners for menu buttons (called once on DOMContentLoaded)
@@ -597,20 +676,39 @@ function showInventory() {
         cell.className = 'inventory-empty';
         cell.textContent = 'Your inventory is empty';
     } else {
+        var colCount = 0;
+        var row = null;
         inventory.forEach(function(itemTypeId) {
             var itemType = below.gameData.itemTypes[itemTypeId];
             if (itemType) {
-                var row = inventoryTable.insertRow();
+                // Start new row every 2 items
+                if (colCount % 2 === 0) {
+                    row = inventoryTable.insertRow();
+                }
                 
                 // Icon cell
                 var iconCell = row.insertCell();
                 var img = document.createElement('img');
                 img.src = "images/" + itemType.icon;
+                img.style.width = '64px'; // 2x size
+                img.style.height = '64px';
                 iconCell.appendChild(img);
                 
-                // Name cell
-                var nameCell = row.insertCell();
-                nameCell.textContent = itemType.name;
+                // Name + Description cell
+                var infoCell = row.insertCell();
+                var nameDiv = document.createElement('div');
+                nameDiv.textContent = itemType.name;
+                nameDiv.style.fontWeight = 'bold';
+                infoCell.appendChild(nameDiv);
+                
+                var descDiv = document.createElement('div');
+                descDiv.textContent = itemType.description || '';
+                descDiv.style.fontSize = '0.8em';
+                descDiv.style.color = '#666';
+                descDiv.style.fontStyle = 'italic';
+                infoCell.appendChild(descDiv);
+                
+                colCount++;
             }
         });
     }
@@ -1327,6 +1425,19 @@ function mapGameLoop() {
     
     // Don't move monsters in editor mode
     if (below.editorMode) return;
+    
+    // Auto-save every 60 seconds (assuming 60fps)
+    if (below.tick % (60 * 60) === 0 && below.currentSlot !== undefined) {
+        saveCurrentGame();
+        var saveStatus = document.getElementById("saveStatus");
+        if (saveStatus) {
+            var now = new Date();
+            saveStatus.textContent = "Last saved: " + now.toLocaleTimeString();
+            setTimeout(function() {
+                saveStatus.textContent = "";
+            }, 3000);
+        }
+    }
     
     if (below.tick % below.tickSpeed === 1) {
         // Calculate new monster movement

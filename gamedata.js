@@ -116,13 +116,13 @@ var belowGameData = {
     itemTypes: {
         4: {
             name: "Key",
-            description: "A rusty key",
+            description: "A silver key",
             icon: "key1.png",
             choiceEvents: []
         },
         5: {
             name: "Key",
-            description: "A rusty key",
+            description: "A bronze key",
             icon: "key2.png",
             choiceEvents: []
         }
