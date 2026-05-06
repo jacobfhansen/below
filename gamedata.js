@@ -211,7 +211,8 @@ var belowGameData = {
                 "x1y0": {
                     "x": 1,
                     "y": 0,
-                    "text": "There are blood on the floor"
+                    "text": "There are blood on the floor",
+                    "searchMsg": "The blood is rather fresh"
                 },
                 "x1y1": {
                     "x": 1,
@@ -244,7 +245,8 @@ var belowGameData = {
                 "x1y4": {
                     "x": 1,
                     "y": 4,
-                    "text": "There is light from above"
+                    "text": "There is light from above",
+                    "searchMsg": "The light comes from a crack in the cealing"
                 },
                 "x2y0": {
                     "x": 2,

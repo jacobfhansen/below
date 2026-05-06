@@ -462,10 +462,14 @@ function handleMenuKey(e, menuId) {
 }
 
 function showChoiceEvent() {
+    var x = below.gameData.player.currentLocation.x;
+    var y = below.gameData.player.currentLocation.y;
+    var msg = getBlockedMessage(x, y) || "You search the area...";
     below.choiceEvent = {
         selectedIndex: 0,
+        message: msg,
         options: [
-            { text: "Search", action: function() { below.gameData.mapLog.push("You search the area..."); maintainMapLog(); } },
+            { text: "Search", action: function() { below.gameData.mapLog.push(msg); maintainMapLog(); } },
             { text: "Move on", action: function() { below.gameData.mapLog.push("You move on..."); maintainMapLog(); } }
         ]
     };
@@ -702,7 +706,20 @@ function getBlockedMessage(x, y) {
     if (obstacle) {
         return below.gameData.obstacleTypes[obstacle.type].description || "Not sure what good that would do";
     }
-    return null;
+    // Empty tile - check for searchMsg on tile first, then return random default message
+    var tileIndex = 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
+    var tile = below.gameData.mapData[curMap].tiles[tileIndex];
+    if (tile && tile.searchMsg) {
+        return tile.searchMsg;
+    }
+    var emptyTileMessages = [
+        "You search the ground - nothing but dirt.",
+        "You look around - nothing here.",
+        "You dig through the dirt - find nothing.",
+        "Just empty space.",
+        "You search - nothing of interest."
+    ];
+    return emptyTileMessages[Math.floor(Math.random() * emptyTileMessages.length)];
 }
 
 function getChoiceEventOptions(choiceEventIds) {
@@ -751,6 +768,7 @@ function getChoiceEventOptions(choiceEventIds) {
                 }
             };
         } else if (id === 6) {
+            // Search - find items and add to inventory
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
@@ -760,13 +778,35 @@ function getChoiceEventOptions(choiceEventIds) {
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
                         if (obstacleType.itemType) {
+                            // Add item to inventory
                             var itemTypeId = obstacleType.itemType;
                             below.gameData.player.inventory.push(itemTypeId);
                             below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
-                            obstacleType.itemType = null;
+                            // Remove item from obstacle and add a default message to the tile
+                            delete obstacleType.itemType;
+                            // Add random default message to the tile
+                            var defaultMessages = [
+                                "You searched here before - nothing but dust.",
+                                "You rummage through it - empty.",
+                                "Just cobwebs and dust.",
+                                "You find nothing of interest.",
+                                "Searched. Nothing here."
+                            ];
+                            var randomMsg = defaultMessages[Math.floor(Math.random() * defaultMessages.length)];
+                            var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
+                            if (below.gameData.mapData[curMap].tiles[tileIndex]) {
+                                below.gameData.mapData[curMap].tiles[tileIndex].text = randomMsg;
+                            }
                             maintainMapLog();
                         } else {
-                            below.gameData.mapLog.push("The table is empty.");
+                            // Already searched - show tile's stored message or default
+                            var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
+                            var tile = below.gameData.mapData[curMap].tiles[tileIndex];
+                            if (tile && tile.text) {
+                                below.gameData.mapLog.push(tile.text);
+                            } else {
+                                below.gameData.mapLog.push("The cupboard is empty.");
+                            }
                             maintainMapLog();
                         }
                     }
