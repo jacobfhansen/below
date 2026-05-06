@@ -668,27 +668,24 @@ function selectChoiceOption(index) {
         });
         
         if (npc && npc.dialogOptions) {
-            // Process "closes" - set available to false
-            if (selectedOption.closes) {
-                selectedOption.closes.forEach(function(id) {
-                    var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
-                    if (dialog) dialog.available = false;
-                });
-            }
-            
-            // Process "opens" - set available to true
+            // Process "opens" - set available to true (do this first so chained dialog is available)
             if (selectedOption.opens) {
                 selectedOption.opens.forEach(function(id) {
                     var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
                     if (dialog) dialog.available = true;
                 });
             }
-            
-            // Process "chains" - show next dialog
+             
+            // Process "chains" - show next dialog (do this before closes so dialog is still active)
             if (selectedOption.chains) {
-                var nextDialogId = selectedOption.chains;
+                // chains can be a string or an array
+                var chainIds = Array.isArray(selectedOption.chains) ? selectedOption.chains : [selectedOption.chains];
+                // For now, take the first chained dialog
+                var nextDialogId = chainIds[0];
                 var nextDialog = npc.dialogOptions.find(function(d) { return d.id === nextDialogId; });
-                if (nextDialog && nextDialog.available) {
+                if (nextDialog) {
+                    // Make the chained dialog available and show it
+                    nextDialog.available = true;
                     below.choiceEvent = {
                         selectedIndex: 0,
                         message: nextDialog.text,
@@ -700,8 +697,25 @@ function selectChoiceOption(index) {
                         isDialog: true
                     };
                     renderChoiceEvent();
+                    
+                    // Process "closes" after showing chained dialog (so we don't close current dialog prematurely)
+                    if (selectedOption.closes) {
+                        selectedOption.closes.forEach(function(id) {
+                            var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
+                            if (dialog) dialog.available = false;
+                        });
+                    }
+                    
                     return; // Don't close the dialog
                 }
+            }
+            
+            // Process "closes" - set available to false (if no chain happened)
+            if (selectedOption.closes) {
+                selectedOption.closes.forEach(function(id) {
+                    var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
+                    if (dialog) dialog.available = false;
+                });
             }
         }
     } else {
@@ -839,9 +853,34 @@ function switchPage(page) {
     });
 }
 
+function checkAndUpdateHermitDialog() {
+    // Check if player has any keys (itemTypes 4 or 5) and make hermitq2 available
+    var hasKey = below.gameData.player.inventory.some(function(itemId) {
+        return itemId === 4 || itemId === 5;
+    });
+    
+    if (hasKey) {
+        // Find hermit NPC and make hermitq2 available
+        below.gameData.mapData.forEach(function(mapData) {
+            if (mapData.npcs) {
+                mapData.npcs.forEach(function(npc) {
+                    if (npc.dialogOptions) {
+                        npc.dialogOptions.forEach(function(dialog) {
+                            if (dialog.id === "hermitq2") {
+                                dialog.available = true;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+}
+
 function loadGame(game) {
     var localstorageBelow = JSON.parse(localStorage["below"]);
     below.gameData = localstorageBelow.saves[game];
+    checkAndUpdateHermitDialog();
 }
 
 function foundTile(x, y) {
@@ -990,6 +1029,21 @@ function getChoiceEventOptions(choiceEventIds) {
                             var itemTypeId = obstacleType.itemType;
                             below.gameData.player.inventory.push(itemTypeId);
                             below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
+                            
+                            // Check if the item is a key (itemTypes 4 or 5) and update hermit dialog
+                            if (itemTypeId === 4 || itemTypeId === 5) {
+                                // Find hermit NPC and make hermitq2 available
+                                below.gameData.mapData[below.gameData.player.currentMap].npcs.forEach(function(npc) {
+                                    if (npc.dialogOptions) {
+                                        npc.dialogOptions.forEach(function(dialog) {
+                                            if (dialog.id === "hermitq2") {
+                                                dialog.available = true;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            
                             delete obstacleType.itemType;
                             var defaultMessages = [
                                 "You searched here before - nothing but dust.",
@@ -1131,8 +1185,13 @@ function getBlockedChoiceEvents(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check NPCs first (they block and have interactions)
     var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
-        return n.position.x === x && n.position.y === y;
+        return n.position && n.position.x === x && n.position.y === y;
     });
+    // New dialog system uses npc.dialogOptions, old system uses npcType.choiceEvents
+    if (npc && npc.dialogOptions) {
+        // This is handled in handleBlockedInteraction, return null here
+        return null;
+    }
     if (npc && below.gameData.npcTypes[npc.type].choiceEvents) {
         return getChoiceEventOptions(below.gameData.npcTypes[npc.type].choiceEvents);
     }
@@ -1797,6 +1856,7 @@ function startGame() {
     respondToVisibility(document.getElementById("gameDiv"), visible => {
         const feedbackEl = document.getElementById("visibilityFeedback");
         if(visible) {
+            checkAndUpdateHermitDialog();
             drawMapCanvas();
             mapGameLoop();
         }
