@@ -133,6 +133,9 @@ rockImg.src = "images/rock.png";
 var cupboardImg = new Image();
 cupboardImg.src = "images/cupboard.png";
 
+var lightbeamImg = new Image();
+lightbeamImg.src = "images/lightbeam.png";
+
 var doorClosedImg = new Image();
 doorClosedImg.src = "images/door_closed.png";
 
@@ -1215,8 +1218,13 @@ function drawMapCanvas() {
             }
         }
     });
-    // OBSTACLES
+    // OBSTACLES - Draw in two passes: below player (drawOrder=1), then on top (drawOrder=2)
+    // First pass: draw obstacles with drawOrder=1 (below player)
     below.gameData.mapData[curMap].obstacles.forEach(function(obstacle) {
+        var type = below.gameData.obstacleTypes[obstacle.type];
+        var drawOrder = type.drawOrder || 1; // Default: draw below player
+        if (drawOrder !== 1) return; // Skip for now
+        
         // Calculate distance for vision check
         var distXO = (obstacle.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
         var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
@@ -1224,23 +1232,85 @@ function drawMapCanvas() {
         
         // In editor mode, show all obstacles. In game mode, check vision
         if (below.editorMode || distanceO <= visionPixels) {
-            var type = below.gameData.obstacleTypes[obstacle.type];
             if (type.icon) {
-                // Handle door states - instance overrides type
-                var img = null;
                 var iconName = obstacle.icon || type.icon;
+                var img = null;
                 if (iconName === "door_closed.png" || iconName === "door_open.png") {
                     var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
                     img = isClosed ? doorClosedImg : doorOpenImg;
                 } else {
-                    var iconImg = iconName === "rock.png" ? rockImg : (iconName === "blood.png" ? bloodImg : (iconName === "table.png" ? tableImg : (iconName === "key1.png" ? keyImg : (iconName === "cupboard.png" ? cupboardImg : new Image()))));
-                    img = iconImg;
+                    if (iconName === "rock.png") img = rockImg;
+                    else if (iconName === "blood.png") img = bloodImg;
+                    else if (iconName === "table.png") img = tableImg;
+                    else if (iconName === "key1.png") img = keyImg;
+                    else if (iconName === "cupboard.png") img = cupboardImg;
+                    else if (iconName === "lightbeam.png") img = lightbeamImg;
+                    else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
                 context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2), (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
                 context.fillStyle = type.color || "#433900";
                 context.fillRect((obstacle.position.x * width) - (width/2) + verticalCenter - horizontalOffset, (obstacle.position.y * width) - (width/2) + horizontalCenter - verticalOffset, width, width);
+            }
+        }
+    });
+    
+    // PLAYER
+    if (!below.editorMode) {
+        var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
+        if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
+        context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
+    }
+    
+    // Second pass: draw obstacles with drawOrder=2 (on top of player)
+    below.gameData.mapData[curMap].obstacles.forEach(function(obstacle) {
+        var type = below.gameData.obstacleTypes[obstacle.type];
+        var drawOrder = type.drawOrder || 1;
+        if (drawOrder !== 2) return; // Skip - only draw top-layer obstacles
+        
+        // Calculate distance for vision check
+        var distXO = (obstacle.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
+        var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
+        var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
+        
+        if (below.editorMode || distanceO <= visionPixels) {
+            if (type.icon) {
+                var iconName = obstacle.icon || type.icon;
+                var img = null;
+                if (iconName === "door_closed.png" || iconName === "door_open.png") {
+                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+                    img = isClosed ? doorClosedImg : doorOpenImg;
+                } else {
+                    if (iconName === "rock.png") img = rockImg;
+                    else if (iconName === "blood.png") img = bloodImg;
+                    else if (iconName === "table.png") img = tableImg;
+                    else if (iconName === "key1.png") img = keyImg;
+                    else if (iconName === "cupboard.png") img = cupboardImg;
+                    else if (iconName === "lightbeam.png") img = lightbeamImg;
+                    else img = new Image();
+                }
+                if (!img.complete) img.src = "images/" + iconName;
+                
+                // Apply opacity if defined
+                var opacity = type.opacity !== undefined ? type.opacity : 1.0;
+                if (opacity < 1.0) {
+                    context.globalAlpha = opacity;
+                }
+                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2), (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
+                if (opacity < 1.0) {
+                    context.globalAlpha = 1.0; // Reset
+                }
+            } else {
+                var opacity = type.opacity !== undefined ? type.opacity : 1.0;
+                if (opacity < 1.0) {
+                    context.globalAlpha = opacity;
+                }
+                context.fillStyle = type.color || "#433900";
+                context.fillRect((obstacle.position.x * width) - (width/2) + verticalCenter - horizontalOffset, (obstacle.position.y * width) - (width/2) + horizontalCenter - verticalOffset, width, width);
+                if (opacity < 1.0) {
+                    context.globalAlpha = 1.0;
+                }
             }
         }
     });

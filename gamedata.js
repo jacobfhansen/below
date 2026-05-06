@@ -98,7 +98,19 @@ var belowGameData = {
             icon: "cupboard.png",
             blocking: true,
             itemType: 5, // Contains key2
-             choiceEvents: [6, 3]
+            drawOrder: 1, // Draw below player
+            opacity: 1.0, // Fully opaque
+            choiceEvents: [6, 3]
+        },
+        6: {
+            name: "Lightbeam",
+            description: "A beam of light from above",
+            color: "#FFFF00",
+            icon: "lightbeam.png",
+            blocking: false,
+            drawOrder: 2, // Draw on top of player
+            opacity: 0.5, // 50% transparent
+            choiceEvents: [6, 3] // Can search it
         },
     },
     itemTypes: {
@@ -721,9 +733,13 @@ var belowGameData = {
                         closed: true
                    },
                    {
-                        type: 5, // Cupboard with key2
-                        position: { x: -1, y: -8 },
-                        itemType: 5
+                         type: 5, // Cupboard with key2
+                         position: { x: -1, y: -8 },
+                         itemType: 5
+                   },
+                   {
+                         type: 6, // Lightbeam at (1,4)
+                         position: { x: 1, y: 4 }
                    }    
                ],
               npcs: [ 1 ]
