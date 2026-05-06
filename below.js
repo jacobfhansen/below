@@ -7,6 +7,8 @@ const below = {
     pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv", "characterSelectDiv"],
     currentSlot: undefined,
     choiceEvent: null,
+    editorMode: false,
+    selectedMap: 0,
     gameData: {
         mapZoom: 50,
         mapLog: [],
@@ -255,7 +257,7 @@ const below = {
             }
         ]
     }
-}
+};
 
 // Save slot utility functions
 function getSaveObject() {
@@ -425,10 +427,203 @@ function checkKey(e) {
             if (e.keyCode === 27 || e.keyCode === 81) {
                 closeInventory();
             }
+        } else if (e.keyCode === 113) { // F2 - Toggle editor mode
+            toggleEditorMode();
         } else {
             moveOnMap(e);
         }
     }
+}
+
+function toggleEditorMode() {
+    below.editorMode = !below.editorMode;
+    var editorPanel = document.getElementById("editorPanel");
+    var editorStatus = document.getElementById("editorStatus");
+    var canvas = document.getElementById("mapCanvas");
+    
+    if (below.editorMode) {
+        editorPanel.style.display = 'block';
+        editorStatus.textContent = "Editor mode: ON - Click tiles to toggle, drag to pan";
+        populateMapSelect();
+        below.editorPanX = 0;
+        below.editorPanY = 0;
+        drawMapCanvas();
+    } else {
+        editorPanel.style.display = 'none';
+        editorStatus.textContent = "Editor mode: OFF";
+    }
+    if (!below.editorMode) drawMapCanvas();
+}
+
+function attachEditorClickHandler() {
+    var canvas = document.getElementById("mapCanvas");
+    if (!canvas) {
+        return;
+    }
+    
+    // Remove existing click listeners (to avoid duplicates)
+    canvas.removeEventListener("click", canvas._editorClickHandler);
+    
+    // Store handler reference for removal
+    canvas._editorClickHandler = function(e) {
+        if (!below.editorMode) return;
+        
+        
+        // Use getBoundingClientRect for accurate position
+        var rect = canvas.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        
+        
+        var width = below.gameData.mapZoom;
+        var centerX = canvas.width / 2;
+        var centerY = canvas.height / 2;
+        
+        // In editor mode, apply pan offset
+        var tileX = Math.round((x - centerX - below.editorPanX) / width);
+        var tileY = Math.round((y - centerY - below.editorPanY) / width);
+        
+        
+        var curMap = below.selectedMap;
+        var tileIndex = 'x' + (tileX < 0 ? 'm' : '') + Math.abs(tileX) + 'y' + (tileY < 0 ? 'm' : '') + Math.abs(tileY);
+        
+        
+        if (below.gameData.mapData[curMap].tiles[tileIndex]) {
+            delete below.gameData.mapData[curMap].tiles[tileIndex];
+        } else {
+            below.gameData.mapData[curMap].tiles[tileIndex] = { x: tileX, y: tileY };
+        }
+        
+        drawMapCanvas();
+    };
+    
+    canvas.addEventListener("click", canvas._editorClickHandler);
+    
+    // Add mouse drag for panning in editor mode
+    var isDragging = false;
+    var lastX, lastY;
+    
+    canvas.removeEventListener("mousedown", canvas._editorMouseDown);
+    canvas._editorMouseDown = function(e) {
+        if (!below.editorMode) return;
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+    };
+    canvas.addEventListener("mousedown", canvas._editorMouseDown);
+    
+    canvas.removeEventListener("mousemove", canvas._editorMouseMove);
+    canvas._editorMouseMove = function(e) {
+        if (!isDragging || !below.editorMode) return;
+        var dx = e.clientX - lastX;
+        var dy = e.clientY - lastY;
+        below.editorPanX += dx;
+        below.editorPanY += dy;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        drawMapCanvas();
+    };
+    canvas.addEventListener("mousemove", canvas._editorMouseMove);
+    
+    canvas.removeEventListener("mouseup", canvas._editorMouseUp);
+    canvas._editorMouseUp = function() {
+        isDragging = false;
+    };
+    canvas.addEventListener("mouseup", canvas._editorMouseUp);
+    
+    canvas.removeEventListener("mouseleave", canvas._editorMouseLeave);
+    canvas._editorMouseLeave = function() {
+        isDragging = false;
+    };
+    canvas.addEventListener("mouseleave", canvas._editorMouseLeave);
+    
+}
+
+// Test function to add a tile at (0,0)
+function testAddTile() {
+    // Add a grass tile at (0,0) for testing
+    below.gameData.mapData[below.selectedMap].tiles.push({x: 0, y: 0, type: 1});
+}
+
+// Add event listeners for menu buttons (called once on DOMContentLoaded)
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // Show title screen immediately
+    var titleScreen = document.getElementById("titleScreen");
+    if (titleScreen) {
+        titleScreen.style.display = "flex";
+    }
+    
+    // New Game button
+    var newGameBtn = document.getElementById("newGameBtn");
+    if (newGameBtn) {
+        newGameBtn.addEventListener("click", function() {
+            try {
+                switchPage('newGameDiv');
+            } catch(e) {
+            }
+        });
+    } else {
+    }
+    
+    // Continue button
+    var resumeGameBtn = document.getElementById("resumeGameBtn");
+    if (resumeGameBtn) {
+        resumeGameBtn.addEventListener("click", function() {
+            try {
+                switchPage('resumeGameDiv');
+            } catch(e) {
+            }
+        });
+    } else {
+    }
+    
+    // Character selection
+    document.querySelectorAll('.below-front-menu-item[data-character]').forEach(function(item) {
+        item.addEventListener("click", function() {
+            selectCharacter(this.getAttribute('data-character'));
+        });
+    });
+    
+    // Start game
+    startGame();
+    
+    // Attach editor click handler
+    attachEditorClickHandler();
+});
+
+function populateMapSelect() {
+    var mapSelect = document.getElementById("mapSelect");
+    mapSelect.innerHTML = '';
+    below.gameData.mapData.forEach(function(map, index) {
+        var option = document.createElement("option");
+        option.value = index;
+        option.textContent = map.name || ("Map " + index);
+        if (index === below.selectedMap) {
+            option.selected = true;
+        }
+        mapSelect.appendChild(option);
+    });
+}
+
+function selectMapForEdit() {
+    var mapSelect = document.getElementById("mapSelect");
+    below.selectedMap = parseInt(mapSelect.value);
+    drawMapCanvas();
+}
+
+function addNewMap() {
+    below.gameData.mapData.push({
+        id: below.gameData.mapData.length,
+        name: "New Map",
+        tiles: {},
+        monsters: [],
+        obstacles: [],
+        npcs: []
+    });
+    populateMapSelect();
+    below.selectedMap = below.gameData.mapData.length - 1;
+    selectMapForEdit();
 }
 
 function handleMenuKey(e, menuId) {
@@ -625,7 +820,6 @@ respondToVisibility = function(element, callback) {
     var options = {
         root: document.documentElement
     }
-    console.log(element);
     var observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             callback(entry.intersectionRatio > 0);
@@ -636,7 +830,6 @@ respondToVisibility = function(element, callback) {
 }
 
 function switchPage(page) {
-    console.log(below.pages);
     below.pages.forEach(function(curPage) {
         var pageEl = document.getElementById(curPage);
         if (page === curPage) {
@@ -1011,7 +1204,6 @@ function moveOnMap(e) {
         playerMoved = false;
     
     if (e.keyCode === 69) {
-        console.log('Interact');
     }
     if (e.keyCode === 81) {
         toggleInventory();
@@ -1069,7 +1261,6 @@ function maintainMapLog() {
     while (gameLogDiv.firstChild) {
         gameLogDiv.removeChild(gameLogDiv.firstChild);
     }
-    console.log(1,gameLogDiv);
     below.gameData.mapLog.slice().reverse().forEach(function(log, index) {
         var node = document.createElement("P");
         if (index === 0) {
@@ -1088,54 +1279,89 @@ function maintainMapLog() {
 function drawMapCanvas() {
     var gameDivCenter = document.getElementById("gameDivCenter");
     var canvas = document.getElementById("mapCanvas");
-    canvas.width = gameDivCenter.offsetWidth -60;
-    canvas.height = gameDivCenter.offsetHeight -60;
+    
+    // Only resize if dimensions changed (prevents clearing event handlers)
+    // Use a threshold to avoid floating point issues
+    var newWidth = Math.floor(gameDivCenter.offsetWidth -60);
+    var newHeight = Math.floor(gameDivCenter.offsetHeight -60);
+    if (Math.abs(canvas.width - newWidth) > 1) {
+        canvas.width = newWidth;
+        // Re-attach click handler after resize
+        if (below.editorMode) {
+            attachEditorClickHandler();
+        }
+    }
+    if (Math.abs(canvas.height - newHeight) > 1) {
+        canvas.height = newHeight;
+        // Re-attach click handler after resize
+        if (below.editorMode) {
+            attachEditorClickHandler();
+        }
+    }
+    
     canvas.clickableElements = [];
     var context = canvas.getContext("2d");
-    var curMap = below.gameData.player.currentMap;
+    var curMap = below.editorMode ? below.selectedMap : below.gameData.player.currentMap;
+    
+    // Clear canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
     
     // Draw tiles
     var thickness = 1;
     var width = below.gameData.mapZoom;    
     var horisontalCenter = canvas.height / 2;
     var verticalCenter = canvas.width / 2;
-    var verticalOffset = below.gameData.player.currentLocation.y * width;
-    var horisontalOffset = below.gameData.player.currentLocation.x * width;
+    
+    // In editor mode, show full map (with pan offset). In game mode, center on player
+    var verticalOffset, horisontalOffset;
+    if (below.editorMode) {
+        verticalOffset = -below.editorPanY;
+        horisontalOffset = -below.editorPanX;
+    } else {
+        verticalOffset = below.gameData.player.currentLocation.y * width;
+        horisontalOffset = below.gameData.player.currentLocation.x * width;
+    }
     
     var vision = below.gameData.player.vision || 2;
-    var playerX = below.gameData.player.currentLocation.x;
-    var playerY = below.gameData.player.currentLocation.y;
     var visionPixels = vision * width;
     
     // Draw all tiles first
+    var tileCount = 0;
     for (var k in below.gameData.mapData[curMap].tiles) {
         if (typeof below.gameData.mapData[curMap].tiles[k] !== 'function') {
+            tileCount++;
             var tile = below.gameData.mapData[curMap].tiles[k];
+            var x = (tile.x * width) - (width/2) + verticalCenter - horisontalOffset;
+            var y = (tile.y * width) - (width/2) + horisontalCenter - verticalOffset;
             context.fillStyle = "#959595";
-            context.fillRect( (tile.x * width) - (width/2) + verticalCenter - horisontalOffset, (tile.y * width) - (width/2) + horisontalCenter - verticalOffset, width, width);
+            context.fillRect(x, y, width, width);
             context.fillStyle = "#6C6C6C";
-            context.fillRect( (tile.x * width) - (width/2) + (thickness + verticalCenter) - horisontalOffset, (tile.y * width) - (width/2) + (thickness + horisontalCenter) - verticalOffset, width - (thickness * 2), width - (thickness * 2));
+            context.fillRect(x + thickness, y + thickness, width - (thickness * 2), width - (thickness * 2));
         }
     }
     
-    // Add radial gradient overlay for vision
-    var gradient = context.createRadialGradient(verticalCenter, horisontalCenter, visionPixels * 0.6, verticalCenter, horisontalCenter, visionPixels);
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    // Add radial gradient overlay for vision (only in game mode)
+    if (!below.editorMode) {
+        var gradient = context.createRadialGradient(verticalCenter, horisontalCenter, visionPixels * 0.6, verticalCenter, horisontalCenter, visionPixels);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    }
     
     // Draw player and monster sprites
-    // PLAYER
-    if (below.gameData.player.icon) {
-        var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
-        if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
-        context.drawImage(playerImg, verticalCenter - (width/2), horisontalCenter - (width/2), width, width);
-    } else {
-        context.fillStyle = "#B8C76F";
-        context.beginPath();
-        context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
-        context.fill();
+    // PLAYER (only in game mode)
+    if (!below.editorMode) {
+        if (below.gameData.player.icon) {
+            var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
+            if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
+            context.drawImage(playerImg, verticalCenter - (width/2), horisontalCenter - (width/2), width, width);
+        } else {
+            context.fillStyle = "#B8C76F";
+            context.beginPath();
+            context.arc( verticalCenter, horisontalCenter, (width-2)/2, 0, 2 * Math.PI);
+            context.fill();
+        }
     }
     
     // Show coordinates if enabled
@@ -1149,11 +1375,13 @@ function drawMapCanvas() {
     
     // MONSTERS
     below.gameData.mapData[curMap].monsters.forEach(function(monster) {
-        // Check if monster is within vision radius (circular)
-        var distX = (monster.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
-        var distY = (monster.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
-        var distance = Math.sqrt(distX * distX + distY * distY);
-        if (distance <= visionPixels) {
+        // Calculate distance for vision check
+        var distXM = (monster.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
+        var distYM = (monster.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
+        var distanceM = Math.sqrt(distXM * distXM + distYM * distYM);
+        
+        // In editor mode, show all monsters. In game mode, check vision
+        if (below.editorMode || distanceM <= visionPixels) {
             var type = below.gameData.monsterTypes[monster.type];
             if (type["icon"]) {
                 var img = type.icon === "bat.png" ? batImg : (type.icon === "rat.png" ? ratImg : (type.icon === "centipede.png" ? centipedeImg : new Image()));
@@ -1170,11 +1398,13 @@ function drawMapCanvas() {
     });
     // OBSTACLES
     below.gameData.mapData[curMap].obstacles.forEach(function(obstacle) {
-        // Check if obstacle is within vision radius (circular)
-        var distX = (obstacle.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
-        var distY = (obstacle.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
-        var distance = Math.sqrt(distX * distX + distY * distY);
-        if (distance <= visionPixels) {
+        // Calculate distance for vision check
+        var distXO = (obstacle.position.x * width + verticalCenter - horisontalOffset) - verticalCenter;
+        var distYO = (obstacle.position.y * width + horisontalCenter - verticalOffset) - horisontalCenter;
+        var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
+        
+        // In editor mode, show all obstacles. In game mode, check vision
+        if (below.editorMode || distanceO <= visionPixels) {
             var type = below.gameData.obstacleTypes[obstacle.type];
         if (type.icon) {
                 // Handle door states - instance overrides type
@@ -1194,26 +1424,12 @@ function drawMapCanvas() {
         }
     });
     
-    canvas.addEventListener('click', function(event) {
-        var x = event.pageX,
-            y = event.pageY;
-        console.log(x, y);
-        canvas.clickableElements.forEach(function(element) {
-            if (y > element.top && y < element.top + element.height && x > element.left && x < element.left + element.width) {
-                alert('clicked an element: ' + element);
-            }
-        });
-
-    }, false);
-    
     gameDivCenter.appendChild(canvas);
 }
 
 function mapGameLoop() {
     // This one loops and loops
     below.tick = window.requestAnimationFrame(mapGameLoop);
-    //console.log(below.tick % below.tickSpeed);
-    //console.log(tick, below.tick);
     var curMap = below.gameData.player.currentMap;
     // Don't process any movement if choice event is active
     if (below.choiceEvent) return;
@@ -1226,7 +1442,6 @@ function mapGameLoop() {
             if (Math.random() < type.movement) {
                 // What direction do it move?
                 var dir = (Math.floor(Math.random() * 4)) + 1;
-                //console.log('foundTile',foundTile(monster.position.x, monster.position.y - 1));
                 if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) {
                     // Check if monster bumps into player
                     if (monster.position.x === below.gameData.player.currentLocation.x && monster.position.y - 1 === below.gameData.player.currentLocation.y) {
@@ -1311,7 +1526,6 @@ function mapGameLoop() {
                         monster.destPos.x = monster.position.x + 1;
                     }
                 }
-                //console.log(dir, monster.position);
             }
         });
     }
@@ -1333,7 +1547,6 @@ function mapGameLoop() {
         if (below.gameData.player.destinationLocation.xVelocity) {
             // Continue here, subtract/add a fraction of currentLocation
             below.gameData.player.currentLocation.x += (below.gameData.player.destinationLocation.xVelocity/below.tickSpeed);
-            //console.log(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.x = below.gameData.player.destinationLocation.x;
                 below.gameData.player.destinationLocation.xVelocity = null;
@@ -1348,7 +1561,6 @@ function mapGameLoop() {
         }
         if (below.gameData.player.destinationLocation.yVelocity) {
             below.gameData.player.currentLocation.y += (below.gameData.player.destinationLocation.yVelocity/below.tickSpeed);
-            //console.log(below.gameData.player.currentLocation.y, below.gameData.player.destinationLocation.y);
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.y = below.gameData.player.destinationLocation.y;
                 below.gameData.player.destinationLocation.yVelocity = null;
@@ -1380,7 +1592,6 @@ function mapGameLoop() {
             }
         });
         // Then draw current map
-        console.log();
         drawMapCanvas();
         //window.cancelAnimationFrame(below.tick);
     }
@@ -1397,4 +1608,10 @@ function startGame() {
             
         }
     });
+}
+
+// Test function to add a tile at (0,0)
+function testAddTile() {
+    // Add a grass tile at (0,0) for testing
+    below.gameData.mapData[below.selectedMap].tiles.push({x: 0, y: 0, type: 1});
 }

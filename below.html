@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Below</title>
-<link rel="stylesheet" type="text/css" href="below.css" />
-<script type="text/javascript" src="below.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Below</title>
+    <link rel="stylesheet" type="text/css" href="below.css" />
+    <script type="text/javascript" src="below.js" defer></script>
 </head>
-<body onload="startGame()">
+<body>
     <div class="title-container" id="titleScreen">
         <div class="below-title">Below</div>
-        <div class="below-front-menu-item" onclick="switchPage('newGameDiv')">New Game</div>
-        <div class="below-front-menu-item" onclick="switchPage('resumeGameDiv')">Continue</div>
+        <div class="below-front-menu-item" id="newGameBtn">New Game</div>
+        <div class="below-front-menu-item" id="resumeGameBtn">Continue</div>
     </div>
     <div class="title-container" id="characterSelectDiv" style="display: none;">
         <div class="below-title">Choose Character</div>
@@ -48,18 +48,27 @@
         <div class="below-game-center-panel" id="gameDivCenter">
             <canvas class="map-canvas" id="mapCanvas"></canvas>
         </div>
-    </div>
-    <div class="modal-outer" id="modal" style="display: none;">
-        <div class="modal-inner">
-            Lorem ipsum dolor sit amet, rutrum vitae morbi felis vitae interdum volutpat, vel eget pede, wisi praesent taciti venenatis dolor nulla, autem eget, posuere a. Dictum donec tempor magna tortor fermentum congue, nec tincidunt, at volutpat morbi, odio amet tortor. Sem luctus vulputate hymenaeos facilisis sodales. Nunc ac fringilla nonummy amet, pellentesque nullam est dis nec. Proin velit felis tristique vivamus proident, amet duis nam posuere. Urna egestas, mattis feugiat volutpat augue, risus nam eu amet sodales in felis. Sodales felis velit euismod nec vitae, morbi fusce scelerisque erat. Proin sodales aliquet pellentesque, integer quis purus mauris sint voluptas aliquam, diam sit sapien semper rutrum.
+        <div class="editor-panel" id="editorPanel" style="display: none;">
+            <h3>Map Editor</h3>
+            <div>
+                <label>Map: </label>
+                <select id="mapSelect" onchange="selectMapForEdit()">
+                </select>
+                <button onclick="addNewMap()">Add Map</button>
+            </div>
+            <div>
+                <p>Click on canvas to toggle tiles</p>
+                <p id="editorStatus">Editor mode: OFF</p>
+                <button onclick="testAddTile()">Test Add Tile at (0,0)</button>
+            </div>
         </div>
-    </div>
-    <div class="inventory-outer" id="inventoryDiv" style="display: none;">
+        <div class="inventory-outer" id="inventoryDiv" style="display: none;">
         <div class="inventory-inner">
             <h2>Inventory</h2>
             <table class="inventory-table" id="inventoryTable">
             </table>
         </div>
     </div>
+    <script type="text/javascript" src="below.js"></script>
 </body>
 </html>
