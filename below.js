@@ -762,7 +762,6 @@ function getChoiceEventOptions(choiceEventIds) {
                 }
             };
         } else if (id === 6) {
-            // Search - find items and add to inventory
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
@@ -772,11 +771,9 @@ function getChoiceEventOptions(choiceEventIds) {
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
                         if (obstacleType.itemType) {
-                            // Add item to inventory
                             var itemTypeId = obstacleType.itemType;
                             below.gameData.player.inventory.push(itemTypeId);
                             below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
-                            // Remove item from obstacle
                             obstacleType.itemType = null;
                             maintainMapLog();
                         } else {
@@ -787,7 +784,6 @@ function getChoiceEventOptions(choiceEventIds) {
                 }
             };
         } else if (id === 7) {
-            // Unlock door with key
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
@@ -801,22 +797,22 @@ function getChoiceEventOptions(choiceEventIds) {
                         var isClosed = obstacle.closed !== undefined ? obstacle.closed : obstacleType.closed;
                         
                         if (keyId) {
-                            // Check if player has the key
                             var hasKey = below.gameData.player.inventory.some(function(itemId) {
                                 return itemId === keyId;
                             });
                             if (hasKey && isClosed) {
-                                // Unlock the door - update instance and type
+                                // Unlock the door - update instance only (not type!)
                                 obstacle.closed = false;
-                                obstacleType.closed = false;
-                                obstacleType.icon = "door_open.png";
-                                obstacleType.blocking = false;
-                                // Update instance choiceEvents to open door events
+                                obstacle.icon = "door_open.png";
+                                obstacle.blocking = false;
                                 obstacle.choiceEvents = obstacle.openChoiceEvents || obstacleType.openChoiceEvents;
                                 below.gameData.mapLog.push("You unlocked the door!");
                                 maintainMapLog();
                             } else if (!isClosed) {
                                 below.gameData.mapLog.push("The door is already open.");
+                                maintainMapLog();
+                            } else if (below.gameData.player.inventory.length > 0) {
+                                below.gameData.mapLog.push("None of your keys seems to fit");
                                 maintainMapLog();
                             } else {
                                 below.gameData.mapLog.push("You need a key to unlock this door.");
@@ -827,7 +823,6 @@ function getChoiceEventOptions(choiceEventIds) {
                 }
             };
         } else if (id === 8) {
-            // Pass through open door
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
@@ -836,10 +831,8 @@ function getChoiceEventOptions(choiceEventIds) {
                     });
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
-                        // Instance overrides type for closed property
                         var isClosed = obstacle.closed !== undefined ? obstacle.closed : obstacleType.closed;
                         if (!isClosed) {
-                            // Move player to the door's position (pass through)
                             below.gameData.player.currentLocation.x = obstacle.position.x;
                             below.gameData.player.currentLocation.y = obstacle.position.y;
                             below.gameData.mapLog.push("You pass through the door.");
@@ -1230,6 +1223,9 @@ function mapGameLoop() {
     var curMap = below.gameData.player.currentMap;
     // Don't process any movement if choice event is active
     if (below.choiceEvent) return;
+    
+    // Don't move monsters in editor mode
+    if (below.editorMode) return;
     
     if (below.tick % below.tickSpeed === 1) {
         // Calculate new monster movement

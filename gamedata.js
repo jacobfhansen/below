@@ -685,25 +685,31 @@ var belowGameData = {
                     destPos: { x: undefined, xVelocity: undefined, y: undefined, yVelocity: undefined }
                 }
             ],
-             obstacles: [
-                {
-                    type: 1,
-                    position: { x: 6, y: 2 },
-                    choiceEvents: [1, 2, 3]
-                },
-                {
-                    type: 2,
-                    position: { x: 1, y: 0 },                        
-                },
+              obstacles: [
                  {
-                      type: 3,
-                      position: { x: -6, y: 2 },                        
-                  },
+                     type: 1,
+                     position: { x: 6, y: 2 },
+                     choiceEvents: [1, 2, 3]
+                 },
+                 {
+                     type: 2,
+                     position: { x: 1, y: 0 },                        
+                 },
                   {
-                      type: 4, // Door
-                      position: { x: 1, y: -1 }    
-                  }    
-              ],
+                       type: 3,
+                       position: { x: -6, y: 2 },                        
+                   },
+                   {
+                       type: 4, // Door
+                       position: { x: 1, y: -1 }    
+                   },
+                   {
+                       type: 4, // Locked door with key2
+                       position: { x: -7, y: 3 },
+                       keyId: 5,
+                       closed: true
+                   }    
+               ],
               npcs: [ 1 ]
         }
     ]
