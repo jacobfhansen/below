@@ -4,6 +4,8 @@ var belowGameData = {
     mapZoom: 50,
     mapLog: [],
     showCoordinates: true,
+    dialogInterval: 1000, // Delay between dialog messages in milliseconds (default: 1000 = 1 second)
+    dialogDots: "...", // Dots to show while waiting
     player: {
         currentMap: 0,
         currentLocation: { x: 2, y: 2 },
@@ -772,35 +774,43 @@ var belowGameData = {
                    {
                        type: 1, // Hermit
                        position: { x: 3, y: 3 },
-                        dialogOptions: [
-                            {
-                                id: "hermitq1",
-                                available: true,
-                                text: "What brings you to my humble abode",
-                                options: [
-                                 { id: "hermita1", text: "I do not know", available: true },
-                                 { id: "hermita2", text: "I am not supposed to talk to strangers", closes: ["hermitq1"] }
-                                ]
-                            },
-                            {
-                                id: "hermitq2",
-                                available: false,
-                                text: "Ah, I see you have a key",
-                                options: [
-                                 { id: "hermita3", text: "Yes, are you interested?", available: true },
-                                 { id: "hermita4", text: "I am not supposed to talk to strangers", closes: ["hermitq2"], opens: ["hermitq3"], chains: ["hermitq3"] }
-                                ]
-                            },
-                            {
-                                id: "hermitq3",
-                                available: false,
-                                text: "But are you not interested in getting out of here?",
-                                options: [
-                                 { id: "hermita5", text: "Not realy, I like it here.", available: true, opens: ["hermitq2"], closes: ["hermitq3"] },
-                                 { id: "hermita6", text: "I am not supposed to talk to strangers", closes: ["hermitq3"], opens: ["hermitq4"] }
-                                ]
-                            }
-                        ]
+                         dialogOptions: [
+                             {
+                                 id: "hermitq1",
+                                 available: true,
+                                 text: "What brings you to my humble abode",
+                                 options: [
+                                  { id: "hermita1", text: "I do not know", available: true, closes: ["hermitq1"] },
+                                  { id: "hermita2", text: "I am not supposed to talk to strangers", closes: ["hermitq1"] }
+                                 ]
+                             },
+                             {
+                                 id: "hermitq2",
+                                 available: false,
+                                 text: "Ah, I see you have a key",
+                                 options: [
+                                  { id: "hermita3", text: "Yes, are you interested?", available: true, closes: ["hermitq2"] },
+                                  { id: "hermita4", text: "I am not supposed to talk to strangers", closes: ["hermitq2"], opens: ["hermitq3"], chains: ["hermitq3"] }
+                                 ]
+                             },
+                             {
+                                 id: "hermitq3",
+                                 available: false,
+                                 text: "But are you not interested in getting out of here?",
+                                 options: [
+                                  { id: "hermita5", text: "Not realy, I like it here.", available: true, closes: ["hermitq3"] },
+                                  { id: "hermita6", text: "I am not supposed to talk to strangers", closes: ["hermitq3"], opens: ["hermitq4"], chains: ["hermitq4"] }
+                                 ]
+                             },
+                             {
+                                 id: "hermitq4",
+                                 available: false,
+                                 text: "Very well, leave me be.",
+                                 options: [
+                                  { id: "hermita7", text: "Goodbye", available: true, closes: ["hermitq4"] }
+                                 ]
+                             }
+                         ]
                    }
                ]
          }

@@ -566,30 +566,83 @@ function showChoiceEvent() {
 
 function renderChoiceEvent() {
     var gameLogDiv = document.getElementById("gameLogDiv");
-    while (gameLogDiv.firstChild) {
-        gameLogDiv.removeChild(gameLogDiv.firstChild);
+    
+    // Only clear the log if this is NOT a chained dialog
+    // (for chained dialogs, keep the previous dialog text visible)
+    if (!below.choiceEvent.isChain) {
+        while (gameLogDiv.firstChild) {
+            gameLogDiv.removeChild(gameLogDiv.firstChild);
+        }
+    } else {
+        // For chained dialogs, clear the old title and options (keep the message)
+        var nodesToRemove = [];
+        gameLogDiv.childNodes.forEach(function(node) {
+            if (node.nodeType === 1) {
+                // Remove title node ("Your response:" or "Choose an action:")
+                if (node.textContent === "Your response:" || node.textContent === "Choose an action:") {
+                    nodesToRemove.push(node);
+                }
+                // Remove all option nodes (class "below-game-left-paragraph" but not current)
+                if (node.className && node.className.includes("below-game-left-paragraph") && !node.className.includes("below-game-left-paragraph-current")) {
+                    nodesToRemove.push(node);
+                }
+                // Also remove dots nodes
+                if (node.className && node.className.includes("below-game-left-paragraph-current") && node.textContent === (below.gameData.dialogDots || "...")) {
+                    nodesToRemove.push(node);
+                }
+            }
+        });
+        nodesToRemove.forEach(function(node) {
+            if (node.parentNode) node.parentNode.removeChild(node);
+        });
     }
+    
     // Add gray overlay to map
     var gameDivCenter = document.getElementById("gameDivCenter");
     gameDivCenter.style.opacity = "0.5";
     gameDivCenter.style.pointerEvents = "none";
     
-    // Show appropriate message based on entity type
+    // Get dialog interval (default: 1000ms = 1 second)
+    var dialogInterval = (below.gameData.dialogInterval !== undefined ? below.gameData.dialogInterval : 1000);
+    var dots = below.gameData.dialogDots || "...";
+    
+    // Show animated dots while waiting for message
+    var dotsNode = document.createElement("P");
+    dotsNode.className = "below-game-left-paragraph-current";
+    dotsNode.textContent = dots;
+    gameLogDiv.appendChild(dotsNode);
+    
+    // After delay, show the actual message
+    setTimeout(function() {
+        if (!below.choiceEvent) return; // Dialog was closed
+        if (dotsNode.parentNode) {
+            dotsNode.parentNode.removeChild(dotsNode);
+        }
+        
+        // Show appropriate message based on entity type
+        showDialogMessage(gameLogDiv);
+        
+        // Show title and options after another delay
+        setTimeout(function() {
+            if (!below.choiceEvent) return;
+            showDialogOptions(gameLogDiv, dots);
+        }, dialogInterval);
+    }, dialogInterval);
+}
+
+function showDialogMessage(gameLogDiv) {
     if (below.choiceEvent.isDialog) {
-        // New dialog system for NPCs
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
         msgNode.textContent = below.choiceEvent.message;
         gameLogDiv.appendChild(msgNode);
     } else if (below.choiceEvent.npcType !== null && below.choiceEvent.npcType !== undefined) {
-        // NPC interaction (old system)
         var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
         msgNode.textContent = (below.choiceEvent.npcAgitated ? npcType.dialog.agitated : npcType.dialog.greeting) || "A character blocks your path.";
         gameLogDiv.appendChild(msgNode);
     } else if (below.choiceEvent.monsterType !== null && below.choiceEvent.monsterType !== undefined) {
-        // Monster interaction
         var monsterType = below.gameData.monsterTypes[below.choiceEvent.monsterType];
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
@@ -605,29 +658,70 @@ function renderChoiceEvent() {
         }
         gameLogDiv.appendChild(msgNode);
     } else if (below.choiceEvent.message) {
-        // Obstacle or other interaction
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
         msgNode.textContent = below.choiceEvent.message;
         gameLogDiv.appendChild(msgNode);
     }
+}
+
+function showDialogOptions(gameLogDiv, dots) {
+    var dialogInterval = (below.gameData.dialogInterval !== undefined ? below.gameData.dialogInterval : 1000);
+    var dotsText = below.gameData.dialogDots || "...";
     
+    // Show title
     var titleNode = document.createElement("P");
     titleNode.className = "below-game-left-paragraph";
     titleNode.textContent = below.choiceEvent.isDialog ? "Your response:" : "Choose an action:";
     gameLogDiv.appendChild(titleNode);
     
-    // Use dialogOptions for new dialog system, options for old system
-    var optionsToShow = below.choiceEvent.isDialog ? below.choiceEvent.dialogOptions : below.choiceEvent.options;
-    optionsToShow.forEach(function(option, index) {
-        var node = document.createElement("P");
-        node.className = "below-game-left-paragraph";
-        if (index === below.choiceEvent.selectedIndex) {
-            node.classList.add("below-choice-selected");
+    // Show animated dots for options
+    var optionDotsNode = document.createElement("P");
+    optionDotsNode.className = "below-game-left-paragraph-current";
+    optionDotsNode.textContent = dotsText;
+    gameLogDiv.appendChild(optionDotsNode);
+    
+    // After delay, show actual options
+    setTimeout(function() {
+        if (!below.choiceEvent) return;
+        if (optionDotsNode.parentNode) {
+            optionDotsNode.parentNode.removeChild(optionDotsNode);
         }
-        node.textContent = option.text;
-        node.onclick = function() { selectChoiceOption(index); };
-        gameLogDiv.appendChild(node);
+        
+        var optionsToShow = below.choiceEvent.isDialog ? below.choiceEvent.dialogOptions : below.choiceEvent.options;
+        if (!optionsToShow) return;
+        
+        optionsToShow.forEach(function(option, index) {
+            var node = document.createElement("P");
+            node.className = "below-game-left-paragraph";
+            if (index === below.choiceEvent.selectedIndex) {
+                node.classList.add("below-choice-selected");
+            }
+            node.textContent = option.text;
+            node.onclick = function() { selectChoiceOption(index); };
+            gameLogDiv.appendChild(node);
+        });
+    }, dialogInterval);
+}
+
+function updateChoiceSelection() {
+    var gameLogDiv = document.getElementById("gameLogDiv");
+    var optionsArray = below.choiceEvent.isDialog ? below.choiceEvent.dialogOptions : below.choiceEvent.options;
+    var optionNodes = gameLogDiv.querySelectorAll(".below-game-left-paragraph");
+    // Remove selected class from all option nodes
+    optionNodes.forEach(function(node) {
+        node.classList.remove("below-choice-selected");
+    });
+    // Add selected class to the current selection (skip title node which has no onclick)
+    var matchIndex = 0;
+    optionNodes.forEach(function(node) {
+        if (node.onclick) {
+            if (matchIndex === below.choiceEvent.selectedIndex) {
+                node.classList.add("below-choice-selected");
+                node.scrollIntoViewIfNeeded ? node.scrollIntoViewIfNeeded() : node.scrollIntoView({ block: "nearest" });
+            }
+            matchIndex++;
+        }
     });
 }
 
@@ -638,12 +732,12 @@ function handleChoiceEventKey(e) {
     if (e.keyCode === 38 || e.keyCode === 87) { // Up
         e.preventDefault();
         below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex - 1 + optionsArray.length) % optionsArray.length;
-        renderChoiceEvent();
+        updateChoiceSelection();
     }
     else if (e.keyCode === 40 || e.keyCode === 83) { // Down
         e.preventDefault();
         below.choiceEvent.selectedIndex = (below.choiceEvent.selectedIndex + 1) % optionsArray.length;
-        renderChoiceEvent();
+        updateChoiceSelection();
     }
     else if (e.keyCode === 13 || e.keyCode === 69) { // Enter or E
         e.preventDefault();
@@ -686,6 +780,16 @@ function selectChoiceOption(index) {
                 if (nextDialog) {
                     // Make the chained dialog available and show it
                     nextDialog.available = true;
+                    
+                    // Process "closes" first (close dialogs that should be closed)
+                    if (selectedOption.closes) {
+                        selectedOption.closes.forEach(function(id) {
+                            var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
+                            if (dialog) dialog.available = false;
+                        });
+                    }
+                    
+                    // Now show the chained dialog
                     below.choiceEvent = {
                         selectedIndex: 0,
                         message: nextDialog.text,
@@ -694,18 +798,10 @@ function selectChoiceOption(index) {
                         npcAgitated: below.choiceEvent.npcAgitated,
                         dialogId: nextDialog.id,
                         dialogOptions: nextDialog.options.filter(function(o) { return o.available !== false; }),
-                        isDialog: true
+                        isDialog: true,
+                        isChain: true
                     };
                     renderChoiceEvent();
-                    
-                    // Process "closes" after showing chained dialog (so we don't close current dialog prematurely)
-                    if (selectedOption.closes) {
-                        selectedOption.closes.forEach(function(id) {
-                            var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
-                            if (dialog) dialog.available = false;
-                        });
-                    }
-                    
                     return; // Don't close the dialog
                 }
             }
@@ -730,6 +826,13 @@ function selectChoiceOption(index) {
 
 function closeChoiceEvent() {
     below.choiceEvent = null;
+    // Clear choice event UI and restore game log
+    var gameLogDiv = document.getElementById("gameLogDiv");
+    while (gameLogDiv.firstChild) {
+        gameLogDiv.removeChild(gameLogDiv.firstChild);
+    }
+    // Restore game log with previous messages
+    maintainMapLog();
     // Restore map appearance
     var gameDivCenter = document.getElementById("gameDivCenter");
     gameDivCenter.style.opacity = "1";
