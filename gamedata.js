@@ -788,7 +788,7 @@ var belowGameData = {
                                 text: "Ah, I see you have a key",
                                 options: [
                                  { id: "hermita3", text: "Yes, are you interested?", available: true },
-                                 { id: "hermita4", text: "No, leave me alone", closes: ["hermitq2"], opens: ["hermitq3"], chains: ["hermitq3"] }
+                                 { id: "hermita4", text: "I am not supposed to talk to strangers", closes: ["hermitq2"], opens: ["hermitq3"], chains: ["hermitq3"] }
                                 ]
                             },
                             {
@@ -797,7 +797,7 @@ var belowGameData = {
                                 text: "But are you not interested in getting out of here?",
                                 options: [
                                  { id: "hermita5", text: "Not realy, I like it here.", available: true, opens: ["hermitq2"], closes: ["hermitq3"] },
-                                 { id: "hermita6", text: "Now you mention it", closes: ["hermitq3"], opens: ["hermitq4"] }
+                                 { id: "hermita6", text: "I am not supposed to talk to strangers", closes: ["hermitq3"], opens: ["hermitq4"] }
                                 ]
                             }
                         ]
