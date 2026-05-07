@@ -99,6 +99,35 @@ function selectCharacter(character) {
     switchPage('gameDiv');
 }
 
+function mergeDialogOptions(savedData) {
+    if (typeof belowGameData === 'undefined') return;
+    var freshMaps = belowGameData.mapData;
+    var savedMaps = savedData.mapData;
+    freshMaps.forEach(function(freshMap, mapIndex) {
+        if (!freshMap.npcs || !savedMaps[mapIndex]) return;
+        freshMap.npcs.forEach(function(freshNpc) {
+            if (!freshNpc.dialogOptions) return;
+            var savedNpc = savedMaps[mapIndex].npcs.find(function(n) {
+                return n.type === freshNpc.type &&
+                       n.position && freshNpc.position &&
+                       n.position.x === freshNpc.position.x &&
+                       n.position.y === freshNpc.position.y;
+            });
+            if (!savedNpc) return;
+            if (!savedNpc.dialogOptions) {
+                savedNpc.dialogOptions = JSON.parse(JSON.stringify(freshNpc.dialogOptions));
+                return;
+            }
+            freshNpc.dialogOptions.forEach(function(freshDialog) {
+                var savedDialog = savedNpc.dialogOptions.find(function(d) { return d.id === freshDialog.id; });
+                if (!savedDialog) {
+                    savedNpc.dialogOptions.push(JSON.parse(JSON.stringify(freshDialog)));
+                }
+            });
+        });
+    });
+}
+
 function continueGame(slotIndex) {
     var saved = loadFromSlot(slotIndex);
     if (!saved) {
@@ -106,6 +135,7 @@ function continueGame(slotIndex) {
         return;
     }
     below.gameData = JSON.parse(JSON.stringify(saved));
+    mergeDialogOptions(below.gameData);
     below.currentSlot = slotIndex;
     switchPage('gameDiv');
 }
@@ -777,6 +807,9 @@ function selectChoiceOption(index) {
                 // For now, take the first chained dialog
                 var nextDialogId = chainIds[0];
                 var nextDialog = npc.dialogOptions.find(function(d) { return d.id === nextDialogId; });
+                if (!nextDialog) {
+                    console.warn('Chain target "' + nextDialogId + '" not found in npc.dialogOptions');
+                }
                 if (nextDialog) {
                     // Make the chained dialog available and show it
                     nextDialog.available = true;
@@ -983,6 +1016,7 @@ function checkAndUpdateHermitDialog() {
 function loadGame(game) {
     var localstorageBelow = JSON.parse(localStorage["below"]);
     below.gameData = localstorageBelow.saves[game];
+    mergeDialogOptions(below.gameData);
     checkAndUpdateHermitDialog();
 }
 
@@ -1135,16 +1169,7 @@ function getChoiceEventOptions(choiceEventIds) {
                             
                             // Check if the item is a key (itemTypes 4 or 5) and update hermit dialog
                             if (itemTypeId === 4 || itemTypeId === 5) {
-                                // Find hermit NPC and make hermitq2 available
-                                below.gameData.mapData[below.gameData.player.currentMap].npcs.forEach(function(npc) {
-                                    if (npc.dialogOptions) {
-                                        npc.dialogOptions.forEach(function(dialog) {
-                                            if (dialog.id === "hermitq2") {
-                                                dialog.available = true;
-                                            }
-                                        });
-                                    }
-                                });
+                                checkAndUpdateHermitDialog();
                             }
                             
                             delete obstacleType.itemType;

@@ -789,7 +789,7 @@ var belowGameData = {
                                  available: false,
                                  text: "Ah, I see you have a key",
                                  options: [
-                                  { id: "hermita3", text: "Yes, are you interested?", available: true, closes: ["hermitq2"] },
+                                  { id: "hermita3", text: "Yes, what about it?", available: true, closes: ["hermitq2"], opens: ["hermitq10"], chains: ["hermitq10"] },
                                   { id: "hermita4", text: "I am not supposed to talk to strangers", closes: ["hermitq2"], opens: ["hermitq3"], chains: ["hermitq3"] }
                                  ]
                              },
@@ -798,16 +798,33 @@ var belowGameData = {
                                  available: false,
                                  text: "But are you not interested in getting out of here?",
                                  options: [
-                                  { id: "hermita5", text: "Not realy, I like it here.", available: true, closes: ["hermitq3"] },
+                                  { id: "hermita5", text: "Not realy, I like it here.", available: true, closes: ["hermitq3"], opens: ["hermitq4"], chains: ["hermitq4"] },
                                   { id: "hermita6", text: "I am not supposed to talk to strangers", closes: ["hermitq3"], opens: ["hermitq4"], chains: ["hermitq4"] }
                                  ]
                              },
                              {
                                  id: "hermitq4",
                                  available: false,
-                                 text: "Very well, leave me be.",
+                                 text: "Hm, but keys open up for new opportunities. Is that not interesting?",
                                  options: [
-                                  { id: "hermita7", text: "Goodbye", available: true, closes: ["hermitq4"] }
+                                  { id: "hermita7", text: "You are maybe right. Enlighten me", available: true, closes: ["hermitq4"], opens: ["hermitq10"], chains: ["hermitq10"] },
+                                  { id: "hermita8", text: "I am not supposed to talk to strangers", closes: ["hermitq3"], opens: ["hermitq5"], chains: ["hermitq5"] }
+                                 ]
+                             },
+                             {
+                                 id: "hermitq5",
+                                 available: false,
+                                 text: "I used to say that a lot to. Maybe that is why I am still here after all those years.",
+                                 options: [
+                                  { id: "hermita9", text: "...", available: true, closes: ["hermitq5"], opens: ["hermitq2"] }
+                                 ]
+                             },
+                             {
+                                 id: "hermitq10",
+                                 available: false,
+                                 text: "Let me tell you a tale about keys bla bla bla",
+                                 options: [
+                                  { id: "hermita10", text: "Wow, goodbye", available: true, closes: ["hermitq10"] }
                                  ]
                              }
                          ]
