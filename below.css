@@ -247,3 +247,47 @@ html, body {
     border-radius: 4px;
     white-space: nowrap;
 }
+
+.password-input-container {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-prompt {
+    color: var(--cyan);
+    white-space: nowrap;
+}
+
+.password-field {
+    background: var(--dark-grey);
+    color: var(--white);
+    border: 1px solid var(--light-grey);
+    padding: 4px 8px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1em;
+    flex: 1;
+    min-width: 80px;
+}
+
+.password-field:focus {
+    outline: none;
+    border-color: var(--cyan);
+}
+
+.password-submit {
+    background: var(--grey);
+    color: var(--white);
+    border: 1px solid var(--light-grey);
+    padding: 4px 12px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.password-submit:hover {
+    background: var(--light-grey);
+    color: var(--black);
+}

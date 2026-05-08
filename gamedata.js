@@ -149,6 +149,25 @@ var belowGameData = {
         6,
         3
       ]
+    },
+    "7": {
+      "name": "Password Door",
+      "description": "A door with a strange lock - it seems to require a word",
+      "color": "#8B4513",
+      "icon": "door_closed.png",
+      "blocking": true,
+      "choiceEvents": [
+        12,
+        3
+      ],
+      "openChoiceEvents": [
+        8,
+        3
+      ],
+      "closedChoiceEvents": [
+        12,
+        3
+      ]
     }
   },
   "itemTypes": {
@@ -1303,7 +1322,25 @@ var belowGameData = {
         "x4y2": { "x": 4, "y": 2 },
         "x4y3": { "x": 4, "y": 3 },
         "x0y1": { "x": 0, "y": 1 },
-        "x0y3": { "x": 0, "y": 3 }
+        "x0y3": { "x": 0, "y": 3 },
+        "x5y1": { "x": 5, "y": 1 },
+        "x5y2": { "x": 5, "y": 2 },
+        "x5y3": { "x": 5, "y": 3 },
+        "x6y1": { "x": 6, "y": 1 },
+        "x6y2": { "x": 6, "y": 2 },
+        "x6y3": { "x": 6, "y": 3 },
+        "x7y1": { "x": 7, "y": 1 },
+        "x7y2": { "x": 7, "y": 2 },
+        "x7y3": { "x": 7, "y": 3 },
+        "x8y1": { "x": 8, "y": 1 },
+        "x8y2": { "x": 8, "y": 2 },
+        "x8y3": { "x": 8, "y": 3 },
+        "x9y1": { "x": 9, "y": 1 },
+        "x9y2": { "x": 9, "y": 2 },
+        "x9y3": { "x": 9, "y": 3 },
+        "x10y1": { "x": 10, "y": 1 },
+        "x10y2": { "x": 10, "y": 2 },
+        "x10y3": { "x": 10, "y": 3 }
       },
       "monsters": [
         {
@@ -1317,9 +1354,29 @@ var belowGameData = {
         {
           "type": 1,
           "position": { "x": 3, "y": 2 }
+        },
+        {
+          "type": 7,
+          "position": { "x": 6, "y": 2 },
+          "password": "secret",
+          "closed": true
         }
       ],
-      "npcs": []
+      "npcs": [],
+      "exits": [
+        {
+          "position": { "x": 4, "y": 2 },
+          "targetMap": 0,
+          "targetPosition": { "x": 11, "y": 3 },
+          "text": "You emerge from the caves..."
+        },
+        {
+          "position": { "x": 10, "y": 2 },
+          "targetMap": 2,
+          "targetPosition": { "x": 0, "y": 0 },
+          "text": "You descend deeper into the earth..."
+        }
+      ]
     }
   ]
 };

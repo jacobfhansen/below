@@ -835,7 +835,9 @@ function handleChoiceEventKey(e) {
     }
     else if (e.keyCode === 27) { // Escape
         e.preventDefault();
-        closeChoiceEvent();
+    if (below.passwordInput) return;
+    
+    closeChoiceEvent();
     }
 }
 
@@ -945,7 +947,9 @@ function selectChoiceOption(index) {
         }
     }
     
-    closeChoiceEvent();
+    if (!below.passwordInput) {
+        closeChoiceEvent();
+    }
 }
 
 function closeChoiceEvent() {
@@ -962,6 +966,78 @@ function closeChoiceEvent() {
     gameDivCenter.style.opacity = "1";
     gameDivCenter.style.pointerEvents = "auto";
     maintainMapLog();
+}
+
+function renderPasswordInput() {
+    var gameLogDiv = document.getElementById("gameLogDiv");
+    var container = document.createElement("DIV");
+    container.id = "passwordInputContainer";
+    container.className = "password-input-container";
+    
+    var prompt = document.createElement("SPAN");
+    prompt.className = "password-prompt";
+    prompt.textContent = "Enter password: ";
+    container.appendChild(prompt);
+    
+    var input = document.createElement("INPUT");
+    input.type = "text";
+    input.id = "passwordField";
+    input.className = "password-field";
+    container.appendChild(input);
+    
+    var button = document.createElement("BUTTON");
+    button.textContent = "OK";
+    button.className = "password-submit";
+    button.onclick = submitPassword;
+    container.appendChild(button);
+    
+    gameLogDiv.appendChild(container);
+    scrollLogToBottom();
+    input.focus();
+    
+    input.onkeydown = function(e) {
+        e.stopPropagation();
+        if (e.keyCode === 13) { e.preventDefault(); submitPassword(); }
+        else if (e.keyCode === 27) { e.preventDefault(); cancelPasswordInput(); }
+    };
+}
+
+function submitPassword() {
+    var input = document.getElementById("passwordField");
+    if (!input) return;
+    var entered = input.value.trim().toLowerCase();
+    var password = below.passwordInput ? below.passwordInput.obstaclePos : null;
+    if (!password) return;
+    
+    var curMap = below.gameData.player.currentMap;
+    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
+        return o.position.x === below.passwordInput.obstaclePos.x && o.position.y === below.passwordInput.obstaclePos.y;
+    });
+    
+    var container = document.getElementById("passwordInputContainer");
+    if (container && container.parentNode) container.parentNode.removeChild(container);
+    
+    if (obstacle && entered === (obstacle.password || "").toLowerCase()) {
+        obstacle.closed = false;
+        obstacle.blocking = false;
+        obstacle.icon = "door_open.png";
+        var obsType = below.gameData.obstacleTypes[obstacle.type];
+        obstacle.choiceEvents = (obsType ? obsType.openChoiceEvents : null) || [8, 3];
+        below.gameData.mapLog.push("The door swings open!");
+        below.passwordInput = null;
+        drawMapCanvas();
+    } else {
+        below.gameData.mapLog.push("Wrong password.");
+        below.passwordInput = null;
+    }
+    closeChoiceEvent();
+}
+
+function cancelPasswordInput() {
+    var container = document.getElementById("passwordInputContainer");
+    if (container && container.parentNode) container.parentNode.removeChild(container);
+    below.passwordInput = null;
+    closeChoiceEvent();
 }
 
 function toggleInventory() {
@@ -1193,7 +1269,8 @@ function getChoiceEventOptions(choiceEventIds) {
         8: "Pass through",
         9: "Talk",
         10: "Trade",
-        11: "Intimidate"
+        11: "Intimidate",
+        12: "Enter password"
     };
     return choiceEventIds.map(function(id) {
         var option = { text: texts[id] };
@@ -1368,14 +1445,31 @@ function getChoiceEventOptions(choiceEventIds) {
                     maintainMapLog();
                 }
             };
+        } else if (id === 12) {
+            option.action = function() {
+                if (below.choiceEvent && below.choiceEvent.obstaclePos) {
+                    var curMap = below.gameData.player.currentMap;
+                    var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
+                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                    });
+                    if (obstacle) {
+                        var isClosed = obstacle.closed !== undefined ? obstacle.closed : true;
+                        if (isClosed) {
+                            below.passwordInput = {
+                                obstaclePos: { x: obstacle.position.x, y: obstacle.position.y }
+                            };
+                            renderPasswordInput();
+                        } else {
+                            below.gameData.mapLog.push("The door is already open.");
+                            maintainMapLog();
+                        }
+                    }
+                }
+            };
         }
         return option;
     });
-
-                    var desc = below.gameData.monsterTypes[below.choiceEvent.monsterType].beholdDesc || "A creature";
-                    below.gameData.mapLog.push(desc);
-                    maintainMapLog();
-                }
+}
 function isTileAllowed(monster, x, y) {
     // If no allowedTiles defined, all tiles are allowed
     if (!monster.allowedTiles) return true;
