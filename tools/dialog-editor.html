@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dialog Editor</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #1e1e2e; color: #cdd6f4; height: 100vh;
+    display: flex; flex-direction: column;
+}
+header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 16px; background: #181825;
+    border-bottom: 1px solid #313244; flex-shrink: 0;
+}
+header h1 { font-size: 16px; font-weight: 600; color: #cba6f7; margin-right: auto; }
+header .count { color: #a6adc8; font-size: 13px; }
+header button, .btn {
+    padding: 6px 14px; border: 1px solid #45475a; border-radius: 6px;
+    background: #313244; color: #cdd6f4; cursor: pointer; font-size: 13px;
+}
+header button:hover, .btn:hover { background: #45475a; }
+.btn-primary { background: #cba6f7; color: #1e1e2e; border-color: #cba6f7; font-weight: 600; }
+.btn-primary:hover { background: #b4befe; }
+.btn-danger { border-color: #f38ba8; color: #f38ba8; }
+.btn-danger:hover { background: #f38ba8; color: #1e1e2e; }
+#main {
+    display: flex; flex: 1; overflow: hidden;
+}
+.panel {
+    display: flex; flex-direction: column; border-right: 1px solid #313244;
+    overflow: hidden;
+}
+.panel:last-child { border-right: none; }
+.panel h2 {
+    font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 8px 12px; background: #181825; color: #a6adc8;
+    border-bottom: 1px solid #313244; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.panel h2 .toolbar { display: flex; gap: 4px; }
+.panel h2 .toolbar button {
+    padding: 2px 8px; font-size: 11px; border: 1px solid #45475a; border-radius: 4px;
+    background: #313244; color: #cdd6f4; cursor: pointer;
+}
+.panel h2 .toolbar button:hover { background: #45475a; }
+.scroll {
+    flex: 1; overflow-y: auto; padding: 4px 0;
+}
+#npc-panel { flex: 0 0 240px; }
+#dialog-panel { flex: 0 0 360px; }
+#option-panel { flex: 1; }
+.npc-item {
+    padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    border-left: 3px solid transparent; font-size: 13px;
+}
+.npc-item:hover { background: #313244; }
+.npc-item.active { background: #313244; border-left-color: #cba6f7; }
+.npc-item .label { font-weight: 500; }
+.npc-item .sub { color: #a6adc8; font-size: 11px; }
+.npc-item .badge {
+    margin-left: auto; background: #45475a; padding: 1px 6px; border-radius: 8px;
+    font-size: 11px; color: #a6adc8;
+}
+.dialog-item {
+    padding: 6px 12px; cursor: pointer; border-left: 3px solid transparent;
+    border-bottom: 1px solid #313244; font-size: 13px;
+}
+.dialog-item:hover { background: #313244; }
+.dialog-item.active { background: #313244; border-left-color: #cba6f7; }
+.dialog-item .dhead { display: flex; align-items: center; gap: 8px; }
+.dialog-item .did {
+    font-weight: 600; color: #fab387; font-family: monospace;
+}
+.dialog-item .davail { display: flex; align-items: center; }
+.dialog-item .davail input { margin: 0; }
+.dialog-item .dtext {
+    color: #a6adc8; font-size: 12px; margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.dialog-item .dtext input { white-space: normal; overflow: visible; }
+.dialog-item .dmeta { font-size: 11px; color: #585b70; margin-top: 2px; }
+.option-card {
+    padding: 12px; border-bottom: 1px solid #313244;
+    border-left: 3px solid transparent; cursor: pointer;
+}
+.option-card:hover { background: #313244; }
+.option-card.active { background: #313244; border-left-color: #cba6f7; }
+.option-card .ohead { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.option-card .oid {
+    font-weight: 600; color: #a6e3a1; font-family: monospace; font-size: 13px;
+}
+.option-card .oavail { display: flex; align-items: center; }
+.option-field { margin-bottom: 6px; }
+.option-field label {
+    display: block; font-size: 11px; color: #585b70; text-transform: uppercase;
+    letter-spacing: 0.3px; margin-bottom: 2px;
+}
+.option-field input, .option-field textarea {
+    width: 100%; padding: 4px 8px; border: 1px solid #45475a; border-radius: 4px;
+    background: #11111b; color: #cdd6f4; font-size: 13px; font-family: monospace;
+}
+.option-field textarea { resize: vertical; min-height: 48px; }
+.option-field input:focus, .option-field textarea:focus {
+    outline: none; border-color: #cba6f7;
+}
+.option-actions { display: flex; gap: 6px; margin-top: 8px; }
+.ref-valid { color: #a6e3a1; font-size: 11px; }
+.ref-invalid { color: #f38ba8; font-size: 11px; }
+.empty-state {
+    padding: 24px; text-align: center; color: #585b70; font-size: 13px;
+}
+.toast {
+    position: fixed; bottom: 20px; right: 20px;
+    padding: 10px 20px; border-radius: 8px; font-size: 13px;
+    background: #a6e3a1; color: #1e1e2e; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 9999;
+    transition: opacity 0.3s; pointer-events: none;
+}
+.toast.error { background: #f38ba8; }
+</style>
+</head>
+<body>
+<header>
+    <h1>Dialog Editor</h1>
+    <span class="count" id="status">No NPCs loaded</span>
+    <button onclick="exportData()" class="btn-primary">Export gamedata.js</button>
+</header>
+<div id="main">
+    <div class="panel" id="npc-panel">
+        <h2>NPCs</h2>
+        <div class="scroll" id="npc-list"></div>
+    </div>
+    <div class="panel" id="dialog-panel">
+        <h2>
+            Dialogs
+            <span class="toolbar">
+                <button onclick="addDialog()" title="Add dialog">+</button>
+            </span>
+        </h2>
+        <div class="scroll" id="dialog-list"></div>
+    </div>
+    <div class="panel" id="option-panel">
+        <h2>
+            Options
+            <span class="toolbar">
+                <button onclick="addOption()" title="Add option">+</button>
+            </span>
+        </h2>
+        <div class="scroll" id="option-list"></div>
+    </div>
+</div>
+
+<script src="../gamedata.js"></script>
+<script>
+var state = {
+    selectedNpcIdx: -1,
+    selectedDialogIdx: -1,
+    selectedOptionIdx: -1
+};
+
+function init() {
+    renderNpcs();
+    updateStatus();
+}
+
+function getNpcs() {
+    var result = [];
+    if (!belowGameData || !belowGameData.mapData) return result;
+    belowGameData.mapData.forEach(function(map, mi) {
+        if (!map.npcs) return;
+        map.npcs.forEach(function(npc, ni) {
+            if (!npc.dialogOptions) return;
+            result.push({
+                mapIndex: mi,
+                npcIndex: ni,
+                npc: npc,
+                map: map,
+                label: getNpcLabel(npc),
+                dialogCount: npc.dialogOptions.length
+            });
+        });
+    });
+    return result;
+}
+
+function getNpcLabel(npc) {
+    var type = (belowGameData.npcTypes && belowGameData.npcTypes[npc.type])
+        ? belowGameData.npcTypes[npc.type].name || "Type " + npc.type
+        : "Type " + npc.type;
+    var pos = npc.position ? "(" + npc.position.x + "," + npc.position.y + ")" : "(?)";
+    return type + " " + pos;
+}
+
+function getSelectedNpc() {
+    var npcs = getNpcs();
+    if (state.selectedNpcIdx >= 0 && state.selectedNpcIdx < npcs.length)
+        return npcs[state.selectedNpcIdx];
+    return null;
+}
+
+function getSelectedDialog() {
+    var npc = getSelectedNpc();
+    if (!npc) return null;
+    if (state.selectedDialogIdx >= 0 && state.selectedDialogIdx < npc.npc.dialogOptions.length)
+        return npc.npc.dialogOptions[state.selectedDialogIdx];
+    return null;
+}
+
+function getSelectedOption() {
+    var dlg = getSelectedDialog();
+    if (!dlg || !dlg.options) return null;
+    if (state.selectedOptionIdx >= 0 && state.selectedOptionIdx < dlg.options.length)
+        return dlg.options[state.selectedOptionIdx];
+    return null;
+}
+
+function updateStatus() {
+    var npcs = getNpcs();
+    var count = npcs.length;
+    var total = 0;
+    npcs.forEach(function(n) { total += n.dialogCount; });
+    document.getElementById("status").textContent = count + " NPC" + (count !== 1 ? "s" : "") + ", " + total + " dialog" + (total !== 1 ? "s" : "");
+}
+
+// ─── NPC Panel ───────────────────────────────────
+
+function renderNpcs() {
+    var el = document.getElementById("npc-list");
+    var npcs = getNpcs();
+    if (npcs.length === 0) {
+        el.innerHTML = '<div class="empty-state">No NPCs with dialogs found.</div>';
+        return;
+    }
+    var html = "";
+    npcs.forEach(function(n, i) {
+        var active = i === state.selectedNpcIdx ? ' active' : '';
+        html += '<div class="npc-item' + active + '" onclick="selectNpc(' + i + ')">';
+        html += '<span class="label">' + escHtml(n.label) + '</span>';
+        html += '<span class="sub">Map ' + n.mapIndex + '</span>';
+        html += '<span class="badge">' + n.dialogCount + '</span>';
+        html += '</div>';
+    });
+    el.innerHTML = html;
+}
+
+function selectNpc(idx) {
+    state.selectedNpcIdx = idx;
+    state.selectedDialogIdx = -1;
+    state.selectedOptionIdx = -1;
+    renderNpcs();
+    renderDialogs();
+    renderOptions();
+}
+
+// ─── Dialog Panel ────────────────────────────────
+
+function renderDialogs() {
+    var el = document.getElementById("dialog-list");
+    var npc = getSelectedNpc();
+    if (!npc) {
+        el.innerHTML = '<div class="empty-state">Select an NPC</div>';
+        return;
+    }
+    var dialogs = npc.npc.dialogOptions;
+    if (!dialogs || dialogs.length === 0) {
+        el.innerHTML = '<div class="empty-state">No dialogs</div>';
+        return;
+    }
+    var html = "";
+    dialogs.forEach(function(d, i) {
+        var active = i === state.selectedDialogIdx ? ' active' : '';
+        var optionCount = d.options ? d.options.length : 0;
+        html += '<div class="dialog-item' + active + '" onclick="selectDialog(' + i + ')">';
+        html += '<div class="dhead">';
+        html += '<label class="davail" onclick="event.stopPropagation()"><input type="checkbox" ' + (d.available ? 'checked' : '') + ' onchange="toggleDialogAvail(' + i + ', this.checked)"></label>';
+        html += '<span class="did">' + escHtml(d.id) + '</span>';
+        html += '</div>';
+        html += '<div class="dtext"><input value="' + escAttr(d.text) + '" onchange="updateDialogText(' + i + ', this.value)" onclick="event.stopPropagation()" style="width:100%;padding:2px 4px;border:1px solid #45475a;border-radius:3px;background:#11111b;color:#cdd6f4;font-size:12px;font-family:inherit"></div>';
+        html += '<div class="dmeta">' + optionCount + ' option' + (optionCount !== 1 ? 's' : '') + '</div>';
+        html += '<div style="margin-top:4px"><button class="btn btn-danger" style="font-size:11px;padding:1px 8px" onclick="event.stopPropagation(); removeDialog(' + i + ')">Delete</button></div>';
+        html += '</div>';
+    });
+    el.innerHTML = html;
+}
+
+function selectDialog(idx) {
+    state.selectedDialogIdx = idx;
+    state.selectedOptionIdx = -1;
+    renderDialogs();
+    renderOptions();
+}
+
+function toggleDialogAvail(idx, val) {
+    var npc = getSelectedNpc();
+    if (!npc) return;
+    npc.npc.dialogOptions[idx].available = val;
+}
+
+function updateDialogText(idx, val) {
+    var npc = getSelectedNpc();
+    if (!npc) return;
+    npc.npc.dialogOptions[idx].text = val;
+}
+
+function addDialog() {
+    var npc = getSelectedNpc();
+    if (!npc) return;
+    var count = npc.npc.dialogOptions.length;
+    npc.npc.dialogOptions.push({
+        id: "newq" + (count + 1),
+        available: false,
+        text: "New dialog text",
+        options: [
+            { id: "newa" + (count + 1) + "a", text: "Option 1", available: true }
+        ]
+    });
+    renderDialogs();
+    updateStatus();
+}
+
+function removeDialog(idx) {
+    var npc = getSelectedNpc();
+    if (!npc) return;
+    if (!confirm('Delete dialog "' + npc.npc.dialogOptions[idx].id + '"?')) return;
+    npc.npc.dialogOptions.splice(idx, 1);
+    if (state.selectedDialogIdx >= npc.npc.dialogOptions.length)
+        state.selectedDialogIdx = npc.npc.dialogOptions.length - 1;
+    if (state.selectedDialogIdx < 0) {
+        state.selectedDialogIdx = -1;
+        state.selectedOptionIdx = -1;
+    }
+    renderDialogs();
+    renderOptions();
+    updateStatus();
+}
+
+// ─── Option Panel ────────────────────────────────
+
+function renderOptions() {
+    var el = document.getElementById("option-list");
+    var dlg = getSelectedDialog();
+    if (!dlg) {
+        el.innerHTML = '<div class="empty-state">Select a dialog</div>';
+        return;
+    }
+    var opts = dlg.options;
+    if (!opts || opts.length === 0) {
+        el.innerHTML = '<div class="empty-state">No options</div>';
+        return;
+    }
+    var html = "";
+    opts.forEach(function(o, i) {
+        var active = i === state.selectedOptionIdx ? ' active' : '';
+        html += '<div class="option-card' + active + '" onclick="selectOption(' + i + ')">';
+        html += '<div class="ohead">';
+        html += '<label class="oavail" onclick="event.stopPropagation()"><input type="checkbox" ' + (o.available !== false ? 'checked' : '') + ' onchange="toggleOptionAvail(' + i + ', this.checked)"></label>';
+        html += '<span class="oid">' + escHtml(o.id) + '</span>';
+        html += '</div>';
+        html += '<div class="option-field"><label>Text</label><input value="' + escAttr(o.text) + '" onchange="updateOptionText(' + i + ', this.value)" onclick="event.stopPropagation()"></div>';
+        html += '<div class="option-field"><label>Opens</label><input value="' + escAttr(arrToStr(o.opens)) + '" onchange="updateOptionField(' + i + ', \'opens\', this.value)" onclick="event.stopPropagation()" placeholder="dialog IDs, comma-separated"></div>';
+        html += '<div class="option-field"><label>Closes</label><input value="' + escAttr(arrToStr(o.closes)) + '" onchange="updateOptionField(' + i + ', \'closes\', this.value)" onclick="event.stopPropagation()" placeholder="dialog IDs, comma-separated"></div>';
+        html += '<div class="option-field"><label>Chains</label><input value="' + escAttr(arrToStr(o.chains)) + '" onchange="updateOptionField(' + i + ', \'chains\', this.value)" onclick="event.stopPropagation()" placeholder="dialog IDs, comma-separated"></div>';
+        var refs = getRefs(o);
+        if (refs.length > 0) {
+            var invalid = refs.filter(function(r) { return !dialogExists(r); });
+            html += '<div class="' + (invalid.length === 0 ? 'ref-valid' : 'ref-invalid') + '">';
+            if (invalid.length === 0)
+                html += '✓ all references valid';
+            else
+                html += '✗ missing: ' + escHtml(invalid.join(', '));
+            html += '</div>';
+        }
+        html += '<div class="option-actions">';
+        html += '<button class="btn btn-danger" onclick="event.stopPropagation(); removeOption(' + i + ')">Delete</button>';
+        html += '</div>';
+        html += '</div>';
+    });
+    el.innerHTML = html;
+}
+
+function selectOption(idx) {
+    state.selectedOptionIdx = idx;
+    renderOptions();
+}
+
+function toggleOptionAvail(idx, val) {
+    var dlg = getSelectedDialog();
+    if (!dlg || !dlg.options) return;
+    dlg.options[idx].available = val;
+}
+
+function updateOptionText(idx, val) {
+    var dlg = getSelectedDialog();
+    if (!dlg || !dlg.options) return;
+    dlg.options[idx].text = val;
+}
+
+function updateOptionField(idx, field, val) {
+    var dlg = getSelectedDialog();
+    if (!dlg || !dlg.options) return;
+    dlg.options[idx][field] = strToArr(val);
+}
+
+function addOption() {
+    var dlg = getSelectedDialog();
+    if (!dlg) return;
+    if (!dlg.options) dlg.options = [];
+    var count = dlg.options.length;
+    dlg.options.push({
+        id: dlg.id + "a" + (count + 1),
+        text: "New option",
+        available: true
+    });
+    renderOptions();
+}
+
+function removeOption(idx) {
+    var dlg = getSelectedDialog();
+    if (!dlg || !dlg.options) return;
+    if (!confirm('Delete option "' + dlg.options[idx].id + '"?')) return;
+    dlg.options.splice(idx, 1);
+    if (state.selectedOptionIdx >= dlg.options.length)
+        state.selectedOptionIdx = dlg.options.length - 1;
+    renderOptions();
+}
+
+// ─── Helpers ─────────────────────────────────────
+
+function arrToStr(arr) {
+    if (!arr || !Array.isArray(arr) || arr.length === 0) return "";
+    return arr.join(", ");
+}
+
+function strToArr(str) {
+    if (!str || str.trim() === "") return [];
+    return str.split(",").map(function(s) { return s.trim(); }).filter(function(s) { return s.length > 0; });
+}
+
+function getRefs(opt) {
+    var refs = [];
+    if (opt.opens) refs = refs.concat(opt.opens);
+    if (opt.closes) refs = refs.concat(opt.closes);
+    if (opt.chains) refs = refs.concat(opt.chains);
+    return refs;
+}
+
+function dialogExists(id) {
+    var npcs = getNpcs();
+    for (var ni = 0; ni < npcs.length; ni++) {
+        var dialogs = npcs[ni].npc.dialogOptions;
+        for (var di = 0; di < dialogs.length; di++) {
+            if (dialogs[di].id === id) return true;
+        }
+    }
+    return false;
+}
+
+function escHtml(s) {
+    if (typeof s !== 'string') return '';
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function escAttr(s) {
+    if (typeof s !== 'string') return '';
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function truncate(s, n) {
+    if (!s) return '';
+    return s.length > n ? s.slice(0, n) + '...' : s;
+}
+
+// ─── Export ──────────────────────────────────────
+
+function exportData() {
+    try {
+        var json = JSON.stringify(belowGameData, null, 2);
+        var js = 'var belowGameData = ' + json + ';\n';
+        var blob = new Blob([js], { type: 'application/javascript' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'gamedata.js';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Exported gamedata.js');
+    } catch(e) {
+        showToast('Export failed: ' + e.message, true);
+    }
+}
+
+function showToast(msg, isError) {
+    var t = document.createElement('div');
+    t.className = 'toast' + (isError ? ' error' : '');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.style.opacity = '0'; }, 2000);
+    setTimeout(function() { document.body.removeChild(t); }, 2300);
+}
+
+// ─── Init ────────────────────────────────────────
+
+init();
+</script>
+</body>
+</html>
