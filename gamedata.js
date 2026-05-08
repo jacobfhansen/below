@@ -1827,6 +1827,7 @@ var belowGameData = {
                         "y": -2
                     },
                     "icon": "statue1.png",
+                    "choiceEvents": [6, 3],
                     "statueName": "The Supplicant",
                     "statueDesc": "A marble figure with arms raised toward the ceiling, palms open. A small sign reads: My first.",
                     "dialogUnlock": "medusas1",
@@ -1839,6 +1840,7 @@ var belowGameData = {
                         "y": -2
                     },
                     "icon": "statue2.png",
+                    "choiceEvents": [6, 3],
                     "statueName": "The Tortured",
                     "statueDesc": "A marble figure clutching its head, face twisted in anguish. A small sign reads: The second.",
                     "dialogUnlock": "medusas2",
@@ -1851,6 +1853,7 @@ var belowGameData = {
                         "y": -2
                     },
                     "icon": "statue3.png",
+                    "choiceEvents": [6, 3],
                     "statueName": "The Observer",
                     "statueDesc": "A marble figure with one hand shielding its eyes and the other pointing into the dark. A small sign reads: The third.",
                     "dialogUnlock": "medusas3",
@@ -1863,6 +1866,7 @@ var belowGameData = {
                         "y": 6
                     },
                     "icon": "statue4.png",
+                    "choiceEvents": [6, 3],
                     "statueName": "The Navigator",
                     "statueDesc": "A marble figure with arms pointing in opposite directions, as if confused.  A small sign reads: Number four.",
                     "dialogUnlock": "medusas4",
@@ -1875,6 +1879,7 @@ var belowGameData = {
                         "y": 6
                     },
                     "icon": "statue5.png",
+                    "choiceEvents": [6, 3],
                     "statueName": "The Exile",
                     "statueDesc": "A marble figure hunched over, turned away, arms wrapped around itself. A small sign reads: The fifth.",
                     "dialogUnlock": "medusas5",
@@ -1887,6 +1892,7 @@ var belowGameData = {
                         "y": 6
                     },
                     "icon": "statue6.png",
+                    "choiceEvents": [6, 3],
                     "statueName": "The Reacher",
                     "statueDesc": "A marble figure leaning forward, one arm stretched out as if grasping for something. A small sign reads: My very last. I promise.",
                     "dialogUnlock": "medusas6",
