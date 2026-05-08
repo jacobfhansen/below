@@ -102,6 +102,11 @@ html, body {
     color: var(--light-grey) !important;
     font-weight: bold;
 }
+.below-player-response {
+    margin: 10px 10px 0px 10px;
+    color: var(--yellow);
+    font-style: italic;
+}
 
 .below-game-center-panel {
     height: 90%;

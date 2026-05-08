@@ -797,10 +797,23 @@ function handleChoiceEventKey(e) {
     }
 }
 
+function showPlayerResponse(text) {
+    var gameLogDiv = document.getElementById("gameLogDiv");
+    var node = document.createElement("P");
+    node.className = "below-player-response";
+    node.textContent = "> " + text;
+    gameLogDiv.appendChild(node);
+}
+
 function selectChoiceOption(index) {
     // Use the correct options array
     var optionsArray = below.choiceEvent.isDialog ? below.choiceEvent.dialogOptions : below.choiceEvent.options;
     var selectedOption = optionsArray[index];
+    
+    // Show the player's response in the dialog log
+    if (below.choiceEvent.isDialog) {
+        showPlayerResponse(selectedOption.text);
+    }
     
     // Handle new dialog system
     if (below.choiceEvent.isDialog && below.choiceEvent.npcPos) {
