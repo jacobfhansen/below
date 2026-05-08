@@ -699,11 +699,7 @@ function showDialogOptions(gameLogDiv, dots) {
     var dialogInterval = (below.gameData.dialogInterval !== undefined ? below.gameData.dialogInterval : 1000);
     var dotsText = below.gameData.dialogDots || "...";
     
-    // Show title
-    var titleNode = document.createElement("P");
-    titleNode.className = "below-game-left-paragraph";
-    titleNode.textContent = below.choiceEvent.isDialog ? "Your response:" : "Choose an action:";
-    gameLogDiv.appendChild(titleNode);
+    // Show title is intentionally removed for cleaner UI
     
     // Show animated dots for options
     var optionDotsNode = document.createElement("P");
