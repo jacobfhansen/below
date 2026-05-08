@@ -1335,14 +1335,14 @@ function getChoiceEventOptions(choiceEventIds) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
                         if (obstacle.type === 8 && obstacle.statueDesc && !obstacle.searched) {
                             obstacle.searched = true;
-                            below.gameData.mapLog.push(obstacle.statueDesc + " You notice a small inscription at the base, worn by age.");
+                            below.gameData.mapLog.push(obstacle.statueDesc);
                             maintainMapLog();
                             if (obstacle.dialogUnlock) {
                                 var medusa = below.gameData.mapData[curMap].npcs.find(function(n) {
                                     return n.type === 3;
                                 });
                                 if (medusa && medusa.dialogOptions) {
-                                    var q1 = medusa.dialogOptions.find(function(d) { return d.id === "medusaq1"; });
+                                    var q1 = medusa.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
                                     if (q1 && q1.options) {
                                         var unlockOpt = q1.options.find(function(o) { return o.id === "medusaa1s" + obstacle.dialogUnlock.slice(-1); });
                                         if (unlockOpt) unlockOpt.available = true;

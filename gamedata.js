@@ -1828,7 +1828,7 @@ var belowGameData = {
                     },
                     "icon": "statue1.png",
                     "statueName": "The Supplicant",
-                    "statueDesc": "A marble figure with arms raised toward the ceiling, palms open.",
+                    "statueDesc": "A marble figure with arms raised toward the ceiling, palms open. A small sign reads: My first.",
                     "dialogUnlock": "medusas1",
                     "letterHint": "S"
                 },
@@ -1840,7 +1840,7 @@ var belowGameData = {
                     },
                     "icon": "statue2.png",
                     "statueName": "The Tortured",
-                    "statueDesc": "A marble figure clutching its head, face twisted in anguish.",
+                    "statueDesc": "A marble figure clutching its head, face twisted in anguish. A small sign reads: The second.",
                     "dialogUnlock": "medusas2",
                     "letterHint": "T"
                 },
@@ -1852,7 +1852,7 @@ var belowGameData = {
                     },
                     "icon": "statue3.png",
                     "statueName": "The Observer",
-                    "statueDesc": "A marble figure with one hand shielding its eyes and the other pointing into the dark.",
+                    "statueDesc": "A marble figure with one hand shielding its eyes and the other pointing into the dark. A small sign reads: The third.",
                     "dialogUnlock": "medusas3",
                     "letterHint": "O"
                 },
@@ -1864,7 +1864,7 @@ var belowGameData = {
                     },
                     "icon": "statue4.png",
                     "statueName": "The Navigator",
-                    "statueDesc": "A marble figure with arms pointing in opposite directions, as if confused.",
+                    "statueDesc": "A marble figure with arms pointing in opposite directions, as if confused.  A small sign reads: Number four.",
                     "dialogUnlock": "medusas4",
                     "letterHint": "N"
                 },
@@ -1876,7 +1876,7 @@ var belowGameData = {
                     },
                     "icon": "statue5.png",
                     "statueName": "The Exile",
-                    "statueDesc": "A marble figure hunched over, turned away, arms wrapped around itself.",
+                    "statueDesc": "A marble figure hunched over, turned away, arms wrapped around itself. A small sign reads: The fifth.",
                     "dialogUnlock": "medusas5",
                     "letterHint": "E"
                 },
@@ -1888,7 +1888,7 @@ var belowGameData = {
                     },
                     "icon": "statue6.png",
                     "statueName": "The Reacher",
-                    "statueDesc": "A marble figure leaning forward, one arm stretched out as if grasping for something.",
+                    "statueDesc": "A marble figure leaning forward, one arm stretched out as if grasping for something. A small sign reads: My very last. I promise.",
                     "dialogUnlock": "medusas6",
                     "letterHint": "R"
                 }
@@ -1903,37 +1903,25 @@ var belowGameData = {
                     "destPos": {},
                     "dialogOptions": [
                         {
-                            "id": "medusaq1",
+                            "id": "medusaq0",
                             "available": true,
-                            "text": "Oh! A child? Down here? How... unexpected. I was miles away, watching clouds I couldn't possibly see through all this rock. You must be lost.",
+                            "text": "A woman with snakes for hair walks aimlesly around lost in her own thoughts.",
                             "options": [
                                 {
-                                    "id": "medusaa1p",
-                                    "text": "Yes, I'm trying to find a way out.",
+                                    "id": "medusaa0p",
+                                    "text": "Excuse me...",
                                     "available": true,
                                     "opens": [
-                                        "medusaq2"
-                                    ],
-                                    "closes": [
                                         "medusaq1"
                                     ],
                                     "chains": [
-                                        "medusaq2"
+                                        "medusaq1"
                                     ]
                                 },
                                 {
-                                    "id": "medusaa1r",
-                                    "text": "What's it to you, snake-head?",
-                                    "available": true,
-                                    "opens": [
-                                        "medusaq2"
-                                    ],
-                                    "closes": [
-                                        "medusaq1"
-                                    ],
-                                    "chains": [
-                                        "medusaq2"
-                                    ]
+                                    "id": "medusaa0n",
+                                    "text": "Never mind",
+                                    "available": true
                                 },
                                 {
                                     "id": "medusaa1s1",
@@ -2017,6 +2005,41 @@ var belowGameData = {
                                     ],
                                     "chains": [
                                         "medusas6"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "medusaq1",
+                            "available": true,
+                            "text": "Oh! A child? Down here? How... unexpected. I was miles away, watching clouds I couldn't possibly see through all this rock. You must be lost.",
+                            "options": [
+                                {
+                                    "id": "medusaa1p",
+                                    "text": "Yes, I'm trying to find a way out.",
+                                    "available": true,
+                                    "opens": [
+                                        "medusaq0","medusaq2"
+                                    ],
+                                    "closes": [
+                                        "medusaq1"
+                                    ],
+                                    "chains": [
+                                        "medusaq2"
+                                    ]
+                                },
+                                {
+                                    "id": "medusaa1r",
+                                    "text": "What's it to you, snake-head?",
+                                    "available": true,
+                                    "opens": [
+                                        "medusaq2"
+                                    ],
+                                    "closes": [
+                                        "medusaq1"
+                                    ],
+                                    "chains": [
+                                        "medusaq2"
                                     ]
                                 }
                             ]
@@ -2117,20 +2140,20 @@ var belowGameData = {
                         {
                             "id": "medusas1",
                             "available": false,
-                            "text": "Ah, the one reaching up. I sometimes dream of stretching toward the sun like that. But the sun is gone down here. There's only the shape of it — a gentle curve, coiling like a snake in the grass. Going and going, never ending. I wonder if he'll ever reach what he's after.",
+                            "text": "Ah, the one reaching up. I sometimes dream of stretching toward the sun like that. But the sun is gone down here. There's only the shape of it - a gentle curve, coiling like a snake in the grass. Going and going, never ending. I wonder if he'll ever reach what he's after.",
                             "options": [
                                 {
                                     "id": "medusas1r",
                                     "text": "I see...",
                                     "available": true,
                                     "opens": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ],
                                     "closes": [
                                         "medusas1"
                                     ],
                                     "chains": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ]
                                 }
                             ]
@@ -2145,13 +2168,13 @@ var belowGameData = {
                                     "text": "That's deep...",
                                     "available": true,
                                     "opens": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ],
                                     "closes": [
                                         "medusas2"
                                     ],
                                     "chains": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ]
                                 }
                             ]
@@ -2166,13 +2189,13 @@ var belowGameData = {
                                     "text": "Go on...",
                                     "available": true,
                                     "opens": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ],
                                     "closes": [
                                         "medusas3"
                                     ],
                                     "chains": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ]
                                 }
                             ]
@@ -2187,13 +2210,13 @@ var belowGameData = {
                                     "text": "I think I understand...",
                                     "available": true,
                                     "opens": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ],
                                     "closes": [
                                         "medusas4"
                                     ],
                                     "chains": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ]
                                 }
                             ]
@@ -2208,13 +2231,13 @@ var belowGameData = {
                                     "text": "I see...",
                                     "available": true,
                                     "opens": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ],
                                     "closes": [
                                         "medusas5"
                                     ],
                                     "chains": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ]
                                 }
                             ]
@@ -2229,13 +2252,13 @@ var belowGameData = {
                                     "text": "Fascinating...",
                                     "available": true,
                                     "opens": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ],
                                     "closes": [
                                         "medusas6"
                                     ],
                                     "chains": [
-                                        "medusaq1"
+                                        "medusaq0"
                                     ]
                                 }
                             ]
