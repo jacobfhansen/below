@@ -4,6 +4,10 @@ populated by excentric characters with bizare agendas. The purpose of the game i
 puzzles and playing the various NPC characters against each other and themselves.
 There is no real combat, meaning when player attack nobody dies but their perception of the player might change. 
 
+# NPC's
+Jester: Annoying and rude. Gives misleading clues and conveys half-thruths and outright lies.
+Hermit: A lost soul consumed in his own delusions. Trades keys for herbs. The real keys are the herbs.
+
 # Code
 Below should be developed with vanilla HTML. No external libraries or frameworks. Only what the latest HTML standard
 includes and allows.

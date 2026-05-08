@@ -55,6 +55,8 @@ var belowGameData = {
     "3": {
       "name": "Centipede",
       "fraction": 1,
+      "movement": 0.1,
+      "icon": "centipede.png",
       "blocking": true,
       "aloof": true,
       "description": "A centipede blocks the path",
@@ -184,7 +186,7 @@ var belowGameData = {
         10,
         11
       ],
-      "agenda": "The hermit offers you some herbs in exchange for a key.",
+      "agenda": "A lost soul consumed in his own delusions. Trades keys for herbs. The real keys are the herbs.",
       "personality": "grumpy"
     },
     "2": {
@@ -201,7 +203,7 @@ var belowGameData = {
         10,
         11
       ],
-      "agenda": "Annoy.",
+      "agenda": "Annoying and rude. Gives misleading clues and conveys half-thruths and outright lies.",
       "personality": "devious"
     }
   },
@@ -213,7 +215,7 @@ var belowGameData = {
         {
           "position": { "x": 11, "y": 4 },
           "targetMap": 1,
-          "targetPosition": { "x": 1, "y": 1 },
+          "targetPosition": { "x": 4, "y": 1 },
           "text": "You descend into the caves..."
         }
       ],
@@ -1255,7 +1257,7 @@ var belowGameData = {
             {
               "id": "jesterq8",
               "available": false,
-              "text": "Anyway, I'm bored of being helpful now. It's making me itch. If you want my advice — not that you asked — find a key, give it to the hermit, and take his herbs. They'll show you the way out of here. Or they'll give you a stomach ache. One of the two! Now GO, I need to practice my juggling.",
+              "text": "Anyway, I'm bored of being helpful now. It's making me itch. If you want my advice - not that you asked - find a key, give it to the hermit, and take his herbs. They'll show you the way out of here. Or they'll give you a stomach ache. One of the two! Now GO, I need to practice my juggling.",
               "options": [
                 {
                   "id": "jestera8p",
@@ -1282,7 +1284,7 @@ var belowGameData = {
         {
           "position": { "x": 4, "y": 2 },
           "targetMap": 0,
-          "targetPosition": { "x": 10, "y": 2 },
+          "targetPosition": { "x": 11, "y": 3 },
           "text": "You emerge from the caves..."
         }
       ],

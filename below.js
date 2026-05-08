@@ -618,6 +618,11 @@ function handleMenuKey(e, menuId) {
     }
 }
 
+function scrollLogToBottom() {
+    var el = document.getElementById("gameLogDiv");
+    if (el) el.scrollTop = el.scrollHeight;
+}
+
 function showChoiceEvent() {
     var x = below.gameData.player.currentLocation.x;
     var y = below.gameData.player.currentLocation.y;
@@ -664,6 +669,7 @@ function renderChoiceEvent() {
         nodesToRemove.forEach(function(node) {
             if (node.parentNode) node.parentNode.removeChild(node);
         });
+        scrollLogToBottom();
     }
     
     // Add gray overlay to map
@@ -680,6 +686,7 @@ function renderChoiceEvent() {
     dotsNode.className = "below-game-left-paragraph-current";
     dotsNode.textContent = dots;
     gameLogDiv.appendChild(dotsNode);
+    scrollLogToBottom();
     
     // After delay, show the actual message
     setTimeout(function() {
@@ -748,6 +755,7 @@ function showDialogMessage(gameLogDiv) {
         msgNode.textContent = below.choiceEvent.message;
         gameLogDiv.appendChild(msgNode);
     }
+    scrollLogToBottom();
 }
 
 function showDialogOptions(gameLogDiv, dots) {
@@ -782,6 +790,7 @@ function showDialogOptions(gameLogDiv, dots) {
             node.onclick = function() { selectChoiceOption(index); };
             gameLogDiv.appendChild(node);
         });
+        scrollLogToBottom();
     }, dialogInterval);
 }
 
@@ -836,6 +845,7 @@ function showPlayerResponse(text) {
     node.className = "below-player-response";
     node.textContent = "> " + text;
     gameLogDiv.appendChild(node);
+    scrollLogToBottom();
 }
 
 function selectChoiceOption(index) {
@@ -1615,6 +1625,7 @@ function maintainMapLog() {
         node.appendChild(textnode);
         gameLogDiv.appendChild(node);
     });
+    scrollLogToBottom();
 }
 
 function drawMapCanvas() {
