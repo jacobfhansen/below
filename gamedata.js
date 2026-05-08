@@ -906,10 +906,11 @@ var belowGameData = {
                 }
               ]
             },
-            {
-              "id": "hermitq2",
-              "available": false,
-              "text": "Ah, I see you have a key",
+             {
+               "id": "hermitq2",
+               "available": true,
+               "requiresItems": [4, 5],
+               "text": "Ah, I see you have a key",
               "options": [
                 {
                   "id": "hermita3",

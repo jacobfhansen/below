@@ -122,6 +122,28 @@ function mergeDialogOptions(savedData) {
                 var savedDialog = savedNpc.dialogOptions.find(function(d) { return d.id === freshDialog.id; });
                 if (!savedDialog) {
                     savedNpc.dialogOptions.push(JSON.parse(JSON.stringify(freshDialog)));
+                } else {
+                    // Copy any missing properties from fresh dialog to saved dialog
+                    Object.keys(freshDialog).forEach(function(key) {
+                        if (savedDialog[key] === undefined) {
+                            savedDialog[key] = JSON.parse(JSON.stringify(freshDialog[key]));
+                        }
+                    });
+                }
+            });
+        });
+    });
+}
+
+function setDialogAvailable(dialogIds, available) {
+    if (!below.gameData) return;
+    below.gameData.mapData.forEach(function(map) {
+        if (!map.npcs) return;
+        map.npcs.forEach(function(npc) {
+            if (!npc.dialogOptions) return;
+            npc.dialogOptions.forEach(function(dialog) {
+                if (dialogIds.indexOf(dialog.id) !== -1) {
+                    dialog.available = available;
                 }
             });
         });
@@ -985,35 +1007,10 @@ function switchPage(page) {
     });
 }
 
-function checkAndUpdateHermitDialog() {
-    // Check if player has any keys (itemTypes 4 or 5) and make hermitq2 available
-    var hasKey = below.gameData.player.inventory.some(function(itemId) {
-        return itemId === 4 || itemId === 5;
-    });
-    
-    if (hasKey) {
-        // Find hermit NPC and make hermitq2 available
-        below.gameData.mapData.forEach(function(mapData) {
-            if (mapData.npcs) {
-                mapData.npcs.forEach(function(npc) {
-                    if (npc.dialogOptions) {
-                        npc.dialogOptions.forEach(function(dialog) {
-                            if (dialog.id === "hermitq2") {
-                                dialog.available = true;
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
-}
-
 function loadGame(game) {
     var localstorageBelow = JSON.parse(localStorage["below"]);
     below.gameData = localstorageBelow.saves[game];
     mergeDialogOptions(below.gameData);
-    checkAndUpdateHermitDialog();
 }
 
 function foundTile(x, y) {
@@ -1160,12 +1157,10 @@ function getChoiceEventOptions(choiceEventIds) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
                         if (obstacleType.itemType) {
                             var itemTypeId = obstacleType.itemType;
-                            below.gameData.player.inventory.push(itemTypeId);
+                             below.gameData.player.inventory.push(itemTypeId);
                             below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
-                            
-                            // Check if the item is a key (itemTypes 4 or 5) and update hermit dialog
                             if (itemTypeId === 4 || itemTypeId === 5) {
-                                checkAndUpdateHermitDialog();
+                                setDialogAvailable(["hermitq1"], false);
                             }
                             
                             delete obstacleType.itemType;
@@ -1357,8 +1352,17 @@ function handleBlockedInteraction(x, y) {
     
     // Handle NPC dialog system
     if (npc && npc.dialogOptions) {
-        // Find first available dialog option
-        var availableDialog = npc.dialogOptions.find(function(d) { return d.available; });
+        // Find first available dialog (checking availability and item requirements)
+        var availableDialog = npc.dialogOptions.find(function(d) {
+            if (!d.available) return false;
+            if (d.requiresItems) {
+                var hasItem = d.requiresItems.some(function(itemId) {
+                    return below.gameData.player.inventory.indexOf(itemId) !== -1;
+                });
+                if (!hasItem) return false;
+            }
+            return true;
+        });
         if (availableDialog) {
             below.choiceEvent = {
                 selectedIndex: 0,
@@ -1980,7 +1984,6 @@ function startGame() {
     respondToVisibility(document.getElementById("gameDiv"), visible => {
         const feedbackEl = document.getElementById("visibilityFeedback");
         if(visible) {
-            checkAndUpdateHermitDialog();
             drawMapCanvas();
             mapGameLoop();
         }
