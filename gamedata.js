@@ -190,7 +190,7 @@ var belowGameData = {
     "2": {
       "name": "Jester",
       "description": "A jester",
-      "icon": "merchant.png",
+      "icon": "jester.png",
       "dialogImg": "jester_dialog.png",
       "dialog": {
         "greeting": "Greetings!",
@@ -211,7 +211,7 @@ var belowGameData = {
       "name": "Start",
       "exits": [
         {
-          "position": { "x": 11, "y": 2 },
+          "position": { "x": 11, "y": 4 },
           "targetMap": 1,
           "targetPosition": { "x": 1, "y": 1 },
           "text": "You descend into the caves..."

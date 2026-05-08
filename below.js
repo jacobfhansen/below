@@ -200,6 +200,9 @@ hermitImg.src = "images/hermit.png";
 var hermitDialogImg = new Image();
 hermitDialogImg.src = "images/hermit_dialog.png";
 
+var jesterImg = new Image();
+jesterImg.src = "images/jester.png";
+
 var merchantImg = new Image();
 merchantImg.src = "images/merchant.png";
 
@@ -226,6 +229,9 @@ doorClosedImg.src = "images/door_closed.png";
 
 var doorOpenImg = new Image();
 doorOpenImg.src = "images/door_open.png";
+
+var exitImg = new Image();
+exitImg.src = "images/exit.png";
 
 window.onbeforeunload = confirmExit;
 function confirmExit() {
@@ -1746,9 +1752,10 @@ function drawMapCanvas() {
         if (below.editorMode || distanceN <= visionPixels) {
             var type = below.gameData.npcTypes[npc.type];
             if (!type) return; // Skip if NPC type is undefined
-            if (type.icon) {
+                if (type.icon) {
                 var img = new Image();
                 if (type.icon === "hermit.png") img = hermitImg || new Image();
+                else if (type.icon === "jester.png") img = jesterImg || new Image();
                 else if (type.icon === "merchant.png") img = merchantImg || new Image();
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
@@ -1856,6 +1863,20 @@ function drawMapCanvas() {
             }
         }
     });
+    
+    // EXITS (drawn on top of everything)
+    var exits = below.gameData.mapData[curMap].exits;
+    if (exits) {
+        exits.forEach(function(exit) {
+            var distXE = (exit.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
+            var distYE = (exit.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
+            var distanceE = Math.sqrt(distXE * distXE + distYE * distYE);
+            if (below.editorMode || distanceE <= visionPixels) {
+                if (!exitImg.complete) exitImg.src = "images/exit.png";
+                context.drawImage(exitImg, (exit.position.x * width) + verticalCenter - horizontalOffset - (width/2), (exit.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
+            }
+        });
+    }
     
     gameDivCenter.appendChild(canvas);
 }
