@@ -182,20 +182,21 @@ var belowGameData = {
       "personality": "grumpy"
     },
     "2": {
-      "name": "Merchant",
-      "description": "A traveling trader with goods to sell",
+      "name": "Jester",
+      "description": "A jester",
       "icon": "merchant.png",
+      "dialogImg": "jester_dialog.png",
       "dialog": {
-        "greeting": "Welcome! Have a look at my wares.",
-        "agitated": "Best be on your way, friend."
+        "greeting": "Greetings!",
+        "agitated": "HA HA HA HA"
       },
       "choiceEvents": [
         9,
         10,
         11
       ],
-      "agenda": "The merchant has rare items for trade.",
-      "personality": "friendly"
+      "agenda": "Annoy.",
+      "personality": "devious"
     }
   },
   "mapData": [
@@ -1040,6 +1041,32 @@ var belowGameData = {
                   "closes": [
                     "hermitq10"
                   ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": 2,
+          "position": {
+            "x": 5,
+            "y": -3
+          },
+          "dialogOptions": [
+            {
+              "id": "newq1",
+              "available": true,
+              "text": "Greetings my friend!",
+              "options": [
+                {
+                  "id": "newa1a",
+                  "text": "Greetings",
+                  "available": true
+                },
+                {
+                  "id": "newq1a2",
+                  "text": "Who are you supposed to be? A clown?",
+                  "available": true
                 }
               ]
             }
