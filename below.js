@@ -206,6 +206,9 @@ jesterImg.src = "images/jester.png";
 var merchantImg = new Image();
 merchantImg.src = "images/merchant.png";
 
+var medusaImg = new Image();
+medusaImg.src = "images/medusa.png";
+
 var tableImg = new Image();
 tableImg.src = "images/table.png";
 
@@ -232,6 +235,19 @@ doorOpenImg.src = "images/door_open.png";
 
 var exitImg = new Image();
 exitImg.src = "images/exit.png";
+
+var statueImg1 = new Image();
+statueImg1.src = "images/statue1.png";
+var statueImg2 = new Image();
+statueImg2.src = "images/statue2.png";
+var statueImg3 = new Image();
+statueImg3.src = "images/statue3.png";
+var statueImg4 = new Image();
+statueImg4.src = "images/statue4.png";
+var statueImg5 = new Image();
+statueImg5.src = "images/statue5.png";
+var statueImg6 = new Image();
+statueImg6.src = "images/statue6.png";
 
 window.onbeforeunload = confirmExit;
 function confirmExit() {
@@ -1317,7 +1333,26 @@ function getChoiceEventOptions(choiceEventIds) {
                     });
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
-                        if (obstacleType.itemType) {
+                        if (obstacle.type === 8 && obstacle.statueDesc && !obstacle.searched) {
+                            obstacle.searched = true;
+                            below.gameData.mapLog.push(obstacle.statueDesc + " You notice a small inscription at the base, worn by age.");
+                            maintainMapLog();
+                            if (obstacle.dialogUnlock) {
+                                var medusa = below.gameData.mapData[curMap].npcs.find(function(n) {
+                                    return n.type === 3;
+                                });
+                                if (medusa && medusa.dialogOptions) {
+                                    var q1 = medusa.dialogOptions.find(function(d) { return d.id === "medusaq1"; });
+                                    if (q1 && q1.options) {
+                                        var unlockOpt = q1.options.find(function(o) { return o.id === "medusaa1s" + obstacle.dialogUnlock.slice(-1); });
+                                        if (unlockOpt) unlockOpt.available = true;
+                                    }
+                                }
+                            }
+                        } else if (obstacle.type === 8 && obstacle.searched) {
+                            below.gameData.mapLog.push("The marble figure stares blankly into the dark. You've already learned what you can from it.");
+                            maintainMapLog();
+                        } else if (obstacleType.itemType) {
                             var itemTypeId = obstacleType.itemType;
                              below.gameData.player.inventory.push(itemTypeId);
                             below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
@@ -1862,6 +1897,7 @@ function drawMapCanvas() {
                 if (type.icon === "hermit.png") img = hermitImg || new Image();
                 else if (type.icon === "jester.png") img = jesterImg || new Image();
                 else if (type.icon === "merchant.png") img = merchantImg || new Image();
+                else if (type.icon === "medusa.png") img = medusaImg || new Image();
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
@@ -1899,6 +1935,12 @@ function drawMapCanvas() {
                     else if (iconName === "key1.png") img = keyImg;
                     else if (iconName === "cupboard.png") img = cupboardImg;
                     else if (iconName === "lightbeam.png") img = lightbeamImg;
+                    else if (iconName === "statue1.png") img = statueImg1;
+                    else if (iconName === "statue2.png") img = statueImg2;
+                    else if (iconName === "statue3.png") img = statueImg3;
+                    else if (iconName === "statue4.png") img = statueImg4;
+                    else if (iconName === "statue5.png") img = statueImg5;
+                    else if (iconName === "statue6.png") img = statueImg6;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
@@ -1942,6 +1984,12 @@ function drawMapCanvas() {
                     else if (iconName === "key1.png") img = keyImg;
                     else if (iconName === "cupboard.png") img = cupboardImg;
                     else if (iconName === "lightbeam.png") img = lightbeamImg;
+                    else if (iconName === "statue1.png") img = statueImg1;
+                    else if (iconName === "statue2.png") img = statueImg2;
+                    else if (iconName === "statue3.png") img = statueImg3;
+                    else if (iconName === "statue4.png") img = statueImg4;
+                    else if (iconName === "statue5.png") img = statueImg5;
+                    else if (iconName === "statue6.png") img = statueImg6;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
@@ -1953,7 +2001,7 @@ function drawMapCanvas() {
                 }
                 context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2), (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
                 if (opacity < 1.0) {
-                    context.globalAlpha = 1.0; // Reset
+                    context.globalAlpha = 1.0;
                 }
             } else {
                 var opacity = type.opacity !== undefined ? type.opacity : 1.0;
@@ -1983,7 +2031,7 @@ function drawMapCanvas() {
         });
     }
     
-    gameDivCenter.appendChild(canvas);
+    //gameDivCenter.appendChild(canvas);
 }
 
 function mapGameLoop() {
@@ -2016,14 +2064,12 @@ function mapGameLoop() {
             if (!monster.destPos) monster.destPos = { x: null, y: null, xVelocity: null, yVelocity: null };
             // First, do monster move?
             var type = below.gameData.monsterTypes[monster.type];
-            if (!type) return; // Skip if monster type is undefined (e.g., NPC in monster array)
+            if (!type) return; // Skip if monster type is undefined
             if (Math.random() < type.movement) {
                 // What direction do it move?
                 var dir = (Math.floor(Math.random() * 4)) + 1;
                 if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) {
-                    // Check if monster bumps into player
                     if (monster.position.x === below.gameData.player.currentLocation.x && monster.position.y - 1 === below.gameData.player.currentLocation.y) {
-                        // Monster bumps into player - activate monster's choice event if not aloof
                         if (!isMonsterAloof(monster)) {
                             var monsterType = below.gameData.monsterTypes[monster.type];
                             var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
@@ -2042,9 +2088,7 @@ function mapGameLoop() {
                     }
                 }
                 else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1)) {
-                    // Check if monster bumps into player
                     if (monster.position.x === below.gameData.player.currentLocation.x && monster.position.y + 1 === below.gameData.player.currentLocation.y) {
-                        // Monster bumps into player - activate monster's choice event if not aloof
                         if (!isMonsterAloof(monster)) {
                             var monsterType = below.gameData.monsterTypes[monster.type];
                             var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
@@ -2063,9 +2107,7 @@ function mapGameLoop() {
                     }
                 }
                 else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y)) {
-                    // Check if monster bumps into player
                     if (monster.position.x - 1 === below.gameData.player.currentLocation.x && monster.position.y === below.gameData.player.currentLocation.y) {
-                        // Monster bumps into player - activate monster's choice event if not aloof
                         if (!isMonsterAloof(monster)) {
                             var monsterType = below.gameData.monsterTypes[monster.type];
                             var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
@@ -2077,16 +2119,14 @@ function mapGameLoop() {
                                 options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
                             };
                             renderChoiceEvent();
-                }
+                        }
                     } else if (!isBlocked(monster.position.x - 1, monster.position.y) && isTileAllowed(monster, monster.position.x - 1, monster.position.y)) {
                         monster.destPos.xVelocity = -1;
                         monster.destPos.x = monster.position.x -1;
                     }
                 }
                 else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y)) {
-                    // Check if monster bumps into player
                     if (monster.position.x + 1 === below.gameData.player.currentLocation.x && monster.position.y === below.gameData.player.currentLocation.y) {
-                        // Monster bumps into player - activate monster's choice event if not aloof
                         if (!isMonsterAloof(monster)) {
                             var monsterType = below.gameData.monsterTypes[monster.type];
                             var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
@@ -2106,15 +2146,63 @@ function mapGameLoop() {
                 }
             }
         });
+        // NPC movement
+        below.gameData.mapData[curMap].npcs.forEach(function(npc) {
+            var type = below.gameData.npcTypes[npc.type];
+            if (!type || !type.movement) return;
+            if (!npc.destPos) npc.destPos = { x: null, y: null, xVelocity: null, yVelocity: null };
+            if (Math.random() < type.movement) {
+                var dir = (Math.floor(Math.random() * 4)) + 1;
+                if (dir === 1 && foundTile(npc.position.x, npc.position.y - 1)) {
+                    if (npc.position.x === below.gameData.player.currentLocation.x && npc.position.y - 1 === below.gameData.player.currentLocation.y) {
+                        handleBlockedInteraction(npc.position.x, npc.position.y - 1);
+                    } else if (!isBlocked(npc.position.x, npc.position.y - 1) && isTileAllowed(npc, npc.position.x, npc.position.y - 1)) {
+                        npc.destPos.yVelocity = -1;
+                        npc.destPos.y = npc.position.y - 1;
+                    }
+                }
+                else if (dir === 2 && foundTile(npc.position.x, npc.position.y + 1)) {
+                    if (npc.position.x === below.gameData.player.currentLocation.x && npc.position.y + 1 === below.gameData.player.currentLocation.y) {
+                        handleBlockedInteraction(npc.position.x, npc.position.y + 1);
+                    } else if (!isBlocked(npc.position.x, npc.position.y + 1) && isTileAllowed(npc, npc.position.x, npc.position.y + 1)) {
+                        npc.destPos.yVelocity = 1;
+                        npc.destPos.y = npc.position.y + 1;
+                    }
+                }
+                else if (dir === 3 && foundTile(npc.position.x - 1, npc.position.y)) {
+                    if (npc.position.x - 1 === below.gameData.player.currentLocation.x && npc.position.y === below.gameData.player.currentLocation.y) {
+                        handleBlockedInteraction(npc.position.x - 1, npc.position.y);
+                    } else if (!isBlocked(npc.position.x - 1, npc.position.y) && isTileAllowed(npc, npc.position.x - 1, npc.position.y)) {
+                        npc.destPos.xVelocity = -1;
+                        npc.destPos.x = npc.position.x - 1;
+                    }
+                }
+                else if (dir === 4 && foundTile(npc.position.x + 1, npc.position.y)) {
+                    if (npc.position.x + 1 === below.gameData.player.currentLocation.x && npc.position.y === below.gameData.player.currentLocation.y) {
+                        handleBlockedInteraction(npc.position.x + 1, npc.position.y);
+                    } else if (!isBlocked(npc.position.x + 1, npc.position.y) && isTileAllowed(npc, npc.position.x + 1, npc.position.y)) {
+                        npc.destPos.xVelocity = 1;
+                        npc.destPos.x = npc.position.x + 1;
+                    }
+                }
+            }
+        });
     }
     var moving = false;
     // Player moving?
     if (below.gameData.player.destinationLocation.xVelocity || below.gameData.player.destinationLocation.yVelocity) moving = true;
     // Monster moving?
     if (!moving) {
-        // Check monsters
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
             if (monster.destPos && (monster.destPos.xVelocity || monster.destPos.yVelocity)) {
+                moving = true;
+                return;
+            }
+        });
+    }
+    if (!moving) {
+        below.gameData.mapData[curMap].npcs.forEach(function(npc) {
+            if (npc.destPos && (npc.destPos.xVelocity || npc.destPos.yVelocity)) {
                 moving = true;
                 return;
             }
@@ -2123,12 +2211,10 @@ function mapGameLoop() {
     // Figure out if anything is moving and move it
     if (moving) {
         if (below.gameData.player.destinationLocation.xVelocity) {
-            // Continue here, subtract/add a fraction of currentLocation
             below.gameData.player.currentLocation.x += (below.gameData.player.destinationLocation.xVelocity/below.tickSpeed);
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.x = below.gameData.player.destinationLocation.x;
                 below.gameData.player.destinationLocation.xVelocity = null;
-                // Show tile text when player arrives
                 var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
                 if (tile && tile['text']) {
                     below.gameData.mapLog.push(tile['text']);
@@ -2142,7 +2228,6 @@ function mapGameLoop() {
             if (below.tick % below.tickSpeed === 0) {
                 below.gameData.player.currentLocation.y = below.gameData.player.destinationLocation.y;
                 below.gameData.player.destinationLocation.yVelocity = null;
-                // Show tile text when player arrives
                 var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
                 if (tile && tile['text']) {
                     below.gameData.mapLog.push(tile['text']);
@@ -2153,7 +2238,6 @@ function mapGameLoop() {
         }
         // Check for map exits when player has settled
         if (!below.gameData.player.destinationLocation.xVelocity && !below.gameData.player.destinationLocation.yVelocity) {
-            var curMap = below.gameData.player.currentMap;
             var exits = below.gameData.mapData[curMap].exits;
             if (exits) {
                 var exit = exits.find(function(e) {
@@ -2182,9 +2266,26 @@ function mapGameLoop() {
                 }
             }
         });
+        below.gameData.mapData[curMap].npcs.forEach(function(npc) {
+            if (npc.destPos && npc.destPos.xVelocity) {
+                npc.position.x += (npc.destPos.xVelocity/below.tickSpeed);
+                if (below.tick % below.tickSpeed === 0) {
+                    npc.position.x = npc.destPos.x;
+                    npc.destPos.xVelocity = null;
+                    saveCurrentGame();
+                }
+            }
+            if (npc.destPos && npc.destPos.yVelocity) {
+                npc.position.y += (npc.destPos.yVelocity/below.tickSpeed);
+                if (below.tick % below.tickSpeed === 0) {
+                    npc.position.y = npc.destPos.y;
+                    npc.destPos.yVelocity = null;
+                    saveCurrentGame();
+                }
+            }
+        });
         // Then draw current map
         drawMapCanvas();
-        //window.cancelAnimationFrame(below.tick);
     }
 }
 
