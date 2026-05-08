@@ -1099,19 +1099,175 @@ var belowGameData = {
           },
           "dialogOptions": [
             {
-              "id": "newq1",
+              "id": "jesterq1",
               "available": true,
-              "text": "Greetings my friend!",
+              "text": "Oh, another wandering soul! How delightful! You look lost, confused, and thoroughly miserable. I LOVE it!",
               "options": [
                 {
-                  "id": "newa1a",
-                  "text": "Greetings",
-                  "available": true
+                  "id": "jestera1p",
+                  "text": "I'm just trying to find my way. Can you help?",
+                  "available": true,
+                  "opens": ["jesterq2"],
+                  "closes": ["jesterq1"],
+                  "chains": ["jesterq2"]
                 },
                 {
-                  "id": "newq1a2",
-                  "text": "Who are you supposed to be? A clown?",
-                  "available": true
+                  "id": "jestera1r",
+                  "text": "Shut it, jester. Not in the mood.",
+                  "available": true,
+                  "opens": ["jesterq1"],
+                  "closes": ["jesterq2", "jesterq3", "jesterq4", "jesterq5", "jesterq6", "jesterq7", "jesterq8"]
+                }
+              ]
+            },
+            {
+              "id": "jesterq2",
+              "available": false,
+              "text": "Help? Oh, I can help you waste your time, get lost more, and regret every decision you've ever made! That's my specialty!",
+              "options": [
+                {
+                  "id": "jestera2p",
+                  "text": "I'll take my chances. What do you know?",
+                  "available": true,
+                  "opens": ["jesterq3"],
+                  "closes": ["jesterq2"],
+                  "chains": ["jesterq3"]
+                },
+                {
+                  "id": "jestera2r",
+                  "text": "You're insufferable.",
+                  "available": true,
+                  "opens": ["jesterq1"],
+                  "closes": ["jesterq2", "jesterq3", "jesterq4", "jesterq5", "jesterq6", "jesterq7", "jesterq8"]
+                }
+              ]
+            },
+            {
+              "id": "jesterq3",
+              "available": false,
+              "text": "Fine, fine! But don't say I didn't warn you. So tell me, have you met the hermit yet? Old beardy? Lives in the corner like a particularly ugly mushroom?",
+              "options": [
+                {
+                  "id": "jestera3p",
+                  "text": "Yes, I spoke with him. He seems lonely.",
+                  "available": true,
+                  "opens": ["jesterq4"],
+                  "closes": ["jesterq3"],
+                  "chains": ["jesterq4"]
+                },
+                {
+                  "id": "jestera3r",
+                  "text": "Why would I tell YOU anything?",
+                  "available": true,
+                  "opens": ["jesterq1"],
+                  "closes": ["jesterq2", "jesterq3", "jesterq4", "jesterq5", "jesterq6", "jesterq7", "jesterq8"]
+                }
+              ]
+            },
+            {
+              "id": "jesterq4",
+              "available": false,
+              "text": "Lonely! HA! That's one word for it. I'd say criminally boring is more accurate. The man talks about KEYS and HERBS all day. KEYS and HERBS! As if they're the most fascinating things in the universe!",
+              "options": [
+                {
+                  "id": "jestera4p",
+                  "text": "What about keys and herbs?",
+                  "available": true,
+                  "opens": ["jesterq5"],
+                  "closes": ["jesterq4"],
+                  "chains": ["jesterq5"]
+                },
+                {
+                  "id": "jestera4r",
+                  "text": "Sounds more interesting than you.",
+                  "available": true,
+                  "opens": ["jesterq1"],
+                  "closes": ["jesterq2", "jesterq3", "jesterq4", "jesterq5", "jesterq6", "jesterq7", "jesterq8"]
+                }
+              ]
+            },
+            {
+              "id": "jesterq5",
+              "available": false,
+              "text": "Oh, you want to know? REALLY want to know? Well, I'm not supposed to tell you - it would RUIN the hermit's fun - but he trades. Herbs for keys. Straight swap. The old fool thinks he's getting treasure, but the herbs are worth way more!",
+              "options": [
+                {
+                  "id": "jestera5p",
+                  "text": "What do the herbs do?",
+                  "available": true,
+                  "opens": ["jesterq6"],
+                  "closes": ["jesterq5"],
+                  "chains": ["jesterq6"]
+                },
+                {
+                  "id": "jestera5r",
+                  "text": "You're lying.",
+                  "available": true,
+                  "opens": ["jesterq1"],
+                  "closes": ["jesterq2", "jesterq3", "jesterq4", "jesterq5", "jesterq6", "jesterq7", "jesterq8"]
+                }
+              ]
+            },
+            {
+              "id": "jesterq6",
+              "available": false,
+              "text": "They clear your head! Open your mind! I heard someone once chewed a handful and suddenly knew the layout of every tunnel in this place. EVERY TUNNEL! Imagine what you could do with THAT knowledge.",
+              "options": [
+                {
+                  "id": "jestera6p",
+                  "text": "So the herbs are more valuable than keys?",
+                  "available": true,
+                  "opens": ["jesterq7"],
+                  "closes": ["jesterq6"],
+                  "chains": ["jesterq7"]
+                },
+                {
+                  "id": "jestera6r",
+                  "text": "Magic herbs? Please.",
+                  "available": true,
+                  "opens": ["jesterq1"],
+                  "closes": ["jesterq2", "jesterq3", "jesterq4", "jesterq5", "jesterq6", "jesterq7", "jesterq8"]
+                }
+              ]
+            },
+            {
+              "id": "jesterq7",
+              "available": false,
+              "text": "Valuable? They're PRICELESS! But don't tell the hermit I said that. He thinks he's ripping people off with his little exchange. It's hilarious! The man sits on a fortune and trades it for shiny door-openers!",
+              "options": [
+                {
+                  "id": "jestera7p",
+                  "text": "I'll keep that in mind. Thanks.",
+                  "available": true,
+                  "opens": ["jesterq8"],
+                  "closes": ["jesterq7"],
+                  "chains": ["jesterq8"]
+                },
+                {
+                  "id": "jestera7r",
+                  "text": "You're insane.",
+                  "available": true,
+                  "opens": ["jesterq1"],
+                  "closes": ["jesterq2", "jesterq3", "jesterq4", "jesterq5", "jesterq6", "jesterq7", "jesterq8"]
+                }
+              ]
+            },
+            {
+              "id": "jesterq8",
+              "available": false,
+              "text": "Anyway, I'm bored of being helpful now. It's making me itch. If you want my advice — not that you asked — find a key, give it to the hermit, and take his herbs. They'll show you the way out of here. Or they'll give you a stomach ache. One of the two! Now GO, I need to practice my juggling.",
+              "options": [
+                {
+                  "id": "jestera8p",
+                  "text": "Thanks, I'll try that.",
+                  "available": true,
+                  "closes": ["jesterq8"]
+                },
+                {
+                  "id": "jestera8r",
+                  "text": "Finally, some silence.",
+                  "available": true,
+                  "closes": ["jesterq8"]
                 }
               ]
             }
