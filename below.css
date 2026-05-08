@@ -107,6 +107,19 @@ html, body {
     color: var(--yellow);
     font-style: italic;
 }
+.below-dialog-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 10px 10px 0px 10px;
+}
+.below-dialog-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 5px;
+    border: 2px solid var(--cyan);
+    flex-shrink: 0;
+}
 
 .below-game-center-panel {
     height: 90%;

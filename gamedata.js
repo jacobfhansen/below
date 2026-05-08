@@ -168,6 +168,7 @@ var belowGameData = {
       "name": "Hermit",
       "description": "An old man living in solitude",
       "icon": "hermit.png",
+      "dialogImg": "hermit_dialog.png",
       "dialog": {
         "greeting": "Welcome traveler. I don't get many visitors here.",
         "agitated": "Back off! I want to be left alone!"

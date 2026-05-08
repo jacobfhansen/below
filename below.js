@@ -189,6 +189,9 @@ centipedeImg.src = "images/centipede.png";
 var hermitImg = new Image();
 hermitImg.src = "images/hermit.png";
 
+var hermitDialogImg = new Image();
+hermitDialogImg.src = "images/hermit_dialog.png";
+
 var merchantImg = new Image();
 merchantImg.src = "images/merchant.png";
 
@@ -684,10 +687,26 @@ function renderChoiceEvent() {
 
 function showDialogMessage(gameLogDiv) {
     if (below.choiceEvent.isDialog) {
-        var msgNode = document.createElement("P");
-        msgNode.className = "below-game-left-paragraph-current";
-        msgNode.textContent = below.choiceEvent.message;
-        gameLogDiv.appendChild(msgNode);
+        var npcType = below.choiceEvent.npcType !== undefined && below.choiceEvent.npcType !== null
+            ? below.gameData.npcTypes[below.choiceEvent.npcType] : null;
+        if (npcType && npcType.dialogImg) {
+            var container = document.createElement("DIV");
+            container.className = "below-dialog-message";
+            var img = document.createElement("IMG");
+            img.className = "below-dialog-img";
+            img.src = "images/" + npcType.dialogImg;
+            container.appendChild(img);
+            var msgNode = document.createElement("P");
+            msgNode.className = "below-game-left-paragraph-current";
+            msgNode.textContent = below.choiceEvent.message;
+            container.appendChild(msgNode);
+            gameLogDiv.appendChild(container);
+        } else {
+            var msgNode = document.createElement("P");
+            msgNode.className = "below-game-left-paragraph-current";
+            msgNode.textContent = below.choiceEvent.message;
+            gameLogDiv.appendChild(msgNode);
+        }
     } else if (below.choiceEvent.npcType !== null && below.choiceEvent.npcType !== undefined) {
         var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
         var msgNode = document.createElement("P");
