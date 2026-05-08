@@ -231,3 +231,19 @@ html, body {
     margin: 5px;
     padding: 5px;
 }
+
+.controls-hint {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--grey);
+    font-size: 0.7em;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+}

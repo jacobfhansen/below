@@ -103,6 +103,14 @@ function mergeDialogOptions(savedData) {
     if (typeof belowGameData === 'undefined') return;
     var freshMaps = belowGameData.mapData;
     var savedMaps = savedData.mapData;
+    
+    // Add any maps from fresh data that don't exist in saved data
+    freshMaps.forEach(function(freshMap, mapIndex) {
+        if (!savedMaps[mapIndex]) {
+            savedMaps.push(JSON.parse(JSON.stringify(freshMap)));
+        }
+    });
+    
     freshMaps.forEach(function(freshMap, mapIndex) {
         if (!freshMap.npcs || !savedMaps[mapIndex]) return;
         freshMap.npcs.forEach(function(freshNpc) {
@@ -904,6 +912,23 @@ function selectChoiceOption(index) {
         }
     }
     
+    // Handle trade dialog option
+    if (below.choiceEvent && below.choiceEvent.isDialog && selectedOption.id === "hermit_trade_accept") {
+        var keyIdx = -1;
+        for (var i = 0; i < below.gameData.player.inventory.length; i++) {
+            if (below.gameData.player.inventory[i] === 4 || below.gameData.player.inventory[i] === 5) {
+                keyIdx = i;
+                break;
+            }
+        }
+        if (keyIdx !== -1) {
+            below.gameData.player.inventory.splice(keyIdx, 1);
+            below.gameData.player.inventory.push(6);
+            below.gameData.mapLog.push("You trade your key for a bundle of cave herbs.");
+            maintainMapLog();
+        }
+    }
+    
     closeChoiceEvent();
 }
 
@@ -1037,6 +1062,18 @@ function switchPage(page) {
             pageEl.style.display = "none";
         }
     });
+}
+
+function changeMap(mapId, entryX, entryY, text) {
+  below.gameData.player.currentMap = mapId;
+  below.gameData.player.currentLocation.x = entryX;
+  below.gameData.player.currentLocation.y = entryY;
+  below.gameData.player.destinationLocation = {};
+  if (text) {
+    below.gameData.mapLog.push(text);
+  }
+  maintainMapLog();
+  drawMapCanvas();
 }
 
 function loadGame(game) {
@@ -1986,6 +2023,19 @@ function mapGameLoop() {
                     maintainMapLog();
                 }
                 saveCurrentGame();
+            }
+        }
+        // Check for map exits when player has settled
+        if (!below.gameData.player.destinationLocation.xVelocity && !below.gameData.player.destinationLocation.yVelocity) {
+            var curMap = below.gameData.player.currentMap;
+            var exits = below.gameData.mapData[curMap].exits;
+            if (exits) {
+                var exit = exits.find(function(e) {
+                    return e.position.x === below.gameData.player.currentLocation.x && e.position.y === below.gameData.player.currentLocation.y;
+                });
+                if (exit) {
+                    changeMap(exit.targetMap, exit.targetPosition.x, exit.targetPosition.y, exit.text);
+                }
             }
         }
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {

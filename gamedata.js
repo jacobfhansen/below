@@ -161,6 +161,12 @@ var belowGameData = {
       "description": "A bronze key",
       "icon": "key2.png",
       "choiceEvents": []
+    },
+    "6": {
+      "name": "Herbs",
+      "description": "A bundle of dried cave herbs",
+      "icon": "herbs.png",
+      "choiceEvents": []
     }
   },
   "npcTypes": {
@@ -203,6 +209,14 @@ var belowGameData = {
     {
       "id": 0,
       "name": "Start",
+      "exits": [
+        {
+          "position": { "x": 11, "y": 2 },
+          "targetMap": 1,
+          "targetPosition": { "x": 1, "y": 1 },
+          "text": "You descend into the caves..."
+        }
+      ],
       "tiles": {
         "xm7y3": {
           "x": -7,
@@ -902,9 +916,14 @@ var belowGameData = {
                   "closes": []
                 },
                 {
-                  "id": "hermita2",
-                  "text": "I am not supposed to talk to strangers",
-                  "closes": []
+                  "id": "hermita10",
+                  "text": "Wow, goodbye",
+                  "opens": [
+                    "hermit_trade"
+                  ],
+                  "closes": [
+                    "hermitq10"
+                  ]
                 }
               ]
             },
@@ -1000,7 +1019,7 @@ var belowGameData = {
                   "id": "hermita8",
                   "text": "I am not supposed to talk to strangers",
                   "closes": [
-                    "hermitq3"
+                    "hermitq4"
                   ],
                   "opens": [
                     "hermitq5"
@@ -1032,14 +1051,40 @@ var belowGameData = {
             {
               "id": "hermitq10",
               "available": false,
-              "text": "Let me tell you a tale about keys bla bla bla",
+              "text": "Keys can open many doors. Some lead to escape, others to deeper mysteries. The choice is yours.",
               "options": [
                 {
                   "id": "hermita10",
                   "text": "Wow, goodbye",
-                  "available": true,
+                  "opens": [
+                    "hermit_trade"
+                  ],
                   "closes": [
                     "hermitq10"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_trade",
+              "available": false,
+              "requiresItems": [4, 5],
+              "text": "Still have a key? I'll trade you my special cave herbs for it. They have remarkable properties.",
+              "options": [
+                {
+                  "id": "hermit_trade_accept",
+                  "text": "Alright, deal.",
+                  "available": true,
+                  "closes": [
+                    "hermit_trade"
+                  ]
+                },
+                {
+                  "id": "hermit_trade_decline",
+                  "text": "No thanks.",
+                  "available": true,
+                  "closes": [
+                    "hermit_trade"
                   ]
                 }
               ]
@@ -1073,6 +1118,50 @@ var belowGameData = {
           ]
         }
       ]
+    },
+    {
+      "id": 1,
+      "name": "The Caves",
+      "exits": [
+        {
+          "position": { "x": 4, "y": 2 },
+          "targetMap": 0,
+          "targetPosition": { "x": 10, "y": 2 },
+          "text": "You emerge from the caves..."
+        }
+      ],
+      "tiles": {
+        "x0y2": { "x": 0, "y": 2 },
+        "x1y1": { "x": 1, "y": 1 },
+        "x1y2": { "x": 1, "y": 2 },
+        "x1y3": { "x": 1, "y": 3 },
+        "x2y1": { "x": 2, "y": 1 },
+        "x2y2": { "x": 2, "y": 2 },
+        "x2y3": { "x": 2, "y": 3 },
+        "x3y1": { "x": 3, "y": 1 },
+        "x3y2": { "x": 3, "y": 2 },
+        "x3y3": { "x": 3, "y": 3 },
+        "x4y1": { "x": 4, "y": 1 },
+        "x4y2": { "x": 4, "y": 2 },
+        "x4y3": { "x": 4, "y": 3 },
+        "x0y1": { "x": 0, "y": 1 },
+        "x0y3": { "x": 0, "y": 3 }
+      },
+      "monsters": [
+        {
+          "type": 3,
+          "position": { "x": 2, "y": 2 },
+          "status": 1,
+          "destPos": {}
+        }
+      ],
+      "obstacles": [
+        {
+          "type": 1,
+          "position": { "x": 3, "y": 2 }
+        }
+      ],
+      "npcs": []
     }
   ]
 };
