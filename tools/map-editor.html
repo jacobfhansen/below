@@ -158,7 +158,7 @@ header button:hover { background: #333; }
         </div>
         <div class="section">
             <h3>Controls</h3>
-            <div class="row">Click: select entity / toggle tile</div>
+            <div class="row">Click: select tile or entity</div>
             <div class="row">Drag: pan view</div>
             <div class="row">Scroll: zoom</div>
             <div class="row">Del: delete selected</div>
@@ -181,6 +181,7 @@ var dragStartX, dragStartY, panStartX, panStartY;
 var hoverTileX = null, hoverTileY = null;
 var selectedEntityType = null;  // "monster" | "npc" | "obstacle" | "exit" | null
 var selectedEntityIndex = -1;
+var selectedTileKey = null;     // string like "x3y4" or null for a selected tile
 var placementMode = null;       // "monster" | "npc" | "obstacle" | "exit" | null
 var placementSubtype = null;    // subtype (monster type index, etc.)
 var hoveredEntities = [];       // entities at hovered tile, for tooltip
@@ -198,7 +199,7 @@ function updateAll() {
     updateMapNameInput();
     updateLayerSection();
     updateCountSection();
-    updateEntitySection();
+    updateSelectionSection();
     drawCanvas();
     updateStatusBar();
 }
@@ -218,7 +219,7 @@ function populateMapSelect() {
 function selectMap() {
     selectedMap = parseInt(document.getElementById("mapSelect").value);
     panX = 0; panY = 0;
-    deselectEntity();
+    deselectAll();
     updateAll();
 }
 function updateMapNameInput() {
@@ -248,7 +249,7 @@ function addMap() {
     populateMapSelect();
     selectedMap = gameData.mapData.length - 1;
     document.getElementById("mapSelect").value = selectedMap;
-    deselectEntity();
+    deselectAll();
     updateAll();
 }
 function deleteMap() {
@@ -259,7 +260,7 @@ function deleteMap() {
     if (selectedMap >= gameData.mapData.length) selectedMap = gameData.mapData.length - 1;
     populateMapSelect();
     document.getElementById("mapSelect").value = selectedMap;
-    deselectEntity();
+    deselectAll();
     updateAll();
 }
 
@@ -363,16 +364,32 @@ function getEntitySubtypeName(entity, etype) {
 
 // ────── Selection ────────────────────────────────────
 function selectEntity(etype, index) {
+    selectedTileKey = null;
     selectedEntityType = etype;
     selectedEntityIndex = index;
-    updateEntitySection();
+    updateSelectionSection();
     drawCanvas();
     updateStatusBar();
 }
-function deselectEntity() {
+function selectTile(x, y) {
     selectedEntityType = null;
     selectedEntityIndex = -1;
-    updateEntitySection();
+    var map = gameData.mapData[selectedMap];
+    var key = getTileKey(x, y);
+    if (!map.tiles[key]) {
+        map.tiles[key] = { x: x, y: y };
+        updateCountSection();
+    }
+    selectedTileKey = key;
+    updateSelectionSection();
+    drawCanvas();
+    updateStatusBar();
+}
+function deselectAll() {
+    selectedEntityType = null;
+    selectedEntityIndex = -1;
+    selectedTileKey = null;
+    updateSelectionSection();
     drawCanvas();
     updateStatusBar();
 }
@@ -385,6 +402,10 @@ function getSelectedEntity() {
     else if (selectedEntityType === "exit") arr = getExits();
     else return null;
     return arr[selectedEntityIndex] || null;
+}
+function getSelectedTile() {
+    if (!selectedTileKey) return null;
+    return gameData.mapData[selectedMap].tiles[selectedTileKey] || null;
 }
 
 // ────── Placement mode ──────────────────────────────
@@ -402,7 +423,7 @@ function startPlacement(mode) {
         placementSubtype = null;
     }
     placementMode = mode;
-    deselectEntity();
+    deselectAll();
     document.getElementById("placement-bar").style.display = "flex";
     updatePlacementLabel();
     updateStatusBar();
@@ -456,8 +477,20 @@ function doPlaceEntity(tileX, tileY) {
     showToast("Placed " + getEntityTypeName(placementMode));
 }
 
-// ────── Entity CRUD ──────────────────────────────────
-function deleteSelectedEntity() {
+// ────── Delete selected ────────────────────────────
+function deleteSelected() {
+    // Tile selected?
+    if (selectedTileKey) {
+        var map = gameData.mapData[selectedMap];
+        delete map.tiles[selectedTileKey];
+        deselectAll();
+        updateCountSection();
+        drawCanvas();
+        updateStatusBar();
+        showToast("Deleted tile");
+        return;
+    }
+    // Entity selected?
     var etype = selectedEntityType;
     var idx = selectedEntityIndex;
     if (etype === null || idx < 0) return;
@@ -468,7 +501,7 @@ function deleteSelectedEntity() {
     else if (etype === "exit") arr = getExits();
     if (!arr || idx >= arr.length) return;
     arr.splice(idx, 1);
-    deselectEntity();
+    deselectAll();
     updateCountSection();
     drawCanvas();
     updateStatusBar();
@@ -625,10 +658,14 @@ function drawCanvas() {
         ctx.setLineDash([]);
     }
 
-    // Selection ring
+    // Selection ring (entity or tile)
     var selEntity = getSelectedEntity();
-    if (selEntity && selEntity.position) {
-        var ss = tileToScreen(selEntity.position.x, selEntity.position.y);
+    var selTile = getSelectedTile();
+    var selPos = null;
+    if (selEntity && selEntity.position) selPos = selEntity.position;
+    else if (selTile) selPos = selTile;
+    if (selPos) {
+        var ss = tileToScreen(selPos.x, selPos.y);
         ctx.strokeStyle = "#70A4B2";
         ctx.lineWidth = 2;
         ctx.setLineDash([4, 4]);
@@ -688,8 +725,27 @@ function updateCountSection() {
         + ' &nbsp; Zoom: <span class="val">' + zoom + '</span></div>';
 }
 
-function updateEntitySection() {
+function updateSelectionSection() {
     var el = document.getElementById("info-entity-section");
+
+    // Tile selected?
+    if (selectedTileKey) {
+        var tile = getSelectedTile();
+        if (!tile) { el.innerHTML = ''; return; }
+        var html = '<h3>Selected: Tile</h3>';
+        html += '<div class="entity-form">';
+        html += '<div class="entity-title">Tile (' + tile.x + ', ' + tile.y + ')</div>';
+        html += '<label>Description:</label><input type="text" value="' + escAttr(tile.description || "") + '" onchange="tileSet(\'description\', this.value)">';
+        html += '<label>Arrive text:</label><input type="text" value="' + escAttr(tile.text || "") + '" onchange="tileSet(\'text\', this.value)">';
+        html += '<label>Search message:</label><input type="text" value="' + escAttr(tile.searchMsg || "") + '" onchange="tileSet(\'searchMsg\', this.value)">';
+        html += '<label>Type:</label><input type="number" value="' + (tile.type || 0) + '" onchange="tileSet(\'type\', parseInt(this.value) || 0)">';
+        html += '<div style="margin-top:8px"><button class="btn-danger" onclick="deleteSelected()">Delete</button></div>';
+        html += '</div>';
+        el.innerHTML = html;
+        return;
+    }
+
+    // Entity selected?
     var entity = getSelectedEntity();
     if (!entity) {
         el.innerHTML = '';
@@ -761,15 +817,16 @@ function updateEntitySection() {
         html += '<label>Text:</label><input type="text" value="' + escAttr(entity.text || "") + '" onchange="entitySet(\'text\', this.value)">';
     }
 
-    html += '<div style="margin-top:8px"><button class="btn-danger" onclick="deleteSelectedEntity()">Delete</button></div>';
+    html += '<div style="margin-top:8px"><button class="btn-danger" onclick="deleteSelected()">Delete</button></div>';
     html += '</div>';
     el.innerHTML = html;
 }
 
-// ────── Entity property helpers (global, for inline onchange) ──
+// ────── Entity & tile property helpers (global, for inline onchange) ──
 function entitySet(key, value) { var e = getSelectedEntity(); if (e) { e[key] = value; drawCanvas(); } }
 function entitySetNum(key, value) { entitySet(key, parseFloat(value)); }
 function entitySetStr(key, value) { entitySet(key, value || undefined); }
+function tileSet(key, value) { var t = getSelectedTile(); if (t) { t[key] = value; drawCanvas(); } }
 function entitySetNested(path, value) {
     var e = getSelectedEntity(); if (!e) return;
     var parts = path.split('.'); var obj = e;
@@ -792,7 +849,7 @@ function updateMonsterType(sel) {
     if (!entity) return;
     entity.type = parseInt(sel.value);
     drawCanvas();
-    updateEntitySection();
+    updateSelectionSection();
 }
 function updateNPCType(sel) {
     var entity = getSelectedEntity();
@@ -805,7 +862,7 @@ function updateObstacleType(sel) {
     if (!entity) return;
     entity.type = parseInt(sel.value);
     drawCanvas();
-    updateEntitySection();
+    updateSelectionSection();
 }
 function editAllowedTiles(textarea) {
     var entity = getSelectedEntity();
@@ -877,6 +934,9 @@ function updateStatusBar() {
     var entity = getSelectedEntity();
     if (entity && entity.position) {
         el.textContent = getEntityTypeName(selectedEntityType) + " (" + entity.position.x + ", " + entity.position.y + ")";
+    } else if (selectedTileKey) {
+        var tile = getSelectedTile();
+        if (tile) el.textContent = "Tile (" + tile.x + ", " + tile.y + ")";
     } else if (hoverTileX !== null && hoverTileY !== null) {
         var ents = entitiesAtTile(hoverTileX, hoverTileY);
         if (ents.length > 0) {
@@ -931,17 +991,8 @@ function updateStatusBar() {
             return;
         }
 
-        // Toggle tile
-        var key = getTileKey(t.x, t.y);
-        if (map.tiles[key]) {
-            delete map.tiles[key];
-        } else {
-            map.tiles[key] = { x: t.x, y: t.y };
-        }
-        deselectEntity();
-        updateCountSection();
-        drawCanvas();
-        updateStatusBar();
+        // Select or create tile
+        selectTile(t.x, t.y);
     });
 
     canvas.addEventListener("mousedown", function(e) {
@@ -984,11 +1035,11 @@ function updateStatusBar() {
         }
         if (e.key === "Delete" || e.key === "Backspace") {
             e.preventDefault();
-            deleteSelectedEntity();
+            deleteSelected();
         }
         if (e.key === "Escape") {
             if (placementMode) { cancelPlacement(); return; }
-            deselectEntity();
+            deselectAll();
         }
         if (e.key === "ArrowUp") { e.preventDefault(); nudgeSelectedEntity(0, -1); }
         if (e.key === "ArrowDown") { e.preventDefault(); nudgeSelectedEntity(0, 1); }

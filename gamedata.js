@@ -2216,7 +2216,7 @@ var belowGameData = {
                         {
                             "id": "medusas2",
                             "available": false,
-                            "text": "He carries such weight on his shoulders. I know that feeling — the weight of a past you can't undo. A straight line down, a crossbar across. Like a gallows. Without that crossbeam, the whole thing collapses. But with it... you can hang your regrets and move on.",
+                            "text": "He carries such weight on his shoulders. I know that feeling - the weight of a past you can't undo. A straight line down, a crossbar across. Like a gallows. Without that crossbeam, the whole thing collapses. But with it... you can hang your regrets and move on.",
                             "options": [
                                 {
                                     "id": "medusas2r",
@@ -2258,7 +2258,7 @@ var belowGameData = {
                         {
                             "id": "medusas4",
                             "available": false,
-                            "text": "He points every which way. I used to do that — give directions to travelers, all of them wrong. Two pillars holding up a bridge. A zigzag path through mountain passes. Up and down, over and under. The road to redemption is never straight, you know.",
+                            "text": "He points every which way. I used to do that - give directions to travelers, all of them wrong. Two pillars holding up a bridge. A zigzag path through mountain passes. Up and down, over and under. The road to redemption is never straight, you know.",
                             "options": [
                                 {
                                     "id": "medusas4r",
