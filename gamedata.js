@@ -1460,14 +1460,8 @@ var belowGameData = {
                                     "id": "jestera8p",
                                     "text": "Thanks, I'll try that.",
                                     "available": true,
-                                    "opens": [
-                                        "jesterq9"
-                                    ],
                                     "closes": [
                                         "jesterq8"
-                                    ],
-                                    "chains": [
-                                        "jesterq9"
                                     ]
                                 },
                                 {
@@ -1489,6 +1483,9 @@ var belowGameData = {
                                     "id": "jestera9",
                                     "text": "Thanks... I think.",
                                     "available": true,
+                                    "opens": [
+                                        "jesterq1"
+                                    ],
                                     "closes": [
                                         "jesterq9"
                                     ]

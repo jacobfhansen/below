@@ -1054,11 +1054,13 @@ function submitPassword() {
         }
         if (jesterIdx !== -1) {
             var jester = below.gameData.mapData[0].npcs.splice(jesterIdx, 1)[0];
-            jester.position = { x: 3, y: -8 };
+            jester.position = { x: 8, y: 2 };
             jester.destPos = {};
             below.gameData.mapData[1].npcs.push(jester);
             var jesterq9 = jester.dialogOptions.find(function(d) { return d.id === "jesterq9"; });
+            var jesterq1 = jester.dialogOptions.find(function(d) { return d.id === "jesterq1"; });
             if (jesterq9) jesterq9.available = true;
+            if (jesterq1) jesterq1.available = false;
         }
         
         below.passwordInput = null;
