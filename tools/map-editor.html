@@ -11,60 +11,98 @@ body {
     display: flex; flex-direction: column; overflow: hidden;
 }
 header {
-    display: flex; align-items: center; gap: 12px;
-    padding: 8px 16px; background: #111;
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 16px; background: #111;
     border-bottom: 1px solid #333; flex-shrink: 0;
+    flex-wrap: wrap;
 }
-header h1 { font-size: 16px; font-weight: 600; color: #70A4B2; margin-right: auto; }
-header label { color: #959595; font-size: 13px; }
-header select {
-    padding: 4px 8px; border: 1px solid #444; border-radius: 4px;
-    background: #222; color: #cdd6f4; font-size: 13px; font-family: inherit;
+header h1 { font-size: 15px; font-weight: 600; color: #70A4B2; margin-right: auto; }
+header label { color: #959595; font-size: 12px; }
+header select, header input {
+    padding: 3px 6px; border: 1px solid #444; border-radius: 4px;
+    background: #222; color: #cdd6f4; font-size: 12px; font-family: inherit;
 }
 header button {
-    padding: 6px 14px; border: 1px solid #444; border-radius: 6px;
-    background: #222; color: #cdd6f4; cursor: pointer; font-size: 13px; font-family: inherit;
+    padding: 4px 10px; border: 1px solid #444; border-radius: 4px;
+    background: #222; color: #cdd6f4; cursor: pointer; font-size: 12px; font-family: inherit;
+    white-space: nowrap;
 }
 header button:hover { background: #333; }
 .btn-primary { background: #70A4B2; color: #000; border-color: #70A4B2; font-weight: 600; }
-.btn-primary:hover { background: #8DC4D2; }
+.btn-primary:hover { background: #8DC4D2 !important; }
+.btn-add { background: #2a4a2a; border-color: #3a6a3a; }
+.btn-add:hover { background: #3a6a3a !important; }
+.btn-danger { border-color: #f38ba8; color: #f38ba8; }
+.btn-danger:hover { background: #f38ba8; color: #000 !important; }
+.btn-cancel { border-color: #f38ba8; color: #f38ba8; }
+.btn-cancel:hover { background: #f38ba8; color: #000 !important; }
+.separator { width: 1px; height: 24px; background: #333; margin: 0 4px; }
+.add-group { display: flex; align-items: center; gap: 2px; }
+.add-group .add-label { color: #959595; font-size: 11px; margin-right: 2px; }
+.subtype-select { width: auto; min-width: 50px; }
+#placement-bar {
+    display: none;
+    align-items: center; gap: 8px;
+    padding: 4px 16px; background: #1a2a1a;
+    border-bottom: 1px solid #3a6a3a; flex-shrink: 0;
+    font-size: 12px; color: #8DC4D2;
+}
 #main {
     flex: 1; display: flex; overflow: hidden;
 }
 #canvas-wrap {
     flex: 1; display: flex; align-items: center; justify-content: center;
-    background: #111;
+    background: #111; position: relative;
 }
-#mapCanvas {
+#canvas-wrap canvas {
     border: 1px solid #333;
     cursor: crosshair;
 }
 #info-panel {
-    width: 200px; flex-shrink: 0;
+    width: 240px; flex-shrink: 0;
     background: #111; border-left: 1px solid #333;
-    padding: 12px; font-size: 12px; overflow-y: auto;
+    padding: 10px; font-size: 12px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px;
 }
 #info-panel h3 {
-    font-size: 12px; color: #70A4B2; margin-bottom: 8px;
+    font-size: 11px; color: #70A4B2; margin-bottom: 4px;
     text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 1px solid #222; padding-bottom: 3px;
 }
 #info-panel .row {
-    margin-bottom: 6px; color: #959595;
+    margin-bottom: 4px; color: #959595; font-size: 11px;
 }
-#info-panel .row span { color: #cdd6f4; }
-#coord-display {
+#info-panel .row span.label { color: #959595; }
+#info-panel .row span.val { color: #cdd6f4; }
+#info-panel .section { margin-bottom: 8px; }
+#info-panel label.toggle { display: inline-flex; align-items: center; gap: 3px; margin-right: 6px; font-size: 11px; color: #959595; cursor: pointer; }
+#info-panel label.toggle input { margin: 0; }
+#info-panel .entity-form label { display: block; font-size: 11px; color: #585b70; margin-top: 4px; }
+#info-panel .entity-form input, #info-panel .entity-form select, #info-panel .entity-form textarea {
+    width: 100%; padding: 3px 5px; border: 1px solid #444; border-radius: 3px;
+    background: #1a1a1a; color: #cdd6f4; font-size: 11px; font-family: inherit;
+    margin-bottom: 2px;
+}
+#info-panel .entity-form textarea { resize: vertical; min-height: 40px; }
+#info-panel .entity-form input[type=checkbox] { width: auto; margin-right: 4px; }
+#info-panel .entity-form .entity-title { font-weight: 600; color: #70A4B2; font-size: 13px; margin-bottom: 4px; }
+#info-panel .entity-form .form-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+#info-panel .entity-form .form-row label { margin: 0; white-space: nowrap; }
+#info-panel .entity-form .form-row input[type=number] { width: 60px; }
+#status-bar {
     position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%);
     background: rgba(0,0,0,0.7); color: #959595;
-    padding: 4px 12px; border-radius: 4px; font-size: 13px;
-    pointer-events: none; user-select: none;
+    padding: 3px 12px; border-radius: 4px; font-size: 12px;
+    pointer-events: none; user-select: none; z-index: 100;
 }
 .toast {
     position: fixed; bottom: 20px; right: 20px;
-    padding: 10px 20px; border-radius: 8px; font-size: 13px;
+    padding: 8px 16px; border-radius: 6px; font-size: 12px;
     background: #70A4B2; color: #000; font-weight: 600;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 9999;
     transition: opacity 0.3s; pointer-events: none;
 }
+.toast.error { background: #f38ba8; }
 </style>
 </head>
 <body>
@@ -72,46 +110,100 @@ header button:hover { background: #333; }
     <h1>Map Editor</h1>
     <label>Map:</label>
     <select id="mapSelect" onchange="selectMap()"></select>
-    <button onclick="addMap()">Add Map</button>
-    <button onclick="deleteMap()">Delete Map</button>
-    <button onclick="exportData()" class="btn-primary">Export gamedata.js</button>
+    <input type="text" id="mapNameInput" onchange="renameMap()" style="width:100px" placeholder="Map name">
+    <button onclick="addMap()">+Map</button>
+    <button onclick="deleteMap()">×Map</button>
+    <span class="separator"></span>
+    <div class="add-group">
+        <span class="add-label">M:</span>
+        <select id="monsterSubtype" class="subtype-select"></select>
+        <button class="btn-add" onclick="startPlacement('monster')">+</button>
+    </div>
+    <div class="add-group">
+        <span class="add-label">N:</span>
+        <select id="npcSubtype" class="subtype-select"></select>
+        <button class="btn-add" onclick="startPlacement('npc')">+</button>
+    </div>
+    <div class="add-group">
+        <span class="add-label">O:</span>
+        <select id="obstacleSubtype" class="subtype-select"></select>
+        <button class="btn-add" onclick="startPlacement('obstacle')">+</button>
+    </div>
+    <button class="btn-add" onclick="startPlacement('exit')">+Exit</button>
+    <span class="separator"></span>
+    <button onclick="exportData()" class="btn-primary">Export</button>
 </header>
+<div id="placement-bar">
+    <span id="placementLabel">Placing…</span>
+    <button class="btn-cancel" onclick="cancelPlacement()">Cancel</button>
+</div>
 <div id="main">
     <div id="canvas-wrap">
         <canvas id="mapCanvas"></canvas>
     </div>
     <div id="info-panel">
-        <h3>Tile Info</h3>
-        <div class="row">Position: <span id="hoverPos">—</span></div>
-        <div class="row">Tile exists: <span id="tileExists">—</span></div>
-        <div class="row">Map tiles: <span id="tileCount">—</span></div>
-        <div class="row">Zoom: <span id="zoomLevel">40</span></div>
-        <h3 style="margin-top:12px">Controls</h3>
-        <div class="row">Click: toggle tile</div>
-        <div class="row">Drag: pan view</div>
-        <div class="row">Scroll: zoom in/out</div>
+        <div class="section" id="info-layer-section"></div>
+        <div class="section" id="info-count-section"></div>
+        <div class="section" id="info-entity-section"></div>
+        <div class="section" id="info-hover-section"></div>
+        <div class="section">
+            <h3>Jump To</h3>
+            <div class="form-row">
+                <label>X:</label>
+                <input type="number" id="jumpX" value="0" style="width:60px">
+                <label>Y:</label>
+                <input type="number" id="jumpY" value="0" style="width:60px">
+                <button onclick="jumpTo()">Go</button>
+            </div>
+        </div>
+        <div class="section">
+            <h3>Controls</h3>
+            <div class="row">Click: select entity / toggle tile</div>
+            <div class="row">Drag: pan view</div>
+            <div class="row">Scroll: zoom</div>
+            <div class="row">Del: delete selected</div>
+            <div class="row">Arrows: nudge selected</div>
+            <div class="row">Esc: deselect / cancel</div>
+        </div>
     </div>
 </div>
-<div id="coord-display"></div>
+<div id="status-bar"></div>
 
 <script src="../gamedata.js"></script>
 <script>
+// ────── State ──────────────────────────────────────
 var gameData;
 var selectedMap = 0;
 var panX = 0, panY = 0;
 var zoom = 40;
 var isDragging = false;
-var dragStartX, dragStartY;
-var panStartX, panStartY;
+var dragStartX, dragStartY, panStartX, panStartY;
 var hoverTileX = null, hoverTileY = null;
+var selectedEntityType = null;  // "monster" | "npc" | "obstacle" | "exit" | null
+var selectedEntityIndex = -1;
+var placementMode = null;       // "monster" | "npc" | "obstacle" | "exit" | null
+var placementSubtype = null;    // subtype (monster type index, etc.)
+var hoveredEntities = [];       // entities at hovered tile, for tooltip
+var layerVis = { tiles: true, monsters: true, npcs: true, obstacles: true, exits: true, grid: true };
 
+// ────── Init ────────────────────────────────────────
 function init() {
     gameData = JSON.parse(JSON.stringify(belowGameData));
     populateMapSelect();
+    populateSubtypeSelects();
     resizeCanvas();
+    updateAll();
+}
+function updateAll() {
+    updateMapNameInput();
+    updateLayerSection();
+    updateCountSection();
+    updateEntitySection();
     drawCanvas();
+    updateStatusBar();
 }
 
+// ────── Map management ──────────────────────────────
 function populateMapSelect() {
     var sel = document.getElementById("mapSelect");
     sel.innerHTML = '';
@@ -122,16 +214,25 @@ function populateMapSelect() {
         if (i === selectedMap) opt.selected = true;
         sel.appendChild(opt);
     });
-    updateTileCount();
 }
-
 function selectMap() {
     selectedMap = parseInt(document.getElementById("mapSelect").value);
     panX = 0; panY = 0;
-    updateTileCount();
-    drawCanvas();
+    deselectEntity();
+    updateAll();
 }
-
+function updateMapNameInput() {
+    var map = gameData.mapData[selectedMap];
+    if (map) document.getElementById("mapNameInput").value = map.name || "";
+}
+function renameMap() {
+    var map = gameData.mapData[selectedMap];
+    if (!map) return;
+    map.name = document.getElementById("mapNameInput").value;
+    // Update select text
+    var sel = document.getElementById("mapSelect");
+    if (sel.options[selectedMap]) sel.options[selectedMap].text = map.name || "Map " + selectedMap;
+}
 function addMap() {
     var name = prompt("Map name:", "New Map");
     if (!name) return;
@@ -147,42 +248,246 @@ function addMap() {
     populateMapSelect();
     selectedMap = gameData.mapData.length - 1;
     document.getElementById("mapSelect").value = selectedMap;
-    updateTileCount();
-    drawCanvas();
+    deselectEntity();
+    updateAll();
 }
-
 function deleteMap() {
-    if (gameData.mapData.length <= 1) {
-        alert("Cannot delete the last map.");
-        return;
-    }
-    if (!confirm('Delete "' + (gameData.mapData[selectedMap].name || "Map " + selectedMap) + '"?')) return;
+    if (gameData.mapData.length <= 1) { showToast("Cannot delete the last map.", true); return; }
+    var name = gameData.mapData[selectedMap].name || "Map " + selectedMap;
+    if (!confirm('Delete "' + name + '"?')) return;
     gameData.mapData.splice(selectedMap, 1);
     if (selectedMap >= gameData.mapData.length) selectedMap = gameData.mapData.length - 1;
     populateMapSelect();
     document.getElementById("mapSelect").value = selectedMap;
-    panX = 0; panY = 0;
-    updateTileCount();
-    drawCanvas();
+    deselectEntity();
+    updateAll();
 }
 
-function updateTileCount() {
-    var map = gameData.mapData[selectedMap];
-    var count = map ? Object.keys(map.tiles).length : 0;
-    document.getElementById("tileCount").textContent = count;
+// ────── Subtype selects ────────────────────────────
+function populateSubtypeSelects() {
+    populateSingleSubtype("monsterSubtype", gameData.monsterTypes);
+    populateSingleSubtype("npcSubtype", gameData.npcTypes);
+    populateSingleSubtype("obstacleSubtype", gameData.obstacleTypes);
+}
+function populateSingleSubtype(id, typeMap) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '';
+    for (var key in typeMap) {
+        if (typeof typeMap[key] !== 'function') {
+            var opt = document.createElement("option");
+            opt.value = key;
+            opt.textContent = key + ": " + (typeMap[key].name || "type " + key);
+            sel.appendChild(opt);
+        }
+    }
 }
 
+// ────── Canvas helpers ──────────────────────────────
 function resizeCanvas() {
     var wrap = document.getElementById("canvas-wrap");
     var canvas = document.getElementById("mapCanvas");
     canvas.width = wrap.clientWidth - 4;
     canvas.height = wrap.clientHeight - 4;
 }
-
+function screenToTile(clientX, clientY) {
+    var canvas = document.getElementById("mapCanvas");
+    var rect = canvas.getBoundingClientRect();
+    var x = clientX - rect.left;
+    var y = clientY - rect.top;
+    var w = zoom;
+    var cx = canvas.width / 2;
+    var cy = canvas.height / 2;
+    return { x: Math.round((x - cx - panX) / w), y: Math.round((y - cy - panY) / w) };
+}
+function tileToScreen(tileX, tileY) {
+    var w = zoom;
+    var canvas = document.getElementById("mapCanvas");
+    var cx = canvas.width / 2;
+    var cy = canvas.height / 2;
+    return { x: (tileX * w) + cx + panX, y: (tileY * w) + cy + panY };
+}
 function getTileKey(x, y) {
     return 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
 }
 
+// ────── Entity queries ──────────────────────────────
+function getMonsters() { return gameData.mapData[selectedMap].monsters; }
+function getNPCs() { return gameData.mapData[selectedMap].npcs; }
+function getObstacles() { return gameData.mapData[selectedMap].obstacles; }
+function getExits() { return gameData.mapData[selectedMap].exits; }
+
+function entitiesAtTile(tileX, tileY) {
+    var result = [];
+    var exits = getExits();
+    for (var i = 0; i < exits.length; i++) {
+        if (exits[i].position.x === tileX && exits[i].position.y === tileY)
+            result.push({ type: "exit", entity: exits[i], index: i });
+    }
+    var obs = getObstacles();
+    for (var i = 0; i < obs.length; i++) {
+        if (obs[i].position && obs[i].position.x === tileX && obs[i].position.y === tileY)
+            result.push({ type: "obstacle", entity: obs[i], index: i });
+    }
+    var npcs = getNPCs();
+    for (var i = 0; i < npcs.length; i++) {
+        if (npcs[i].position && npcs[i].position.x === tileX && npcs[i].position.y === tileY)
+            result.push({ type: "npc", entity: npcs[i], index: i });
+    }
+    var monsters = getMonsters();
+    for (var i = 0; i < monsters.length; i++) {
+        if (monsters[i].position && monsters[i].position.x === tileX && monsters[i].position.y === tileY)
+            result.push({ type: "monster", entity: monsters[i], index: i });
+    }
+    return result;
+}
+function getEntityTypeName(etype) {
+    var names = { monster: "Monster", npc: "NPC", obstacle: "Obstacle", exit: "Exit" };
+    return names[etype] || etype;
+}
+function getEntitySubtypeName(entity, etype) {
+    if (etype === "monster") {
+        var mt = gameData.monsterTypes[entity.type];
+        return mt ? mt.name : "type " + entity.type;
+    }
+    if (etype === "npc") {
+        var nt = gameData.npcTypes[entity.type];
+        return nt ? nt.name : "type " + entity.type;
+    }
+    if (etype === "obstacle") {
+        var ot = gameData.obstacleTypes[entity.type];
+        return ot ? ot.name : "type " + entity.type;
+    }
+    return "";
+}
+
+// ────── Selection ────────────────────────────────────
+function selectEntity(etype, index) {
+    selectedEntityType = etype;
+    selectedEntityIndex = index;
+    updateEntitySection();
+    drawCanvas();
+    updateStatusBar();
+}
+function deselectEntity() {
+    selectedEntityType = null;
+    selectedEntityIndex = -1;
+    updateEntitySection();
+    drawCanvas();
+    updateStatusBar();
+}
+function getSelectedEntity() {
+    if (selectedEntityType === null || selectedEntityIndex < 0) return null;
+    var arr;
+    if (selectedEntityType === "monster") arr = getMonsters();
+    else if (selectedEntityType === "npc") arr = getNPCs();
+    else if (selectedEntityType === "obstacle") arr = getObstacles();
+    else if (selectedEntityType === "exit") arr = getExits();
+    else return null;
+    return arr[selectedEntityIndex] || null;
+}
+
+// ────── Placement mode ──────────────────────────────
+function startPlacement(mode) {
+    if (mode === "monster") {
+        var sel = document.getElementById("monsterSubtype");
+        placementSubtype = parseInt(sel.value);
+    } else if (mode === "npc") {
+        var sel = document.getElementById("npcSubtype");
+        placementSubtype = parseInt(sel.value);
+    } else if (mode === "obstacle") {
+        var sel = document.getElementById("obstacleSubtype");
+        placementSubtype = parseInt(sel.value);
+    } else {
+        placementSubtype = null;
+    }
+    placementMode = mode;
+    deselectEntity();
+    document.getElementById("placement-bar").style.display = "flex";
+    updatePlacementLabel();
+    updateStatusBar();
+}
+function cancelPlacement() {
+    placementMode = null;
+    placementSubtype = null;
+    document.getElementById("placement-bar").style.display = "none";
+    updateStatusBar();
+}
+function updatePlacementLabel() {
+    var el = document.getElementById("placementLabel");
+    if (placementMode === "monster") {
+        var mt = gameData.monsterTypes[placementSubtype];
+        el.textContent = "Placing Monster: " + (mt ? mt.name : "type " + placementSubtype);
+    } else if (placementMode === "npc") {
+        var nt = gameData.npcTypes[placementSubtype];
+        el.textContent = "Placing NPC: " + (nt ? nt.name : "type " + placementSubtype);
+    } else if (placementMode === "obstacle") {
+        var ot = gameData.obstacleTypes[placementSubtype];
+        el.textContent = "Placing Obstacle: " + (ot ? ot.name : "type " + placementSubtype);
+    } else if (placementMode === "exit") {
+        el.textContent = "Placing Exit";
+    }
+}
+function doPlaceEntity(tileX, tileY) {
+    if (!placementMode) return;
+    var map = gameData.mapData[selectedMap];
+    var entity;
+    if (placementMode === "monster") {
+        entity = { type: placementSubtype, position: { x: tileX, y: tileY }, destPos: {} };
+        map.monsters.push(entity);
+        selectEntity("monster", map.monsters.length - 1);
+    } else if (placementMode === "npc") {
+        entity = { type: placementSubtype, position: { x: tileX, y: tileY }, destPos: {} };
+        map.npcs.push(entity);
+        selectEntity("npc", map.npcs.length - 1);
+    } else if (placementMode === "obstacle") {
+        entity = { type: placementSubtype, position: { x: tileX, y: tileY } };
+        map.obstacles.push(entity);
+        selectEntity("obstacle", map.obstacles.length - 1);
+    } else if (placementMode === "exit") {
+        entity = { position: { x: tileX, y: tileY }, targetMap: 0, targetPosition: { x: 0, y: 0 }, text: "" };
+        map.exits.push(entity);
+        selectEntity("exit", map.exits.length - 1);
+    }
+    cancelPlacement();
+    updateCountSection();
+    drawCanvas();
+    updateStatusBar();
+    showToast("Placed " + getEntityTypeName(placementMode));
+}
+
+// ────── Entity CRUD ──────────────────────────────────
+function deleteSelectedEntity() {
+    var etype = selectedEntityType;
+    var idx = selectedEntityIndex;
+    if (etype === null || idx < 0) return;
+    var arr;
+    if (etype === "monster") arr = getMonsters();
+    else if (etype === "npc") arr = getNPCs();
+    else if (etype === "obstacle") arr = getObstacles();
+    else if (etype === "exit") arr = getExits();
+    if (!arr || idx >= arr.length) return;
+    arr.splice(idx, 1);
+    deselectEntity();
+    updateCountSection();
+    drawCanvas();
+    updateStatusBar();
+    showToast("Deleted " + getEntityTypeName(etype));
+}
+function nudgeSelectedEntity(dx, dy) {
+    var entity = getSelectedEntity();
+    if (!entity || !entity.position) return;
+    entity.position.x += dx;
+    entity.position.y += dy;
+    // Update form position fields
+    var fx = document.getElementById("ef-pos-x");
+    var fy = document.getElementById("ef-pos-y");
+    if (fx) fx.value = entity.position.x;
+    if (fy) fy.value = entity.position.y;
+    drawCanvas();
+}
+
+// ────── Canvas drawing ──────────────────────────────
 function drawCanvas() {
     var canvas = document.getElementById("mapCanvas");
     var ctx = canvas.getContext("2d");
@@ -192,111 +497,451 @@ function drawCanvas() {
     var map = gameData.mapData[selectedMap];
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     if (!map) return;
 
-    // Draw tiles
-    for (var k in map.tiles) {
-        if (typeof map.tiles[k] === 'function') continue;
-        var tile = map.tiles[k];
-        var sx = (tile.x * w) + cx + panX - (w / 2);
-        var sy = (tile.y * w) + cy + panY - (w / 2);
-        ctx.fillStyle = "#959595";
-        ctx.fillRect(sx, sy, w, w);
-        ctx.fillStyle = "#6C6C6C";
-        ctx.fillRect(sx + 1, sy + 1, w - 2, w - 2);
+    // Tiles
+    if (layerVis.tiles) {
+        for (var k in map.tiles) {
+            if (typeof map.tiles[k] === 'function') continue;
+            var tile = map.tiles[k];
+            var sx = (tile.x * w) + cx + panX - (w / 2);
+            var sy = (tile.y * w) + cy + panY - (w / 2);
+            ctx.fillStyle = "#959595";
+            ctx.fillRect(sx, sy, w, w);
+            ctx.fillStyle = "#6C6C6C";
+            ctx.fillRect(sx + 1, sy + 1, w - 2, w - 2);
+        }
     }
 
-    // Draw grid lines
-    ctx.strokeStyle = "rgba(255,255,255,0.08)";
-    ctx.lineWidth = 0.5;
-    var viewLeft = -cx - panX;
-    var viewTop = -cy - panY;
-    var viewRight = viewLeft + canvas.width;
-    var viewBottom = viewTop + canvas.height;
-    var startGX = Math.floor(viewLeft / w) * w;
-    var startGY = Math.floor(viewTop / w) * w;
-    for (var gx = startGX; gx < viewRight; gx += w) {
-        ctx.beginPath();
-        ctx.moveTo(gx + cx + panX, 0);
-        ctx.lineTo(gx + cx + panX, canvas.height);
-        ctx.stroke();
-    }
-    for (var gy = startGY; gy < viewBottom; gy += w) {
-        ctx.beginPath();
-        ctx.moveTo(0, gy + cy + panY);
-        ctx.lineTo(canvas.width, gy + cy + panY);
-        ctx.stroke();
+    // Grid
+    if (layerVis.grid) {
+        ctx.strokeStyle = "rgba(255,255,255,0.07)";
+        ctx.lineWidth = 0.5;
+        var viewLeft = -cx - panX;
+        var viewTop = -cy - panY;
+        var viewRight = viewLeft + canvas.width;
+        var viewBottom = viewTop + canvas.height;
+        var startGX = Math.floor(viewLeft / w) * w;
+        var startGY = Math.floor(viewTop / w) * w;
+        for (var gx = startGX; gx < viewRight; gx += w) {
+            ctx.beginPath(); ctx.moveTo(gx + cx + panX, 0); ctx.lineTo(gx + cx + panX, canvas.height); ctx.stroke();
+        }
+        for (var gy = startGY; gy < viewBottom; gy += w) {
+            ctx.beginPath(); ctx.moveTo(0, gy + cy + panY); ctx.lineTo(canvas.width, gy + cy + panY); ctx.stroke();
+        }
     }
 
-    // Highlight hovered tile
-    if (hoverTileX !== null && hoverTileY !== null) {
-        var hx = (hoverTileX * w) + cx + panX - (w / 2);
-        var hy = (hoverTileY * w) + cy + panY - (w / 2);
+    // Obstacles (pass 1: drawOrder=1 or no override)
+    if (layerVis.obstacles) {
+        getObstacles().forEach(function(o) {
+            if (!o.position) return;
+            var ot = gameData.obstacleTypes[o.type];
+            var drawOrder = (ot && ot.drawOrder) || 1;
+            if (drawOrder !== 1) return;
+            drawObstacle(ctx, o, ot, w, cx, cy);
+        });
+    }
+
+    // Monsters
+    if (layerVis.monsters) {
+        getMonsters().forEach(function(m) {
+            if (!m.position) return;
+            var mt = gameData.monsterTypes[m.type];
+            var s = tileToScreen(m.position.x, m.position.y);
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, w * 0.35, 0, Math.PI * 2);
+            ctx.fillStyle = mt ? mt.color || "#9A6759" : "#9A6759";
+            ctx.fill();
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold " + Math.max(9, w * 0.3) + "px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText((mt ? mt.name.charAt(0) : "M"), s.x, s.y);
+        });
+    }
+
+    // NPCs
+    if (layerVis.npcs) {
+        getNPCs().forEach(function(n) {
+            if (!n.position) return;
+            var nt = gameData.npcTypes[n.type];
+            var s = tileToScreen(n.position.x, n.position.y);
+            ctx.save();
+            ctx.translate(s.x, s.y);
+            ctx.rotate(Math.PI / 4);
+            ctx.fillStyle = nt ? nt.color || "#00aa00" : "#00aa00";
+            ctx.fillRect(-w * 0.28, -w * 0.28, w * 0.56, w * 0.56);
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-w * 0.28, -w * 0.28, w * 0.56, w * 0.56);
+            ctx.restore();
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold " + Math.max(9, w * 0.3) + "px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText((nt ? nt.name.charAt(0) : "N"), s.x, s.y);
+        });
+    }
+
+    // Exits
+    if (layerVis.exits) {
+        getExits().forEach(function(e) {
+            if (!e.position) return;
+            var s = tileToScreen(e.position.x, e.position.y);
+            ctx.fillStyle = "#4a7a4a";
+            ctx.fillRect(s.x - w/2, s.y - w/2, w, w);
+            ctx.strokeStyle = "#6aaa6a";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(s.x - w/2, s.y - w/2, w, w);
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold " + Math.max(8, w * 0.25) + "px monospace";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("→" + e.targetMap, s.x, s.y);
+        });
+    }
+
+    // Obstacles (pass 2: drawOrder=2)
+    if (layerVis.obstacles) {
+        getObstacles().forEach(function(o) {
+            if (!o.position) return;
+            var ot = gameData.obstacleTypes[o.type];
+            var drawOrder = (ot && ot.drawOrder) || 1;
+            if (drawOrder !== 2) return;
+            drawObstacle(ctx, o, ot, w, cx, cy);
+        });
+    }
+
+    // Hover highlight
+    if (hoverTileX !== null && hoverTileY !== null && !placementMode) {
+        var hs = tileToScreen(hoverTileX, hoverTileY);
+        ctx.strokeStyle = "rgba(255,255,255,0.3)";
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.strokeRect(hs.x - w/2, hs.y - w/2, w, w);
+        ctx.setLineDash([]);
+    }
+
+    // Selection ring
+    var selEntity = getSelectedEntity();
+    if (selEntity && selEntity.position) {
+        var ss = tileToScreen(selEntity.position.x, selEntity.position.y);
         ctx.strokeStyle = "#70A4B2";
         ctx.lineWidth = 2;
-        ctx.strokeRect(hx, hy, w, w);
+        ctx.setLineDash([4, 4]);
+        ctx.strokeRect(ss.x - w/2 - 2, ss.y - w/2 - 2, w + 4, w + 4);
+        ctx.setLineDash([]);
+    }
+}
+
+function drawObstacle(ctx, o, ot, w, cx, cy) {
+    var s = tileToScreen(o.position.x, o.position.y);
+    var color = ot ? ot.color || "#433900" : "#433900";
+    ctx.fillStyle = color;
+    ctx.fillRect(s.x - w/2, s.y - w/2, w, w);
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(s.x - w/2, s.y - w/2, w, w);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold " + Math.max(8, w * 0.22) + "px monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    var label = ot ? ot.name || "O" : "O";
+    ctx.fillText(label.substring(0, 3), s.x, s.y);
+}
+
+// ────── Info panel ──────────────────────────────────
+function updateLayerSection() {
+    var el = document.getElementById("info-layer-section");
+    var html = '<h3>Layers</h3><div>';
+    var toggles = [
+        { key: "tiles", label: "Tiles" },
+        { key: "monsters", label: "Monsters" },
+        { key: "npcs", label: "NPCs" },
+        { key: "obstacles", label: "Obs" },
+        { key: "exits", label: "Exits" },
+        { key: "grid", label: "Grid" }
+    ];
+    toggles.forEach(function(t) {
+        html += '<label class="toggle"><input type="checkbox" ' + (layerVis[t.key] ? "checked" : "") + ' onchange="toggleLayer(\'' + t.key + '\', this.checked)">' + t.label + '</label>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+}
+function toggleLayer(key, val) {
+    layerVis[key] = val;
+    drawCanvas();
+}
+function updateCountSection() {
+    var el = document.getElementById("info-count-section");
+    var map = gameData.mapData[selectedMap];
+    if (!map) { el.innerHTML = ''; return; }
+    el.innerHTML = '<h3>Counts</h3>'
+        + '<div class="row">Monsters: <span class="val">' + map.monsters.length + '</span>'
+        + ' &nbsp; NPCs: <span class="val">' + map.npcs.length + '</span></div>'
+        + '<div class="row">Obstacles: <span class="val">' + map.obstacles.length + '</span>'
+        + ' &nbsp; Exits: <span class="val">' + map.exits.length + '</span></div>'
+        + '<div class="row">Tiles: <span class="val">' + Object.keys(map.tiles).length + '</span>'
+        + ' &nbsp; Zoom: <span class="val">' + zoom + '</span></div>';
+}
+
+function updateEntitySection() {
+    var el = document.getElementById("info-entity-section");
+    var entity = getSelectedEntity();
+    if (!entity) {
+        el.innerHTML = '';
+        return;
+    }
+    var etype = selectedEntityType;
+    var subtypeName = getEntitySubtypeName(entity, etype);
+    var html = '<h3>Selected: ' + getEntityTypeName(etype) + '</h3>';
+    html += '<div class="entity-form">';
+    html += '<div class="entity-title">' + subtypeName + '</div>';
+
+    // Position (common)
+    html += '<div class="form-row">';
+    html += '<label>X:</label><input type="number" id="ef-pos-x" value="' + entity.position.x + '" onchange="updateEntityPos(this, \'x\')">';
+    html += '<label>Y:</label><input type="number" id="ef-pos-y" value="' + entity.position.y + '" onchange="updateEntityPos(this, \'y\')">';
+    html += '</div>';
+
+    // Type-specific fields
+    if (etype === "monster") {
+        html += '<label>Type:</label><select onchange="updateMonsterType(this)">';
+        for (var k in gameData.monsterTypes) {
+            if (typeof gameData.monsterTypes[k] !== 'function') {
+                var selected = (parseInt(k) === entity.type) ? "selected" : "";
+                html += '<option value="' + k + '" ' + selected + '>' + k + ': ' + gameData.monsterTypes[k].name + '</option>';
+            }
+        }
+        html += '</select>';
+        html += '<label><input type="checkbox" ' + (entity.aloof !== false ? "checked" : "") + ' onchange="entitySet(\'aloof\', this.checked)"> Aloof</label>';
+        html += '<label>Movement:</label><input type="number" min="0" max="1" step="0.1" value="' + (entity.movement !== undefined ? entity.movement : (gameData.monsterTypes[entity.type] ? gameData.monsterTypes[entity.type].movement : 0.3)) + '" onchange="entitySetNum(\'movement\', this.value)">';
+        html += '<label>AllowedTiles:</label><textarea onchange="editAllowedTiles(this)" placeholder="x,y per line">' + formatAllowedTiles(entity) + '</textarea>';
+    }
+    if (etype === "npc") {
+        html += '<label>Type:</label><select onchange="updateNPCType(this)">';
+        for (var k in gameData.npcTypes) {
+            if (typeof gameData.npcTypes[k] !== 'function') {
+                var selected = (parseInt(k) === entity.type) ? "selected" : "";
+                html += '<option value="' + k + '" ' + selected + '>' + k + ': ' + gameData.npcTypes[k].name + '</option>';
+            }
+        }
+        html += '</select>';
+        html += '<label><input type="checkbox" ' + (entity.agitated ? "checked" : "") + ' onchange="entitySet(\'agitated\', this.checked)"> Agitated</label>';
+    }
+    if (etype === "obstacle") {
+        html += '<label>Type:</label><select onchange="updateObstacleType(this)">';
+        for (var k in gameData.obstacleTypes) {
+            if (typeof gameData.obstacleTypes[k] !== 'function') {
+                var selected = (parseInt(k) === entity.type) ? "selected" : "";
+                html += '<option value="' + k + '" ' + selected + '>' + k + ': ' + gameData.obstacleTypes[k].name + '</option>';
+            }
+        }
+        html += '</select>';
+        var ot = gameData.obstacleTypes[entity.type];
+        html += '<label>Icon override:</label><input type="text" value="' + (entity.icon || "") + '" onchange="entitySetStr(\'icon\', this.value)" placeholder="' + (ot ? ot.icon : "") + '">';
+        html += '<div class="form-row">';
+        html += '<label><input type="checkbox" ' + (entity.blocking !== false ? "checked" : "") + ' onchange="entitySet(\'blocking\', this.checked)"> Blocking</label>';
+        html += '<label><input type="checkbox" ' + (entity.closed ? "checked" : "") + ' onchange="entitySet(\'closed\', this.checked)"> Closed</label>';
+        html += '</div>';
+        html += '<label>Password:</label><input type="text" value="' + (entity.password || "") + '" onchange="entitySetStr(\'password\', this.value)">';
+        html += '<label>StatueDesc:</label><textarea onchange="entitySetStr(\'statueDesc\', this.value)">' + (entity.statueDesc || "") + '</textarea>';
+        html += '<label>DialogUnlock:</label><input type="text" value="' + (entity.dialogUnlock || "") + '" onchange="entitySetStr(\'dialogUnlock\', this.value)">';
+        html += '<label>ChoiceEvents:</label><input type="text" value="' + (entity.choiceEvents ? entity.choiceEvents.join(",") : "") + '" onchange="editChoiceEvents(this)">';
+    }
+    if (etype === "exit") {
+        html += '<label>Target Map:</label><input type="number" value="' + entity.targetMap + '" onchange="entitySet(\'targetMap\', parseInt(this.value) || 0)">';
+        html += '<div class="form-row">';
+        html += '<label>TX:</label><input type="number" value="' + (entity.targetPosition ? entity.targetPosition.x : 0) + '" onchange="entitySetNestedNum(\'targetPosition.x\', this.value)">';
+        html += '<label>TY:</label><input type="number" value="' + (entity.targetPosition ? entity.targetPosition.y : 0) + '" onchange="entitySetNestedNum(\'targetPosition.y\', this.value)">';
+        html += '</div>';
+        html += '<label>Text:</label><input type="text" value="' + escAttr(entity.text || "") + '" onchange="entitySet(\'text\', this.value)">';
     }
 
-    // Update coord display
-    var cd = document.getElementById("coord-display");
-    if (hoverTileX !== null && hoverTileY !== null) {
-        var key = getTileKey(hoverTileX, hoverTileY);
-        var exists = map.tiles[key] ? "Yes" : "No";
-        cd.textContent = "Tile (" + hoverTileX + ", " + hoverTileY + ") — " + exists;
-        document.getElementById("hoverPos").textContent = "(" + hoverTileX + ", " + hoverTileY + ")";
-        document.getElementById("tileExists").textContent = exists;
-        updateInfoZoom();
+    html += '<div style="margin-top:8px"><button class="btn-danger" onclick="deleteSelectedEntity()">Delete</button></div>';
+    html += '</div>';
+    el.innerHTML = html;
+}
+
+// ────── Entity property helpers (global, for inline onchange) ──
+function entitySet(key, value) { var e = getSelectedEntity(); if (e) { e[key] = value; drawCanvas(); } }
+function entitySetNum(key, value) { entitySet(key, parseFloat(value)); }
+function entitySetStr(key, value) { entitySet(key, value || undefined); }
+function entitySetNested(path, value) {
+    var e = getSelectedEntity(); if (!e) return;
+    var parts = path.split('.'); var obj = e;
+    for (var i = 0; i < parts.length - 1; i++) {
+        if (!obj[parts[i]]) obj[parts[i]] = {};
+        obj = obj[parts[i]];
+    }
+    obj[parts[parts.length - 1]] = value; drawCanvas();
+}
+function entitySetNestedNum(path, value) { entitySetNested(path, parseInt(value) || 0); }
+
+function updateEntityPos(input, axis) {
+    var entity = getSelectedEntity();
+    if (!entity || !entity.position) return;
+    entity.position[axis] = parseInt(input.value) || 0;
+    drawCanvas();
+}
+function updateMonsterType(sel) {
+    var entity = getSelectedEntity();
+    if (!entity) return;
+    entity.type = parseInt(sel.value);
+    drawCanvas();
+    updateEntitySection();
+}
+function updateNPCType(sel) {
+    var entity = getSelectedEntity();
+    if (!entity) return;
+    entity.type = parseInt(sel.value);
+    drawCanvas();
+}
+function updateObstacleType(sel) {
+    var entity = getSelectedEntity();
+    if (!entity) return;
+    entity.type = parseInt(sel.value);
+    drawCanvas();
+    updateEntitySection();
+}
+function editAllowedTiles(textarea) {
+    var entity = getSelectedEntity();
+    if (!entity) return;
+    var lines = textarea.value.trim().split("\n").filter(function(l) { return l.trim(); });
+    entity.allowedTiles = lines.map(function(l) {
+        var parts = l.trim().split(",");
+        return { x: parseInt(parts[0]), y: parseInt(parts[1]) };
+    }).filter(function(t) { return !isNaN(t.x) && !isNaN(t.y); });
+    if (entity.allowedTiles.length === 0) delete entity.allowedTiles;
+}
+function formatAllowedTiles(entity) {
+    if (!entity.allowedTiles) return "";
+    return entity.allowedTiles.map(function(t) { return t.x + "," + t.y; }).join("\n");
+}
+function editChoiceEvents(input) {
+    var entity = getSelectedEntity();
+    if (!entity) return;
+    var val = input.value.trim();
+    entity.choiceEvents = val ? val.split(",").map(function(s) { return parseInt(s.trim()); }).filter(function(n) { return !isNaN(n); }) : undefined;
+}
+
+function updateHoverSection(tileX, tileY) {
+    var el = document.getElementById("info-hover-section");
+    if (tileX === null || tileY === null) {
+        el.innerHTML = '';
+        return;
+    }
+    var map = gameData.mapData[selectedMap];
+    var key = getTileKey(tileX, tileY);
+    var tileExists = map.tiles[key] ? "Yes" : "No";
+    var ents = entitiesAtTile(tileX, tileY);
+    var html = '<h3>Tile (' + tileX + ', ' + tileY + ')</h3>';
+    html += '<div class="row">Exists: <span class="val">' + tileExists + '</span></div>';
+    if (ents.length > 0) {
+        html += '<div class="row">Entities:</div>';
+        ents.forEach(function(e) {
+            html += '<div class="row" style="padding-left:8px">· ' + getEntityTypeName(e.type) + ': ' + escHtml(getEntitySubtypeName(e.entity, e.type)) + '</div>';
+        });
     } else {
-        cd.textContent = "";
+        html += '<div class="row">No entities</div>';
     }
+    el.innerHTML = html;
 }
 
-function updateInfoZoom() {
-    document.getElementById("zoomLevel").textContent = zoom;
+// ────── Jump to ────────────────────────────────────
+function jumpTo() {
+    var x = parseInt(document.getElementById("jumpX").value) || 0;
+    var y = parseInt(document.getElementById("jumpY").value) || 0;
+    centerOn(x, y);
 }
-
-function screenToTile(clientX, clientY) {
+function centerOn(tileX, tileY) {
     var canvas = document.getElementById("mapCanvas");
-    var rect = canvas.getBoundingClientRect();
-    var x = clientX - rect.left;
-    var y = clientY - rect.top;
     var w = zoom;
     var cx = canvas.width / 2;
     var cy = canvas.height / 2;
-    var tileX = Math.round((x - cx - panX) / w);
-    var tileY = Math.round((y - cy - panY) / w);
-    return { x: tileX, y: tileY };
+    panX = -(tileX * w);
+    panY = -(tileY * w);
+    drawCanvas();
 }
 
-// Canvas events
+// ────── Status bar ──────────────────────────────────
+function updateStatusBar() {
+    var el = document.getElementById("status-bar");
+    if (placementMode) {
+        el.textContent = "Placement mode — click a tile to place";
+        return;
+    }
+    var entity = getSelectedEntity();
+    if (entity && entity.position) {
+        el.textContent = getEntityTypeName(selectedEntityType) + " (" + entity.position.x + ", " + entity.position.y + ")";
+    } else if (hoverTileX !== null && hoverTileY !== null) {
+        var ents = entitiesAtTile(hoverTileX, hoverTileY);
+        if (ents.length > 0) {
+            el.textContent = "Tile (" + hoverTileX + ", " + hoverTileY + ") — " + ents.length + " entit" + (ents.length > 1 ? "ies" : "y");
+        } else {
+            el.textContent = "";
+        }
+    } else {
+        el.textContent = "";
+    }
+}
+
+// ────── Event handlers ──────────────────────────────
 (function() {
     var canvas = document.getElementById("mapCanvas");
 
     canvas.addEventListener("mousemove", function(e) {
         var t = screenToTile(e.clientX, e.clientY);
-        hoverTileX = t.x;
-        hoverTileY = t.y;
-        drawCanvas();
+        if (t.x !== hoverTileX || t.y !== hoverTileY) {
+            hoverTileX = t.x;
+            hoverTileY = t.y;
+            hoveredEntities = entitiesAtTile(t.x, t.y);
+            updateHoverSection(t.x, t.y);
+            updateStatusBar();
+            drawCanvas();
+        }
     });
 
     canvas.addEventListener("mouseleave", function() {
         hoverTileX = null;
         hoverTileY = null;
+        hoveredEntities = [];
+        updateHoverSection(null, null);
         drawCanvas();
+        updateStatusBar();
     });
 
     canvas.addEventListener("click", function(e) {
         var t = screenToTile(e.clientX, e.clientY);
         var map = gameData.mapData[selectedMap];
+
+        // Placement mode?
+        if (placementMode) {
+            doPlaceEntity(t.x, t.y);
+            return;
+        }
+
+        // Check for entity at clicked tile
+        var ents = entitiesAtTile(t.x, t.y);
+        if (ents.length > 0) {
+            selectEntity(ents[0].type, ents[0].index);
+            return;
+        }
+
+        // Toggle tile
         var key = getTileKey(t.x, t.y);
         if (map.tiles[key]) {
             delete map.tiles[key];
         } else {
             map.tiles[key] = { x: t.x, y: t.y };
         }
-        updateTileCount();
+        deselectEntity();
+        updateCountSection();
         drawCanvas();
+        updateStatusBar();
     });
 
     canvas.addEventListener("mousedown", function(e) {
@@ -326,6 +971,30 @@ function screenToTile(clientX, clientY) {
         if (zoom < 10) zoom = 10;
         if (zoom > 120) zoom = 120;
         drawCanvas();
+        updateCountSection();
+    });
+
+    // Keyboard
+    document.addEventListener("keydown", function(e) {
+        // Don't intercept if typing in an input
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") {
+            // Allow Escape from inputs
+            if (e.key === "Escape") { e.target.blur(); }
+            return;
+        }
+        if (e.key === "Delete" || e.key === "Backspace") {
+            e.preventDefault();
+            deleteSelectedEntity();
+        }
+        if (e.key === "Escape") {
+            if (placementMode) { cancelPlacement(); return; }
+            deselectEntity();
+        }
+        if (e.key === "ArrowUp") { e.preventDefault(); nudgeSelectedEntity(0, -1); }
+        if (e.key === "ArrowDown") { e.preventDefault(); nudgeSelectedEntity(0, 1); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); nudgeSelectedEntity(-1, 0); }
+        if (e.key === "ArrowRight") { e.preventDefault(); nudgeSelectedEntity(1, 0); }
+        if (e.key === "g" || e.key === "G") { layerVis.grid = !layerVis.grid; updateLayerSection(); drawCanvas(); }
     });
 })();
 
@@ -335,7 +1004,7 @@ window.addEventListener("resize", function() {
     drawCanvas();
 });
 
-// Export
+// ────── Export ──────────────────────────────────────
 function exportData() {
     try {
         var json = JSON.stringify(gameData, null, 2);
@@ -355,6 +1024,7 @@ function exportData() {
     }
 }
 
+// ────── Helpers ─────────────────────────────────────
 function showToast(msg, isError) {
     var t = document.createElement('div');
     t.className = 'toast' + (isError ? ' error' : '');
@@ -363,7 +1033,12 @@ function showToast(msg, isError) {
     setTimeout(function() { t.style.opacity = '0'; }, 2000);
     setTimeout(function() { document.body.removeChild(t); }, 2300);
 }
+function escAttr(s) {
+    if (typeof s !== 'string') return '';
+    return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 
+// ────── Start ───────────────────────────────────────
 init();
 </script>
 </body>
