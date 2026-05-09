@@ -74,7 +74,25 @@ html, body {
     border-radius: 10px;
     border: 2px solid var(--light-grey);
     margin: 20px 10px 20px 20px;
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.below-game-log {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.area-description {
+    padding: 10px 14px;
+    color: var(--grey);
+    font-style: italic;
+    font-size: 0.85em;
+    border-bottom: 1px solid var(--light-grey);
+    flex-shrink: 0;
+    min-height: 0;
 }
 .below-game-left-panel::-webkit-scrollbar {
     width: 12;
@@ -210,28 +228,6 @@ html, body {
     color: var(--dark-grey);
     font-style: italic;
 }
-.editor-panel {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: var(--cyan);
-    border: 2px solid var(--black);
-    border-radius: 10px;
-    padding: 10px;
-    z-index: 2000;
-    color: var(--black);
-}
-.editor-panel button, .editor-panel select, .editor-panel label {
-    pointer-events: auto; /* Keep buttons/select clickable */
-}
-.editor-panel h3 {
-    margin-top: 0;
-}
-.editor-panel select, .editor-panel button {
-    margin: 5px;
-    padding: 5px;
-}
-
 .controls-hint {
     position: absolute;
     bottom: 5px;

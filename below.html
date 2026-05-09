@@ -12,7 +12,6 @@
         <div class="below-title">Below</div>
         <div class="below-front-menu-item" id="newGameBtn">New Game</div>
         <div class="below-front-menu-item" id="resumeGameBtn">Continue</div>
-        <div class="below-front-menu-item" id="editorBtn">Map Editor</div>
     </div>
     <div class="title-container" id="characterSelectDiv" style="display: none;">
         <div class="below-title">Choose Character</div>
@@ -33,30 +32,17 @@
         <div class="below-front-menu-item" data-slot="2" onclick="continueGame(2)">Slot 3</div>
     </div>
     <div class="below-game-container" id="gameDiv" style="display: none;">
-        <div class="below-game-left-panel" id="gameLogDiv">
+        <div class="below-game-left-panel">
+            <div class="area-description" id="areaDescriptionDiv"></div>
+            <div class="below-game-log" id="gameLogDiv"></div>
         </div>
         <div class="below-game-center-panel" id="gameDivCenter">
             <canvas class="map-canvas" id="mapCanvas"></canvas>
             <div id="saveStatus" style="position: absolute; bottom: 10px; right: 10px; font-size: 0.8em; color: #666;"></div>
-            <div class="controls-hint">Arrow keys/WASD: Move | Enter: Interact | Q: Inventory | Esc: Back | F2: Editor</div>
+            <div class="controls-hint">Arrow keys/WASD: Move | Enter: Interact | Q: Inventory | Esc: Back</div>
             <div style="position: absolute; top: 10px; right: 10px;">
                 <button onclick="exportSave()" style="font-size: 0.8em;">Export Save</button>
                 <button onclick="importSave()" style="font-size: 0.8em;">Import Save</button>
-            </div>
-        </div>
-        <div class="editor-panel" id="editorPanel" style="display: none;">
-            <h3>Map Editor</h3>
-            <div>
-                <label>Map: </label>
-                <select id="mapSelect" onchange="selectMapForEdit()">
-                </select>
-                <button onclick="addNewMap()">Add Map</button>
-            </div>
-            <div>
-                <p>Click on canvas to toggle tiles</p>
-                <p id="editorStatus">Editor mode: OFF</p>
-                <button onclick="testAddTile()">Test Add Tile at (0,0)</button>
-                <button onclick="exportMapData()">Export to File</button>
             </div>
         </div>
         <div class="inventory-outer" id="inventoryDiv" style="display: none;">

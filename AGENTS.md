@@ -12,6 +12,10 @@ Medusa: Aloof and dreaming. A former "stoner", turning people to stone with her 
 The Mole: He lives in "The Maze", a series of tunnels he have dug to find the Herbs the Hermit have. 
     The Hermit do not like the mole and will not give him any herbs because the mole is Evil. The Mole
     speaks like he is in a Shaekspeare play.
+    
+# Developer
+Please refer to me as mrFlemming. You can call yourself Big Pickle. This might make it easier for me when building the
+game where we refer to player/user/agents I hope.
 
 # Code
 Below should be developed with vanilla HTML. No external libraries or frameworks. Only what the latest HTML standard
@@ -28,12 +32,13 @@ python3 -m http.server 8000
 ## File roles
 - `gamedata.js` — Pure data. Defines global `belowGameData` with all initial state (maps, NPCs, dialogs, monsters, obstacles, items, player defaults). No logic.
 - `below.js` — All game logic, rendering, input, save/load. Reads `belowGameData` at DOMContentLoaded via `JSON.parse(JSON.stringify(belowGameData))` into `below.gameData`.
-- `below.html` — Minimal HTML shell with menu screens, game div (canvas + log panel + editor panel), inventory modal.
+- `below.html` — Minimal HTML shell with menu screens, game div (canvas + log panel), inventory modal.
 - `tools/dialog-editor.html` — Standalone dev tool for editing dialog trees, reads `gamedata.js` directly.
+- `tools/map-editor.html` — Standalone dev tool for editing maps, reads `gamedata.js` directly.
 
 ## State management
 - `below.gameData` is the single mutable source of truth — a deep clone of `belowGameData`, modified in place.
-- `below` namespace holds runtime state: `choiceEvent`, `editorMode`, `tick`, `currentSlot`, etc.
+- `below` namespace holds runtime state: `choiceEvent`, `tick`, `currentSlot`, etc.
 - Deep cloning pattern (`JSON.parse(JSON.stringify(obj))`) used throughout for init, save/load, and dialog merging.
 
 ## Dialog system
@@ -80,7 +85,7 @@ python3 -m http.server 8000
 ## Keyboard
 - `checkKey()` routes to `handleMenuKey`, `handleChoiceEventKey`, or `moveOnMap` based on active div.
 - Arrow keys/WASD for movement, Enter/E for confirm, Escape for close/cancel.
-- F2 toggles editor mode, Q toggles inventory.
+- Q toggles inventory.
 
 ## Gotchas
 - Chain-cleaning in `renderChoiceEvent` removes nodes with class containing `below-game-left-paragraph` but NOT `below-game-left-paragraph-current`. Custom classes (like `below-player-response`, `below-dialog-message`) must NOT contain `below-game-left-paragraph` to survive chaining.

@@ -7,8 +7,6 @@ const below = {
     pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv", "characterSelectDiv"],
     currentSlot: undefined,
     choiceEvent: null,
-    editorMode: false,
-    selectedMap: 0,
     gameData: null // Loaded from gamedata.js
 };
 
@@ -296,149 +294,9 @@ function checkKey(e) {
             if (e.keyCode === 27 || e.keyCode === 81) {
                 closeInventory();
             }
-        } else if (e.keyCode === 113) { // F2 - Toggle editor mode
-            toggleEditorMode();
         } else {
             moveOnMap(e);
         }
-    }
-}
-
-function toggleEditorMode() {
-    below.editorMode = !below.editorMode;
-    var editorPanel = document.getElementById("editorPanel");
-    var editorStatus = document.getElementById("editorStatus");
-    var canvas = document.getElementById("mapCanvas");
-    
-    if (below.editorMode) {
-        editorPanel.style.display = 'block';
-        editorStatus.textContent = "Editor mode: ON - Click tiles to toggle, drag to pan";
-        populateMapSelect();
-        below.editorPanX = 0;
-        below.editorPanY = 0;
-        drawMapCanvas();
-    } else {
-        editorPanel.style.display = 'none';
-        editorStatus.textContent = "Editor mode: OFF";
-    }
-    if (!below.editorMode) drawMapCanvas();
-}
-
-function attachEditorClickHandler() {
-    var canvas = document.getElementById("mapCanvas");
-    if (!canvas) {
-        return;
-    }
-    
-    // Remove existing click listeners (to avoid duplicates)
-    canvas.removeEventListener("click", canvas._editorClickHandler);
-    
-    // Store handler reference for removal
-    canvas._editorClickHandler = function(e) {
-        if (!below.editorMode) return;
-        
-        
-        // Use getBoundingClientRect for accurate position
-        var rect = canvas.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        
-        
-        var width = below.gameData.mapZoom;
-        var centerX = canvas.width / 2;
-        var centerY = canvas.height / 2;
-        
-        // In editor mode, apply pan offset
-        var tileX = Math.round((x - centerX - below.editorPanX) / width);
-        var tileY = Math.round((y - centerY - below.editorPanY) / width);
-        
-        
-        var curMap = below.selectedMap;
-        var tileIndex = 'x' + (tileX < 0 ? 'm' : '') + Math.abs(tileX) + 'y' + (tileY < 0 ? 'm' : '') + Math.abs(tileY);
-        
-        
-        if (below.gameData.mapData[curMap].tiles[tileIndex]) {
-            delete below.gameData.mapData[curMap].tiles[tileIndex];
-        } else {
-            below.gameData.mapData[curMap].tiles[tileIndex] = { x: tileX, y: tileY };
-        }
-        
-        drawMapCanvas();
-    };
-    
-    canvas.addEventListener("click", canvas._editorClickHandler);
-    
-    // Add mouse drag for panning in editor mode
-    var isDragging = false;
-    var lastX, lastY;
-    
-    canvas.removeEventListener("mousedown", canvas._editorMouseDown);
-    canvas._editorMouseDown = function(e) {
-        if (!below.editorMode) return;
-        isDragging = true;
-        lastX = e.clientX;
-        lastY = e.clientY;
-    };
-    canvas.addEventListener("mousedown", canvas._editorMouseDown);
-    
-    canvas.removeEventListener("mousemove", canvas._editorMouseMove);
-    canvas._editorMouseMove = function(e) {
-        if (!isDragging || !below.editorMode) return;
-        var dx = e.clientX - lastX;
-        var dy = e.clientY - lastY;
-        below.editorPanX += dx;
-        below.editorPanY += dy;
-        lastX = e.clientX;
-        lastY = e.clientY;
-        drawMapCanvas();
-    };
-    canvas.addEventListener("mousemove", canvas._editorMouseMove);
-    
-    canvas.removeEventListener("mouseup", canvas._editorMouseUp);
-    canvas._editorMouseUp = function() {
-        isDragging = false;
-    };
-    canvas.addEventListener("mouseup", canvas._editorMouseUp);
-    
-    canvas.removeEventListener("mouseleave", canvas._editorMouseLeave);
-    canvas._editorMouseLeave = function() {
-        isDragging = false;
-    };
-    canvas.addEventListener("mouseleave", canvas._editorMouseLeave);
-    
-}
-
-// Test function to add a tile at (0,0)
-function testAddTile() {
-    // Add a grass tile at (0,0) for testing
-    var tileIndex = 'x0y0';
-    below.gameData.mapData[below.selectedMap].tiles[tileIndex] = { x: 0, y: 0, type: 1 };
-}
-
-// Export map data to file (for developers to copy back to gamedata.js)
-function exportMapData() {
-    // Create a clean copy without function references
-    var exportObj = JSON.parse(JSON.stringify(below.gameData));
-    var jsonStr = JSON.stringify(exportObj, null, 4);
-    var fullContent = 'var belowGameData = ' + jsonStr + ';';
-    
-    // Create a Blob and download link
-    var blob = new Blob([fullContent], { type: 'text/javascript' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'gamedata.js';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    var status = document.getElementById("editorStatus");
-    if (status) {
-        status.textContent = "Exported! Copy content to gamedata.js";
-        setTimeout(function() {
-            status.textContent = "Editor mode: ON";
-        }, 3000);
     }
 }
 
@@ -545,15 +403,6 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
     }
     
-    // Editor button (opens editor without starting a game)
-    var editorBtn = document.getElementById("editorBtn");
-    if (editorBtn) {
-        editorBtn.addEventListener("click", function() {
-            toggleEditorMode();
-            switchPage('gameDiv'); // Editor works on gameDiv canvas
-        });
-    }
-    
     // Character selection
     document.querySelectorAll('.below-front-menu-item[data-character]').forEach(function(item) {
         item.addEventListener("click", function() {
@@ -564,43 +413,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Start game
     startGame();
     
-    // Attach editor click handler
-    attachEditorClickHandler();
 });
-
-function populateMapSelect() {
-    var mapSelect = document.getElementById("mapSelect");
-    mapSelect.innerHTML = '';
-    below.gameData.mapData.forEach(function(map, index) {
-        var option = document.createElement("option");
-        option.value = index;
-        option.textContent = map.name || ("Map " + index);
-        if (index === below.selectedMap) {
-            option.selected = true;
-        }
-        mapSelect.appendChild(option);
-    });
-}
-
-function selectMapForEdit() {
-    var mapSelect = document.getElementById("mapSelect");
-    below.selectedMap = parseInt(mapSelect.value);
-    drawMapCanvas();
-}
-
-function addNewMap() {
-    below.gameData.mapData.push({
-        id: below.gameData.mapData.length,
-        name: "New Map",
-        tiles: {},
-        monsters: [],
-        obstacles: [],
-        npcs: []
-    });
-    populateMapSelect();
-    below.selectedMap = below.gameData.mapData.length - 1;
-    selectMapForEdit();
-}
 
 function handleMenuKey(e, menuId) {
     var menu = document.getElementById(menuId);
@@ -1204,6 +1017,7 @@ function changeMap(mapId, entryX, entryY, text) {
     below.gameData.mapLog.push(text);
   }
   maintainMapLog();
+  updateAreaDescription();
   drawMapCanvas();
 }
 
@@ -1780,6 +1594,35 @@ function maintainMapLog() {
     scrollLogToBottom();
 }
 
+function updateAreaDescription() {
+    var curMap = below.gameData.player.currentMap;
+    var x = below.gameData.player.currentLocation.x;
+    var y = below.gameData.player.currentLocation.y;
+    var tile = foundTile(x, y);
+    var desc = null;
+    if (tile && tile.description) {
+        desc = tile.description;
+    } else {
+        var mapData = below.gameData.mapData[curMap];
+        if (mapData.areaDescriptions) {
+            for (var i = 0; i < mapData.areaDescriptions.length; i++) {
+                var a = mapData.areaDescriptions[i];
+                if (x >= a.x1 && x <= a.x2 && y >= a.y1 && y <= a.y2) {
+                    desc = a.description;
+                    break;
+                }
+            }
+        }
+        if (!desc && mapData.defaultDescription) {
+            desc = mapData.defaultDescription;
+        }
+    }
+    var el = document.getElementById("areaDescriptionDiv");
+    if (el) {
+        el.textContent = desc || "";
+    }
+}
+
 function drawMapCanvas() {
     var gameDivCenter = document.getElementById("gameDivCenter");
     var canvas = document.getElementById("mapCanvas");
@@ -1790,22 +1633,14 @@ function drawMapCanvas() {
     var newHeight = Math.floor(gameDivCenter.offsetHeight -60);
     if (Math.abs(canvas.width - newWidth) > 1) {
         canvas.width = newWidth;
-        // Re-attach click handler after resize
-        if (below.editorMode) {
-            attachEditorClickHandler();
-        }
     }
     if (Math.abs(canvas.height - newHeight) > 1) {
         canvas.height = newHeight;
-        // Re-attach click handler after resize
-        if (below.editorMode) {
-            attachEditorClickHandler();
-        }
     }
     
     canvas.clickableElements = [];
     var context = canvas.getContext("2d");
-    var curMap = below.editorMode ? below.selectedMap : below.gameData.player.currentMap;
+    var curMap = below.gameData.player.currentMap;
     
     // Clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -1816,15 +1651,9 @@ function drawMapCanvas() {
     var horizontalCenter = canvas.height / 2;
     var verticalCenter = canvas.width / 2;
     
-    // In editor mode, show full map (with pan offset). In game mode, center on player
-    var verticalOffset, horizontalOffset;
-    if (below.editorMode) {
-        verticalOffset = -below.editorPanY;
-        horizontalOffset = -below.editorPanX;
-    } else {
-        verticalOffset = below.gameData.player.currentLocation.y * width;
-        horizontalOffset = below.gameData.player.currentLocation.x * width;
-    }
+    // Center on player
+    var verticalOffset = below.gameData.player.currentLocation.y * width;
+    var horizontalOffset = below.gameData.player.currentLocation.x * width;
     
     var vision = below.gameData.player.vision || 2;
     var visionPixels = vision * width;
@@ -1844,28 +1673,24 @@ function drawMapCanvas() {
         }
     }
     
-    // Add radial gradient overlay for vision (only in game mode)
-    if (!below.editorMode) {
-        var gradient = context.createRadialGradient(verticalCenter, horizontalCenter, visionPixels * 0.6, verticalCenter, horizontalCenter, visionPixels);
-        gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
-        context.fillStyle = gradient;
-        context.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    // Add radial gradient overlay for vision
+    var gradient = context.createRadialGradient(verticalCenter, horizontalCenter, visionPixels * 0.6, verticalCenter, horizontalCenter, visionPixels);
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
     
     // Draw player and monster sprites
-    // PLAYER (only in game mode)
-    if (!below.editorMode) {
-        if (below.gameData.player.icon) {
-            var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
-            if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
-            context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
-        } else {
-            context.fillStyle = "#B8C76F";
-            context.beginPath();
-            context.arc( verticalCenter, horizontalCenter, (width-2)/2, 0, 2 * Math.PI);
-            context.fill();
-        }
+    // PLAYER
+    if (below.gameData.player.icon) {
+        var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
+        if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
+        context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
+    } else {
+        context.fillStyle = "#B8C76F";
+        context.beginPath();
+        context.arc( verticalCenter, horizontalCenter, (width-2)/2, 0, 2 * Math.PI);
+        context.fill();
     }
     
     // Show coordinates if enabled
@@ -1884,8 +1709,8 @@ function drawMapCanvas() {
         var distYM = (monster.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceM = Math.sqrt(distXM * distXM + distYM * distYM);
         
-        // In editor mode, show all monsters. In game mode, check vision
-        if (below.editorMode || distanceM <= visionPixels) {
+        // Check vision
+        if (distanceM <= visionPixels) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type) return; // Skip if monster type is undefined
             if (type["icon"]) {
@@ -1911,8 +1736,8 @@ function drawMapCanvas() {
         var distYN = (npc.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceN = Math.sqrt(distXN * distXN + distYN * distYN);
         
-        // In editor mode, show all NPCs. In game mode, check vision
-        if (below.editorMode || distanceN <= visionPixels) {
+        // Check vision
+        if (distanceN <= visionPixels) {
             var type = below.gameData.npcTypes[npc.type];
             if (!type) return; // Skip if NPC type is undefined
                 if (type.icon) {
@@ -1944,8 +1769,8 @@ function drawMapCanvas() {
         var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
         
-        // In editor mode, show all obstacles. In game mode, check vision
-        if (below.editorMode || distanceO <= visionPixels) {
+        // Check vision
+        if (distanceO <= visionPixels) {
             if (type.icon) {
                 var iconName = obstacle.icon || type.icon;
                 var img = null;
@@ -1976,12 +1801,10 @@ function drawMapCanvas() {
         }
     });
     
-    // PLAYER
-    if (!below.editorMode) {
-        var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
-        if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
-        context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
-    }
+    // PLAYER (second pass for correct draw order)
+    var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
+    if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
+    context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
     
     // Second pass: draw obstacles with drawOrder=2 (on top of player)
     (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {
@@ -1994,7 +1817,7 @@ function drawMapCanvas() {
         var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
         
-        if (below.editorMode || distanceO <= visionPixels) {
+        if (distanceO <= visionPixels) {
             if (type.icon) {
                 var iconName = obstacle.icon || type.icon;
                 var img = null;
@@ -2048,7 +1871,7 @@ function drawMapCanvas() {
             var distXE = (exit.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
             var distYE = (exit.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
             var distanceE = Math.sqrt(distXE * distXE + distYE * distYE);
-            if (below.editorMode || distanceE <= visionPixels) {
+            if (distanceE <= visionPixels) {
                 if (!exitImg.complete) exitImg.src = "images/exit.png";
                 context.drawImage(exitImg, (exit.position.x * width) + verticalCenter - horizontalOffset - (width/2), (exit.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             }
@@ -2064,9 +1887,6 @@ function mapGameLoop() {
     var curMap = below.gameData.player.currentMap;
     // Don't process any movement if choice event is active
     if (below.choiceEvent) return;
-    
-    // Don't move monsters in editor mode
-    if (below.editorMode) return;
     
     // Auto-save every 60 seconds (assuming 60fps)
     if (below.tick % (60 * 60) === 0 && below.currentSlot !== undefined) {
@@ -2244,6 +2064,7 @@ function mapGameLoop() {
                     below.gameData.mapLog.push(tile['text']);
                     maintainMapLog();
                 }
+                updateAreaDescription();
                 saveCurrentGame();
             }
         }
@@ -2257,6 +2078,7 @@ function mapGameLoop() {
                     below.gameData.mapLog.push(tile['text']);
                     maintainMapLog();
                 }
+                updateAreaDescription();
                 saveCurrentGame();
             }
         }
@@ -2343,9 +2165,4 @@ function startGame() {
     });
 }
 
-// Test function to add a tile at (0,0)
-function testAddTile() {
-    // Add a grass tile at (0,0) for testing
-    var tileIndex = 'x0y0';
-    below.gameData.mapData[below.selectedMap].tiles[tileIndex] = { x: 0, y: 0, type: 1 };
-}
+

@@ -288,6 +288,10 @@ var belowGameData = {
                     "text": "You descend into the caves..."
                 }
             ],
+            "defaultDescription": "A dark damp corridor echoes your footsteps.",
+            "areaDescriptions": [
+                { "x1": -1, "y1": 0, "x2": 3, "y2": 4, "description": "A dark dusty room with a crack in the ceiling where light floods in" }
+            ],
             "tiles": {
                 "xm7y3": {
                     "x": -7,
@@ -1477,17 +1481,17 @@ var belowGameData = {
                         {
                             "id": "jesterq9",
                             "available": false,
-                            "text": "You've met the Mole? Deep in the tunnels — or is it? I heard he's actually three weasels in a trenchcoat pretending to dig. Or maybe that was the hermit's story. I get them mixed up. Point is: if he offers you advice, do the opposite. That's my advice, which you should also do the opposite of! HA!",
+                            "text": "You've met the Mole? Deep in the tunnels - or is it? I heard he's actually three weasels in a trenchcoat pretending to dig. Or maybe that was the hermit's story. I get them mixed up. Point is: if he offers you advice, do the opposite. That's my advice, which you should also do the opposite of! HA!",
                             "options": [
                                 {
                                     "id": "jestera9",
                                     "text": "Thanks... I think.",
                                     "available": true,
                                     "opens": [
-                                        "jesterq1"
+                                        
                                     ],
                                     "closes": [
-                                        "jesterq9"
+                                        
                                     ]
                                 }
                             ]
