@@ -10,7 +10,8 @@ Hermit: A lost soul consumed in his own delusions. Trades keys for herbs. The re
 Medusa: Aloof and dreaming. A former "stoner", turning people to stone with her gaze, but she has reformed
     and are not doing that anymore.
 The Mole: He lives in "The Maze", a series of tunnels he have dug to find the Herbs the Hermit have. 
-    The Hermit do not like the mole and will not give him any herbs because the mole is Evil
+    The Hermit do not like the mole and will not give him any herbs because the mole is Evil. The Mole
+    speaks like he is in a Shaekspeare play.
 
 # Code
 Below should be developed with vanilla HTML. No external libraries or frameworks. Only what the latest HTML standard

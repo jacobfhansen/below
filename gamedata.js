@@ -2418,6 +2418,69 @@ var belowGameData = {
                                     "id": "molea1",
                                     "text": "Leave",
                                     "available": true
+                                },
+                                {
+                                    "id": "molea1q",
+                                    "text": "Excuse me? I'm trying to talk to you.",
+                                    "available": true,
+                                    "opens": ["moleq2"],
+                                    "closes": ["moleq1"],
+                                    "chains": ["moleq2"]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "moleq2",
+                            "available": false,
+                            "text": "Hark, thou dost vex me with thy ceaseless prattle! What wouldst thou have of me, creeping thing? Thou interruptest the sacred labour of my paws!",
+                            "options": [
+                                {
+                                    "id": "molea2e",
+                                    "text": "I'm sorry, I didn't catch that...",
+                                    "available": true,
+                                    "opens": ["moleq3"],
+                                    "closes": ["moleq2"],
+                                    "chains": ["moleq3"]
+                                },
+                                {
+                                    "id": "molea2l",
+                                    "text": "I'll leave you alone.",
+                                    "available": true,
+                                    "closes": ["moleq2"]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "moleq3",
+                            "available": false,
+                            "text": "Fie upon thee! Thou comest hither with thy idle chatter whilst I seek the herbs of sight. The hermit thinks them his, but I have tunnelled every league of this earth! They are mine by right of toil, not his miserly keeping!",
+                            "options": [
+                                {
+                                    "id": "molea3e",
+                                    "text": "Wait, you mean the hermit's herbs?",
+                                    "available": true,
+                                    "opens": ["moleq4"],
+                                    "closes": ["moleq3"],
+                                    "chains": ["moleq4"]
+                                },
+                                {
+                                    "id": "molea3l",
+                                    "text": "You're a strange creature.",
+                                    "available": true,
+                                    "closes": ["moleq3"]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "moleq4",
+                            "available": false,
+                            "text": "Ay, the same! He hoards them like a dragon with coin, whilst I — I — dig through the cold earth in search of but a single leaf! But my tunnels grow deeper by the day, and soon, soon they shall all be mine. Now cease thy prating — I have earth to move.",
+                            "options": [
+                                {
+                                    "id": "molea4",
+                                    "text": "Good luck with that...",
+                                    "available": true,
+                                    "closes": ["moleq4"]
                                 }
                             ]
                         }
@@ -2428,19 +2491,19 @@ var belowGameData = {
                 {
                     "position": {"x": 5, "y": 5},
                     "targetMap": 1,
-                    "targetPosition": {"x": 10, "y": 2},
+                    "targetPosition": {"x": 9, "y": 2},
                     "text": "You climb back up the stairs..."
                 },
                 {
                     "position": {"x": 14, "y": 5},
                     "targetMap": 1,
-                    "targetPosition": {"x": 10, "y": 2},
+                    "targetPosition": {"x": 9, "y": 2},
                     "text": "You climb back up the stairs..."
                 },
                 {
                     "position": {"x": 5, "y": 12},
                     "targetMap": 1,
-                    "targetPosition": {"x": 10, "y": 2},
+                    "targetPosition": {"x": 9, "y": 2},
                     "text": "You climb back up the stairs..."
                 }
             ]

@@ -2272,7 +2272,7 @@ function mapGameLoop() {
                     var targetY = exit.targetPosition.y;
                     if (exit.targetMap === 2) {
                         if (below.gameData.player.mazeCycle === undefined) below.gameData.player.mazeCycle = 0;
-                        var mazeEntries = [[3, 1], [12, 1], [3, 9]];
+                        var mazeEntries = [[4, 5], [13, 5], [4, 12]];
                         var cycle = below.gameData.player.mazeCycle % 3;
                         targetX = mazeEntries[cycle][0];
                         targetY = mazeEntries[cycle][1];
