@@ -209,6 +209,9 @@ merchantImg.src = "images/merchant.png";
 var medusaImg = new Image();
 medusaImg.src = "images/medusa.png";
 
+var moleImg = new Image();
+moleImg.src = "images/mole.png";
+
 var tableImg = new Image();
 tableImg.src = "images/table.png";
 
@@ -1040,6 +1043,24 @@ function submitPassword() {
         var obsType = below.gameData.obstacleTypes[obstacle.type];
         obstacle.choiceEvents = (obsType ? obsType.openChoiceEvents : null) || [8, 3];
         below.gameData.mapLog.push("The door swings open!");
+        
+        // Move jester to map 1 at (3,-8) and unlock mole hint dialog
+        var jesterIdx = -1;
+        for (var i = 0; i < below.gameData.mapData[0].npcs.length; i++) {
+            if (below.gameData.mapData[0].npcs[i].type === 2) {
+                jesterIdx = i;
+                break;
+            }
+        }
+        if (jesterIdx !== -1) {
+            var jester = below.gameData.mapData[0].npcs.splice(jesterIdx, 1)[0];
+            jester.position = { x: 3, y: -8 };
+            jester.destPos = {};
+            below.gameData.mapData[1].npcs.push(jester);
+            var jesterq9 = jester.dialogOptions.find(function(d) { return d.id === "jesterq9"; });
+            if (jesterq9) jesterq9.available = true;
+        }
+        
         below.passwordInput = null;
         drawMapCanvas();
     } else {
@@ -1898,6 +1919,7 @@ function drawMapCanvas() {
                 else if (type.icon === "jester.png") img = jesterImg || new Image();
                 else if (type.icon === "merchant.png") img = merchantImg || new Image();
                 else if (type.icon === "medusa.png") img = medusaImg || new Image();
+                else if (type.icon === "mole.png") img = moleImg || new Image();
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
@@ -2244,7 +2266,24 @@ function mapGameLoop() {
                     return e.position.x === below.gameData.player.currentLocation.x && e.position.y === below.gameData.player.currentLocation.y;
                 });
                 if (exit) {
-                    changeMap(exit.targetMap, exit.targetPosition.x, exit.targetPosition.y, exit.text);
+                    var targetX = exit.targetPosition.x;
+                    var targetY = exit.targetPosition.y;
+                    if (exit.targetMap === 2) {
+                        if (below.gameData.player.mazeCycle === undefined) below.gameData.player.mazeCycle = 0;
+                        var mazeEntries = [[3, 1], [12, 1], [3, 9]];
+                        var cycle = below.gameData.player.mazeCycle % 3;
+                        targetX = mazeEntries[cycle][0];
+                        targetY = mazeEntries[cycle][1];
+                        below.gameData.player.mazeCycle = (cycle + 1) % 3;
+                        // Reposition the Mole to the current maze area
+                        var molePositions = [[3, 3], [13, 3], [3, 11]];
+                        var mole = below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; });
+                        if (mole) {
+                            mole.position = { x: molePositions[cycle][0], y: molePositions[cycle][1] };
+                            mole.destPos = {};
+                        }
+                    }
+                    changeMap(exit.targetMap, targetX, targetY, exit.text);
                 }
             }
         }

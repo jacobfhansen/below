@@ -237,24 +237,39 @@ var belowGameData = {
             "agenda": "Annoying and rude. Gives misleading clues and conveys half-thruths and outright lies.",
             "personality": "devious"
         },
-        "3": {
-            "name": "Medusa",
-            "description": "A once-feared gorgon who has renounced petrification",
-            "icon": "medusa.png",
-            "dialogImg": "medusa_dialog.png",
-            "dialog": {
-                "greeting": "Oh, hello there. Don't worry, I don't do the stone thing anymore.",
-                "agitated": "I said I'm not going to petrify you! Calm down!"
-            },
-            "choiceEvents": [
-                9,
-                11
-            ],
-            "agenda": "A reformed gorgon wandering the caves. Friendly and approachable.",
-            "personality": "friendly",
-            "movement": 0.2
-        }
+    "3": {
+        "name": "Medusa",
+        "description": "A once-feared gorgon who has renounced petrification",
+        "icon": "medusa.png",
+        "dialogImg": "medusa_dialog.png",
+        "dialog": {
+            "greeting": "Oh, hello there. Don't worry, I don't do the stone thing anymore.",
+            "agitated": "I said I'm not going to petrify you! Calm down!"
+        },
+        "choiceEvents": [
+            9,
+            11
+        ],
+        "agenda": "A reformed gorgon wandering the caves. Friendly and approachable.",
+        "personality": "friendly",
+        "movement": 0.2
     },
+    "4": {
+        "name": "Mole",
+        "description": "A creature of the tunnels",
+        "icon": "mole.png",
+        "dialogImg": "mole_dialog.png",
+        "dialog": {
+            "greeting": "The mole sniffs the air and turns away, uninterested.",
+            "agitated": "The mole hisses and retreats into the shadows."
+        },
+        "choiceEvents": [
+            9
+        ],
+        "agenda": "Lives in the maze. Digs tunnels to find the herbs the hermit hides. The hermit despises him.",
+        "personality": "antisocial"
+    }
+},
     "mapData": [
         {
             "id": 0,
@@ -940,8 +955,8 @@ var belowGameData = {
                 {
                     "type": 4,
                     "position": {
-                        "x": -7,
-                        "y": 3
+                        "x": 3,
+                        "y": -8
                     },
                     "keyId": 5,
                     "closed": true
@@ -1445,8 +1460,14 @@ var belowGameData = {
                                     "id": "jestera8p",
                                     "text": "Thanks, I'll try that.",
                                     "available": true,
+                                    "opens": [
+                                        "jesterq9"
+                                    ],
                                     "closes": [
                                         "jesterq8"
+                                    ],
+                                    "chains": [
+                                        "jesterq9"
                                     ]
                                 },
                                 {
@@ -1455,6 +1476,21 @@ var belowGameData = {
                                     "available": true,
                                     "closes": [
                                         "jesterq8"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "jesterq9",
+                            "available": false,
+                            "text": "You've met the Mole? Deep in the tunnels — or is it? I heard he's actually three weasels in a trenchcoat pretending to dig. Or maybe that was the hermit's story. I get them mixed up. Point is: if he offers you advice, do the opposite. That's my advice, which you should also do the opposite of! HA!",
+                            "options": [
+                                {
+                                    "id": "jestera9",
+                                    "text": "Thanks... I think.",
+                                    "available": true,
+                                    "closes": [
+                                        "jesterq9"
                                     ]
                                 }
                             ]
@@ -1790,6 +1826,18 @@ var belowGameData = {
                 "x11y0": {
                     "x": 11,
                     "y": 0
+                },
+                "x2ym8": {
+                    "x": 2,
+                    "y": -8
+                },
+                "x3ym8": {
+                    "x": 3,
+                    "y": -8
+                },
+                "x4ym8": {
+                    "x": 4,
+                    "y": -8
                 }
             },
             "monsters": [
@@ -2296,6 +2344,107 @@ var belowGameData = {
                         "y": 0
                     },
                     "text": "You descend deeper into the earth..."
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "The Maze",
+            "tiles": {
+                "x2y1": {"x": 2, "y": 1},
+                "x3y1": {"x": 3, "y": 1},
+                "x4y1": {"x": 4, "y": 1},
+                "x5y1": {"x": 5, "y": 1},
+                "x2y2": {"x": 2, "y": 2},
+                "x3y2": {"x": 3, "y": 2},
+                "x5y2": {"x": 5, "y": 2},
+                "x2y3": {"x": 2, "y": 3},
+                "x3y3": {"x": 3, "y": 3},
+                "x5y3": {"x": 5, "y": 3},
+                "x5y4": {"x": 5, "y": 4},
+                "x3y4": {"x": 3, "y": 4},
+                "x2y5": {"x": 2, "y": 5},
+                "x3y5": {"x": 3, "y": 5},
+                "x4y5": {"x": 4, "y": 5},
+                "x5y5": {"x": 5, "y": 5},
+                "x11y1": {"x": 11, "y": 1},
+                "x12y1": {"x": 12, "y": 1},
+                "x13y1": {"x": 13, "y": 1},
+                "x14y1": {"x": 14, "y": 1},
+                "x11y2": {"x": 11, "y": 2},
+                "x13y2": {"x": 13, "y": 2},
+                "x14y2": {"x": 14, "y": 2},
+                "x11y3": {"x": 11, "y": 3},
+                "x12y3": {"x": 12, "y": 3},
+                "x13y3": {"x": 13, "y": 3},
+                "x14y3": {"x": 14, "y": 3},
+                "x11y4": {"x": 11, "y": 4},
+                "x13y4": {"x": 13, "y": 4},
+                "x14y4": {"x": 14, "y": 4},
+                "x11y5": {"x": 11, "y": 5},
+                "x12y5": {"x": 12, "y": 5},
+                "x13y5": {"x": 13, "y": 5},
+                "x14y5": {"x": 14, "y": 5},
+                "x2y9": {"x": 2, "y": 9},
+                "x3y9": {"x": 3, "y": 9},
+                "x4y9": {"x": 4, "y": 9},
+                "x5y9": {"x": 5, "y": 9},
+                "x2y10": {"x": 2, "y": 10},
+                "x4y10": {"x": 4, "y": 10},
+                "x5y10": {"x": 5, "y": 10},
+                "x2y11": {"x": 2, "y": 11},
+                "x3y11": {"x": 3, "y": 11},
+                "x4y11": {"x": 4, "y": 11},
+                "x5y11": {"x": 5, "y": 11},
+                "x2y12": {"x": 2, "y": 12},
+                "x3y12": {"x": 3, "y": 12},
+                "x4y12": {"x": 4, "y": 12},
+                "x5y12": {"x": 5, "y": 12}
+            },
+            "monsters": [],
+            "obstacles": [],
+            "npcs": [
+                {
+                    "type": 4,
+                    "position": {
+                        "x": 0,
+                        "y": 0
+                    },
+                    "destPos": {},
+                    "dialogOptions": [
+                        {
+                            "id": "moleq1",
+                            "available": true,
+                            "text": "The mole sniffs the air and turns away, uninterested.",
+                            "options": [
+                                {
+                                    "id": "molea1",
+                                    "text": "Leave",
+                                    "available": true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "exits": [
+                {
+                    "position": {"x": 5, "y": 5},
+                    "targetMap": 1,
+                    "targetPosition": {"x": 10, "y": 2},
+                    "text": "You climb back up the stairs..."
+                },
+                {
+                    "position": {"x": 14, "y": 5},
+                    "targetMap": 1,
+                    "targetPosition": {"x": 10, "y": 2},
+                    "text": "You climb back up the stairs..."
+                },
+                {
+                    "position": {"x": 5, "y": 12},
+                    "targetMap": 1,
+                    "targetPosition": {"x": 10, "y": 2},
+                    "text": "You climb back up the stairs..."
                 }
             ]
         }
