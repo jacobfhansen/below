@@ -2566,7 +2566,12 @@ var belowGameData = {
         },
         "x4y5": {
           "x": 4,
-          "y": 5
+          "y": 5,
+          "splash": {
+            "image": "mole_dialog.png",
+            "text": "Hark, thou foolish child! Thou hast wandered into mine own domain!\nBwa ha ha! Now shalt thou know the meaning of true despair!",
+            "shake": true
+          }
         },
         "x5y5": {
           "x": 5,

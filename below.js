@@ -7,6 +7,7 @@ const below = {
     pages: ["cutSceneDiv", "titleScreen", "resumeGameDiv", "gameDiv", "newGameDiv", "characterSelectDiv"],
     currentSlot: undefined,
     choiceEvent: null,
+    splashActive: false,
     gameData: null // Loaded from gamedata.js
 };
 
@@ -299,6 +300,12 @@ function checkKey(e) {
     }
     // Map div
     else if (document.getElementById("gameDiv").style.display !== 'none') {
+        if (below.splashActive) {
+            if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 27) {
+                hideSplash();
+            }
+            return;
+        }
         if (below.choiceEvent) {
             handleChoiceEventKey(e);
         } else if (document.getElementById("inventoryDiv").style.display !== 'none') {
@@ -421,6 +428,9 @@ document.addEventListener("DOMContentLoaded", function() {
             selectCharacter(this.getAttribute('data-character'));
         });
     });
+    
+    // Splash continue button
+    document.getElementById("splashBtn").addEventListener("click", hideSplash);
     
     // Start game
     startGame();
@@ -852,6 +862,24 @@ function closeChoiceEvent() {
     maintainMapLog();
 }
 
+function showSplash(splash) {
+    below.splashActive = true;
+    document.getElementById("splashImage").src = "images/" + splash.image;
+    document.getElementById("splashText").textContent = splash.text;
+    var el = document.getElementById("splashContent");
+    el.classList.remove("splash-shake");
+    if (splash.shake) {
+        void el.offsetWidth;
+        el.classList.add("splash-shake");
+    }
+    document.getElementById("splashOverlay").style.display = "flex";
+}
+
+function hideSplash() {
+    document.getElementById("splashOverlay").style.display = "none";
+    below.splashActive = false;
+}
+    
 function renderPasswordInput() {
     var gameLogDiv = document.getElementById("gameLogDiv");
     var container = document.createElement("DIV");
@@ -1084,6 +1112,12 @@ function changeMap(mapId, entryX, entryY, text) {
   }
   maintainMapLog();
   updateAreaDescription();
+  // Check tile splash on map entry
+  var splashTile = foundTile(entryX, entryY);
+  if (splashTile && splashTile.splash && !splashTile.splashSeen) {
+      splashTile.splashSeen = true;
+      showSplash(splashTile.splash);
+  }
   drawMapCanvas();
 }
 
@@ -1963,8 +1997,8 @@ function mapGameLoop() {
     // This one loops and loops
     below.tick = window.requestAnimationFrame(mapGameLoop);
     var curMap = below.gameData.player.currentMap;
-    // Don't process any movement if choice event is active
-    if (below.choiceEvent) return;
+    // Don't process any movement if choice event or splash is active
+    if (below.choiceEvent || below.splashActive) return;
     
     // Auto-save every 60 seconds (assuming 60fps)
     if (below.tick % (60 * 60) === 0 && below.currentSlot !== undefined) {
@@ -2143,6 +2177,12 @@ function mapGameLoop() {
                     maintainMapLog();
                 }
                 updateAreaDescription();
+                // Check tile splash on arrival
+                var splashTile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
+                if (splashTile && splashTile.splash && !splashTile.splashSeen) {
+                    splashTile.splashSeen = true;
+                    showSplash(splashTile.splash);
+                }
                 saveCurrentGame();
             }
         }
@@ -2157,6 +2197,12 @@ function mapGameLoop() {
                     maintainMapLog();
                 }
                 updateAreaDescription();
+                // Check tile splash on arrival
+                var splashTile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
+                if (splashTile && splashTile.splash && !splashTile.splashSeen) {
+                    splashTile.splashSeen = true;
+                    showSplash(splashTile.splash);
+                }
                 saveCurrentGame();
             }
         }
