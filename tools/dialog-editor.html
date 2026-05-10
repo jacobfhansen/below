@@ -308,7 +308,7 @@ function updateDialogText(idx, val) {
 function updateDialogRequiresItems(idx, val) {
     var npc = getSelectedNpc();
     if (!npc) return;
-    npc.npc.dialogOptions[idx].requiresItems = strToArr(val);
+    npc.npc.dialogOptions[idx].requiresItems = strToArr(val).map(function(s) { return Number(s); });
 }
 
 function addDialog() {
@@ -369,6 +369,8 @@ function renderOptions() {
         html += '<div class="option-field"><label>Opens</label><input value="' + escAttr(arrToStr(o.opens)) + '" onchange="updateOptionField(' + i + ', \'opens\', this.value)" onclick="event.stopPropagation()" placeholder="dialog IDs, comma-separated"></div>';
         html += '<div class="option-field"><label>Closes</label><input value="' + escAttr(arrToStr(o.closes)) + '" onchange="updateOptionField(' + i + ', \'closes\', this.value)" onclick="event.stopPropagation()" placeholder="dialog IDs, comma-separated"></div>';
         html += '<div class="option-field"><label>Chains</label><input value="' + escAttr(arrToStr(o.chains)) + '" onchange="updateOptionField(' + i + ', \'chains\', this.value)" onclick="event.stopPropagation()" placeholder="dialog IDs, comma-separated"></div>';
+        html += '<div class="option-field"><label>Requires Items</label><input value="' + escAttr(arrToStr(o.requiresItems)) + '" onchange="updateOptionField(' + i + ', \'requiresItems\', this.value)" onclick="event.stopPropagation()" placeholder="item IDs, comma-separated"></div>';
+        html += '<div class="option-field"><label>Blocked By Items</label><input value="' + escAttr(arrToStr(o.blockedByItems)) + '" onchange="updateOptionField(' + i + ', \'blockedByItems\', this.value)" onclick="event.stopPropagation()" placeholder="item IDs, comma-separated"></div>';
         var refs = getRefs(o);
         if (refs.length > 0) {
             var invalid = refs.filter(function(r) { return !dialogExists(r); });
@@ -407,7 +409,11 @@ function updateOptionText(idx, val) {
 function updateOptionField(idx, field, val) {
     var dlg = getSelectedDialog();
     if (!dlg || !dlg.options) return;
-    dlg.options[idx][field] = strToArr(val);
+    var arr = strToArr(val);
+    if (field === 'requiresItems' || field === 'blockedByItems') {
+        arr = arr.map(function(s) { return Number(s); });
+    }
+    dlg.options[idx][field] = arr;
 }
 
 function addOption() {

@@ -763,7 +763,22 @@ function selectChoiceOption(index) {
                         npcType: below.choiceEvent.npcType,
                         npcAgitated: below.choiceEvent.npcAgitated,
                         dialogId: nextDialog.id,
-                        dialogOptions: nextDialog.options.filter(function(o) { return o.available !== false; }),
+                        dialogOptions: nextDialog.options.filter(function(o) {
+                            if (o.available === false) return false;
+                            if (o.requiresItems) {
+                                var hasItem = o.requiresItems.some(function(itemId) {
+                                    return below.gameData.player.inventory.indexOf(itemId) !== -1;
+                                });
+                                if (!hasItem) return false;
+                            }
+                            if (o.blockedByItems) {
+                                var hasBlocked = o.blockedByItems.some(function(itemId) {
+                                    return below.gameData.player.inventory.indexOf(itemId) !== -1;
+                                });
+                                if (hasBlocked) return false;
+                            }
+                            return true;
+                        }),
                         isDialog: true,
                         isChain: true
                     };
@@ -857,6 +872,18 @@ function selectChoiceOption(index) {
             below.gameData.player.inventory.splice(herbIdx, 1);
             below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
             maintainMapLog();
+        }
+    }
+    
+    // When Mole reveals the secret passage, unlock Medusa's mole dialog option
+    if (selectedOption.id === "mole_post5_a") {
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        if (medusaNpc && medusaNpc.dialogOptions) {
+            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+            if (medusaq0 && medusaq0.options) {
+                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
+                if (moleOpt) moleOpt.available = true;
+            }
         }
     }
     
