@@ -844,6 +844,22 @@ function selectChoiceOption(index) {
         maintainMapLog();
     }
     
+    // When player gives herbs to the Mole, consume them from inventory
+    if (selectedOption.id === "mole_post_a3_give") {
+        var herbIdx = -1;
+        for (var hi = 0; hi < below.gameData.player.inventory.length; hi++) {
+            if (below.gameData.player.inventory[hi] === 6) {
+                herbIdx = hi;
+                break;
+            }
+        }
+        if (herbIdx !== -1) {
+            below.gameData.player.inventory.splice(herbIdx, 1);
+            below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
+            maintainMapLog();
+        }
+    }
+    
     // When player finishes Mole trap dialog, restore normal dialog
     if (selectedOption.id === "mole_trap_leave" && below.choiceEvent && below.choiceEvent.npcPos) {
         var curMap = below.gameData.player.currentMap;
@@ -904,6 +920,24 @@ function hideSplash() {
     // Trigger rock drop if splash has rockDrop
     if (below.splashData && below.splashData.rockDrop && below.splashData.rockDrop.length > 0) {
         dropTrapRocks(below.splashData.rockDrop, below.splashPos.x, below.splashPos.y, below.splashData.moleTeleport);
+        // Track splash trap count for post-trap mole state
+        if (below.splashCount === undefined) below.splashCount = 0;
+        below.splashCount++;
+        // On 6th trap, return mole to starting position and unlock post-trap dialog
+        if (below.splashCount >= 6) {
+            var curMap = below.gameData.player.currentMap;
+            var mole = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === 4; });
+            if (mole) {
+                var cycle = below.gameData.player.mazeCycle || 0;
+                var molePositions = [[11, 10], [33, 10], [11, 32]];
+                mole.position = { x: molePositions[cycle][0], y: molePositions[cycle][1] };
+                mole.destPos = {};
+                var trapD = mole.dialogOptions.find(function(d) { return d.id === "mole_trap"; });
+                var postD = mole.dialogOptions.find(function(d) { return d.id === "mole_post1"; });
+                if (trapD) trapD.available = false;
+                if (postD) postD.available = true;
+            }
+        }
     }
     below.splashPos = null;
     below.splashData = null;
@@ -2304,7 +2338,7 @@ function mapGameLoop() {
                     var targetY = exit.targetPosition.y;
                     if (exit.targetMap === 2) {
                         if (below.gameData.player.mazeCycle === undefined) below.gameData.player.mazeCycle = 0;
-                        var mazeEntries = [[20, 10], [25, 10], [20, 32]];
+                        var mazeEntries = [[3, 10], [42, 10], [3, 32]];
                         var cycle = below.gameData.player.mazeCycle % 3;
                         targetX = mazeEntries[cycle][0];
                         targetY = mazeEntries[cycle][1];

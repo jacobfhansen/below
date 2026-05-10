@@ -200,6 +200,23 @@ var belowGameData = {
       "icon": "gem.png",
       "blocking": false,
       "choiceEvents": []
+    },
+    "11": {
+      "name": "Stone Door",
+      "description": "A heavy stone door carved with ancient symbols",
+      "color": "#666666",
+      "icon": "door_closed.png",
+      "blocking": true,
+      "closed": true,
+      "keyId": 7,
+      "choiceEvents": [
+        7,
+        3
+      ],
+      "openChoiceEvents": [
+        8,
+        3
+      ]
     }
   },
   "itemTypes": {
@@ -3321,16 +3338,8 @@ var belowGameData = {
           "x": 20,
           "y": 11
         },
-        "x21y11": {
-          "x": 21,
-          "y": 11
-        },
         "x24y11": {
           "x": 24,
-          "y": 11
-        },
-        "x25y11": {
-          "x": 25,
           "y": 11
         },
         "x26y11": {
@@ -4345,10 +4354,6 @@ var belowGameData = {
           "x": 8,
           "y": 38
         },
-        "x23y36": {
-          "x": 23,
-          "y": 36
-        },
         "x27y16": {
           "x": 27,
           "y": 16
@@ -4396,6 +4401,138 @@ var belowGameData = {
         "x22y16": {
           "x": 22,
           "y": 16
+        },
+        "x22y10": {
+          "x": 22,
+          "y": 10
+        },
+        "x23y10": {
+          "x": 23,
+          "y": 10
+        },
+        "x22y11": {
+          "x": 22,
+          "y": 11
+        },
+        "x23y11": {
+          "x": 23,
+          "y": 11
+        },
+        "x22y12": {
+          "x": 22,
+          "y": 12
+        },
+        "x23y12": {
+          "x": 23,
+          "y": 12
+        },
+        "x24y12": {
+          "x": 24,
+          "y": 12
+        },
+        "x23y13": {
+          "x": 23,
+          "y": 13
+        },
+        "x23y14": {
+          "x": 23,
+          "y": 14
+        },
+        "x23y15": {
+          "x": 23,
+          "y": 15
+        },
+        "x23y16": {
+          "x": 23,
+          "y": 16
+        },
+        "x23y17": {
+          "x": 23,
+          "y": 17
+        },
+        "x23y18": {
+          "x": 23,
+          "y": 18
+        },
+        "x23y19": {
+          "x": 23,
+          "y": 19
+        },
+        "x23y20": {
+          "x": 23,
+          "y": 20
+        },
+        "x23y21": {
+          "x": 23,
+          "y": 21
+        },
+        "x23y22": {
+          "x": 23,
+          "y": 22
+        },
+        "x23y23": {
+          "x": 23,
+          "y": 23
+        },
+        "x23y24": {
+          "x": 23,
+          "y": 24
+        },
+        "x23y25": {
+          "x": 23,
+          "y": 25
+        },
+        "x23y26": {
+          "x": 23,
+          "y": 26
+        },
+        "x23y27": {
+          "x": 23,
+          "y": 27
+        },
+        "x23y28": {
+          "x": 23,
+          "y": 28
+        },
+        "x23y29": {
+          "x": 23,
+          "y": 29
+        },
+        "x23y30": {
+          "x": 23,
+          "y": 30
+        },
+        "x23y31": {
+          "x": 23,
+          "y": 31
+        },
+        "x22y32": {
+          "x": 22,
+          "y": 32
+        },
+        "x23y32": {
+          "x": 23,
+          "y": 32
+        },
+        "x27y14": {
+          "x": 27,
+          "y": 14
+        },
+        "x24y18": {
+          "x": 24,
+          "y": 18
+        },
+        "x7y20": {
+          "x": 7,
+          "y": 20
+        },
+        "x31y19": {
+          "x": 31,
+          "y": 19
+        },
+        "x21y21": {
+          "x": 21,
+          "y": 21
         }
       },
       "monsters": [],
@@ -4532,6 +4669,27 @@ var belowGameData = {
             "x": 19,
             "y": 28
           }
+        },
+        {
+          "type": 11,
+          "position": {
+            "x": 21,
+            "y": 10
+          }
+        },
+        {
+          "type": 11,
+          "position": {
+            "x": 25,
+            "y": 10
+          }
+        },
+        {
+          "type": 11,
+          "position": {
+            "x": 22,
+            "y": 32
+          }
         }
       ],
       "npcs": [
@@ -4653,6 +4811,96 @@ var belowGameData = {
                   "available": true
                 }
               ]
+            },
+            {
+              "id": "mole_post1",
+              "available": false,
+              "text": "Alas! Fortune hath turned her back on me once more! The very stones I meant to cage thee have become thy shelter! Woe is me, for my grand scheme hath come to naught!",
+              "options": [
+                {
+                  "id": "mole_post_a1",
+                  "text": "You wanted me to starve down here.",
+                  "available": true,
+                  "chains": [
+                    "mole_post2"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mole_post2",
+              "available": false,
+              "text": "Aye, 'twas my design! To see thee wither, to watch the light fade from thine eyes! For then would I take the Hermit's precious herbs for mine own! But fate hath mocked me — thou art too clever by half!",
+              "options": [
+                {
+                  "id": "mole_post_a2",
+                  "text": "You mean the herbs the Hermit collects?",
+                  "available": true,
+                  "chains": [
+                    "mole_post3"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mole_post3",
+              "available": false,
+              "text": "The very same! The Hermit hoards 'em in his cave, thinkin' them to be nothin' but baubles. But I know their true worth! With 'em, I could... well, 'tis no matter now. Thou hast bested me, and the herbs are beyond my reach.",
+              "options": [
+                {
+                  "id": "mole_post_a3_give",
+                  "text": "I have the Hermit's herbs. Here, take them.",
+                  "available": true,
+                  "requiresItems": [
+                    6
+                  ],
+                  "chains": [
+                    "mole_post4_give"
+                  ]
+                },
+                {
+                  "id": "mole_post_a3_none",
+                  "text": "Sorry, I don't have them.",
+                  "available": true,
+                  "closes": [
+                    "mole_post3"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mole_post4_give",
+              "available": false,
+              "text": "Thou... thou wouldst give them to me? After all I have done? Thou art either a fool or a saint! But I shall not look a gift horse in the mouth! Accept my gratitude, and in return, I shall share a secret. Between the cracks of these very tunnels lie passages unknown!",
+              "options": [
+                {
+                  "id": "mole_post4_give_a",
+                  "text": "Show me this secret passage.",
+                  "available": true,
+                  "chains": [
+                    "mole_post5_reveal"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mole_post5_reveal",
+              "available": false,
+              "text": "Dost thou see the shimmerin' walls? Beyond 'em lie chambers sealed by ancient stone doors. The Stone Key the Medusa guards shall open 'em, but only if thou hast earned her trust. Behind those doors, a stair awaits — one that leads deeper still, to wonders — or horrors — unknown. Seek it, if thou dare!",
+              "options": [
+                {
+                  "id": "mole_post5_a",
+                  "text": "I'll find this place.",
+                  "available": true,
+                  "closes": [
+                    "mole_post1",
+                    "mole_post2",
+                    "mole_post3",
+                    "mole_post4_give",
+                    "mole_post5_reveal"
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -4660,7 +4908,7 @@ var belowGameData = {
       "exits": [
         {
           "position": {
-            "x": 21,
+            "x": 2,
             "y": 10
           },
           "targetMap": 1,
@@ -4672,7 +4920,7 @@ var belowGameData = {
         },
         {
           "position": {
-            "x": 24,
+            "x": 43,
             "y": 10
           },
           "targetMap": 1,
@@ -4684,7 +4932,7 @@ var belowGameData = {
         },
         {
           "position": {
-            "x": 21,
+            "x": 2,
             "y": 32
           },
           "targetMap": 1,
@@ -4693,6 +4941,57 @@ var belowGameData = {
             "y": 2
           },
           "text": "You climb back up the stairs..."
+        },
+        {
+          "position": {
+            "x": 23,
+            "y": 11
+          },
+          "targetMap": 3,
+          "targetPosition": {
+            "x": 2,
+            "y": 2
+          },
+          "text": "You descend deeper into the ancient passage..."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "The Depths",
+      "tiles": {
+        "x2y2": {
+          "x": 2,
+          "y": 2
+        },
+        "x3y2": {
+          "x": 3,
+          "y": 2
+        },
+        "x2y3": {
+          "x": 2,
+          "y": 3
+        },
+        "x3y3": {
+          "x": 3,
+          "y": 3
+        }
+      },
+      "monsters": [],
+      "obstacles": [],
+      "npcs": [],
+      "exits": [
+        {
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "targetMap": 2,
+          "targetPosition": {
+            "x": 23,
+            "y": 11
+          },
+          "text": "You climb back up the ancient stairs..."
         }
       ]
     }
