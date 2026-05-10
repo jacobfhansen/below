@@ -1014,6 +1014,9 @@ var belowGameData = {
                     4,
                     5
                   ],
+                  "blockedByItems": [
+                    6
+                  ],
                   "chains": [
                     "hermit_key_intro"
                   ]

@@ -1493,6 +1493,12 @@ function handleBlockedInteraction(x, y) {
                         });
                         if (!hasItem) return false;
                     }
+                    if (o.blockedByItems) {
+                        var hasBlocked = o.blockedByItems.some(function(itemId) {
+                            return below.gameData.player.inventory.indexOf(itemId) !== -1;
+                        });
+                        if (hasBlocked) return false;
+                    }
                     return true;
                 }),
                 isDialog: true
