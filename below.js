@@ -743,6 +743,19 @@ function selectChoiceOption(index) {
                         isChain: true
                     };
                     renderChoiceEvent();
+                    
+                    // When player first talks to the Mole, enable Medusa's mole dialog option
+                    if (selectedOption.id === "molea1q") {
+                        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+                        if (medusaNpc && medusaNpc.dialogOptions) {
+                            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+                            if (medusaq0 && medusaq0.options) {
+                                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
+                                if (moleOpt) moleOpt.available = true;
+                            }
+                        }
+                    }
+                    
                     return; // Don't close the dialog
                 }
             }
@@ -777,6 +790,25 @@ function selectChoiceOption(index) {
             below.gameData.mapLog.push("You trade your key for a bundle of cave herbs.");
             maintainMapLog();
         }
+    }
+    
+    // When player first talks to the Mole, enable Medusa's mole dialog option
+    if (selectedOption.id === "molea1q") {
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        if (medusaNpc && medusaNpc.dialogOptions) {
+            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+            if (medusaq0 && medusaq0.options) {
+                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
+                if (moleOpt) moleOpt.available = true;
+            }
+        }
+    }
+    
+    // When player accepts Medusa's key, grant Stone Key
+    if (selectedOption.id === "medusama4p") {
+        below.gameData.player.inventory.push(7);
+        below.gameData.mapLog.push("Medusa hands you a heavy stone key, warm to the touch.");
+        maintainMapLog();
     }
     
     if (!below.passwordInput) {
@@ -874,6 +906,20 @@ function submitPassword() {
             var jesterq1 = jester.dialogOptions.find(function(d) { return d.id === "jesterq1"; });
             if (jesterq9) jesterq9.available = true;
             if (jesterq1) jesterq1.available = false;
+        }
+        
+        // Disable statue dialog options after door opens
+        var medusaNpcMap1 = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        if (medusaNpcMap1 && medusaNpcMap1.dialogOptions) {
+            var medusaq0 = medusaNpcMap1.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+            if (medusaq0 && medusaq0.options) {
+                var statueOptionIds = ["medusaa1s1","medusaa1s2","medusaa1s3","medusaa1s4","medusaa1s5","medusaa1s6"];
+                medusaq0.options.forEach(function(opt) {
+                    if (statueOptionIds.indexOf(opt.id) !== -1) {
+                        opt.available = false;
+                    }
+                });
+            }
         }
         
         below.passwordInput = null;
