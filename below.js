@@ -250,6 +250,9 @@ doorOpenImg.src = "images/door_open.png";
 var exitImg = new Image();
 exitImg.src = "images/exit.png";
 
+var gemImg = new Image();
+gemImg.src = "images/gem.png";
+
 var statueImg1 = new Image();
 statueImg1.src = "images/statue1.png";
 var statueImg2 = new Image();
@@ -841,6 +844,20 @@ function selectChoiceOption(index) {
         maintainMapLog();
     }
     
+    // When player finishes Mole trap dialog, restore normal dialog
+    if (selectedOption.id === "mole_trap_leave" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var mole = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (mole) {
+            var trapD = mole.dialogOptions.find(function(d) { return d.id === "mole_trap"; });
+            var normalD = mole.dialogOptions.find(function(d) { return d.id === "moleq1"; });
+            if (trapD) trapD.available = false;
+            if (normalD) normalD.available = true;
+        }
+    }
+    
     if (!below.passwordInput) {
         closeChoiceEvent();
     }
@@ -864,6 +881,12 @@ function closeChoiceEvent() {
 
 function showSplash(splash) {
     below.splashActive = true;
+    // Store player position for rock drop
+    below.splashPos = {
+        x: below.gameData.player.currentLocation.x,
+        y: below.gameData.player.currentLocation.y
+    };
+    below.splashData = splash;
     document.getElementById("splashImage").src = "images/" + splash.image;
     document.getElementById("splashText").textContent = splash.text;
     var el = document.getElementById("splashContent");
@@ -878,6 +901,38 @@ function showSplash(splash) {
 function hideSplash() {
     document.getElementById("splashOverlay").style.display = "none";
     below.splashActive = false;
+    // Trigger rock drop if splash has rockDrop
+    if (below.splashData && below.splashData.rockDrop && below.splashData.rockDrop.length > 0) {
+        dropTrapRocks(below.splashData.rockDrop, below.splashPos.x, below.splashPos.y, below.splashData.moleTeleport);
+    }
+    below.splashPos = null;
+    below.splashData = null;
+    drawMapCanvas();
+}
+
+function dropTrapRocks(rockDrop, playerX, playerY, moleTeleport) {
+    var curMap = below.gameData.player.currentMap;
+    rockDrop.forEach(function(offset) {
+        var rx = playerX + offset.dx;
+        var ry = playerY + offset.dy;
+        if (foundTile(rx, ry)) {
+            below.gameData.mapData[curMap].obstacles.push({
+                type: 9,
+                position: { x: rx, y: ry }
+            });
+        }
+    });
+    if (moleTeleport) {
+        var mole = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === 4; });
+        if (mole && foundTile(moleTeleport.x, moleTeleport.y)) {
+            mole.position = { x: moleTeleport.x, y: moleTeleport.y };
+            mole.destPos = {};
+            var trapD = mole.dialogOptions.find(function(d) { return d.id === "mole_trap"; });
+            var normalD = mole.dialogOptions.find(function(d) { return d.id === "moleq1"; });
+            if (trapD) trapD.available = true;
+            if (normalD) normalD.available = false;
+        }
+    }
 }
     
 function renderPasswordInput() {
@@ -1624,6 +1679,23 @@ function pushObstacle(obstaclePos) {
     return false;
 }
 
+function tryAutoPush(x, y, fromX, fromY) {
+    var curMap = below.gameData.player.currentMap;
+    var rock = (below.gameData.mapData[curMap].obstacles || []).find(function(o) {
+        return o.position && o.position.x === x && o.position.y === y && o.type === 9;
+    });
+    if (!rock) return false;
+    var dirX = x - fromX;
+    var dirY = y - fromY;
+    var pushX = x + dirX;
+    var pushY = y + dirY;
+    if (!foundTile(pushX, pushY)) return false;
+    if (isBlocked(pushX, pushY)) return false;
+    rock.position.x = pushX;
+    rock.position.y = pushY;
+    return true;
+}
+
 function moveOnMap(e) {
     // Don't process movement if choice event is active
     if (below.choiceEvent) return;
@@ -1643,39 +1715,51 @@ function moveOnMap(e) {
         return;
     }
     if ((e.keyCode === 38 || e.keyCode === 87) && foundTile(curX, curY -1)) {
-        if (!isBlocked(curX, curY -1)) {
-            below.gameData.player.destinationLocation.yVelocity = -1;
-            below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y - 1;
-            playerMoved = true;
+        var destY = curY - 1;
+        if (tryAutoPush(curX, destY, curX, curY) || !isBlocked(curX, destY)) {
+            if (!playerMoved) {
+                below.gameData.player.destinationLocation.yVelocity = -1;
+                below.gameData.player.destinationLocation.y = destY;
+                playerMoved = true;
+            }
         } else {
-            handleBlockedInteraction(curX, curY -1);
+            handleBlockedInteraction(curX, destY);
         }
     }
     else if ((e.keyCode === 40 || e.keyCode === 83) && foundTile(curX, curY +1)) {
-        if (!isBlocked(curX, curY +1)) {
-            below.gameData.player.destinationLocation.y = below.gameData.player.currentLocation.y + 1;
-            below.gameData.player.destinationLocation.yVelocity = 1;
-            playerMoved = true;
+        var destY = curY + 1;
+        if (tryAutoPush(curX, destY, curX, curY) || !isBlocked(curX, destY)) {
+            if (!playerMoved) {
+                below.gameData.player.destinationLocation.y = destY;
+                below.gameData.player.destinationLocation.yVelocity = 1;
+                playerMoved = true;
+            }
         } else {
-            handleBlockedInteraction(curX, curY +1);
+            handleBlockedInteraction(curX, destY);
         }
     }
     else if ((e.keyCode === 37 || e.keyCode === 65) && foundTile(curX -1, curY)) {
-        if (!isBlocked(curX -1, curY)) {
-            below.gameData.player.destinationLocation.xVelocity = -1;
-            below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x - 1;
-            playerMoved = true;
+        var destX = curX - 1;
+        if (tryAutoPush(destX, curY, curX, curY) || !isBlocked(destX, curY)) {
+            if (!playerMoved) {
+                below.gameData.player.destinationLocation.xVelocity = -1;
+                below.gameData.player.destinationLocation.x = destX;
+                playerMoved = true;
+            }
         } else {
-            handleBlockedInteraction(curX -1, curY);
+            handleBlockedInteraction(destX, curY);
         }
     }
     else if ((e.keyCode === 39 || e.keyCode === 68) && foundTile(curX +1, curY)) {
-        if (!isBlocked(curX +1, curY)) {
-            below.gameData.player.destinationLocation.xVelocity = 1;
-            below.gameData.player.destinationLocation.x = below.gameData.player.currentLocation.x + 1;
-            playerMoved = true;
+        var destX = curX + 1;
+        if (tryAutoPush(destX, curY, curX, curY) || !isBlocked(destX, curY)) {
+            if (!playerMoved) {
+                below.gameData.player.destinationLocation.xVelocity = 1;
+                below.gameData.player.destinationLocation.x = destX;
+                playerMoved = true;
+            }
         } else {
-            handleBlockedInteraction(curX +1, curY);
+            handleBlockedInteraction(destX, curY);
         }
     }
     if (playerMoved) {        
@@ -1902,6 +1986,7 @@ function drawMapCanvas() {
                     else if (iconName === "statue4.png") img = statueImg4;
                     else if (iconName === "statue5.png") img = statueImg5;
                     else if (iconName === "statue6.png") img = statueImg6;
+                    else if (iconName === "gem.png") img = gemImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
@@ -1949,6 +2034,7 @@ function drawMapCanvas() {
                     else if (iconName === "statue4.png") img = statueImg4;
                     else if (iconName === "statue5.png") img = statueImg5;
                     else if (iconName === "statue6.png") img = statueImg6;
+                    else if (iconName === "gem.png") img = gemImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
@@ -2218,13 +2304,13 @@ function mapGameLoop() {
                     var targetY = exit.targetPosition.y;
                     if (exit.targetMap === 2) {
                         if (below.gameData.player.mazeCycle === undefined) below.gameData.player.mazeCycle = 0;
-                        var mazeEntries = [[4, 5], [13, 5], [4, 12]];
+                        var mazeEntries = [[20, 10], [25, 10], [20, 32]];
                         var cycle = below.gameData.player.mazeCycle % 3;
                         targetX = mazeEntries[cycle][0];
                         targetY = mazeEntries[cycle][1];
                         below.gameData.player.mazeCycle = (cycle + 1) % 3;
                         // Reposition the Mole to the current maze area
-                        var molePositions = [[3, 3], [13, 3], [3, 11]];
+                        var molePositions = [[11, 10], [33, 10], [11, 32]];
                         var mole = below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; });
                         if (mole) {
                             mole.position = { x: molePositions[cycle][0], y: molePositions[cycle][1] };
