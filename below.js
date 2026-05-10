@@ -102,6 +102,18 @@ function mergeDialogOptions(savedData) {
     var freshMaps = belowGameData.mapData;
     var savedMaps = savedData.mapData;
     
+    // Remove stale dialog IDs from saved data (dialogs that no longer exist in fresh data)
+    var staleDialogIds = ["hermitq1", "hermitq2", "hermitq3", "hermitq4", "hermitq5", "hermitq10"];
+    savedMaps.forEach(function(map) {
+        if (!map.npcs) return;
+        map.npcs.forEach(function(npc) {
+            if (!npc.dialogOptions) return;
+            npc.dialogOptions = npc.dialogOptions.filter(function(d) {
+                return staleDialogIds.indexOf(d.id) === -1;
+            });
+        });
+    });
+    
     // Add any maps from fresh data that don't exist in saved data
     freshMaps.forEach(function(freshMap, mapIndex) {
         if (!savedMaps[mapIndex]) {
@@ -744,7 +756,7 @@ function selectChoiceOption(index) {
                     };
                     renderChoiceEvent();
                     
-                    // When player first talks to the Mole, enable Medusa's mole dialog option
+                    // When player first talks to the Mole, enable related dialog options
                     if (selectedOption.id === "molea1q") {
                         var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
                         if (medusaNpc && medusaNpc.dialogOptions) {
@@ -752,6 +764,14 @@ function selectChoiceOption(index) {
                             if (medusaq0 && medusaq0.options) {
                                 var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
                                 if (moleOpt) moleOpt.available = true;
+                            }
+                        }
+                        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+                        if (hermitNpc && hermitNpc.dialogOptions) {
+                            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+                            if (hermitq0 && hermitq0.options) {
+                                var hermitMoleOpt = hermitq0.options.find(function(o) { return o.id === "hermit_ask_mole"; });
+                                if (hermitMoleOpt) hermitMoleOpt.available = true;
                             }
                         }
                     }
@@ -1239,9 +1259,6 @@ function getChoiceEventOptions(choiceEventIds) {
                             var itemTypeId = obstacleType.itemType;
                              below.gameData.player.inventory.push(itemTypeId);
                             below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
-                            if (itemTypeId === 4 || itemTypeId === 5) {
-                                setDialogAvailable(["hermitq1"], false);
-                            }
                             
                             delete obstacleType.itemType;
                             var defaultMessages = [
@@ -1468,7 +1485,16 @@ function handleBlockedInteraction(x, y) {
                 npcType: npc.type,
                 npcAgitated: npc.agitated || false,
                 dialogId: availableDialog.id,
-                dialogOptions: availableDialog.options.filter(function(o) { return o.available !== false; }),
+                dialogOptions: availableDialog.options.filter(function(o) {
+                    if (o.available === false) return false;
+                    if (o.requiresItems) {
+                        var hasItem = o.requiresItems.some(function(itemId) {
+                            return below.gameData.player.inventory.indexOf(itemId) !== -1;
+                        });
+                        if (!hasItem) return false;
+                    }
+                    return true;
+                }),
                 isDialog: true
             };
             renderChoiceEvent();

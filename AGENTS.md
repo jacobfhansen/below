@@ -7,6 +7,7 @@ There is no real combat, meaning when player attack nobody dies but their percep
 # NPC's
 Jester: Annoying and rude. Gives misleading clues and conveys half-thruths and outright lies.
 Hermit: A lost soul consumed in his own delusions. Trades keys for herbs. The real keys are the herbs.
+    Is amused and Befuddled by the Medusa taking interest in his hobby. Despises The Mole for his evil ways.
 Medusa: Aloof and dreaming. A former "stoner", turning people to stone with her gaze, but she has reformed
     and are not doing that anymore.
     She pitty The Mole, herself a former evildoer.

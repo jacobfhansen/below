@@ -1002,166 +1002,203 @@ var belowGameData = {
           },
           "dialogOptions": [
             {
-              "id": "hermitq1",
+              "id": "hermitq0",
               "available": true,
-              "text": "What brings you to my humble abode",
+              "text": "An old man sits among his collected trinkets. He looks up as you approach.",
               "options": [
                 {
-                  "id": "hermita1",
-                  "text": "I do not know",
+                  "id": "hermit_ask_key",
+                  "text": "I have this key... what can you tell me about it?",
                   "available": true,
-                  "closes": []
+                  "requiresItems": [
+                    4,
+                    5
+                  ],
+                  "chains": [
+                    "hermit_key_intro"
+                  ]
                 },
                 {
-                  "id": "hermita10",
-                  "text": "Wow, goodbye",
-                  "opens": [
+                  "id": "hermit_ask_mole",
+                  "text": "I met a strange mole-like creature in the tunnels.",
+                  "available": false,
+                  "chains": [
+                    "hermit_mole1"
+                  ]
+                },
+                {
+                  "id": "hermit_ask_stonekey",
+                  "text": "I found this heavy stone key...",
+                  "available": true,
+                  "requiresItems": [
+                    7
+                  ],
+                  "chains": [
+                    "hermit_stonekey1"
+                  ]
+                },
+                {
+                  "id": "hermit_leave",
+                  "text": "Never mind.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_key_intro",
+              "available": false,
+              "text": "Ah yes, I see you have a key. Keys can open many doors. Some lead to escape, others to deeper mysteries. The choice is yours. Now, about that key in your pocket...",
+              "options": [
+                {
+                  "id": "hermit_key_trade",
+                  "text": "Want to trade?",
+                  "available": true,
+                  "chains": [
                     "hermit_trade"
-                  ],
-                  "closes": [
-                    "hermitq10"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "hermitq2",
-              "available": true,
-              "requiresItems": [
-                4,
-                5
-              ],
-              "text": "Ah, I see you have a key",
-              "options": [
-                {
-                  "id": "hermita3",
-                  "text": "Yes, what about it?",
-                  "available": true,
-                  "closes": [
-                    "hermitq2"
-                  ],
-                  "opens": [
-                    "hermitq10"
-                  ],
-                  "chains": [
-                    "hermitq10"
                   ]
                 },
                 {
-                  "id": "hermita4",
-                  "text": "I am not supposed to talk to strangers",
-                  "closes": [
-                    "hermitq2"
-                  ],
-                  "opens": [
-                    "hermitq3"
-                  ],
-                  "chains": [
-                    "hermitq3"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "hermitq3",
-              "available": false,
-              "text": "But are you not interested in getting out of here?",
-              "options": [
-                {
-                  "id": "hermita5",
-                  "text": "Not realy, I like it here.",
+                  "id": "hermit_key_stranger",
+                  "text": "I'm not supposed to talk to strangers.",
                   "available": true,
-                  "closes": [
-                    "hermitq3"
-                  ],
-                  "opens": [
-                    "hermitq4"
-                  ],
                   "chains": [
-                    "hermitq4"
+                    "hermit_key_persuade"
                   ]
                 },
                 {
-                  "id": "hermita6",
-                  "text": "I am not supposed to talk to strangers",
-                  "closes": [
-                    "hermitq3"
-                  ],
-                  "opens": [
-                    "hermitq4"
-                  ],
-                  "chains": [
-                    "hermitq4"
-                  ]
+                  "id": "hermit_key_leave",
+                  "text": "Goodbye.",
+                  "available": true
                 }
               ]
             },
             {
-              "id": "hermitq4",
+              "id": "hermit_key_persuade",
               "available": false,
-              "text": "Hm, but keys open up for new opportunities. Is that not interesting?",
+              "text": "Strangers? Down here everyone is a stranger, child. But opportunity — that's rarer than sunlight. That key could be your ticket out. I'm offering a fair exchange: cave herbs for your key. What do you say?",
               "options": [
                 {
-                  "id": "hermita7",
-                  "text": "You are maybe right. Enlighten me",
+                  "id": "hermit_persuade_accept",
+                  "text": "Alright, deal.",
                   "available": true,
-                  "closes": [
-                    "hermitq4"
-                  ],
-                  "opens": [
-                    "hermitq10"
-                  ],
                   "chains": [
-                    "hermitq10"
-                  ]
-                },
-                {
-                  "id": "hermita8",
-                  "text": "I am not supposed to talk to strangers",
-                  "closes": [
-                    "hermitq4"
-                  ],
-                  "opens": [
-                    "hermitq5"
-                  ],
-                  "chains": [
-                    "hermitq5"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "hermitq5",
-              "available": false,
-              "text": "I used to say that a lot to. Maybe that is why I am still here after all those years.",
-              "options": [
-                {
-                  "id": "hermita9",
-                  "text": "...",
-                  "available": true,
-                  "closes": [
-                    "hermitq5"
-                  ],
-                  "opens": [
-                    "hermitq2"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "hermitq10",
-              "available": false,
-              "text": "Keys can open many doors. Some lead to escape, others to deeper mysteries. The choice is yours.",
-              "options": [
-                {
-                  "id": "hermita10",
-                  "text": "Wow, goodbye",
-                  "opens": [
                     "hermit_trade"
-                  ],
-                  "closes": [
-                    "hermitq10"
                   ]
+                },
+                {
+                  "id": "hermit_persuade_decline",
+                  "text": "Still not interested.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_mole1",
+              "available": false,
+              "text": "That pestilent creature! He tunnels through MY caves, stealing MY herbs. I've spent years cultivating those medicinal roots!",
+              "options": [
+                {
+                  "id": "hermit_mole1p",
+                  "text": "He seems dedicated.",
+                  "available": true,
+                  "chains": [
+                    "hermit_mole2"
+                  ]
+                },
+                {
+                  "id": "hermit_mole1r",
+                  "text": "Sounds like you have a pest problem.",
+                  "available": true,
+                  "chains": [
+                    "hermit_mole2"
+                  ]
+                },
+                {
+                  "id": "hermit_mole1l",
+                  "text": "I'll leave you to your herbs.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_mole2",
+              "available": false,
+              "text": "Dedicated? He's obsessed! But I'll admit — he's clever. He's been digging new tunnels, stockpiling stones. Mark my words, he's planning something. Probably to trap someone in that maze of his.",
+              "options": [
+                {
+                  "id": "hermit_mole2p",
+                  "text": "Trap someone?",
+                  "available": true,
+                  "chains": [
+                    "hermit_mole3"
+                  ]
+                },
+                {
+                  "id": "hermit_mole2r",
+                  "text": "I should be careful down there.",
+                  "available": true,
+                  "chains": [
+                    "hermit_mole3"
+                  ]
+                },
+                {
+                  "id": "hermit_mole2l",
+                  "text": "You're paranoid.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_mole3",
+              "available": false,
+              "text": "Anyone who wanders into his tunnels! He's been moving boulders, blocking paths, setting up some kind of game. If you go down there, watch for falling stones. He'll try to box you in.",
+              "options": [
+                {
+                  "id": "hermit_mole3p",
+                  "text": "Thanks for the warning.",
+                  "available": true
+                },
+                {
+                  "id": "hermit_mole3r",
+                  "text": "I can handle a mole.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_stonekey1",
+              "available": false,
+              "text": "That thing? Put it away, child. I want nothing to do with it. Some keys are not meant to turn locks — they're meant to stay lost. That key carries... a presence. An old hunger.",
+              "options": [
+                {
+                  "id": "hermit_stonekey1p",
+                  "text": "What do you mean?",
+                  "available": true,
+                  "chains": [
+                    "hermit_stonekey2"
+                  ]
+                },
+                {
+                  "id": "hermit_stonekey1r",
+                  "text": "Ominous, but okay.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_stonekey2",
+              "available": false,
+              "text": "I've seen its kind before. Crafted not by hands but by want — by need so deep it took form in stone. That key wants to be used, but using it will cost more than you'd ever pay.",
+              "options": [
+                {
+                  "id": "hermit_stonekey2p",
+                  "text": "I'll be careful.",
+                  "available": true
+                },
+                {
+                  "id": "hermit_stonekey2r",
+                  "text": "Sounds like a challenge.",
+                  "available": true
                 }
               ]
             },
