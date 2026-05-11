@@ -154,6 +154,104 @@ function mergeDialogOptions(savedData) {
     });
 }
 
+function syncGameData() {
+    if (typeof belowGameData === 'undefined') {
+        alert('gamedata.js not loaded!');
+        return;
+    }
+    var fresh = JSON.parse(JSON.stringify(belowGameData));
+    var curData = below.gameData;
+    if (!curData) { alert('No active game to sync!'); return; }
+    
+    // 1. Update type definitions (schema, not state)
+    curData.monsterTypes = JSON.parse(JSON.stringify(fresh.monsterTypes));
+    curData.obstacleTypes = JSON.parse(JSON.stringify(fresh.obstacleTypes));
+    curData.npcTypes = JSON.parse(JSON.stringify(fresh.npcTypes));
+    curData.itemTypes = JSON.parse(JSON.stringify(fresh.itemTypes));
+    
+    // 2. Merge map data — add new tiles, obstacles, NPCs, monsters; update exits and areas
+    fresh.mapData.forEach(function(freshMap, mapIndex) {
+        if (!curData.mapData[mapIndex]) {
+            curData.mapData[mapIndex] = JSON.parse(JSON.stringify(freshMap));
+            return;
+        }
+        var curMap = curData.mapData[mapIndex];
+        
+        // Map metadata
+        curMap.id = freshMap.id;
+        curMap.name = freshMap.name;
+        curMap.defaultDescription = freshMap.defaultDescription;
+        
+        // Tiles: add new tiles from fresh data, keep existing
+        Object.keys(freshMap.tiles || {}).forEach(function(key) {
+            if (!curMap.tiles[key]) {
+                curMap.tiles[key] = JSON.parse(JSON.stringify(freshMap.tiles[key]));
+            }
+        });
+        
+        // Area descriptions: replace entirely
+        curMap.areaDescriptions = JSON.parse(JSON.stringify(freshMap.areaDescriptions || []));
+        
+        // Exits: replace entirely (these aren't stateful)
+        curMap.exits = JSON.parse(JSON.stringify(freshMap.exits || []));
+        
+        // Obstacles: add new ones from fresh data, keep existing instance state
+        (freshMap.obstacles || []).forEach(function(freshObs) {
+            if (!freshObs.position) return;
+            var exists = (curMap.obstacles || []).some(function(o) {
+                return o.position && o.position.x === freshObs.position.x && o.position.y === freshObs.position.y;
+            });
+            if (!exists) {
+                curMap.obstacles.push(JSON.parse(JSON.stringify(freshObs)));
+            }
+        });
+        
+        // Monsters: add new ones from fresh data, keep existing instance state
+        (freshMap.monsters || []).forEach(function(freshMon) {
+            if (!freshMon.position) return;
+            var exists = (curMap.monsters || []).some(function(m) {
+                return m.position && m.position.x === freshMon.position.x && m.position.y === freshMon.position.y;
+            });
+            if (!exists) {
+                curMap.monsters.push(JSON.parse(JSON.stringify(freshMon)));
+            }
+        });
+        
+        // NPCs: add new, merge dialog options on existing (match by type, not position — NPCs can move)
+        (freshMap.npcs || []).forEach(function(freshNpc) {
+            var existing = (curMap.npcs || []).find(function(n) {
+                return n.type === freshNpc.type;
+            });
+            if (!existing) {
+                curMap.npcs.push(JSON.parse(JSON.stringify(freshNpc)));
+            } else if (freshNpc.dialogOptions) {
+                if (!existing.dialogOptions) {
+                    existing.dialogOptions = JSON.parse(JSON.stringify(freshNpc.dialogOptions));
+                } else {
+                    freshNpc.dialogOptions.forEach(function(freshDialog) {
+                        var existingDialog = existing.dialogOptions.find(function(d) { return d.id === freshDialog.id; });
+                        if (!existingDialog) {
+                            existing.dialogOptions.push(JSON.parse(JSON.stringify(freshDialog)));
+                        } else {
+                            Object.keys(freshDialog).forEach(function(key) {
+                                if (existingDialog[key] === undefined) {
+                                    existingDialog[key] = JSON.parse(JSON.stringify(freshDialog[key]));
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    });
+    
+    // 3. Update area description and redraw
+    updateAreaDescription();
+    drawMapCanvas();
+    below.gameData.mapLog.push("Game data synced from gamedata.js.");
+    maintainMapLog();
+}
+
 function setDialogAvailable(dialogIds, available) {
     if (!below.gameData) return;
     below.gameData.mapData.forEach(function(map) {

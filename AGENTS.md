@@ -82,6 +82,13 @@ python3 -m http.server 8000
 - Each slot is full `below.gameData` deep clone plus `saveDate`.
 - `mergeDialogOptions()` called on continue — merges new dialogs from source into saved data, preserving `available` flags and adding missing properties.
 - Auto-save every ~60 seconds in game loop.
+- `syncGameData()` re-reads `gamedata.js` and merges changes into the running game without restarting:
+  - Updates type definitions (monsterTypes, obstacleTypes, npcTypes, itemTypes)
+  - Adds new tiles, obstacles, monsters, NPCs from fresh data (keeps existing instance state)
+  - Merges dialog options on existing NPCs (preserves `available` flags, adds missing properties)
+  - Replaces exits and area descriptions with fresh data
+  - Preserves player state (position, inventory, map, flags)
+  - Call via "Sync" button (top-right corner) or `syncGameData()` from console
 
 ## UI rendering
 - `drawMapCanvas()` renders map, monsters, NPCs, obstacles, player with vision overlay.

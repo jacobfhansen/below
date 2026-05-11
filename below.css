@@ -55,6 +55,10 @@ html, body {
     color: var(--yellow);
     cursor: pointer;
 }
+.below-front-menu-item.menu-selected::before {
+    content: ">";
+    margin-right: 0.5em;
+}
 .below-front-menu-item.slot-initiated {
     color: var(--yellow);
 }

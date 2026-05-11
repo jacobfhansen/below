@@ -22,11 +22,13 @@
         Cut scene!
     </div>
     <div class="title-container" id="newGameDiv" style="display: none;">
+        <div class="below-title">New Game</div>
         <div class="below-front-menu-item" data-slot="0" onclick="startNewGame(0)">Slot 1</div>
         <div class="below-front-menu-item" data-slot="1" onclick="startNewGame(1)">Slot 2</div>
         <div class="below-front-menu-item" data-slot="2" onclick="startNewGame(2)">Slot 3</div>
     </div>
     <div class="title-container" id="resumeGameDiv" style="display: none;">
+        <div class="below-title">Continue</div>
         <div class="below-front-menu-item" data-slot="0" onclick="continueGame(0)">Slot 1</div>
         <div class="below-front-menu-item" data-slot="1" onclick="continueGame(1)">Slot 2</div>
         <div class="below-front-menu-item" data-slot="2" onclick="continueGame(2)">Slot 3</div>
@@ -43,6 +45,7 @@
             <div style="position: absolute; top: 10px; right: 10px;">
                 <button onclick="exportSave()" style="font-size: 0.8em;">Export Save</button>
                 <button onclick="importSave()" style="font-size: 0.8em;">Import Save</button>
+                <button onclick="syncGameData()" style="font-size: 0.8em;">Sync</button>
             </div>
         </div>
         <div class="inventory-outer" id="inventoryDiv" style="display: none;">
