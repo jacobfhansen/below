@@ -4,6 +4,13 @@ var belowGameData = {
   "showCoordinates": true,
   "dialogInterval": 1000,
   "dialogDots": "...",
+  "tileTypes": {
+    "0": { "name": "floor", "fill": "#6C6C6C", "border": "#959595" },
+    "1": { "name": "water", "fill": "#1a3050", "border": "#2a5080" },
+    "2": { "name": "carpet", "fill": "#4a2020", "border": "#7a3030" },
+    "3": { "name": "grass", "fill": "#2a4a20", "border": "#4a7a30" },
+    "4": { "name": "stone", "fill": "#505050", "border": "#707070" }
+  },
   "player": {
     "currentMap": 0,
     "currentLocation": {
@@ -5622,7 +5629,8 @@ var belowGameData = {
         },
         "xm5y12": {
           "x": -5,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "xm4y8": {
           "x": -4,
@@ -5642,7 +5650,8 @@ var belowGameData = {
         },
         "xm4y12": {
           "x": -4,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "xm3y8": {
           "x": -3,
@@ -5662,7 +5671,8 @@ var belowGameData = {
         },
         "xm3y12": {
           "x": -3,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "xm2y8": {
           "x": -2,
@@ -5682,7 +5692,8 @@ var belowGameData = {
         },
         "xm2y12": {
           "x": -2,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "xm1y8": {
           "x": -1,
@@ -5702,7 +5713,8 @@ var belowGameData = {
         },
         "xm1y12": {
           "x": -1,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x0y8": {
           "x": 0,
@@ -5722,7 +5734,8 @@ var belowGameData = {
         },
         "x0y12": {
           "x": 0,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x1y8": {
           "x": 1,
@@ -5742,7 +5755,8 @@ var belowGameData = {
         },
         "x1y12": {
           "x": 1,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x2y9": {
           "x": 2,
@@ -5758,7 +5772,8 @@ var belowGameData = {
         },
         "x2y12": {
           "x": 2,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x3y8": {
           "x": 3,
@@ -5778,7 +5793,8 @@ var belowGameData = {
         },
         "x3y12": {
           "x": 3,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x4y8": {
           "x": 4,
@@ -5798,7 +5814,8 @@ var belowGameData = {
         },
         "x4y12": {
           "x": 4,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x5y8": {
           "x": 5,
@@ -5818,7 +5835,8 @@ var belowGameData = {
         },
         "x5y12": {
           "x": 5,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x6y8": {
           "x": 6,
@@ -5838,7 +5856,8 @@ var belowGameData = {
         },
         "x6y12": {
           "x": 6,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x7y8": {
           "x": 7,
@@ -5858,7 +5877,8 @@ var belowGameData = {
         },
         "x7y12": {
           "x": 7,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x8y8": {
           "x": 8,
@@ -5878,7 +5898,8 @@ var belowGameData = {
         },
         "x8y12": {
           "x": 8,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x9y9": {
           "x": 9,
@@ -5894,7 +5915,8 @@ var belowGameData = {
         },
         "x9y12": {
           "x": 9,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x10y8": {
           "x": 10,
@@ -5914,7 +5936,8 @@ var belowGameData = {
         },
         "x10y12": {
           "x": 10,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x11y8": {
           "x": 11,
@@ -5934,7 +5957,8 @@ var belowGameData = {
         },
         "x11y12": {
           "x": 11,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x12y8": {
           "x": 12,
@@ -5954,7 +5978,8 @@ var belowGameData = {
         },
         "x12y12": {
           "x": 12,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x13y8": {
           "x": 13,
@@ -5974,7 +5999,8 @@ var belowGameData = {
         },
         "x13y12": {
           "x": 13,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "x14y8": {
           "x": 14,
@@ -5994,7 +6020,8 @@ var belowGameData = {
         },
         "x14y12": {
           "x": 14,
-          "y": 12
+          "y": 12,
+          "type": 1
         },
         "xm4y7": {
           "x": -4,

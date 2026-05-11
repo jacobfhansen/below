@@ -618,9 +618,12 @@ function drawCanvas() {
             var tile = map.tiles[k];
             var sx = (tile.x * w) + cx + panX - (w / 2);
             var sy = (tile.y * w) + cy + panY - (w / 2);
-            ctx.fillStyle = "#959595";
+            var tileTypeDef = tile.type !== undefined && gameData.tileTypes ? gameData.tileTypes[tile.type] : null;
+            var tileBorder = tileTypeDef ? tileTypeDef.border : "#959595";
+            var tileFill = tileTypeDef ? tileTypeDef.fill : "#6C6C6C";
+            ctx.fillStyle = tileBorder;
             ctx.fillRect(sx, sy, w, w);
-            ctx.fillStyle = "#6C6C6C";
+            ctx.fillStyle = tileFill;
             ctx.fillRect(sx + 1, sy + 1, w - 2, w - 2);
         }
     }
@@ -817,7 +820,14 @@ function updateSelectionSection() {
         html += '<label>Description:</label><input type="text" value="' + escAttr(tile.description || "") + '" onchange="tileSet(\'description\', this.value)">';
         html += '<label>Arrive text:</label><input type="text" value="' + escAttr(tile.text || "") + '" onchange="tileSet(\'text\', this.value)">';
         html += '<label>Search message:</label><input type="text" value="' + escAttr(tile.searchMsg || "") + '" onchange="tileSet(\'searchMsg\', this.value)">';
-        html += '<label>Type:</label><input type="number" value="' + (tile.type || 0) + '" onchange="tileSet(\'type\', parseInt(this.value) || 0)">';
+        html += '<label>Type:</label><select onchange="tileSet(\'type\', parseInt(this.value))">';
+        for (var tk in gameData.tileTypes) {
+            if (typeof gameData.tileTypes[tk] !== 'function') {
+                var sel = (parseInt(tk) === (tile.type || 0)) ? 'selected' : '';
+                html += '<option value="' + tk + '" ' + sel + '>' + tk + ': ' + gameData.tileTypes[tk].name + '</option>';
+            }
+        }
+        html += '</select>';
         html += '<div style="margin-top:8px"><button class="btn-danger" onclick="deleteSelected()">Delete</button></div>';
         html += '</div>';
         el.innerHTML = html;

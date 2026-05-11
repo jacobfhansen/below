@@ -206,6 +206,7 @@ function syncGameData() {
     if (!curData) { alert('No active game to sync!'); return; }
     
     // 1. Update type definitions (schema, not state)
+    curData.tileTypes = JSON.parse(JSON.stringify(fresh.tileTypes));
     curData.monsterTypes = JSON.parse(JSON.stringify(fresh.monsterTypes));
     curData.obstacleTypes = JSON.parse(JSON.stringify(fresh.obstacleTypes));
     curData.npcTypes = JSON.parse(JSON.stringify(fresh.npcTypes));
@@ -2222,9 +2223,12 @@ function drawMapCanvas() {
                 tileCount++;
                 var x = (tile.x * width) - (width/2) + verticalCenter - horizontalOffset;
                 var y = (tile.y * width) - (width/2) + horizontalCenter - verticalOffset;
-                context.fillStyle = "#959595";
+                var tileTypeDef = tile.type !== undefined && below.gameData.tileTypes ? below.gameData.tileTypes[tile.type] : null;
+                var tileBorder = tileTypeDef ? tileTypeDef.border : "#959595";
+                var tileFill = tileTypeDef ? tileTypeDef.fill : "#6C6C6C";
+                context.fillStyle = tileBorder;
                 context.fillRect(x, y, width, width);
-                context.fillStyle = "#6C6C6C";
+                context.fillStyle = tileFill;
                 context.fillRect(x + thickness, y + thickness, width - (thickness * 2), width - (thickness * 2));
             }
         }
