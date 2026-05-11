@@ -2122,10 +2122,9 @@ function updateAreaDescription() {
             desc = mapData.defaultDescription;
         }
     }
-    var el = document.getElementById("areaDescriptionDiv");
-    if (el) {
-        el.textContent = desc || "";
-    }
+    var mapName = below.gameData.mapData[curMap].name || "Unknown";
+    below.currentMapName = mapName;
+    below.currentAreaDesc = desc || "";
 }
 
 function computeVisibleTiles() {
@@ -2476,6 +2475,43 @@ function drawMapCanvas() {
             context.fillStyle = fogGrad;
             context.fillRect(fogX - fogSize, fogY - fogSize, fogSize * 2, fogSize * 2);
         });
+    }
+    
+    // Area description overlay (drawn on canvas so it's fixed to the map area)
+    if (below.currentMapName) {
+        var boxX = 10;
+        var boxY = 8;
+        var lineH = 18;
+        var nameText = below.currentMapName;
+        var descText = below.currentAreaDesc;
+        context.font = "bold 15px Courier New";
+        var nameW = context.measureText(nameText).width;
+        context.font = "italic 13px Courier New";
+        var descW = descText ? context.measureText(descText).width : 0;
+        var boxW = Math.max(nameW, descW) + 20;
+        var boxH = descText ? lineH * 2 + 10 : lineH + 10;
+        if (boxW > canvas.width - 20) boxW = canvas.width - 20;
+        
+        // Background
+        context.fillStyle = "rgba(0, 0, 0, 0.75)";
+        context.fillRect(boxX, boxY, boxW, boxH);
+        context.strokeStyle = "#6C6C6C";
+        context.lineWidth = 1;
+        context.strokeRect(boxX, boxY, boxW, boxH);
+        
+        // Map name
+        context.fillStyle = "#FFFFFF";
+        context.font = "bold 15px Courier New";
+        context.textAlign = "left";
+        context.textBaseline = "top";
+        context.fillText(nameText, boxX + 10, boxY + 5);
+        
+        // Area description
+        if (descText) {
+            context.fillStyle = "#B8C76F";
+            context.font = "italic 13px Courier New";
+            context.fillText(descText, boxX + 10, boxY + lineH + 5);
+        }
     }
 }
 

@@ -39,7 +39,7 @@ header button:hover { background: #333; }
 .separator { width: 1px; height: 24px; background: #333; margin: 0 4px; }
 .add-group { display: flex; align-items: center; gap: 2px; }
 .add-group .add-label { color: #959595; font-size: 11px; margin-right: 2px; }
-.subtype-select { width: auto; min-width: 50px; }
+
 #placement-bar {
     display: none;
     align-items: center; gap: 8px;
@@ -103,30 +103,55 @@ header button:hover { background: #333; }
     transition: opacity 0.3s; pointer-events: none;
 }
 .toast.error { background: #f38ba8; }
+
+/* ── Custom select dropdown ─────────────────────── */
+.custom-select { position: relative; display: inline-flex; }
+.custom-select .sel-trigger {
+    padding: 3px 18px 3px 6px; border: 1px solid #444; border-radius: 4px;
+    background: #222; color: #cdd6f4; font-size: 12px; font-family: inherit;
+    cursor: pointer; text-align: left; white-space: nowrap;
+    appearance: none; -webkit-appearance: none; position: relative;
+}
+.custom-select .sel-trigger:focus { outline: 1px solid #70A4B2; }
+.custom-select .sel-trigger::after {
+    content: '▾'; position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: #959595; pointer-events: none;
+}
+.custom-select .sel-dropdown {
+    display: none; position: absolute; top: 100%; left: 0; z-index: 9999;
+    background: #222; border: 1px solid #444; border-radius: 4px;
+    max-height: 260px; overflow-y: auto; min-width: 120px;
+}
+.custom-select.open .sel-dropdown { display: block; }
+.custom-select .sel-option {
+    padding: 3px 10px; cursor: pointer; font-size: 12px; color: #cdd6f4;
+    white-space: nowrap;
+}
+.custom-select .sel-option:hover { background: #333; color: #fff; }
 </style>
 </head>
 <body>
 <header>
     <h1>Map Editor</h1>
     <label>Map:</label>
-    <select id="mapSelect" onchange="selectMap()"></select>
+    <div class="custom-select" id="mapSelect"><button class="sel-trigger" type="button"></button><div class="sel-dropdown"></div></div>
     <input type="text" id="mapNameInput" onchange="renameMap()" style="width:100px" placeholder="Map name">
     <button onclick="addMap()">+Map</button>
     <button onclick="deleteMap()">×Map</button>
     <span class="separator"></span>
     <div class="add-group">
         <span class="add-label">M:</span>
-        <select id="monsterSubtype" class="subtype-select"></select>
+        <div class="custom-select" id="monsterSubtype"><button class="sel-trigger" type="button"></button><div class="sel-dropdown"></div></div>
         <button class="btn-add" onclick="startPlacement('monster')">+</button>
     </div>
     <div class="add-group">
         <span class="add-label">N:</span>
-        <select id="npcSubtype" class="subtype-select"></select>
+        <div class="custom-select" id="npcSubtype"><button class="sel-trigger" type="button"></button><div class="sel-dropdown"></div></div>
         <button class="btn-add" onclick="startPlacement('npc')">+</button>
     </div>
     <div class="add-group">
         <span class="add-label">O:</span>
-        <select id="obstacleSubtype" class="subtype-select"></select>
+        <div class="custom-select" id="obstacleSubtype"><button class="sel-trigger" type="button"></button><div class="sel-dropdown"></div></div>
         <button class="btn-add" onclick="startPlacement('obstacle')">+</button>
     </div>
     <button class="btn-add" onclick="startPlacement('exit')">+Exit</button>
@@ -187,9 +212,73 @@ var placementSubtype = null;    // subtype (monster type index, etc.)
 var hoveredEntities = [];       // entities at hovered tile, for tooltip
 var layerVis = { tiles: true, monsters: true, npcs: true, obstacles: true, exits: true, grid: true };
 
+// ────── Custom select helper ────────────────────────
+function customSelect(id, onChange) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    var trigger = el.querySelector(".sel-trigger");
+    var dropdown = el.querySelector(".sel-dropdown");
+    if (!trigger || !dropdown) return null;
+    var val = "";
+    trigger.addEventListener("click", function(e) {
+        e.stopPropagation();
+        document.querySelectorAll(".custom-select.open").forEach(function(c) {
+            if (c !== el) c.classList.remove("open");
+        });
+        el.classList.toggle("open");
+    });
+    var api = {
+        el: el,
+        getValue: function() { return val; },
+        setValue: function(v) {
+            val = String(v);
+            var opts = dropdown.querySelectorAll(".sel-option");
+            for (var i = 0; i < opts.length; i++) {
+                if (opts[i].dataset.value === String(v)) {
+                    trigger.textContent = opts[i].textContent;
+                    return;
+                }
+            }
+        },
+        setOptions: function(options) {
+            dropdown.innerHTML = "";
+            options.forEach(function(opt, idx) {
+                var div = document.createElement("div");
+                div.className = "sel-option";
+                div.dataset.value = opt.value;
+                div.textContent = opt.label;
+                if (idx === 0 && val === "") {
+                    val = String(opt.value);
+                    trigger.textContent = opt.label;
+                }
+                div.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    val = String(opt.value);
+                    trigger.textContent = opt.label;
+                    el.classList.remove("open");
+                    if (onChange) onChange(opt.value);
+                });
+                dropdown.appendChild(div);
+            });
+        }
+    };
+    el._api = api;
+    return api;
+}
+document.addEventListener("click", function() {
+    document.querySelectorAll(".custom-select.open").forEach(function(el) {
+        el.classList.remove("open");
+    });
+});
+
 // ────── Init ────────────────────────────────────────
+var mapSelect, monsterSelect, npcSelect, obstacleSelect;
 function init() {
     gameData = JSON.parse(JSON.stringify(belowGameData));
+    mapSelect = customSelect("mapSelect", function() { selectMap(); });
+    monsterSelect = customSelect("monsterSubtype");
+    npcSelect = customSelect("npcSubtype");
+    obstacleSelect = customSelect("obstacleSubtype");
     populateMapSelect();
     populateSubtypeSelects();
     resizeCanvas();
@@ -206,18 +295,14 @@ function updateAll() {
 
 // ────── Map management ──────────────────────────────
 function populateMapSelect() {
-    var sel = document.getElementById("mapSelect");
-    sel.innerHTML = '';
-    gameData.mapData.forEach(function(map, i) {
-        var opt = document.createElement("option");
-        opt.value = i;
-        opt.textContent = map.name || "Map " + i;
-        if (i === selectedMap) opt.selected = true;
-        sel.appendChild(opt);
+    var opts = gameData.mapData.map(function(m, i) {
+        return { value: i, label: m.name || "Map " + i };
     });
+    mapSelect.setOptions(opts);
+    mapSelect.setValue(selectedMap);
 }
 function selectMap() {
-    selectedMap = parseInt(document.getElementById("mapSelect").value);
+    selectedMap = parseInt(mapSelect.getValue());
     panX = 0; panY = 0;
     deselectAll();
     updateAll();
@@ -230,9 +315,9 @@ function renameMap() {
     var map = gameData.mapData[selectedMap];
     if (!map) return;
     map.name = document.getElementById("mapNameInput").value;
-    // Update select text
-    var sel = document.getElementById("mapSelect");
-    if (sel.options[selectedMap]) sel.options[selectedMap].text = map.name || "Map " + selectedMap;
+    // Rebuild select options
+    populateMapSelect();
+    mapSelect.setValue(selectedMap);
 }
 function addMap() {
     var name = prompt("Map name:", "New Map");
@@ -246,9 +331,9 @@ function addMap() {
         npcs: [],
         exits: []
     });
-    populateMapSelect();
     selectedMap = gameData.mapData.length - 1;
-    document.getElementById("mapSelect").value = selectedMap;
+    populateMapSelect();
+    mapSelect.setValue(selectedMap);
     deselectAll();
     updateAll();
 }
@@ -259,29 +344,26 @@ function deleteMap() {
     gameData.mapData.splice(selectedMap, 1);
     if (selectedMap >= gameData.mapData.length) selectedMap = gameData.mapData.length - 1;
     populateMapSelect();
-    document.getElementById("mapSelect").value = selectedMap;
+    mapSelect.setValue(selectedMap);
     deselectAll();
     updateAll();
 }
 
 // ────── Subtype selects ────────────────────────────
 function populateSubtypeSelects() {
-    populateSingleSubtype("monsterSubtype", gameData.monsterTypes);
-    populateSingleSubtype("npcSubtype", gameData.npcTypes);
-    populateSingleSubtype("obstacleSubtype", gameData.obstacleTypes);
+    populateSingleSubtype(monsterSelect, gameData.monsterTypes);
+    populateSingleSubtype(npcSelect, gameData.npcTypes);
+    populateSingleSubtype(obstacleSelect, gameData.obstacleTypes);
 }
-function populateSingleSubtype(id, typeMap) {
-    var sel = document.getElementById(id);
-    if (!sel) return;
-    sel.innerHTML = '';
+function populateSingleSubtype(api, typeMap) {
+    if (!api) return;
+    var opts = [];
     for (var key in typeMap) {
         if (typeof typeMap[key] !== 'function') {
-            var opt = document.createElement("option");
-            opt.value = key;
-            opt.textContent = key + ": " + (typeMap[key].name || "type " + key);
-            sel.appendChild(opt);
+            opts.push({ value: key, label: key + ": " + (typeMap[key].name || "type " + key) });
         }
     }
+    api.setOptions(opts);
 }
 
 // ────── Canvas helpers ──────────────────────────────
@@ -411,14 +493,11 @@ function getSelectedTile() {
 // ────── Placement mode ──────────────────────────────
 function startPlacement(mode) {
     if (mode === "monster") {
-        var sel = document.getElementById("monsterSubtype");
-        placementSubtype = parseInt(sel.value);
+        placementSubtype = parseInt(monsterSelect.getValue());
     } else if (mode === "npc") {
-        var sel = document.getElementById("npcSubtype");
-        placementSubtype = parseInt(sel.value);
+        placementSubtype = parseInt(npcSelect.getValue());
     } else if (mode === "obstacle") {
-        var sel = document.getElementById("obstacleSubtype");
-        placementSubtype = parseInt(sel.value);
+        placementSubtype = parseInt(obstacleSelect.getValue());
     } else {
         placementSubtype = null;
     }
@@ -1028,7 +1107,7 @@ function updateStatusBar() {
     // Keyboard
     document.addEventListener("keydown", function(e) {
         // Don't intercept if typing in an input
-        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") {
+        if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT" || e.target.tagName === "BUTTON") {
             // Allow Escape from inputs
             if (e.key === "Escape") { e.target.blur(); }
             return;

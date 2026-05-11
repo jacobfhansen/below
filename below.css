@@ -88,16 +88,6 @@ html, body {
     overflow-y: auto;
     min-height: 0;
 }
-
-.area-description {
-    padding: 10px 14px;
-    color: var(--grey);
-    font-style: italic;
-    font-size: 0.85em;
-    border-bottom: 1px solid var(--light-grey);
-    flex-shrink: 0;
-    min-height: 0;
-}
 .below-game-left-panel::-webkit-scrollbar {
     width: 12;
 }

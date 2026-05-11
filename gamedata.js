@@ -2509,8 +2509,7 @@ var belowGameData = {
                   "closes": [
                     "medusas1"
                   ],
-                  "chains": [
-                  ]
+                  "chains": []
                 }
               ]
             },
@@ -2529,8 +2528,7 @@ var belowGameData = {
                   "closes": [
                     "medusas2"
                   ],
-                  "chains": [
-                  ]
+                  "chains": []
                 }
               ]
             },
@@ -2549,8 +2547,7 @@ var belowGameData = {
                   "closes": [
                     "medusas3"
                   ],
-                  "chains": [
-                  ]
+                  "chains": []
                 }
               ]
             },
@@ -2569,8 +2566,7 @@ var belowGameData = {
                   "closes": [
                     "medusas4"
                   ],
-                  "chains": [
-                  ]
+                  "chains": []
                 }
               ]
             },
@@ -2589,8 +2585,7 @@ var belowGameData = {
                   "closes": [
                     "medusas5"
                   ],
-                  "chains": [
-                  ]
+                  "chains": []
                 }
               ]
             },
@@ -2609,8 +2604,7 @@ var belowGameData = {
                   "closes": [
                     "medusas6"
                   ],
-                  "chains": [
-                  ]
+                  "chains": []
                 }
               ]
             },
@@ -5169,7 +5163,8 @@ var belowGameData = {
           "text": "You descend deeper into the ancient passage..."
         }
       ]
-    },    {
+    },
+    {
       "id": 3,
       "name": "The Depths",
       "defaultDescription": "A black and white depiction of a 1950s underground city. Dark alleys, dim street lamps, and the faint sound of distant dripping water.",
@@ -5485,10 +5480,6 @@ var belowGameData = {
           "x": -5,
           "y": 8
         },
-        "x2ym1": {
-          "x": 2,
-          "y": -1
-        },
         "x2y0": {
           "x": 2,
           "y": 0
@@ -5505,10 +5496,6 @@ var belowGameData = {
           "x": 2,
           "y": 5
         },
-        "x2y6": {
-          "x": 2,
-          "y": 6
-        },
         "x2y7": {
           "x": 2,
           "y": 7
@@ -5516,30 +5503,6 @@ var belowGameData = {
         "x2y8": {
           "x": 2,
           "y": 8
-        },
-        "x9ym1": {
-          "x": 9,
-          "y": -1
-        },
-        "x9y0": {
-          "x": 9,
-          "y": 0
-        },
-        "x9y1": {
-          "x": 9,
-          "y": 1
-        },
-        "x9y4": {
-          "x": 9,
-          "y": 4
-        },
-        "x9y5": {
-          "x": 9,
-          "y": 5
-        },
-        "x9y6": {
-          "x": 9,
-          "y": 6
         },
         "x9y7": {
           "x": 9,
@@ -5601,49 +5564,21 @@ var belowGameData = {
           "x": -3,
           "y": 5
         },
-        "xm3y6": {
-          "x": -3,
-          "y": 6
-        },
         "xm2y5": {
           "x": -2,
           "y": 5
-        },
-        "xm2y6": {
-          "x": -2,
-          "y": 6
         },
         "xm1y5": {
           "x": -1,
           "y": 5
         },
-        "xm1y6": {
-          "x": -1,
-          "y": 6
-        },
         "x0y5": {
           "x": 0,
           "y": 5
         },
-        "x0y6": {
-          "x": 0,
-          "y": 6
-        },
         "x1y5": {
           "x": 1,
           "y": 5
-        },
-        "x1y6": {
-          "x": 1,
-          "y": 6
-        },
-        "xm7y0": {
-          "x": -7,
-          "y": 0
-        },
-        "xm7y1": {
-          "x": -7,
-          "y": 1
         },
         "x11y0": {
           "x": 11,
@@ -5661,14 +5596,6 @@ var belowGameData = {
           "x": 12,
           "y": 1
         },
-        "xm8y4": {
-          "x": -8,
-          "y": 4
-        },
-        "xm8y5": {
-          "x": -8,
-          "y": 5
-        },
         "x11y4": {
           "x": 11,
           "y": 4
@@ -5684,10 +5611,6 @@ var belowGameData = {
         "x12y5": {
           "x": 12,
           "y": 5
-        },
-        "xm5y9": {
-          "x": -5,
-          "y": 9
         },
         "xm5y10": {
           "x": -5,
@@ -6140,6 +6063,106 @@ var belowGameData = {
         "x14y7": {
           "x": 14,
           "y": 7
+        },
+        "xm3y4": {
+          "x": -3,
+          "y": 4
+        },
+        "xm2y4": {
+          "x": -2,
+          "y": 4
+        },
+        "xm1y4": {
+          "x": -1,
+          "y": 4
+        },
+        "x0y4": {
+          "x": 0,
+          "y": 4
+        },
+        "x1y4": {
+          "x": 1,
+          "y": 4
+        },
+        "x3y4": {
+          "x": 3,
+          "y": 4
+        },
+        "x3y5": {
+          "x": 3,
+          "y": 5
+        },
+        "xm6y1": {
+          "x": -6,
+          "y": 1
+        },
+        "xm6y0": {
+          "x": -6,
+          "y": 0
+        },
+        "xm6ym1": {
+          "x": -6,
+          "y": -1
+        },
+        "xm6y4": {
+          "x": -6,
+          "y": 4
+        },
+        "xm6y5": {
+          "x": -6,
+          "y": 5
+        },
+        "xm6y6": {
+          "x": -6,
+          "y": 6
+        },
+        "xm6y7": {
+          "x": -6,
+          "y": 7
+        },
+        "xm6y8": {
+          "x": -6,
+          "y": 8
+        },
+        "xm7y8": {
+          "x": -7,
+          "y": 8
+        },
+        "xm7y7": {
+          "x": -7,
+          "y": 7
+        },
+        "xm8y7": {
+          "x": -8,
+          "y": 7
+        },
+        "xm8y8": {
+          "x": -8,
+          "y": 8
+        },
+        "xm9y8": {
+          "x": -9,
+          "y": 8
+        },
+        "xm9y7": {
+          "x": -9,
+          "y": 7
+        },
+        "xm10y8": {
+          "x": -10,
+          "y": 8
+        },
+        "xm10y7": {
+          "x": -10,
+          "y": 7
+        },
+        "x11y6": {
+          "x": 11,
+          "y": 6
+        },
+        "x12y6": {
+          "x": 12,
+          "y": 6
         }
       },
       "monsters": [],
@@ -6147,8 +6170,8 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": -5,
-            "y": -1
+            "x": -9,
+            "y": 3
           },
           "icon": "lightbeam.png"
         },
@@ -6163,8 +6186,8 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": -5,
-            "y": 2
+            "x": -7,
+            "y": 3
           },
           "icon": "lightbeam.png"
         },
@@ -6187,8 +6210,8 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": -5,
-            "y": 6
+            "x": -9,
+            "y": 8
           },
           "icon": "lightbeam.png"
         },
@@ -6203,7 +6226,7 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": -5,
+            "x": -6,
             "y": 8
           },
           "icon": "lightbeam.png"
@@ -6211,15 +6234,7 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 2,
-            "y": -1
-          },
-          "icon": "lightbeam.png"
-        },
-        {
-          "type": 6,
-          "position": {
-            "x": 2,
+            "x": 1,
             "y": 0
           },
           "icon": "lightbeam.png"
@@ -6227,8 +6242,16 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 2,
-            "y": 2
+            "x": -1,
+            "y": 0
+          },
+          "icon": "lightbeam.png"
+        },
+        {
+          "type": 6,
+          "position": {
+            "x": 3,
+            "y": 0
           },
           "icon": "lightbeam.png"
         },
@@ -6252,8 +6275,8 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 2,
-            "y": 6
+            "x": -2,
+            "y": 5
           },
           "icon": "lightbeam.png"
         },
@@ -6276,15 +6299,7 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 9,
-            "y": -1
-          },
-          "icon": "lightbeam.png"
-        },
-        {
-          "type": 6,
-          "position": {
-            "x": 9,
+            "x": 11,
             "y": 0
           },
           "icon": "lightbeam.png"
@@ -6292,8 +6307,16 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 9,
+            "x": 13,
             "y": 2
+          },
+          "icon": "lightbeam.png"
+        },
+        {
+          "type": 6,
+          "position": {
+            "x": 8,
+            "y": 10
           },
           "icon": "lightbeam.png"
         },
@@ -6308,7 +6331,7 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 9,
+            "x": 11,
             "y": 5
           },
           "icon": "lightbeam.png"
@@ -6316,23 +6339,7 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 9,
-            "y": 6
-          },
-          "icon": "lightbeam.png"
-        },
-        {
-          "type": 6,
-          "position": {
-            "x": 9,
-            "y": 7
-          },
-          "icon": "lightbeam.png"
-        },
-        {
-          "type": 6,
-          "position": {
-            "x": 9,
+            "x": 13,
             "y": 8
           },
           "icon": "lightbeam.png"
@@ -6340,8 +6347,24 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": -3,
-            "y": 2
+            "x": 8,
+            "y": 8
+          },
+          "icon": "lightbeam.png"
+        },
+        {
+          "type": 6,
+          "position": {
+            "x": 12,
+            "y": 10
+          },
+          "icon": "lightbeam.png"
+        },
+        {
+          "type": 6,
+          "position": {
+            "x": -4,
+            "y": 8
           },
           "icon": "lightbeam.png"
         },
@@ -6357,7 +6380,7 @@ var belowGameData = {
           "type": 6,
           "position": {
             "x": 0,
-            "y": 2
+            "y": 10
           },
           "icon": "lightbeam.png",
           "lightRadius": 2
@@ -6373,8 +6396,8 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 5,
-            "y": 2
+            "x": 2,
+            "y": 10
           },
           "icon": "lightbeam.png"
         },
@@ -6389,8 +6412,8 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": 7,
-            "y": 2
+            "x": 6,
+            "y": 10
           },
           "icon": "lightbeam.png"
         },
@@ -6537,7 +6560,7 @@ var belowGameData = {
         {
           "position": {
             "x": 2,
-            "y": -1
+            "y": 0
           },
           "targetMap": 2,
           "targetPosition": {
