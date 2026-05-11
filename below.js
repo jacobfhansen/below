@@ -968,7 +968,8 @@ function selectChoiceOption(index) {
 
 function closeChoiceEvent() {
     below.choiceEvent = null;
-    // Clear choice event UI and restore game log
+    // Clear log messages and UI
+    below.gameData.mapLog = [];
     var gameLogDiv = document.getElementById("gameLogDiv");
     while (gameLogDiv.firstChild) {
         gameLogDiv.removeChild(gameLogDiv.firstChild);
@@ -1287,6 +1288,7 @@ function changeMap(mapId, entryX, entryY, text) {
   below.gameData.player.currentLocation.x = entryX;
   below.gameData.player.currentLocation.y = entryY;
   below.gameData.player.destinationLocation = {};
+  below.gameData.mapLog = [];
   if (text) {
     below.gameData.mapLog.push(text);
   }
