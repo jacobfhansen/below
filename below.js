@@ -11,6 +11,48 @@ const below = {
     gameData: null // Loaded from gamedata.js
 };
 
+// Dev teleport — callable from console: below.teleport(mapId, x, y)
+below.teleport = function(mapId, x, y) {
+    if (!below.gameData || !below.gameData.mapData[mapId]) return;
+    if (below.choiceEvent) closeChoiceEvent();
+    if (below.splashActive) hideSplash();
+    closeInventory();
+    var text = "Teleported to map " + mapId + " at (" + x + ", " + y + ")";
+    changeMap(mapId, x, y, text);
+};
+
+function showTeleport() {
+    if (!below.gameData) return;
+    document.getElementById("teleportOverlay").style.display = "flex";
+    document.getElementById("teleportMap").value = below.gameData.player.currentMap;
+    document.getElementById("teleportX").value = Math.round(below.gameData.player.currentLocation.x);
+    document.getElementById("teleportY").value = Math.round(below.gameData.player.currentLocation.y);
+    document.getElementById("teleportMap").focus();
+    document.getElementById("teleportMap").select();
+}
+
+function hideTeleport() {
+    document.getElementById("teleportOverlay").style.display = "none";
+}
+
+function doTeleport() {
+    var mapId = parseInt(document.getElementById("teleportMap").value) || 0;
+    var x = parseInt(document.getElementById("teleportX").value) || 0;
+    var y = parseInt(document.getElementById("teleportY").value) || 0;
+    below.teleport(mapId, x, y);
+    hideTeleport();
+    drawMapCanvas();
+}
+
+function toggleTeleport() {
+    var overlay = document.getElementById("teleportOverlay");
+    if (overlay.style.display === "none" || overlay.style.display === "") {
+        showTeleport();
+    } else {
+        hideTeleport();
+    }
+}
+
 // Save slot utility functions
 function getSaveObject() {
     var saveObj = localStorage["below"];
@@ -396,6 +438,24 @@ function checkWheel(e) {
 
 function checkKey(e) {
     e = e || window.event;
+    // Dev teleport toggle (Ctrl+Shift+T)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 84) {
+        if (below.gameData) {
+            toggleTeleport();
+        }
+        e.preventDefault();
+        return;
+    }
+    // Teleport overlay keyboard handling
+    var teleportOverlay = document.getElementById("teleportOverlay");
+    if (teleportOverlay.style.display !== "none" && teleportOverlay.style.display !== "") {
+        if (e.keyCode === 13) {
+            doTeleport();
+        } else if (e.keyCode === 27) {
+            hideTeleport();
+        }
+        return;
+    }
     // Menu screens
     if (document.getElementById("titleScreen").style.display !== 'none') {
         handleMenuKey(e, 'titleScreen');
@@ -545,6 +605,19 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Splash continue button
     document.getElementById("splashBtn").addEventListener("click", hideSplash);
+    
+    // Initialize fog particles
+    below.fogParticles = [];
+    for (var fi = 0; fi < 25; fi++) {
+        below.fogParticles.push({
+            x: -0.5 + Math.random() * 2.0,
+            y: Math.random(),
+            size: 0.8 + Math.random() * 1.2,
+            opacity: 0.06 + Math.random() * 0.07,
+            speed: 0.0005 + Math.random() * 0.0008,
+            phase: Math.random() * Math.PI * 2
+        });
+    }
     
     // Start game
     startGame();
@@ -2061,27 +2134,40 @@ function computeVisibleTiles() {
     var py = Math.round(below.gameData.player.currentLocation.y);
     var vision = below.gameData.player.vision || 2;
     var visible = {};
-    var queue = [{x: px, y: py}];
-    var visited = {};
-    visited[px + "," + py] = true;
-    while (queue.length > 0) {
-        var cur = queue.shift();
-        var key = cur.x + "," + cur.y;
-        visible[key] = true;
-        if (isVisionBlocked(cur.x, cur.y)) continue;
-        var dist = Math.abs(cur.x - px) + Math.abs(cur.y - py);
-        if (dist >= vision) continue;
-        var dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
-        for (var di = 0; di < dirs.length; di++) {
-            var nx = cur.x + dirs[di][0];
-            var ny = cur.y + dirs[di][1];
-            var nkey = nx + "," + ny;
-            if (!visited[nkey] && foundTile(nx, ny)) {
-                visited[nkey] = true;
-                queue.push({x: nx, y: ny});
+
+    function bfsFrom(srcX, srcY, srcVision) {
+        var queue = [{x: srcX, y: srcY}];
+        var visited = {};
+        visited[srcX + "," + srcY] = true;
+        while (queue.length > 0) {
+            var cur = queue.shift();
+            visible[cur.x + "," + cur.y] = true;
+            if (isVisionBlocked(cur.x, cur.y)) continue;
+            var dist = Math.abs(cur.x - srcX) + Math.abs(cur.y - srcY);
+            if (dist >= srcVision) continue;
+            var dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+            for (var di = 0; di < dirs.length; di++) {
+                var nx = cur.x + dirs[di][0];
+                var ny = cur.y + dirs[di][1];
+                var nkey = nx + "," + ny;
+                if (!visited[nkey] && foundTile(nx, ny)) {
+                    visited[nkey] = true;
+                    queue.push({x: nx, y: ny});
+                }
             }
         }
     }
+
+    bfsFrom(px, py, vision);
+
+    (below.gameData.mapData[curMap].obstacles || []).forEach(function(o) {
+        var obsType = below.gameData.obstacleTypes[o.type];
+        var lr = o.lightRadius !== undefined ? o.lightRadius : (obsType ? obsType.lightRadius : 0);
+        if (lr > 0) {
+            bfsFrom(o.position.x, o.position.y, lr);
+        }
+    });
+
     return visible;
 }
 
@@ -2144,13 +2230,6 @@ function drawMapCanvas() {
             }
         }
     }
-    
-    // Add radial gradient overlay for vision
-    var gradient = context.createRadialGradient(verticalCenter, horizontalCenter, visionPixels * 0.6, verticalCenter, horizontalCenter, visionPixels);
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, canvas.width, canvas.height);
     
     // Draw player and monster sprites
     // PLAYER
@@ -2359,7 +2438,45 @@ function drawMapCanvas() {
         });
     }
     
-    //gameDivCenter.appendChild(canvas);
+    // Radial gradient overlay for vision (fades everything at edge of player's vision)
+    var gradient = context.createRadialGradient(verticalCenter, horizontalCenter, visionPixels * 0.6, verticalCenter, horizontalCenter, visionPixels);
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Lamp glow (drawn on top of darkness so pools of light are visible through the vignette)
+    (below.gameData.mapData[curMap].obstacles || []).forEach(function(o) {
+        var obsType = below.gameData.obstacleTypes[o.type];
+        var lr = o.lightRadius !== undefined ? o.lightRadius : (obsType ? obsType.lightRadius : 0);
+        if (lr > 0) {
+            var lampX = (o.position.x * width) + verticalCenter - horizontalOffset;
+            var lampY = (o.position.y * width) + horizontalCenter - verticalOffset;
+            if (lampX > -100 && lampX < canvas.width + 100 && lampY > -100 && lampY < canvas.height + 100) {
+                var glowSize = lr * width * 2.5;
+                var glow = context.createRadialGradient(lampX, lampY, 0, lampX, lampY, glowSize);
+                glow.addColorStop(0, 'rgba(200, 200, 150, 0.35)');
+                glow.addColorStop(0.5, 'rgba(200, 200, 150, 0.1)');
+                glow.addColorStop(1, 'rgba(200, 200, 150, 0)');
+                context.fillStyle = glow;
+                context.fillRect(lampX - glowSize, lampY - glowSize, glowSize * 2, glowSize * 2);
+            }
+        }
+    });
+    
+    // Fog overlay (drawn on top of everything, only on map 3)
+    if (curMap === 3 && below.fogParticles) {
+        below.fogParticles.forEach(function(p) {
+            var fogX = (p.x * canvas.width);
+            var fogY = (p.y * canvas.height);
+            var fogSize = p.size * width * 3;
+            var fogGrad = context.createRadialGradient(fogX, fogY, 0, fogX, fogY, fogSize);
+            fogGrad.addColorStop(0, 'rgba(180, 180, 180, ' + p.opacity + ')');
+            fogGrad.addColorStop(1, 'rgba(180, 180, 180, 0)');
+            context.fillStyle = fogGrad;
+            context.fillRect(fogX - fogSize, fogY - fogSize, fogSize * 2, fogSize * 2);
+        });
+    }
 }
 
 function mapGameLoop() {
@@ -2368,6 +2485,15 @@ function mapGameLoop() {
     var curMap = below.gameData.player.currentMap;
     // Don't process any movement if choice event or splash is active
     if (below.choiceEvent || below.splashActive) return;
+    
+    // Update fog particles (drift left to right, screen-space independent of player)
+    if (below.fogParticles && curMap === 3) {
+        below.fogParticles.forEach(function(p) {
+            p.x += p.speed;
+            if (p.x > 1.5) p.x = -0.5;
+            p.y += Math.sin(p.phase + below.tick * 0.001) * 0.0003;
+        });
+    }
     
     // Auto-save every 60 seconds (assuming 60fps)
     if (below.tick % (60 * 60) === 0 && below.currentSlot !== undefined) {
@@ -2648,9 +2774,10 @@ function mapGameLoop() {
                 }
             }
         });
-        // Then draw current map
-        drawMapCanvas();
     }
+    
+    // Draw current map every frame for smooth fog/lamp glow animation
+    drawMapCanvas();
 }
 
 function startGame() {

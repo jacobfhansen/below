@@ -63,5 +63,26 @@
         <button class="splash-btn" id="splashBtn">Continue</button>
       </div>
     </div>
+    <div class="teleport-overlay" id="teleportOverlay" style="display:none;">
+      <div class="teleport-content">
+        <h3 class="teleport-title">Dev Teleport</h3>
+        <div class="teleport-row">
+          <label class="teleport-label">Map:</label>
+          <input type="number" id="teleportMap" class="teleport-input" value="0" min="0">
+        </div>
+        <div class="teleport-row">
+          <label class="teleport-label">X:</label>
+          <input type="number" id="teleportX" class="teleport-input" value="0">
+        </div>
+        <div class="teleport-row">
+          <label class="teleport-label">Y:</label>
+          <input type="number" id="teleportY" class="teleport-input" value="0">
+        </div>
+        <div class="teleport-actions">
+          <button class="teleport-btn" onclick="doTeleport()">Teleport</button>
+          <button class="teleport-btn teleport-cancel" onclick="hideTeleport()">Cancel</button>
+        </div>
+      </div>
+    </div>
 </body>
 </html>

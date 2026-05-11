@@ -372,3 +372,82 @@ html, body {
 .splash-shake {
     animation: shake 0.4s ease-in-out;
 }
+
+.teleport-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.teleport-content {
+    background: var(--dark-grey);
+    border: 3px solid var(--cyan);
+    border-radius: 10px;
+    padding: 24px 32px;
+    min-width: 260px;
+}
+.teleport-title {
+    color: var(--yellow);
+    text-align: center;
+    margin: 0 0 16px 0;
+    font-size: 1.3em;
+}
+.teleport-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 8px;
+}
+.teleport-label {
+    color: var(--cyan);
+    min-width: 40px;
+    font-size: 1em;
+}
+.teleport-input {
+    flex: 1;
+    background: var(--black);
+    color: var(--white);
+    border: 1px solid var(--grey);
+    padding: 6px 10px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1em;
+    border-radius: 3px;
+}
+.teleport-input:focus {
+    outline: none;
+    border-color: var(--cyan);
+}
+.teleport-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 16px;
+}
+.teleport-btn {
+    background: var(--green);
+    color: var(--white);
+    border: 1px solid var(--light-green);
+    padding: 8px 20px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.teleport-btn:hover {
+    background: var(--light-green);
+    color: var(--black);
+}
+.teleport-cancel {
+    background: var(--grey);
+    border-color: var(--light-grey);
+}
+.teleport-cancel:hover {
+    background: var(--light-grey);
+    color: var(--black);
+}
