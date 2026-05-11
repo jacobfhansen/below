@@ -7,7 +7,7 @@ var belowGameData = {
   "player": {
     "currentMap": 0,
     "currentLocation": {
-      "x": 2,
+      "x": 1,
       "y": 2
     },
     "destinationLocation": {},
@@ -234,7 +234,7 @@ var belowGameData = {
     },
     "6": {
       "name": "Herbs",
-      "description": "A bundle of dried cave herbs",
+      "description": "A bundle of dried cave herbs. Smells awful, dont look very tasty",
       "icon": "herbs.png",
       "choiceEvents": []
     },
@@ -1093,6 +1093,14 @@ var belowGameData = {
                   ]
                 },
                 {
+                  "id": "hermit_ask_wayout",
+                  "text": "Can you tell me the way out of here?",
+                  "available": true,
+                  "chains": [
+                    "hermit_intro1"
+                  ]
+                },
+                {
                   "id": "hermit_leave",
                   "text": "Never mind.",
                   "available": true
@@ -1279,6 +1287,111 @@ var belowGameData = {
                   "text": "No thanks.",
                   "available": true,
                   "closes": []
+                }
+              ]
+            },
+            {
+              "id": "hermit_intro1",
+              "available": false,
+              "text": "The old man chuckles softly. 'The way out? Heh. I've been trying to find that for... oh, must be years now. The name's Alistair. Alistair Wormwood. I was a botanist once. Before the cave-in.'",
+              "options": [
+                {
+                  "id": "hermit_intro1a",
+                  "text": "A botanist? What happened?",
+                  "available": true,
+                  "chains": [
+                    "hermit_intro2"
+                  ]
+                },
+                {
+                  "id": "hermit_intro1l",
+                  "text": "You're not very helpful.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_intro2",
+              "available": false,
+              "text": "'I was exploring a promising fissure in the old quarry. Found some remarkable specimens - luminescent moss, crystal formations unlike any I'd seen. Then the earth moved. When I woke, the passage was sealed. I've been here ever since.' He gestures vaguely at his trinkets.",
+              "options": [
+                {
+                  "id": "hermit_intro2a",
+                  "text": "So you've been surviving down here all this time?",
+                  "available": true,
+                  "chains": [
+                    "hermit_intro3"
+                  ]
+                },
+                {
+                  "id": "hermit_intro2b",
+                  "text": "That's a sad story.",
+                  "available": true,
+                  "chains": [
+                    "hermit_intro3"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_intro3",
+              "available": false,
+              "text": "'Surviving? Ha! This is no mere survival, child - this is a lifetime's work! Every key tells a story. Every herb holds a secret. The moss in these caves can cure wounds that would fester above ground. The crystals hum with energy if you hold them just right. There's a whole world down here that surface-dwellers know nothing about.'",
+              "options": [
+                {
+                  "id": "hermit_intro3a",
+                  "text": "What about the way out?",
+                  "available": true,
+                  "chains": [
+                    "hermit_intro4"
+                  ]
+                },
+                {
+                  "id": "hermit_intro3l",
+                  "text": "Fascinating, but I need to go.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_intro4",
+              "available": false,
+              "text": "'The way out...' He strokes his beard thoughtfully. 'There are layers to this place, child. You came from the surface. Below these caves lies a maze. Below that... deeper chambers, sealed by ancient doors. The secret isn't in finding the way up - it's in how far down you're willing to go.'",
+              "options": [
+                {
+                  "id": "hermit_intro4a",
+                  "text": "What's at the bottom?",
+                  "available": true,
+                  "chains": [
+                    "hermit_intro5"
+                  ]
+                },
+                {
+                  "id": "hermit_intro4b",
+                  "text": "I just want to escape.",
+                  "available": true,
+                  "chains": [
+                    "hermit_intro5"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_intro5",
+              "available": false,
+              "text": "'Then you'll need to descend. Through the caves, into the maze, past the old stone doors. Seek the woman with snakes for hair - Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
+              "options": [
+                {
+                  "id": "hermit_intro_end",
+                  "text": "Thank you, Alistair.",
+                  "available": true,
+                  "closes": [
+                    "hermit_intro1",
+                    "hermit_intro2",
+                    "hermit_intro3",
+                    "hermit_intro4",
+                    "hermit_intro5"
+                  ]
                 }
               ]
             }
@@ -2340,7 +2453,6 @@ var belowGameData = {
                     "medusas1"
                   ],
                   "chains": [
-                    "medusaq0"
                   ]
                 }
               ]
@@ -2361,7 +2473,6 @@ var belowGameData = {
                     "medusas2"
                   ],
                   "chains": [
-                    "medusaq0"
                   ]
                 }
               ]
@@ -2382,7 +2493,6 @@ var belowGameData = {
                     "medusas3"
                   ],
                   "chains": [
-                    "medusaq0"
                   ]
                 }
               ]
@@ -2403,7 +2513,6 @@ var belowGameData = {
                     "medusas4"
                   ],
                   "chains": [
-                    "medusaq0"
                   ]
                 }
               ]
@@ -2424,7 +2533,6 @@ var belowGameData = {
                     "medusas5"
                   ],
                   "chains": [
-                    "medusaq0"
                   ]
                 }
               ]
@@ -2445,7 +2553,6 @@ var belowGameData = {
                     "medusas6"
                   ],
                   "chains": [
-                    "medusaq0"
                   ]
                 }
               ]

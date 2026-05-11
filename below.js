@@ -890,6 +890,18 @@ function selectChoiceOption(index) {
         }
     }
     
+    // When Hermit intro chain finishes, remove the "way out" option
+    if (selectedOption.id === "hermit_intro_end") {
+        var hermit = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        if (hermit && hermit.dialogOptions) {
+            var hermitq0 = hermit.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (hermitq0 && hermitq0.options) {
+                var askWayout = hermitq0.options.find(function(o) { return o.id === "hermit_ask_wayout"; });
+                if (askWayout) askWayout.available = false;
+            }
+        }
+    }
+    
     // When player finishes Mole trap dialog, restore normal dialog
     if (selectedOption.id === "mole_trap_leave" && below.choiceEvent && below.choiceEvent.npcPos) {
         var curMap = below.gameData.player.currentMap;
@@ -1373,6 +1385,7 @@ function getChoiceEventOptions(choiceEventIds) {
                     });
                     if (monster) {
                         monster.aloof = false;
+                        monster.agitatedTicks = 10;
                         var monsterType = below.gameData.monsterTypes[monster.type];
                         var msg = monsterType.aloofFalseMsg || "The creature becomes agitated!";
                         below.gameData.mapLog.push(msg);
@@ -2167,6 +2180,14 @@ function mapGameLoop() {
     if (below.tick % below.tickSpeed === 1) {
         // Calculate new monster movement
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
+            // Decrement agitated timer
+            if (monster.agitatedTicks !== undefined) {
+                monster.agitatedTicks--;
+                if (monster.agitatedTicks <= 0) {
+                    delete monster.agitatedTicks;
+                    delete monster.aloof;
+                }
+            }
             // Initialize destPos if missing
             if (!monster.destPos) monster.destPos = { x: null, y: null, xVelocity: null, yVelocity: null };
             // First, do monster move?
