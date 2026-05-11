@@ -505,6 +505,20 @@ function showChoiceEvent() {
     renderChoiceEvent();
 }
 
+function animateDots(node, interval) {
+    var dots = "";
+    var step = Math.max(1, Math.floor(interval / 3));
+    var timer = setInterval(function() {
+        dots = dots.length < 3 ? dots + "." : "";
+        if (node.parentNode) {
+            node.textContent = dots;
+        } else {
+            clearInterval(timer);
+        }
+    }, step);
+    return timer;
+}
+
 function renderChoiceEvent() {
     var gameLogDiv = document.getElementById("gameLogDiv");
     
@@ -527,8 +541,8 @@ function renderChoiceEvent() {
                 if (node.className && node.className.includes("below-game-left-paragraph") && !node.className.includes("below-game-left-paragraph-current")) {
                     nodesToRemove.push(node);
                 }
-                // Also remove dots nodes
-                if (node.className && node.className.includes("below-game-left-paragraph-current") && node.textContent === (below.gameData.dialogDots || "...")) {
+                // Also remove dots nodes (animated or static)
+                if (node.classList && node.classList.contains("below-dots-node")) {
                     nodesToRemove.push(node);
                 }
             }
@@ -551,12 +565,15 @@ function renderChoiceEvent() {
     // Show animated dots while waiting for message
     var dotsNode = document.createElement("P");
     dotsNode.className = "below-game-left-paragraph-current";
-    dotsNode.textContent = dots;
+    dotsNode.classList.add("below-dots-node");
+    dotsNode.textContent = "";
     gameLogDiv.appendChild(dotsNode);
+    var dotsTimer = animateDots(dotsNode, dialogInterval);
     scrollLogToBottom();
     
     // After delay, show the actual message
     setTimeout(function() {
+        clearInterval(dotsTimer);
         if (!below.choiceEvent) return; // Dialog was closed
         if (dotsNode.parentNode) {
             dotsNode.parentNode.removeChild(dotsNode);
@@ -634,11 +651,14 @@ function showDialogOptions(gameLogDiv, dots) {
     // Show animated dots for options
     var optionDotsNode = document.createElement("P");
     optionDotsNode.className = "below-game-left-paragraph-current";
-    optionDotsNode.textContent = dotsText;
+    optionDotsNode.classList.add("below-dots-node");
+    optionDotsNode.textContent = "";
     gameLogDiv.appendChild(optionDotsNode);
+    var optionDotsTimer = animateDots(optionDotsNode, dialogInterval);
     
     // After delay, show actual options
     setTimeout(function() {
+        clearInterval(optionDotsTimer);
         if (!below.choiceEvent) return;
         if (optionDotsNode.parentNode) {
             optionDotsNode.parentNode.removeChild(optionDotsNode);
@@ -698,6 +718,11 @@ function handleChoiceEventKey(e) {
     }
     else if (e.keyCode === 13 || e.keyCode === 69) { // Enter or E
         e.preventDefault();
+        // Guard: wait for options to be rendered before allowing selection
+        if (below.choiceEvent && below.choiceEvent.isDialog) {
+            var gameLogDiv = document.getElementById("gameLogDiv");
+            if (!gameLogDiv.querySelector(".below-game-left-paragraph")) return;
+        }
         selectChoiceOption(below.choiceEvent.selectedIndex);
     }
     else if (e.keyCode === 27) { // Escape
@@ -904,18 +929,6 @@ function selectChoiceOption(index) {
             if (medusaq0 && medusaq0.options) {
                 var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
                 if (moleOpt) moleOpt.available = true;
-            }
-        }
-    }
-    
-    // When Hermit intro chain finishes, remove the "way out" option
-    if (selectedOption.id === "hermit_intro_end") {
-        var hermit = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
-        if (hermit && hermit.dialogOptions) {
-            var hermitq0 = hermit.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
-            if (hermitq0 && hermitq0.options) {
-                var askWayout = hermitq0.options.find(function(o) { return o.id === "hermit_ask_wayout"; });
-                if (askWayout) askWayout.available = false;
             }
         }
     }
