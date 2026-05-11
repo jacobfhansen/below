@@ -439,8 +439,8 @@ function checkWheel(e) {
 
 function checkKey(e) {
     e = e || window.event;
-    // Dev teleport toggle (Ctrl+Shift+T)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 84) {
+    // Dev teleport toggle (Ctrl+Alt+P)
+    if (e.ctrlKey && e.altKey && e.keyCode === 80) {
         if (below.gameData) {
             toggleTeleport();
         }
@@ -1489,6 +1489,13 @@ function foundTile(x, y) {
     //});
 }
 
+function isTileBlocking(x, y) {
+    var tile = foundTile(x, y);
+    if (!tile) return false;
+    if (tile.blocking !== undefined) return tile.blocking;
+    var tileType = tile.type !== undefined ? below.gameData.tileTypes[tile.type] : null;
+    return tileType ? !!tileType.blocking : false;
+}
 function isBlocked(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check NPCs - they always block (unless attacked/intimidated)
@@ -1515,7 +1522,10 @@ function isBlocked(x, y) {
         var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
         return o.position.x === x && o.position.y === y && isBlocking;
     });
-    return blockedByObstacle;
+    if (blockedByObstacle) return true;
+    // Check blocking tiles (e.g. water)
+    if (isTileBlocking(x, y)) return true;
+    return false;
 }
 
 function isVisionBlocked(x, y) {

@@ -85,6 +85,13 @@ header button:hover { background: #333; }
 }
 #info-panel .entity-form textarea { resize: vertical; min-height: 40px; }
 #info-panel .entity-form input[type=checkbox] { width: auto; margin-right: 4px; }
+#info-panel .tile-type-picker { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px; }
+#info-panel .tile-type-item {
+    padding: 2px 6px; border: 1px solid #444; border-radius: 3px;
+    background: #1a1a1a; color: #959595; font-size: 11px; cursor: pointer;
+}
+#info-panel .tile-type-item:hover { background: #333; color: #cdd6f4; }
+#info-panel .tile-type-selected { background: #2a4a2a; border-color: #4a7a4a; color: #8DC4D2; }
 #info-panel .entity-form .entity-title { font-weight: 600; color: #70A4B2; font-size: 13px; margin-bottom: 4px; }
 #info-panel .entity-form .form-row { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 #info-panel .entity-form .form-row label { margin: 0; white-space: nowrap; }
@@ -202,7 +209,9 @@ var selectedMap = 0;
 var panX = 0, panY = 0;
 var zoom = 40;
 var isDragging = false;
+var hasDragged = false;
 var dragStartX, dragStartY, panStartX, panStartY;
+var lastTileType = 0;
 var hoverTileX = null, hoverTileY = null;
 var selectedEntityType = null;  // "monster" | "npc" | "obstacle" | "exit" | null
 var selectedEntityIndex = -1;
@@ -459,7 +468,7 @@ function selectTile(x, y) {
     var map = gameData.mapData[selectedMap];
     var key = getTileKey(x, y);
     if (!map.tiles[key]) {
-        map.tiles[key] = { x: x, y: y };
+        map.tiles[key] = { x: x, y: y, type: lastTileType };
         updateCountSection();
     }
     selectedTileKey = key;
@@ -820,14 +829,14 @@ function updateSelectionSection() {
         html += '<label>Description:</label><input type="text" value="' + escAttr(tile.description || "") + '" onchange="tileSet(\'description\', this.value)">';
         html += '<label>Arrive text:</label><input type="text" value="' + escAttr(tile.text || "") + '" onchange="tileSet(\'text\', this.value)">';
         html += '<label>Search message:</label><input type="text" value="' + escAttr(tile.searchMsg || "") + '" onchange="tileSet(\'searchMsg\', this.value)">';
-        html += '<label>Type:</label><select onchange="tileSet(\'type\', parseInt(this.value))">';
+        html += '<label>Type:</label><div class="tile-type-picker">';
         for (var tk in gameData.tileTypes) {
             if (typeof gameData.tileTypes[tk] !== 'function') {
-                var sel = (parseInt(tk) === (tile.type || 0)) ? 'selected' : '';
-                html += '<option value="' + tk + '" ' + sel + '>' + tk + ': ' + gameData.tileTypes[tk].name + '</option>';
+                var sel = (parseInt(tk) === (tile.type || 0)) ? ' tile-type-selected' : '';
+                html += '<div class="tile-type-item' + sel + '" onclick="tileTypePick(this, ' + tk + ')">' + tk + ': ' + gameData.tileTypes[tk].name + '</div>';
             }
         }
-        html += '</select>';
+        html += '</div>';
         html += '<div style="margin-top:8px"><button class="btn-danger" onclick="deleteSelected()">Delete</button></div>';
         html += '</div>';
         el.innerHTML = html;
@@ -916,6 +925,7 @@ function entitySet(key, value) { var e = getSelectedEntity(); if (e) { e[key] = 
 function entitySetNum(key, value) { entitySet(key, parseFloat(value)); }
 function entitySetStr(key, value) { entitySet(key, value || undefined); }
 function tileSet(key, value) { var t = getSelectedTile(); if (t) { t[key] = value; drawCanvas(); } }
+function tileTypePick(el, value) { lastTileType = value; tileSet('type', value); }
 function entitySetNested(path, value) {
     var e = getSelectedEntity(); if (!e) return;
     var parts = path.split('.'); var obj = e;
@@ -1064,6 +1074,7 @@ function updateStatusBar() {
     });
 
     canvas.addEventListener("click", function(e) {
+        if (hasDragged) { hasDragged = false; return; }
         var t = screenToTile(e.clientX, e.clientY);
         var map = gameData.mapData[selectedMap];
 
@@ -1086,6 +1097,7 @@ function updateStatusBar() {
 
     canvas.addEventListener("mousedown", function(e) {
         isDragging = true;
+        hasDragged = false;
         dragStartX = e.clientX;
         dragStartY = e.clientY;
         panStartX = panX;
@@ -1094,6 +1106,7 @@ function updateStatusBar() {
 
     window.addEventListener("mousemove", function(e) {
         if (!isDragging) return;
+        hasDragged = true;
         var dx = e.clientX - dragStartX;
         var dy = e.clientY - dragStartY;
         panX = panStartX + dx;
