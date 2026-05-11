@@ -256,6 +256,11 @@ exitImg.src = "images/exit.png";
 var gemImg = new Image();
 gemImg.src = "images/gem.png";
 
+var shimmerWallClosedImg = new Image();
+shimmerWallClosedImg.src = "images/shimmer_wall_closed.png";
+var shimmerWallOpenImg = new Image();
+shimmerWallOpenImg.src = "images/shimmer_wall_open.png";
+
 var statueImg1 = new Image();
 statueImg1.src = "images/statue1.png";
 var statueImg2 = new Image();
@@ -875,6 +880,17 @@ function selectChoiceOption(index) {
             below.gameData.player.inventory.splice(herbIdx, 1);
             below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
             maintainMapLog();
+            // Open shimmering walls on map 2
+            var map2Obstacles = below.gameData.mapData[2].obstacles;
+            map2Obstacles.forEach(function(o) {
+                if (o.type === 12) {
+                    o.closed = false;
+                    o.blocking = false;
+                    o.icon = "shimmer_wall_open.png";
+                }
+            });
+            below.gameData.mapLog.push("A distant shimmering echoes through the tunnels.");
+            maintainMapLog();
         }
     }
     
@@ -898,6 +914,19 @@ function selectChoiceOption(index) {
             if (hermitq0 && hermitq0.options) {
                 var askWayout = hermitq0.options.find(function(o) { return o.id === "hermit_ask_wayout"; });
                 if (askWayout) askWayout.available = false;
+            }
+        }
+    }
+    
+    // When player first interacts with the Jester, unlock Hermit's opinion dialog
+    if (below.choiceEvent && below.choiceEvent.npcType === 2 && !below.jesterMet) {
+        below.jesterMet = true;
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (hermitq0 && hermitq0.options) {
+                var askJester = hermitq0.options.find(function(o) { return o.id === "hermit_ask_jester"; });
+                if (askJester) askJester.available = true;
             }
         }
     }
@@ -1293,6 +1322,17 @@ function isBlocked(x, y) {
         return o.position.x === x && o.position.y === y && isBlocking;
     });
     return blockedByObstacle;
+}
+
+function isVisionBlocked(x, y) {
+    var curMap = below.gameData.player.currentMap;
+    var obstacles = below.gameData.mapData[curMap].obstacles || [];
+    return obstacles.some(function(o) {
+        if (!o.position) return false;
+        var obsType = below.gameData.obstacleTypes[o.type];
+        var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
+        return o.position.x === x && o.position.y === y && isBlocking;
+    });
 }
 
 function getBlockedMessage(x, y) {
@@ -1896,6 +1936,36 @@ function updateAreaDescription() {
     }
 }
 
+function computeVisibleTiles() {
+    var curMap = below.gameData.player.currentMap;
+    var px = Math.round(below.gameData.player.currentLocation.x);
+    var py = Math.round(below.gameData.player.currentLocation.y);
+    var vision = below.gameData.player.vision || 2;
+    var visible = {};
+    var queue = [{x: px, y: py}];
+    var visited = {};
+    visited[px + "," + py] = true;
+    while (queue.length > 0) {
+        var cur = queue.shift();
+        var key = cur.x + "," + cur.y;
+        visible[key] = true;
+        if (isVisionBlocked(cur.x, cur.y)) continue;
+        var dist = Math.abs(cur.x - px) + Math.abs(cur.y - py);
+        if (dist >= vision) continue;
+        var dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+        for (var di = 0; di < dirs.length; di++) {
+            var nx = cur.x + dirs[di][0];
+            var ny = cur.y + dirs[di][1];
+            var nkey = nx + "," + ny;
+            if (!visited[nkey] && foundTile(nx, ny)) {
+                visited[nkey] = true;
+                queue.push({x: nx, y: ny});
+            }
+        }
+    }
+    return visible;
+}
+
 function drawMapCanvas() {
     var gameDivCenter = document.getElementById("gameDivCenter");
     var canvas = document.getElementById("mapCanvas");
@@ -1918,6 +1988,10 @@ function drawMapCanvas() {
     // Clear canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
     
+    // Fill background black for blank/non-visible tiles
+    context.fillStyle = "#000000";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    
     // Draw tiles
     var thickness = 1;
     var width = below.gameData.mapZoom;    
@@ -1931,18 +2005,24 @@ function drawMapCanvas() {
     var vision = below.gameData.player.vision || 2;
     var visionPixels = vision * width;
     
-    // Draw all tiles first
+    // Compute visible tiles using BFS for line-of-sight
+    var visibleTiles = computeVisibleTiles();
+    
+    // Draw visible tiles only
     var tileCount = 0;
     for (var k in below.gameData.mapData[curMap].tiles) {
         if (typeof below.gameData.mapData[curMap].tiles[k] !== 'function') {
-            tileCount++;
             var tile = below.gameData.mapData[curMap].tiles[k];
-            var x = (tile.x * width) - (width/2) + verticalCenter - horizontalOffset;
-            var y = (tile.y * width) - (width/2) + horizontalCenter - verticalOffset;
-            context.fillStyle = "#959595";
-            context.fillRect(x, y, width, width);
-            context.fillStyle = "#6C6C6C";
-            context.fillRect(x + thickness, y + thickness, width - (thickness * 2), width - (thickness * 2));
+            var tileKey = tile.x + "," + tile.y;
+            if (visibleTiles[tileKey]) {
+                tileCount++;
+                var x = (tile.x * width) - (width/2) + verticalCenter - horizontalOffset;
+                var y = (tile.y * width) - (width/2) + horizontalCenter - verticalOffset;
+                context.fillStyle = "#959595";
+                context.fillRect(x, y, width, width);
+                context.fillStyle = "#6C6C6C";
+                context.fillRect(x + thickness, y + thickness, width - (thickness * 2), width - (thickness * 2));
+            }
         }
     }
     
@@ -1982,8 +2062,8 @@ function drawMapCanvas() {
         var distYM = (monster.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceM = Math.sqrt(distXM * distXM + distYM * distYM);
         
-        // Check vision
-        if (distanceM <= visionPixels) {
+        // Check vision and line-of-sight
+        if (distanceM <= visionPixels && visibleTiles[monster.position.x + "," + monster.position.y]) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type) return; // Skip if monster type is undefined
             if (type["icon"]) {
@@ -2009,8 +2089,8 @@ function drawMapCanvas() {
         var distYN = (npc.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceN = Math.sqrt(distXN * distXN + distYN * distYN);
         
-        // Check vision
-        if (distanceN <= visionPixels) {
+        // Check vision and line-of-sight
+        if (distanceN <= visionPixels && visibleTiles[npc.position.x + "," + npc.position.y]) {
             var type = below.gameData.npcTypes[npc.type];
             if (!type) return; // Skip if NPC type is undefined
                 if (type.icon) {
@@ -2043,14 +2123,17 @@ function drawMapCanvas() {
         var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
         
-        // Check vision
-        if (distanceO <= visionPixels) {
+        // Check vision and line-of-sight
+        if (distanceO <= visionPixels && visibleTiles[obstacle.position.x + "," + obstacle.position.y]) {
             if (type.icon) {
                 var iconName = obstacle.icon || type.icon;
                 var img = null;
                 if (iconName === "door_closed.png" || iconName === "door_open.png") {
                     var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
                     img = isClosed ? doorClosedImg : doorOpenImg;
+                } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
+                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+                    img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
                 } else {
                     if (iconName === "rock.png") img = rockImg;
                     else if (iconName === "blood.png") img = bloodImg;
@@ -2092,13 +2175,16 @@ function drawMapCanvas() {
         var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
         
-        if (distanceO <= visionPixels) {
+        if (distanceO <= visionPixels && visibleTiles[obstacle.position.x + "," + obstacle.position.y]) {
             if (type.icon) {
                 var iconName = obstacle.icon || type.icon;
                 var img = null;
                 if (iconName === "door_closed.png" || iconName === "door_open.png") {
                     var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
                     img = isClosed ? doorClosedImg : doorOpenImg;
+                } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
+                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+                    img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
                 } else {
                     if (iconName === "rock.png") img = rockImg;
                     else if (iconName === "blood.png") img = bloodImg;
@@ -2147,7 +2233,7 @@ function drawMapCanvas() {
             var distXE = (exit.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
             var distYE = (exit.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
             var distanceE = Math.sqrt(distXE * distXE + distYE * distYE);
-            if (distanceE <= visionPixels) {
+            if (distanceE <= visionPixels && visibleTiles[exit.position.x + "," + exit.position.y]) {
                 if (!exitImg.complete) exitImg.src = "images/exit.png";
                 context.drawImage(exitImg, (exit.position.x * width) + verticalCenter - horizontalOffset - (width/2), (exit.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             }

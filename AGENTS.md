@@ -6,14 +6,19 @@ There is no real combat, meaning when player attack nobody dies but their percep
 
 # NPC's
 Jester: Annoying and rude. Gives misleading clues and conveys half-thruths and outright lies.
+    Dont give much about the Hermit, fears Medusa, finds the Mole boring and loves to fool Sam Shale.
 Hermit: A lost soul consumed in his own delusions. Trades keys for herbs. The real keys are the herbs.
     Is amused and Befuddled by the Medusa taking interest in his hobby. Despises The Mole for his evil ways.
+    finds the Jester annoying for teasing him all the time. Do not get Sam Shale.
 Medusa: Aloof and dreaming. A former "stoner", turning people to stone with her gaze, but she has reformed
     and are not doing that anymore.
-    She pitty The Mole, herself a former evildoer.
+    She pitty The Mole, herself a former evildoer. Mostly ignores the Jester, Find the Hermit amusing.
+    Avoids Sam Shale for her own personal reasons.
 The Mole: He lives in "The Maze", a series of tunnels he have dug to find the Herbs the Hermit have. 
     The Hermit do not like the mole and will not give him any herbs because the mole is Evil. The Mole
-    speaks like he is in a Shaekspeare play.
+    speaks like he is in a Shaekspeare play. Dont have anyt interest in Sam Shale.
+Sam Shale: Film noir detective. Endlessly searching for Medusa, lost in his fake Chicago like cave chasing shadows.
+    Believes the Jester is his contact in the underworld.
     
 # Developer
 Please refer to me as mrFlemming. You can call yourself Big Pickle. This might make it easier for me when building the
@@ -88,6 +93,16 @@ python3 -m http.server 8000
 - `checkKey()` routes to `handleMenuKey`, `handleChoiceEventKey`, or `moveOnMap` based on active div.
 - Arrow keys/WASD for movement, Enter/E for confirm, Escape for close/cancel.
 - Q toggles inventory.
+
+### FOV / Shadow system
+- `isVisionBlocked(x, y)` checks only obstacles with `blocking: true` (not NPCs/monsters — creatures don't cast vision shadows)
+- `computeVisibleTiles()` runs BFS from player position (4-direction), max distance = `player.vision` tiles
+- BFS expands through tiles that `foundTile()` exists for; blocking obstacles stop further expansion (player sees the obstacle but not through it)
+- `drawMapCanvas()` pre-fills canvas black, computes visible tiles once, draws only visible tiles + entities
+- Tiles/entities behind blocking obstacles (doors, walls, statues, cupboards) are hidden — shown as solid black
+- Blank areas (no tile data) are solid black via the pre-fill
+- Radial gradient overlay (transparent → black) still provides soft edge at vision radius boundary
+- Vision recomputed every frame — opening a door or pushing a rock updates LOS on the next frame
 
 ## Gotchas
 - Chain-cleaning in `renderChoiceEvent` removes nodes with class containing `below-game-left-paragraph` but NOT `below-game-left-paragraph-current`. Custom classes (like `below-player-response`, `below-dialog-message`) must NOT contain `below-game-left-paragraph` to survive chaining.

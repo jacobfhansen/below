@@ -217,6 +217,22 @@ var belowGameData = {
         8,
         3
       ]
+    },
+    "12": {
+      "name": "Shimmering Wall",
+      "description": "A wall of shimmering energy pulses with a faint blue light",
+      "color": "#70A4B2",
+      "icon": "shimmer_wall_closed.png",
+      "blocking": true,
+      "closed": true,
+      "choiceEvents": [
+        8,
+        3
+      ],
+      "openChoiceEvents": [
+        8,
+        3
+      ]
     }
   },
   "itemTypes": {
@@ -1093,6 +1109,14 @@ var belowGameData = {
                   ]
                 },
                 {
+                  "id": "hermit_ask_jester",
+                  "text": "I met a jester in the caves.",
+                  "available": false,
+                  "chains": [
+                    "hermit_jester1"
+                  ]
+                },
+                {
                   "id": "hermit_ask_wayout",
                   "text": "Can you tell me the way out of here?",
                   "available": true,
@@ -1379,7 +1403,7 @@ var belowGameData = {
             {
               "id": "hermit_intro5",
               "available": false,
-              "text": "'Then you'll need to descend. Through the caves, into the maze, past the old stone doors. Seek the woman with snakes for hair - Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
+              "text": "'Then you'll need to descend. Through the caves, into the maze, past the old stone doors. Seek the woman with snakes for hair — Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
               "options": [
                 {
                   "id": "hermit_intro_end",
@@ -1392,6 +1416,38 @@ var belowGameData = {
                     "hermit_intro4",
                     "hermit_intro5"
                   ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_jester1",
+              "available": false,
+              "text": "'That insufferable fool? Ha! He thinks himself clever with his riddles and pranks. He's been mocking me for as long as I can remember - hiding my herbs, swapping my keys, leaving whoopee cushions on my stone chair. The man has no respect for solitude or science!'",
+              "options": [
+                {
+                  "id": "hermit_jester1a",
+                  "text": "Sounds annoying.",
+                  "available": true
+                },
+                {
+                  "id": "hermit_jester1b",
+                  "text": "Why does he tease you?",
+                  "available": true,
+                  "chains": [
+                    "hermit_jester2"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_jester2",
+              "available": false,
+              "text": "'Because he's a man-child with nothing better to do! He's not dangerous, mind you - just exhausting. Like a fly that keeps buzzing around your head. Ignore him and he'll eventually get bored. That's my strategy anyway.'",
+              "options": [
+                {
+                  "id": "hermit_jester2a",
+                  "text": "I'll keep that in mind.",
+                  "available": true
                 }
               ]
             }
@@ -4824,6 +4880,27 @@ var belowGameData = {
           "type": 11,
           "position": {
             "x": 22,
+            "y": 32
+          }
+        },
+        {
+          "type": 12,
+          "position": {
+            "x": 20,
+            "y": 10
+          }
+        },
+        {
+          "type": 12,
+          "position": {
+            "x": 26,
+            "y": 10
+          }
+        },
+        {
+          "type": 12,
+          "position": {
+            "x": 21,
             "y": 32
           }
         }
