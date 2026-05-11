@@ -1403,7 +1403,7 @@ var belowGameData = {
             {
               "id": "hermit_intro5",
               "available": false,
-              "text": "'Then you'll need to descend. Through the caves, into the maze, past the old stone doors. Seek the woman with snakes for hair — Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
+              "text": "'Then you'll need to descend. Through the caves, into the maze, past the old stone doors. Seek the woman with snakes for hair - Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
               "options": [
                 {
                   "id": "hermit_intro_end",
@@ -2181,7 +2181,7 @@ var belowGameData = {
             3
           ],
           "statueName": "The Observer",
-          "statueDesc": "A marble figure with one hand shielding its eyes and the other pointing into the dark. A small sign reads: The third.",
+          "statueDesc": "A marble figure with one hand shielding its eyes and the other pointing into the dark. A small sign reads: The regretable third.",
           "dialogUnlock": "medusas3",
           "letterHint": "O"
         },
@@ -5032,7 +5032,7 @@ var belowGameData = {
               "options": [
                 {
                   "id": "mole_post_a1",
-                  "text": "You wanted me to starve down here?",
+                  "text": "You wanted to trap me down here - to starve to death?",
                   "available": true,
                   "chains": [
                     "mole_post2"

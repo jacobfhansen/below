@@ -812,6 +812,33 @@ function selectChoiceOption(index) {
                         }
                     }
                     
+                    // When player gives herbs to the Mole, consume herbs and open shimmering walls
+                    if (selectedOption.id === "mole_post_a3_give") {
+                        var herbIdx = -1;
+                        for (var hi = 0; hi < below.gameData.player.inventory.length; hi++) {
+                            if (below.gameData.player.inventory[hi] === 6) {
+                                herbIdx = hi;
+                                break;
+                            }
+                        }
+                        if (herbIdx !== -1) {
+                            below.gameData.player.inventory.splice(herbIdx, 1);
+                            below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
+                            maintainMapLog();
+                            // Open shimmering walls on map 2
+                            var map2Obstacles = below.gameData.mapData[2].obstacles;
+                            map2Obstacles.forEach(function(o) {
+                                if (o.type === 12) {
+                                    o.closed = false;
+                                    o.blocking = false;
+                                    o.icon = "shimmer_wall_open.png";
+                                }
+                            });
+                            below.gameData.mapLog.push("A distant shimmering echoes through the tunnels.");
+                            maintainMapLog();
+                        }
+                    }
+                    
                     return; // Don't close the dialog
                 }
             }
@@ -865,33 +892,6 @@ function selectChoiceOption(index) {
         below.gameData.player.inventory.push(7);
         below.gameData.mapLog.push("Medusa hands you a heavy stone key, warm to the touch.");
         maintainMapLog();
-    }
-    
-    // When player gives herbs to the Mole, consume them from inventory
-    if (selectedOption.id === "mole_post_a3_give") {
-        var herbIdx = -1;
-        for (var hi = 0; hi < below.gameData.player.inventory.length; hi++) {
-            if (below.gameData.player.inventory[hi] === 6) {
-                herbIdx = hi;
-                break;
-            }
-        }
-        if (herbIdx !== -1) {
-            below.gameData.player.inventory.splice(herbIdx, 1);
-            below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
-            maintainMapLog();
-            // Open shimmering walls on map 2
-            var map2Obstacles = below.gameData.mapData[2].obstacles;
-            map2Obstacles.forEach(function(o) {
-                if (o.type === 12) {
-                    o.closed = false;
-                    o.blocking = false;
-                    o.icon = "shimmer_wall_open.png";
-                }
-            });
-            below.gameData.mapLog.push("A distant shimmering echoes through the tunnels.");
-            maintainMapLog();
-        }
     }
     
     // When Mole reveals the secret passage, unlock Medusa's mole dialog option
