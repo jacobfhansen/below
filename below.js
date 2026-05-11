@@ -285,6 +285,8 @@ document.onwheel = checkWheel;
 
 function checkWheel(e) {
     e = e || window.event;
+    // Only zoom when scrolling over the map canvas area, not the log/message panel
+    if (e.target && !document.getElementById("gameDivCenter").contains(e.target)) return;
     const delta = Math.sign(e.deltaY);
     if (document.getElementById("gameDiv").style.display !== 'none') {
         below.gameData.mapZoom += (4*delta);
