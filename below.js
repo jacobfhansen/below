@@ -897,8 +897,7 @@ function selectChoiceOption(index) {
         if (keyIdx !== -1) {
             below.gameData.player.inventory.splice(keyIdx, 1);
             below.gameData.player.inventory.push(6);
-            below.gameData.mapLog.push("You trade your key for a bundle of cave herbs.");
-            maintainMapLog();
+            setTimeout(function() { showInventory([6]); }, 50);
         }
     }
     
@@ -917,8 +916,7 @@ function selectChoiceOption(index) {
     // When player accepts Medusa's key, grant Stone Key
     if (selectedOption.id === "medusama4p") {
         below.gameData.player.inventory.push(7);
-        below.gameData.mapLog.push("Medusa hands you a heavy stone key, warm to the touch.");
-        maintainMapLog();
+        setTimeout(function() { showInventory([7]); }, 50);
     }
     
     // When Mole reveals the secret passage, unlock Medusa's mole dialog option
@@ -1179,7 +1177,7 @@ function closeInventory() {
     gameDiv.style.pointerEvents = "auto";
 }
 
-function showInventory() {
+function showInventory(newItems) {
     var inventoryDiv = document.getElementById("inventoryDiv");
     var inventoryTable = document.getElementById("inventoryTable");
     var inventory = below.gameData.player.inventory;
@@ -1214,6 +1212,10 @@ function showInventory() {
                 
                 // Name + Description cell
                 var infoCell = row.insertCell();
+                // Highlight newly acquired items
+                if (newItems && newItems.indexOf(itemTypeId) !== -1) {
+                    infoCell.classList.add("inventory-new-item");
+                }
                 var nameDiv = document.createElement('div');
                 nameDiv.textContent = itemType.name;
                 nameDiv.style.fontWeight = 'bold';
@@ -1479,7 +1481,6 @@ function getChoiceEventOptions(choiceEventIds) {
                         } else if (obstacleType.itemType) {
                             var itemTypeId = obstacleType.itemType;
                              below.gameData.player.inventory.push(itemTypeId);
-                            below.gameData.mapLog.push("You found a " + below.gameData.itemTypes[itemTypeId].name + "!");
                             
                             delete obstacleType.itemType;
                             var defaultMessages = [
@@ -1494,7 +1495,7 @@ function getChoiceEventOptions(choiceEventIds) {
                             if (below.gameData.mapData[curMap].tiles[tileIndex]) {
                                 below.gameData.mapData[curMap].tiles[tileIndex].text = randomMsg;
                             }
-                            maintainMapLog();
+                            setTimeout(function() { showInventory([itemTypeId]); }, 50);
                         } else {
                             var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
                             var tile = below.gameData.mapData[curMap].tiles[tileIndex];
