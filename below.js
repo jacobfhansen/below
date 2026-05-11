@@ -1390,6 +1390,7 @@ function showInventory(newItems) {
                 var infoCell = row.insertCell();
                 // Highlight newly acquired items
                 if (newItems && newItems.indexOf(itemTypeId) !== -1) {
+                    iconCell.classList.add("inventory-new-item");
                     infoCell.classList.add("inventory-new-item");
                 }
                 var nameDiv = document.createElement('div');
@@ -1665,33 +1666,39 @@ function getChoiceEventOptions(choiceEventIds) {
                         } else if (obstacle.type === 8 && obstacle.searched) {
                             below.gameData.mapLog.push("The marble figure stares blankly into the dark. You've already learned what you can from it.");
                             maintainMapLog();
-                        } else if (obstacleType.itemType) {
-                            var itemTypeId = obstacleType.itemType;
-                             below.gameData.player.inventory.push(itemTypeId);
-                            
-                            delete obstacleType.itemType;
-                            var defaultMessages = [
-                                "You searched here before - nothing but dust.",
-                                "You rummage through it - empty.",
-                                "Just cobwebs and dust.",
-                                "You find nothing of interest.",
-                                "Searched. Nothing here."
-                            ];
-                            var randomMsg = defaultMessages[Math.floor(Math.random() * defaultMessages.length)];
-                            var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
-                            if (below.gameData.mapData[curMap].tiles[tileIndex]) {
-                                below.gameData.mapData[curMap].tiles[tileIndex].text = randomMsg;
-                            }
-                            setTimeout(function() { showInventory([itemTypeId]); }, 50);
                         } else {
-                            var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
-                            var tile = below.gameData.mapData[curMap].tiles[tileIndex];
-                            if (tile && tile.text) {
-                                below.gameData.mapLog.push(tile.text);
+                            var searchItemType = obstacle.itemType !== undefined ? obstacle.itemType : (obstacleType ? obstacleType.itemType : undefined);
+                            if (searchItemType) {
+                                var itemTypeId = searchItemType;
+                                below.gameData.player.inventory.push(itemTypeId);
+                                if (obstacle.itemType !== undefined) {
+                                    delete obstacle.itemType;
+                                } else if (obstacleType && obstacleType.itemType !== undefined) {
+                                    delete obstacleType.itemType;
+                                }
+                                var defaultMessages = [
+                                    "You searched here before - nothing but dust.",
+                                    "You rummage through it - empty.",
+                                    "Just cobwebs and dust.",
+                                    "You find nothing of interest.",
+                                    "Searched. Nothing here."
+                                ];
+                                var randomMsg = defaultMessages[Math.floor(Math.random() * defaultMessages.length)];
+                                var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
+                                if (below.gameData.mapData[curMap].tiles[tileIndex]) {
+                                    below.gameData.mapData[curMap].tiles[tileIndex].text = randomMsg;
+                                }
+                                setTimeout(function() { showInventory([itemTypeId]); }, 50);
                             } else {
-                                below.gameData.mapLog.push("The cupboard is empty.");
+                                var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
+                                var tile = below.gameData.mapData[curMap].tiles[tileIndex];
+                                if (tile && tile.text) {
+                                    below.gameData.mapLog.push(tile.text);
+                                } else {
+                                    below.gameData.mapLog.push("The cupboard is empty.");
+                                }
+                                maintainMapLog();
                             }
-                            maintainMapLog();
                         }
                     }
                 }
