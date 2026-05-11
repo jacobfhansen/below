@@ -311,6 +311,21 @@ var belowGameData = {
       ],
       "agenda": "Lives in the maze. Digs tunnels to find the herbs the hermit hides. The hermit despises him.",
       "personality": "antisocial"
+    },
+    "5": {
+      "name": "Sam Shale",
+      "description": "A hard-boiled detective in trenchcoat and fedora",
+      "icon": "detective.png",
+      "dialogImg": "detective_dialog.png",
+      "dialog": {
+        "greeting": "A shadowy figure in a trenchcoat tips his fedora. 'Name's Shale. Sam Shale. You look like you've seen things, kid.'",
+        "agitated": "He holds up a hand. 'Let's keep this professional, pal.'"
+      },
+      "choiceEvents": [
+        9
+      ],
+      "agenda": "A noir detective in the Depths. Speaks like Philip Marlowe.",
+      "personality": "mysterious"
     }
   },
   "mapData": [
@@ -1115,7 +1130,7 @@ var belowGameData = {
             {
               "id": "hermit_key_persuade",
               "available": false,
-              "text": "Strangers? Down here everyone is a stranger, child. But opportunity — that's rarer than sunlight. That key could be your ticket out. I'm offering a fair exchange: cave herbs for your key. What do you say?",
+              "text": "Strangers? Down here everyone is a stranger, child. But opportunity - that's rarer than sunlight. That key could be your ticket out. I'm offering a fair exchange: cave herbs for your key. What do you say?",
               "options": [
                 {
                   "id": "hermit_persuade_accept",
@@ -1163,7 +1178,7 @@ var belowGameData = {
             {
               "id": "hermit_mole2",
               "available": false,
-              "text": "Dedicated? He's obsessed! But I'll admit — he's clever. He's been digging new tunnels, stockpiling stones. Mark my words, he's planning something. Probably to trap someone in that maze of his.",
+              "text": "Dedicated? He's obsessed! But I'll admit - he's clever. He's been digging new tunnels, stockpiling stones. Mark my words, he's planning something. Probably to trap someone in that maze of his.",
               "options": [
                 {
                   "id": "hermit_mole2p",
@@ -1208,7 +1223,7 @@ var belowGameData = {
             {
               "id": "hermit_stonekey1",
               "available": false,
-              "text": "That thing? Put it away, child. I want nothing to do with it. Some keys are not meant to turn locks — they're meant to stay lost. That key carries... a presence. An old hunger.",
+              "text": "That thing? Put it away, child. I want nothing to do with it. Some keys are not meant to turn locks - they're meant to stay lost. That key carries... a presence. An old hunger.",
               "options": [
                 {
                   "id": "hermit_stonekey1p",
@@ -1228,7 +1243,7 @@ var belowGameData = {
             {
               "id": "hermit_stonekey2",
               "available": false,
-              "text": "I've seen its kind before. Crafted not by hands but by want — by need so deep it took form in stone. That key wants to be used, but using it will cost more than you'd ever pay.",
+              "text": "I've seen its kind before. Crafted not by hands but by want - by need so deep it took form in stone. That key wants to be used, but using it will cost more than you'd ever pay.",
               "options": [
                 {
                   "id": "hermit_stonekey2p",
@@ -2728,7 +2743,7 @@ var belowGameData = {
           "text": "A sparkling gem draws you closer...",
           "splash": {
             "image": "mole_dialog.png",
-            "text": "Hark, thou foolish child! Thou hast wandered into mine own domain!\\nBwa ha ha! Now shalt thou know the meaning of true despair!",
+            "text": "Hark, thou foolish child! Thou hast wandered into mine own domain! Bwa ha ha! Now shalt thou know the meaning of true despair!",
             "shake": true,
             "rockDrop": [
               {
@@ -4533,6 +4548,14 @@ var belowGameData = {
         "x21y21": {
           "x": 21,
           "y": 21
+        },
+        "x14y4": {
+          "x": 14,
+          "y": 4
+        },
+        "x11y3": {
+          "x": 11,
+          "y": 3
         }
       },
       "monsters": [],
@@ -4819,7 +4842,7 @@ var belowGameData = {
               "options": [
                 {
                   "id": "mole_post_a1",
-                  "text": "You wanted me to starve down here.",
+                  "text": "You wanted me to starve down here?",
                   "available": true,
                   "chains": [
                     "mole_post2"
@@ -4830,7 +4853,7 @@ var belowGameData = {
             {
               "id": "mole_post2",
               "available": false,
-              "text": "Aye, 'twas my design! To see thee wither, to watch the light fade from thine eyes! For then would I take the Hermit's precious herbs for mine own! But fate hath mocked me — thou art too clever by half!",
+              "text": "Aye, 'twas my design! To see thee wither, to watch the light fade from thine eyes! For then would I take the Hermit's precious herbs for mine own! But fate hath mocked me - thou art too clever by half!",
               "options": [
                 {
                   "id": "mole_post_a2",
@@ -4886,7 +4909,7 @@ var belowGameData = {
             {
               "id": "mole_post5_reveal",
               "available": false,
-              "text": "Dost thou see the shimmerin' walls? Beyond 'em lie chambers sealed by ancient stone doors. The Stone Key the Medusa guards shall open 'em, but only if thou hast earned her trust. Behind those doors, a stair awaits — one that leads deeper still, to wonders — or horrors — unknown. Seek it, if thou dare!",
+              "text": "Dost thou see the shimmerin' walls? Beyond 'em lie chambers sealed by ancient stone doors. The Stone Key the Medusa guards shall open 'em, but only if thou hast earned her trust. Behind those doors, a stair awaits - one that leads deeper still, to wonders - or horrors - unknown. Seek it, if thou dare!",
               "options": [
                 {
                   "id": "mole_post5_a",
@@ -4949,8 +4972,8 @@ var belowGameData = {
           },
           "targetMap": 3,
           "targetPosition": {
-            "x": 2,
-            "y": 2
+            "x": 3,
+            "y": -1
           },
           "text": "You descend deeper into the ancient passage..."
         }
@@ -4975,16 +4998,182 @@ var belowGameData = {
         "x3y3": {
           "x": 3,
           "y": 3
+        },
+        "x4y2": {
+          "x": 4,
+          "y": 2
+        },
+        "x4y3": {
+          "x": 4,
+          "y": 3
+        },
+        "x5y2": {
+          "x": 5,
+          "y": 2
+        },
+        "x5y3": {
+          "x": 5,
+          "y": 3
+        },
+        "x1y2": {
+          "x": 1,
+          "y": 2
+        },
+        "x1y3": {
+          "x": 1,
+          "y": 3
+        },
+        "x0y2": {
+          "x": 0,
+          "y": 2
+        },
+        "x0y3": {
+          "x": 0,
+          "y": 3
+        },
+        "xm1y1": {
+          "x": -1,
+          "y": 1
+        },
+        "x0y0": {
+          "x": 0,
+          "y": 0
+        },
+        "xm1y0": {
+          "x": -1,
+          "y": 0
+        },
+        "xm2y0": {
+          "x": -2,
+          "y": 0
+        },
+        "xm2ym1": {
+          "x": -2,
+          "y": -1
+        },
+        "xm1ym1": {
+          "x": -1,
+          "y": -1
+        },
+        "x0ym1": {
+          "x": 0,
+          "y": -1
+        },
+        "xm1y2": {
+          "x": -1,
+          "y": 2
+        },
+        "xm1y3": {
+          "x": -1,
+          "y": 3
+        },
+        "xm2y2": {
+          "x": -2,
+          "y": 2
+        },
+        "xm2y3": {
+          "x": -2,
+          "y": 3
+        },
+        "x3y1": {
+          "x": 3,
+          "y": 1
+        },
+        "x3y0": {
+          "x": 3,
+          "y": 0
+        },
+        "x2y0": {
+          "x": 2,
+          "y": 0
+        },
+        "x2ym1": {
+          "x": 2,
+          "y": -1
+        },
+        "x3ym1": {
+          "x": 3,
+          "y": -1
+        },
+        "x4ym1": {
+          "x": 4,
+          "y": -1
+        },
+        "x4y0": {
+          "x": 4,
+          "y": 0
+        },
+        "xm3y2": {
+          "x": -3,
+          "y": 2
+        },
+        "xm3y3": {
+          "x": -3,
+          "y": 3
         }
       },
       "monsters": [],
       "obstacles": [],
-      "npcs": [],
+      "npcs": [
+        {
+          "type": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "dialogOptions": [
+            {
+              "id": "detectiveq0",
+              "available": true,
+              "text": "A shadowy figure in a trenchcoat leans against the damp wall, his fedora casting his face in shadow. He takes a long drag from a cigarette that isn't lit. 'The name's Sam Shale. I'm looking for a dame. Long legs, scales, hair full of snakes. Goes by Medusa. You seen her?'",
+              "options": [
+                {
+                  "id": "detectivea0y",
+                  "text": "Yeah, she's back in the caves above.",
+                  "available": true,
+                  "opens": [
+                    "detectiveq1"
+                  ],
+                  "closes": [
+                    "detectiveq0"
+                  ],
+                  "chains": [
+                    "detectiveq1"
+                  ]
+                },
+                {
+                  "id": "detectivea0n",
+                  "text": "No, I haven't seen anyone like that.",
+                  "available": true,
+                  "closes": [
+                    "detectiveq0"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "detectiveq1",
+              "available": false,
+              "text": "He nods slowly. 'Figured as much. That dame's been around longer than these tunnels. She knows things. If you're looking to get out of this hole, she's your best bet. But be careful - she's got a past that follows her like a shadow.' He tips his hat. 'I'm done here. Watch your back, kid.'",
+              "options": [
+                {
+                  "id": "detectivea1",
+                  "text": "Thanks for the tip.",
+                  "available": true,
+                  "closes": [
+                    "detectiveq1"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
       "exits": [
         {
           "position": {
             "x": 2,
-            "y": 2
+            "y": -1
           },
           "targetMap": 2,
           "targetPosition": {

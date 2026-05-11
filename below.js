@@ -223,6 +223,9 @@ medusaImg.src = "images/medusa.png";
 var moleImg = new Image();
 moleImg.src = "images/mole.png";
 
+var detectiveImg = new Image();
+detectiveImg.src = "images/detective.png";
+
 var tableImg = new Image();
 tableImg.src = "images/table.png";
 
@@ -2004,6 +2007,7 @@ function drawMapCanvas() {
                 else if (type.icon === "merchant.png") img = merchantImg || new Image();
                 else if (type.icon === "medusa.png") img = medusaImg || new Image();
                 else if (type.icon === "mole.png") img = moleImg || new Image();
+                else if (type.icon === "detective.png") img = detectiveImg || new Image();
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
