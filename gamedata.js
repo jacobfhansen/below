@@ -40,7 +40,7 @@ var belowGameData = {
       "movement": 0.6,
       "color": "#433900",
       "icon": "bat.png",
-      "blocking": true,
+      "blocking": false,
       "aloof": true,
       "description": "A bat is in your way",
       "aloofTrueMsg": "A bat screeches and ignores you.",
@@ -1601,6 +1601,7 @@ var belowGameData = {
     {
       "id": 1,
       "name": "The Caves",
+      "defaultDescription": "A dark dusty place",
       "tiles": {
         "x0y2": {
           "x": 0,
@@ -2559,6 +2560,7 @@ var belowGameData = {
     {
       "id": 2,
       "name": "The Maze",
+      "defaultDescription": "A dark and damp place",
       "tiles": {
         "x8y3": {
           "x": 8,
@@ -4986,6 +4988,7 @@ var belowGameData = {
     {
       "id": 3,
       "name": "The Depths",
+      "defaultDescription": "A black and white depiction of Chicago in the 50's",
       "tiles": {
         "x2y2": {
           "x": 2,
