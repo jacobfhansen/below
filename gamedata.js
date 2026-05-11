@@ -4556,6 +4556,10 @@ var belowGameData = {
         "x11y3": {
           "x": 11,
           "y": 3
+        },
+        "x13y6": {
+          "x": 13,
+          "y": 6
         }
       },
       "monsters": [],
@@ -4973,7 +4977,7 @@ var belowGameData = {
           "targetMap": 3,
           "targetPosition": {
             "x": 3,
-            "y": -1
+            "y": 0
           },
           "text": "You descend deeper into the ancient passage..."
         }
@@ -5110,6 +5114,222 @@ var belowGameData = {
         "xm3y3": {
           "x": -3,
           "y": 3
+        },
+        "x3y4": {
+          "x": 3,
+          "y": 4
+        },
+        "x2y5": {
+          "x": 2,
+          "y": 5
+        },
+        "x2y6": {
+          "x": 2,
+          "y": 6
+        },
+        "x3y6": {
+          "x": 3,
+          "y": 6
+        },
+        "x3y5": {
+          "x": 3,
+          "y": 5
+        },
+        "x4y5": {
+          "x": 4,
+          "y": 5
+        },
+        "x4y6": {
+          "x": 4,
+          "y": 6
+        },
+        "xm1y4": {
+          "x": -1,
+          "y": 4
+        },
+        "xm1y5": {
+          "x": -1,
+          "y": 5
+        },
+        "x0y5": {
+          "x": 0,
+          "y": 5
+        },
+        "x0y6": {
+          "x": 0,
+          "y": 6
+        },
+        "xm1y6": {
+          "x": -1,
+          "y": 6
+        },
+        "xm2y6": {
+          "x": -2,
+          "y": 6
+        },
+        "xm2y5": {
+          "x": -2,
+          "y": 5
+        },
+        "xm4y1": {
+          "x": -4,
+          "y": 1
+        },
+        "xm4y0": {
+          "x": -4,
+          "y": 0
+        },
+        "xm4ym1": {
+          "x": -4,
+          "y": -1
+        },
+        "xm4y2": {
+          "x": -4,
+          "y": 2
+        },
+        "xm4y3": {
+          "x": -4,
+          "y": 3
+        },
+        "xm5y3": {
+          "x": -5,
+          "y": 3
+        },
+        "xm5y2": {
+          "x": -5,
+          "y": 2
+        },
+        "xm5y1": {
+          "x": -5,
+          "y": 1
+        },
+        "xm5y0": {
+          "x": -5,
+          "y": 0
+        },
+        "xm5ym1": {
+          "x": -5,
+          "y": -1
+        },
+        "xm5y4": {
+          "x": -5,
+          "y": 4
+        },
+        "xm5y5": {
+          "x": -5,
+          "y": 5
+        },
+        "xm4y4": {
+          "x": -4,
+          "y": 4
+        },
+        "xm4y5": {
+          "x": -4,
+          "y": 5
+        },
+        "xm4y7": {
+          "x": -4,
+          "y": 7
+        },
+        "xm5y6": {
+          "x": -5,
+          "y": 6
+        },
+        "xm4y6": {
+          "x": -4,
+          "y": 6
+        },
+        "xm5y7": {
+          "x": -5,
+          "y": 7
+        },
+        "xm4ym2": {
+          "x": -4,
+          "y": -2
+        },
+        "xm5ym2": {
+          "x": -5,
+          "y": -2
+        },
+        "x6y1": {
+          "x": 6,
+          "y": 1
+        },
+        "x6y0": {
+          "x": 6,
+          "y": 0
+        },
+        "x6ym1": {
+          "x": 6,
+          "y": -1
+        },
+        "x6ym2": {
+          "x": 6,
+          "y": -2
+        },
+        "x7ym2": {
+          "x": 7,
+          "y": -2
+        },
+        "x7ym1": {
+          "x": 7,
+          "y": -1
+        },
+        "x7y0": {
+          "x": 7,
+          "y": 0
+        },
+        "x7y1": {
+          "x": 7,
+          "y": 1
+        },
+        "x6y2": {
+          "x": 6,
+          "y": 2
+        },
+        "x7y2": {
+          "x": 7,
+          "y": 2
+        },
+        "x6y3": {
+          "x": 6,
+          "y": 3
+        },
+        "x7y3": {
+          "x": 7,
+          "y": 3
+        },
+        "x7y4": {
+          "x": 7,
+          "y": 4
+        },
+        "x6y4": {
+          "x": 6,
+          "y": 4
+        },
+        "x6y5": {
+          "x": 6,
+          "y": 5
+        },
+        "x7y5": {
+          "x": 7,
+          "y": 5
+        },
+        "x7y6": {
+          "x": 7,
+          "y": 6
+        },
+        "x6y6": {
+          "x": 6,
+          "y": 6
+        },
+        "x6y7": {
+          "x": 6,
+          "y": 7
+        },
+        "x7y7": {
+          "x": 7,
+          "y": 7
         }
       },
       "monsters": [],
@@ -5154,7 +5374,7 @@ var belowGameData = {
             {
               "id": "detectiveq1",
               "available": false,
-              "text": "He nods slowly. 'Figured as much. That dame's been around longer than these tunnels. She knows things. If you're looking to get out of this hole, she's your best bet. But be careful she's got a past that follows her like a shadow.' He tips his hat. 'I'm done here. Watch your back, kid.'",
+              "text": "He nods slowly. 'Figured as much. That dame's been around longer than these tunnels. She knows things. If you're looking to get out of this hole, she's your best bet. But be careful - she's got a past that follows her like a shadow.' He tips his hat. 'I'm done here. Watch your back, kid.'",
               "options": [
                 {
                   "id": "detectivea1",
