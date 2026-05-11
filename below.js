@@ -409,6 +409,9 @@ document.addEventListener("DOMContentLoaded", function() {
     var titleScreen = document.getElementById("titleScreen");
     if (titleScreen) {
         titleScreen.style.display = "flex";
+        // Auto-select first menu item (New Game)
+        var items = titleScreen.querySelectorAll('.below-front-menu-item');
+        if (items.length > 0) items[0].classList.add('menu-selected');
     }
     
     // New Game button
@@ -1261,8 +1264,8 @@ function switchPage(page) {
             pageEl.style.display = "flex";
             if (curPage === 'newGameDiv' || curPage === 'resumeGameDiv') {
                 updateSlotColors(curPage);
-            } else if (curPage === 'titleScreen') {
-                // Select first item in title screen
+            } else if (curPage === 'titleScreen' || curPage === 'characterSelectDiv') {
+                // Select first item
                 var items = pageEl.querySelectorAll('.below-front-menu-item');
                 items.forEach(function(item, index) {
                     if (index === 0) {
