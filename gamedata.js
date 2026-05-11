@@ -5154,7 +5154,7 @@ var belowGameData = {
             {
               "id": "detectiveq1",
               "available": false,
-              "text": "He nods slowly. 'Figured as much. That dame's been around longer than these tunnels. She knows things. If you're looking to get out of this hole, she's your best bet. But be careful - she's got a past that follows her like a shadow.' He tips his hat. 'I'm done here. Watch your back, kid.'",
+              "text": "He nods slowly. 'Figured as much. That dame's been around longer than these tunnels. She knows things. If you're looking to get out of this hole, she's your best bet. But be careful she's got a past that follows her like a shadow.' He tips his hat. 'I'm done here. Watch your back, kid.'",
               "options": [
                 {
                   "id": "detectivea1",
