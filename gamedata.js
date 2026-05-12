@@ -5770,7 +5770,7 @@ var belowGameData = {
         "xm1y12": {
           "x": -1,
           "y": 12,
-          "type": 1
+          "type": 5
         },
         "x0y8": {
           "x": 0,
@@ -5829,7 +5829,7 @@ var belowGameData = {
         "x2y12": {
           "x": 2,
           "y": 12,
-          "type": 5
+          "type": 1
         },
         "x3y8": {
           "x": 3,
@@ -5892,7 +5892,7 @@ var belowGameData = {
         "x5y12": {
           "x": 5,
           "y": 12,
-          "type": 1
+          "type": 5
         },
         "x6y8": {
           "x": 6,
@@ -5993,7 +5993,7 @@ var belowGameData = {
         "x10y12": {
           "x": 10,
           "y": 12,
-          "type": 5
+          "type": 1
         },
         "x11y8": {
           "x": 11,
@@ -6035,7 +6035,7 @@ var belowGameData = {
         "x12y12": {
           "x": 12,
           "y": 12,
-          "type": 1
+          "type": 5
         },
         "x13y8": {
           "x": 13,
@@ -6487,7 +6487,7 @@ var belowGameData = {
         "xm1y13": {
           "x": -1,
           "y": 13,
-          "type": 1
+          "type": 5
         },
         "x0y13": {
           "x": 0,
@@ -6502,7 +6502,7 @@ var belowGameData = {
         "x2y13": {
           "x": 2,
           "y": 13,
-          "type": 5
+          "type": 1
         },
         "x3y13": {
           "x": 3,
@@ -6522,7 +6522,7 @@ var belowGameData = {
         "x5y13": {
           "x": 5,
           "y": 13,
-          "type": 1
+          "type": 5
         },
         "x7y13": {
           "x": 7,
@@ -6542,7 +6542,7 @@ var belowGameData = {
         "x10y13": {
           "x": 10,
           "y": 13,
-          "type": 5
+          "type": 1
         },
         "x11y13": {
           "x": 11,
@@ -6552,7 +6552,7 @@ var belowGameData = {
         "x12y13": {
           "x": 12,
           "y": 13,
-          "type": 1
+          "type": 5
         },
         "x13y13": {
           "x": 13,
