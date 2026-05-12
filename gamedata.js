@@ -7108,84 +7108,84 @@ var belowGameData = {
             "x": 6,
             "y": -5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -5,
             "y": 0
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -8,
             "y": 3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 2,
             "y": -5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -5,
             "y": 5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -9,
             "y": 8
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 14,
             "y": 10
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -6,
             "y": 8
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 1,
             "y": 0
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -1,
             "y": 0
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -5,
             "y": -3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 2,
             "y": 3
           },
-"lightRadius": 2
+          "lightRadius": 2
         },
         {
           "type": 13,
@@ -7193,91 +7193,91 @@ var belowGameData = {
             "x": 2,
             "y": 5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -2,
             "y": 5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -3,
             "y": -5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 2,
             "y": 8
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 11,
             "y": 0
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 13,
             "y": 2
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 9,
             "y": 3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 11,
             "y": 5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 14,
             "y": 8
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 16,
             "y": 3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -10,
             "y": 0
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -3,
             "y": 3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 16,
             "y": 0
           },
-"lightRadius": 2
+          "lightRadius": 2
         },
         {
           "type": 13,
@@ -7285,56 +7285,56 @@ var belowGameData = {
             "x": 0,
             "y": 3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 2,
             "y": 10
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 5,
             "y": 3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 6,
             "y": 10
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 10,
             "y": -5
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -2,
             "y": 8
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 6,
             "y": 8
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 10,
             "y": 8
           },
-"lightRadius": 2
+          "lightRadius": 2
         },
         {
           "type": 13,
@@ -7342,21 +7342,21 @@ var belowGameData = {
             "x": 12,
             "y": -3
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": -2,
             "y": 10
           }
-},
+        },
         {
           "type": 13,
           "position": {
             "x": 10,
             "y": 10
-          },
-}
+          }
+        }
       ],
       "npcs": [
         {
@@ -7407,14 +7407,6 @@ var belowGameData = {
                   "available": true,
                   "closes": [
                     "detectiveq1"
-                  ]
-                },
-                {
-                  "id": "detectivea1_help",
-                  "text": "I need your help, but can't tell you here. The walls have ears.",
-                  "available": true,
-                  "closes": [
-                    "detectiveq1"
                   ],
                   "opens": [
                     "detective_help_intro"
@@ -7434,6 +7426,9 @@ var belowGameData = {
                   "available": true,
                   "chains": [
                     "detectiveq1"
+                  ],
+                  "closes": [
+                    "detective_jester"
                   ]
                 }
               ]
@@ -7441,7 +7436,7 @@ var belowGameData = {
             {
               "id": "detective_help_intro",
               "available": false,
-              "text": "Sam's eyes narrow. He glances over his shoulder at the flickering shadows. 'Yeah... I know the feeling. These tunnels got ears in the walls and eyes in the floor. Tell me when you're ready — I know a place we can talk without an audience.'",
+              "text": "Sam's eyes narrow. He glances over his shoulder at the flickering shadows. 'Kid, I need your help. But these tunnels got ears in the walls and eyes in the floor. I know a place we can talk without an audience. Tell me when you're ready'",
               "options": [
                 {
                   "id": "detective_help_intro_ready",
