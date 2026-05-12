@@ -800,14 +800,19 @@ function renderChoiceEvent() {
 
 function showDialogMessage(gameLogDiv) {
     if (below.choiceEvent.isDialog) {
-        var npcType = below.choiceEvent.npcType !== undefined && below.choiceEvent.npcType !== null
-            ? below.gameData.npcTypes[below.choiceEvent.npcType] : null;
-        if (npcType && npcType.dialogImg) {
+        var speakerTypeId = below.choiceEvent.speakerNpcType;
+        if (speakerTypeId === undefined || speakerTypeId === null) {
+            speakerTypeId = below.choiceEvent.npcType;
+        }
+        var isPrimary = (speakerTypeId === below.choiceEvent.npcType);
+        var speakerNpcType = speakerTypeId !== undefined && speakerTypeId !== null
+            ? below.gameData.npcTypes[speakerTypeId] : null;
+        if (speakerNpcType && speakerNpcType.dialogImg) {
             var container = document.createElement("DIV");
-            container.className = "below-dialog-message";
+            container.className = isPrimary ? "below-dialog-message" : "below-dialog-message-right";
             var img = document.createElement("IMG");
-            img.className = "below-dialog-img";
-            img.src = "images/" + npcType.dialogImg;
+            img.className = isPrimary ? "below-dialog-img" : "below-dialog-img-secondary";
+            img.src = "images/" + speakerNpcType.dialogImg;
             container.appendChild(img);
             var msgNode = document.createElement("P");
             msgNode.className = "below-game-left-paragraph-current";
@@ -1004,6 +1009,7 @@ function selectChoiceOption(index) {
                         message: nextDialog.text,
                         npcPos: below.choiceEvent.npcPos,
                         npcType: below.choiceEvent.npcType,
+                        speakerNpcType: nextDialog.speaker || below.choiceEvent.npcType,
                         npcAgitated: below.choiceEvent.npcAgitated,
                         dialogId: nextDialog.id,
                         dialogOptions: nextDialog.options.filter(function(o) {
@@ -1932,6 +1938,7 @@ function handleBlockedInteraction(x, y) {
                 message: availableDialog.text,
                 npcPos: { x: x, y: y },
                 npcType: npc.type,
+                speakerNpcType: availableDialog.speaker || npc.type,
                 npcAgitated: npc.agitated || false,
                 dialogId: availableDialog.id,
                 dialogOptions: availableDialog.options.filter(function(o) {

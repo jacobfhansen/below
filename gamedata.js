@@ -7383,7 +7383,7 @@ var belowGameData = {
                     "detectiveq0"
                   ],
                   "chains": [
-                    "detectiveq1"
+                    "detective_jester"
                   ]
                 },
                 {
@@ -7406,6 +7406,22 @@ var belowGameData = {
                   "text": "Thanks for the tip.",
                   "available": true,
                   "closes": [
+                    "detectiveq1"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "detective_jester",
+              "available": false,
+              "speaker": 2,
+              "text": "A cackling laugh echoes from the shadows. The Jester steps forward, twirling his bauble. 'The great Sam Shale! Still chasing dames through the underworld! He's been looking for Medusa since before these tunnels were dug. Won't ever find her, but it's fun to watch!' He winks and vanishes back into the darkness.",
+              "options": [
+                {
+                  "id": "detective_jester_a",
+                  "text": "...",
+                  "available": true,
+                  "chains": [
                     "detectiveq1"
                   ]
                 }

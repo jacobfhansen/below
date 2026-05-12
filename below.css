@@ -122,11 +122,25 @@ html, body {
     gap: 10px;
     margin: 10px 10px 0px 10px;
 }
+.below-dialog-message-right {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 10px 10px 0px 10px;
+    flex-direction: row-reverse;
+}
 .below-dialog-img {
     width: 64px;
     height: 64px;
     border-radius: 5px;
     border: 2px solid var(--cyan);
+    flex-shrink: 0;
+}
+.below-dialog-img-secondary {
+    width: 64px;
+    height: 64px;
+    border-radius: 5px;
+    border: 2px solid var(--green);
     flex-shrink: 0;
 }
 

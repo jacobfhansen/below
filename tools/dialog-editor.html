@@ -279,7 +279,12 @@ function renderDialogs() {
         html += '<span class="did">' + escHtml(d.id) + '</span>';
         html += '</div>';
         html += '<div class="dtext"><input value="' + escAttr(d.text) + '" onchange="updateDialogText(' + i + ', this.value)" onclick="event.stopPropagation()" style="width:100%;padding:2px 4px;border:1px solid #45475a;border-radius:3px;background:#11111b;color:#cdd6f4;font-size:12px;font-family:inherit"></div>';
-        html += '<div class="dmeta">' + optionCount + ' option' + (optionCount !== 1 ? 's' : '') + ' &middot; requiresItems: <input value="' + escAttr(arrToStr(d.requiresItems)) + '" onchange="updateDialogRequiresItems(' + i + ', this.value)" onclick="event.stopPropagation()" style="width:120px;padding:1px 4px;border:1px solid #45475a;border-radius:3px;background:#11111b;color:#cdd6f4;font-size:11px;font-family:monospace" placeholder="item IDs"></div>';
+        var speakerOpts = '<option value="">Primary NPC (default)</option>';
+        for (var tid in belowGameData.npcTypes) {
+            var t = belowGameData.npcTypes[tid];
+            speakerOpts += '<option value="' + tid + '"' + (d.speaker == tid ? ' selected' : '') + '>' + escHtml(t.name) + '</option>';
+        }
+        html += '<div class="dmeta">' + optionCount + ' option' + (optionCount !== 1 ? 's' : '') + ' &middot; Speaker: <select onchange="updateDialogSpeaker(' + i + ', this.value)" onclick="event.stopPropagation()" style="padding:1px 4px;border:1px solid #45475a;border-radius:3px;background:#11111b;color:#cdd6f4;font-size:11px;font-family:inherit">' + speakerOpts + '</select> &middot; requiresItems: <input value="' + escAttr(arrToStr(d.requiresItems)) + '" onchange="updateDialogRequiresItems(' + i + ', this.value)" onclick="event.stopPropagation()" style="width:120px;padding:1px 4px;border:1px solid #45475a;border-radius:3px;background:#11111b;color:#cdd6f4;font-size:11px;font-family:monospace" placeholder="item IDs"></div>';
         html += '<div style="margin-top:4px"><button class="btn btn-danger" style="font-size:11px;padding:1px 8px" onclick="event.stopPropagation(); removeDialog(' + i + ')">Delete</button></div>';
         html += '</div>';
     });
@@ -311,6 +316,16 @@ function updateDialogRequiresItems(idx, val) {
     npc.npc.dialogOptions[idx].requiresItems = strToArr(val).map(function(s) { return Number(s); });
 }
 
+function updateDialogSpeaker(idx, val) {
+    var npc = getSelectedNpc();
+    if (!npc) return;
+    if (val === "") {
+        delete npc.npc.dialogOptions[idx].speaker;
+    } else {
+        npc.npc.dialogOptions[idx].speaker = Number(val);
+    }
+}
+
 function addDialog() {
     var npc = getSelectedNpc();
     if (!npc) return;
@@ -318,6 +333,7 @@ function addDialog() {
     npc.npc.dialogOptions.push({
         id: "newq" + (count + 1),
         available: false,
+        speaker: npc.npc.type,
         text: "New dialog text",
         options: [
             { id: "newa" + (count + 1) + "a", text: "Option 1", available: true }
