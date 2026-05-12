@@ -5313,7 +5313,7 @@ var belowGameData = {
           "y1": 7,
           "x2": 15,
           "y2": 11,
-          "description": "The Docks. An underground lake stretches into darkness, its waters still and black. A rickety wooden pier extends over the water."
+          "description": "The Docks. An underground lake stretches into darkness, its waters still and black. A number of rickety wooden piers extends over the water."
         },
         {
           "x1": -2,
@@ -5377,6 +5377,13 @@ var belowGameData = {
           "x2": 16,
           "y2": -3,
           "description": "The Rooftop. The 'sky' is stalactites. The wind comes from somewhere deep below. A good place for a meet that nobody's supposed to see."
+        },
+        {
+          "x1": 17,
+          "y1": 8,
+          "x2": 19,
+          "y2": 10,
+          "description": "A dusty office built from reclaimed crate wood. A ledger sits open on the desk - every page blank. A mug of cold coffee rests beside a compass that spins in circles. Through the grimy window, the black water lapping at the dock is the only thing that moves."
         }
       ],
       "tiles": {
@@ -7433,6 +7440,56 @@ var belowGameData = {
         "x14ym10": {
           "x": 14,
           "y": -10,
+          "type": 2
+        },
+        "x16y9": {
+          "x": 16,
+          "y": 9,
+          "type": 0
+        },
+        "x17y9": {
+          "x": 17,
+          "y": 9,
+          "type": 2
+        },
+        "x17y8": {
+          "x": 17,
+          "y": 8,
+          "type": 2
+        },
+        "x18y8": {
+          "x": 18,
+          "y": 8,
+          "type": 2
+        },
+        "x19y9": {
+          "x": 19,
+          "y": 9,
+          "type": 2
+        },
+        "x19y8": {
+          "x": 19,
+          "y": 8,
+          "type": 2
+        },
+        "x18y9": {
+          "x": 18,
+          "y": 9,
+          "type": 2
+        },
+        "x17y10": {
+          "x": 17,
+          "y": 10,
+          "type": 2
+        },
+        "x18y10": {
+          "x": 18,
+          "y": 10,
+          "type": 2
+        },
+        "x19y10": {
+          "x": 19,
+          "y": 10,
           "type": 2
         }
       },
