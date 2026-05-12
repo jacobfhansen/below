@@ -7444,9 +7444,6 @@ var belowGameData = {
                   "available": true,
                   "closes": [
                     "detective_help_intro"
-                  ],
-                  "opens": [
-                    "detective_ready"
                   ]
                 },
                 {

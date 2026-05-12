@@ -1173,7 +1173,7 @@ function selectChoiceOption(index) {
     }
     
     // When player chooses "Let's go" for Sam Slate's walk
-    if (selectedOption.id === "detective_ready_go" && below.choiceEvent && below.choiceEvent.npcPos) {
+    if ((selectedOption.id === "detective_ready_go" || selectedOption.id === "detective_help_intro_ready") && below.choiceEvent && below.choiceEvent.npcPos) {
         var curMap = below.gameData.player.currentMap;
         var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
             return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
@@ -1188,7 +1188,7 @@ function selectChoiceOption(index) {
             if (arrivalD) arrivalD.available = true;
             below.gameData.mapLog.push("Sam Slate stops in a shadowy alcove and gestures for you to join him.");
             maintainMapLog();
-        })) {
+        }, 3)) {
             below.gameData.mapLog.push("Sam Slate tips his hat and melts into the shadows. You follow at a distance.");
             maintainMapLog();
         }
@@ -1931,13 +1931,15 @@ function findPath(startX, startY, endX, endY) {
     return null;
 }
 
-function npcWalkTo(npc, targetX, targetY, onComplete) {
+function npcWalkTo(npc, targetX, targetY, onComplete, walkDelay) {
     var path = findPath(Math.round(npc.position.x), Math.round(npc.position.y), targetX, targetY);
     if (!path || path.length === 0) {
         console.warn("No path found for NPC from (" + npc.position.x + "," + npc.position.y + ") to (" + targetX + "," + targetY + ")");
         return false;
     }
     npc.walkPath = path;
+    npc.walkDelay = walkDelay || 0;
+    npc._walkTimer = undefined;
     npc.onPathComplete = onComplete;
     return true;
 }
@@ -2394,7 +2396,7 @@ function drawMapCanvas() {
         var distanceM = Math.sqrt(distXM * distXM + distYM * distYM);
         
         // Check vision and line-of-sight
-        if (distanceM <= visionPixels && visibleTiles[monster.position.x + "," + monster.position.y]) {
+        if (distanceM <= visionPixels && visibleTiles[Math.round(monster.position.x) + "," + Math.round(monster.position.y)]) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type) return; // Skip if monster type is undefined
             if (type["icon"]) {
@@ -2421,7 +2423,7 @@ function drawMapCanvas() {
         var distanceN = Math.sqrt(distXN * distXN + distYN * distYN);
         
         // Check vision and line-of-sight
-        if (distanceN <= visionPixels && visibleTiles[npc.position.x + "," + npc.position.y]) {
+        if (distanceN <= visionPixels && visibleTiles[Math.round(npc.position.x) + "," + Math.round(npc.position.y)]) {
             var type = below.gameData.npcTypes[npc.type];
             if (!type) return; // Skip if NPC type is undefined
                 if (type.icon) {
@@ -2786,6 +2788,13 @@ function mapGameLoop() {
             // Scripted path movement takes priority over random walk
             if (npc.walkPath && npc.walkPath.length > 0) {
                 if (!npc.destPos.xVelocity && !npc.destPos.yVelocity) {
+                    // Speed control: walkDelay = extra ticks to wait between steps
+                    if (npc.walkDelay > 0) {
+                        if (npc._walkTimer === undefined) npc._walkTimer = 0;
+                        npc._walkTimer++;
+                        if (npc._walkTimer <= npc.walkDelay) return;
+                        npc._walkTimer = 0;
+                    }
                     var nextStep = npc.walkPath[0];
                     var dx = nextStep.x - Math.round(npc.position.x);
                     var dy = nextStep.y - Math.round(npc.position.y);
