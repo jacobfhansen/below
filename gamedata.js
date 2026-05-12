@@ -5249,79 +5249,93 @@ var belowGameData = {
           "x1": -3,
           "y1": 0,
           "x2": 3,
-          "y2": 1,
-          "description": "A narrow alley where the ancient stairs from the maze empty out. Faint light flickers from the street ahead."
+          "y2": 5,
+          "description": "An empty square where the ancient stairs from the maze empty out. Faint light flickers from the street ahead."
         },
         {
-          "x1": 0,
-          "y1": 2,
-          "x2": 5,
-          "y2": 3,
-          "description": "Central crossing of the Depths. Shadowy figures dart between pools of lamplight. The air smells of damp concrete and desperation."
-        },
-        {
-          "x1": -10,
-          "y1": 2,
-          "x2": -1,
-          "y2": 3,
+          "x1": -6,
+          "y1": -6,
+          "x2": -5,
+          "y2": 8,
           "description": "West Main Street. Dilapidated storefronts line the street, their windows dark and dusty. A flickering neon sign buzzes somewhere above."
         },
         {
-          "x1": 6,
-          "y1": 2,
-          "x2": 14,
-          "y2": 3,
+          "x1": 11,
+          "y1": -6,
+          "x2": 12,
+          "y2": 6,
           "description": "East Main Street. The road widens here, leading toward the docks. Crates and barrels are stacked against the walls."
         },
         {
-          "x1": -5,
+          "x1": -10,
           "y1": -1,
-          "x2": -5,
-          "y2": 8,
+          "x2": -9,
+          "y2": 1,
           "description": "A narrow side street cutting north-south. Puddles of water reflect the dim glow of a single lamp."
         },
         {
-          "x1": 9,
-          "y1": -1,
-          "x2": 9,
+          "x1": -10,
+          "y1": 7,
+          "x2": -7,
           "y2": 8,
           "description": "An eastern alley used by merchants to haul goods to and from the docks."
         },
         {
-          "x1": -7,
-          "y1": 0,
-          "x2": -7,
-          "y2": 1,
-          "description": "A dead-end alley filled with discarded crates. Nothing of value here."
+          "x1": -2,
+          "y1": 12,
+          "x2": -1,
+          "y2": 13,
+          "description": "Pier A1."
         },
         {
-          "x1": 11,
-          "y1": 0,
-          "x2": 12,
-          "y2": 1,
-          "description": "A dead end. The wall is covered in old posters advertising circuses and miracle tonics."
+          "x1": 5,
+          "y1": 12,
+          "x2": 6,
+          "y2": 13,
+          "description": "Pier B2."
         },
         {
-          "x1": -8,
-          "y1": 4,
-          "x2": -8,
-          "y2": 5,
-          "description": "A garbage-strewn alley behind what used to be a restaurant. The smell is overwhelming."
+          "x1": 12,
+          "y1": 12,
+          "x2": 13,
+          "y2": 13,
+          "description": "Pier C3."
         },
         {
-          "x1": 11,
-          "y1": 4,
-          "x2": 12,
-          "y2": 5,
-          "description": "A short alley ending at a collapsed tunnel. Rubble blocks any further passage."
+          "x1": 4,
+          "y1": 2,
+          "x2": 10,
+          "y2": 3,
+          "description": "A garbage-strewn alley. The walls are covered in old posters advertising circuses and miracle tonics."
         },
         {
-          "x1": -5,
-          "y1": 8,
-          "x2": 14,
-          "y2": 12,
+          "x1": -4,
+          "y1": 7,
+          "x2": 15,
+          "y2": 11,
           "description": "The Docks. An underground lake stretches into darkness, its waters still and black. A rickety wooden pier extends over the water."
-        }
+        },
+        {
+          "x1": -2,
+          "y1": -3,
+          "x2": 1,
+          "y2": -2,
+          "description": "Sam Shales 'office'. A hollowed-out crevice with a crate desk and a candle stub. A single photograph's tacked to the wall - a woman's silhouette. Medusa, you'd guess."
+        },
+        {
+          "x1": -4,
+          "y1": -6,
+          "x2": 10,
+          "y2": -5,
+          "description": "The 'business district' of this underground city - a row of hollowed-out alcoves that pass for storefronts. Sam Shale's office sits next to a dimly lit bar. A payphone rings. Nobody answers."
+        },
+        {
+          "x1": 6,
+          "y1": -3,
+          "x2": 9,
+          "y2": -1,
+          "description": "A low-ceilinged joint carved out of a natural fissure. The bar is a plank across two barrels. A single bulb buzzes over a game of cards that never finishes. The special today is 'don't ask.'"
+        }        
       ],
       "tiles": {
         "xm10y2": {
@@ -7399,7 +7413,7 @@ var belowGameData = {
             {
               "id": "detectiveq1",
               "available": false,
-              "text": "He nods slowly. 'Figured as much. That dame's been around longer than these tunnels. She knows things. If you're looking to get out of this hole, she's your best bet. But be careful - she's got a past that follows her like a shadow.' He tips his hat. 'I'm done here. Watch your back, kid.'",
+              "text": "As if he did not notice the Jester he nods slowly. 'Figured as much. That dame's been around longer than these tunnels. She knows things. If you're looking to get out of this hole, she's your best bet. But be careful - she's got a past that follows her like a shadow.' He tips his hat. 'I'm done here. Watch your back, kid.'",
               "options": [
                 {
                   "id": "detectivea1",

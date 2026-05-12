@@ -2627,8 +2627,27 @@ function drawMapCanvas() {
         context.font = "italic 13px Courier New";
         var descW = descText ? context.measureText(descText).width : 0;
         var boxW = Math.max(nameW, descW) + 20;
-        var boxH = descText ? lineH * 2 + 10 : lineH + 10;
         if (boxW > canvas.width - 20) boxW = canvas.width - 20;
+        
+        // Word-wrap description text
+        var descLines = descText ? [descText] : [];
+        if (descW > boxW - 20) {
+            descLines = [];
+            var words = descText.split(' ');
+            var line = '';
+            for (var wi = 0; wi < words.length; wi++) {
+                var testLine = line ? line + ' ' + words[wi] : words[wi];
+                if (context.measureText(testLine).width > boxW - 20 && line) {
+                    descLines.push(line);
+                    line = words[wi];
+                } else {
+                    line = testLine;
+                }
+            }
+            if (line) descLines.push(line);
+        }
+        var descLineCount = descLines.length;
+        var boxH = descLineCount > 0 ? lineH * (1 + descLineCount) + 10 : lineH + 10;
         
         // Background
         context.fillStyle = "rgba(0, 0, 0, 0.75)";
@@ -2644,11 +2663,13 @@ function drawMapCanvas() {
         context.textBaseline = "top";
         context.fillText(nameText, boxX + 10, boxY + 5);
         
-        // Area description
-        if (descText) {
+        // Area description (wrapped)
+        if (descLines.length > 0) {
             context.fillStyle = "#B8C76F";
             context.font = "italic 13px Courier New";
-            context.fillText(descText, boxX + 10, boxY + lineH + 5);
+            for (var li = 0; li < descLines.length; li++) {
+                context.fillText(descLines[li], boxX + 10, boxY + lineH * (li + 1) + 5);
+            }
         }
     }
 }
