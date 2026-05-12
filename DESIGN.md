@@ -39,7 +39,9 @@ Lives in The Maze, a series of tunnels he has dug to find the herbs the Hermit h
 
 ### Sam Shale
 Film noir detective. Endlessly searching for Medusa, lost in his fake Chicago-like cave chasing shadows.
-- Believes the Jester is his contact in the underworld
+- Believes the Jester is his contact in the underworld and numerious other characters that fit into his universe.
+- Sam Slate is a two-dimensional character that only exists in his film-noir hard-bioled detective universe and
+can not understand and ignores anything that fals out of that context.
 
 ---
 
@@ -62,7 +64,8 @@ Three-section maze with Mole, traps, pushable rocks, shimmering walls, locked st
 - Jester disguise system: Jester icon/name/text swaps to impersonate various characters tailing Sam Shale
 - Player encounters "disguised" Jester giving false noir leads
 - Player can reveal the Jester but Sam Shale ignores it — he's in-character, can't hear the audience
-- **Climax**: Sam corners "Medusa" (Jester in disguise) → revelation → exit to Map 4 unlocks
+- Real quest is finding parts for a derelict boat that is harbored on one of the piers to repair it and sail on to map 4.
+- Sam Slate recognises boat parts as evidence in his investigation, but player can see what the items truly are.
 
 ### Map 4 — The Glowing Caves *(planned)*
 - Bioluminescent mushrooms, glowing flora

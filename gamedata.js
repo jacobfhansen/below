@@ -7408,6 +7408,17 @@ var belowGameData = {
                   "closes": [
                     "detectiveq1"
                   ]
+                },
+                {
+                  "id": "detectivea1_help",
+                  "text": "I need your help, but can't tell you here. The walls have ears.",
+                  "available": true,
+                  "closes": [
+                    "detectiveq1"
+                  ],
+                  "opens": [
+                    "detective_help_intro"
+                  ]
                 }
               ]
             },
@@ -7423,6 +7434,70 @@ var belowGameData = {
                   "available": true,
                   "chains": [
                     "detectiveq1"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "detective_help_intro",
+              "available": false,
+              "text": "Sam's eyes narrow. He glances over his shoulder at the flickering shadows. 'Yeah... I know the feeling. These tunnels got ears in the walls and eyes in the floor. Tell me when you're ready — I know a place we can talk without an audience.'",
+              "options": [
+                {
+                  "id": "detective_help_intro_ready",
+                  "text": "I'm ready. Let's go.",
+                  "available": true,
+                  "closes": [
+                    "detective_help_intro"
+                  ],
+                  "opens": [
+                    "detective_ready"
+                  ]
+                },
+                {
+                  "id": "detective_help_intro_later",
+                  "text": "Maybe later.",
+                  "available": true,
+                  "closes": [
+                    "detective_help_intro"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "detective_ready",
+              "available": false,
+              "text": "'Alright, follow my lead. And try to look like you belong — not that anyone down here does.' He pushes off the wall and jerks his head toward the darkness.",
+              "options": [
+                {
+                  "id": "detective_ready_go",
+                  "text": "Let's go.",
+                  "available": true
+                },
+                {
+                  "id": "detective_ready_notyet",
+                  "text": "Not ready yet. Give me a minute.",
+                  "available": true,
+                  "closes": [
+                    "detective_ready"
+                  ],
+                  "opens": [
+                    "detective_help_intro"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "detective_arrival",
+              "available": false,
+              "text": "Sam glances around the dim corridor, his hand resting on his coat lapel. 'Alright, kid. We're alone now. Well, as alone as anyone gets in a joint like this. The shadows in this place got shadows of their own. But I've been watching. I've been listenin'. And there's something goin' on down here bigger than any dame with snakes for hair. You want out of this hole? I might just know a way. But it ain't gonna be pretty.'",
+              "options": [
+                {
+                  "id": "detective_arrival_a1",
+                  "text": "I'm listening.",
+                  "available": true,
+                  "closes": [
+                    "detective_arrival"
                   ]
                 }
               ]

@@ -1172,6 +1172,28 @@ function selectChoiceOption(index) {
         }
     }
     
+    // When player chooses "Let's go" for Sam Slate's walk
+    if (selectedOption.id === "detective_ready_go" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, -9, 0, function() {
+            var arrivalDialogs = ["detectiveq0", "detectiveq1", "detective_help_intro", "detective_ready"];
+            arrivalDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var arrivalD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_arrival"; });
+            if (arrivalD) arrivalD.available = true;
+            below.gameData.mapLog.push("Sam Slate stops in a shadowy alcove and gestures for you to join him.");
+            maintainMapLog();
+        })) {
+            below.gameData.mapLog.push("Sam Slate tips his hat and melts into the shadows. You follow at a distance.");
+            maintainMapLog();
+        }
+    }
+    
     if (!below.passwordInput) {
         closeChoiceEvent();
     }
@@ -1867,6 +1889,57 @@ function isTileAllowed(monster, x, y) {
     return monster.allowedTiles.some(function(tile) {
         return tile.x === x && tile.y === y;
     });
+}
+
+function isPathBlocked(x, y) {
+    var curMap = below.gameData.player.currentMap;
+    // Check obstacles (blocking ones only)
+    var obstacles = below.gameData.mapData[curMap].obstacles || [];
+    var blockedByObstacle = obstacles.some(function(o) {
+        if (!o.position) return false;
+        var obsType = below.gameData.obstacleTypes[o.type];
+        var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
+        return o.position.x === x && o.position.y === y && isBlocking;
+    });
+    if (blockedByObstacle) return true;
+    // Check blocking tiles
+    if (isTileBlocking(x, y)) return true;
+    return false;
+}
+
+function findPath(startX, startY, endX, endY) {
+    var curMap = below.gameData.player.currentMap;
+    var queue = [{x: startX, y: startY, path: []}];
+    var visited = {};
+    visited[startX + "," + startY] = true;
+    while (queue.length > 0) {
+        var cur = queue.shift();
+        if (cur.x === endX && cur.y === endY) {
+            return cur.path;
+        }
+        var dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+        for (var di = 0; di < 4; di++) {
+            var nx = cur.x + dirs[di][0];
+            var ny = cur.y + dirs[di][1];
+            var key = nx + "," + ny;
+            if (!visited[key] && foundTile(nx, ny) && !isPathBlocked(nx, ny)) {
+                visited[key] = true;
+                queue.push({x: nx, y: ny, path: cur.path.concat([{x: nx, y: ny}])});
+            }
+        }
+    }
+    return null;
+}
+
+function npcWalkTo(npc, targetX, targetY, onComplete) {
+    var path = findPath(Math.round(npc.position.x), Math.round(npc.position.y), targetX, targetY);
+    if (!path || path.length === 0) {
+        console.warn("No path found for NPC from (" + npc.position.x + "," + npc.position.y + ") to (" + targetX + "," + targetY + ")");
+        return false;
+    }
+    npc.walkPath = path;
+    npc.onPathComplete = onComplete;
+    return true;
 }
 
 function getBlockedChoiceEvents(x, y) {
@@ -2707,9 +2780,29 @@ function mapGameLoop() {
         // NPC movement
         below.gameData.mapData[curMap].npcs.forEach(function(npc) {
             var type = below.gameData.npcTypes[npc.type];
-            if (!type || !type.movement) return;
+            if (!type) return;
             if (!npc.destPos) npc.destPos = { x: null, y: null, xVelocity: null, yVelocity: null };
-            if (Math.random() < type.movement) {
+            
+            // Scripted path movement takes priority over random walk
+            if (npc.walkPath && npc.walkPath.length > 0) {
+                if (!npc.destPos.xVelocity && !npc.destPos.yVelocity) {
+                    var nextStep = npc.walkPath[0];
+                    var dx = nextStep.x - Math.round(npc.position.x);
+                    var dy = nextStep.y - Math.round(npc.position.y);
+                    if (Math.abs(dx) + Math.abs(dy) === 1 && foundTile(nextStep.x, nextStep.y) && !isPathBlocked(nextStep.x, nextStep.y)) {
+                        if (dx === 1) { npc.destPos.xVelocity = 1; npc.destPos.x = nextStep.x; }
+                        else if (dx === -1) { npc.destPos.xVelocity = -1; npc.destPos.x = nextStep.x; }
+                        else if (dy === 1) { npc.destPos.yVelocity = 1; npc.destPos.y = nextStep.y; }
+                        else if (dy === -1) { npc.destPos.yVelocity = -1; npc.destPos.y = nextStep.y; }
+                        npc.walkPath.shift();
+                    }
+                }
+            } else if (npc.onPathComplete) {
+                var cb = npc.onPathComplete;
+                delete npc.walkPath;
+                delete npc.onPathComplete;
+                cb();
+            } else if (type.movement && Math.random() < type.movement) {
                 var dir = (Math.floor(Math.random() * 4)) + 1;
                 if (dir === 1 && foundTile(npc.position.x, npc.position.y - 1)) {
                     if (npc.position.x === below.gameData.player.currentLocation.x && npc.position.y - 1 === below.gameData.player.currentLocation.y) {
