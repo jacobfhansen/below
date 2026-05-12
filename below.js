@@ -1194,6 +1194,177 @@ function selectChoiceOption(index) {
         }
     }
     
+    // Walk from office to police precinct
+    if ((selectedOption.id === "detective_arrival_in" || selectedOption.id === "detective_arrival_doubt_in") && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, -5, -9, function() {
+            var closeDialogs = ["detective_arrival", "detective_arrival_doubt"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_precinct"; });
+            if (openD) openD.available = true;
+            below.gameData.mapLog.push("Sam leads you through the damp streets to the police precinct.");
+            maintainMapLog();
+        }, 3)) {
+            below.gameData.mapLog.push("Sam nods and pushes off the crate. 'Stay close.'");
+            maintainMapLog();
+        }
+    }
+    
+    // Walk from precinct to Honest Abe's
+    if ((selectedOption.id === "detective_precinct_go" || selectedOption.id === "detective_precinct_go2") && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, 1, -9, function() {
+            var closeDialogs = ["detective_precinct", "detective_precinct_sgt", "detective_precinct_info", "detective_precinct_thanks", "detective_precinct_sgt_final", "detective_precinct_after", "detective_precinct_reliable"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_abe"; });
+            if (openD) openD.available = true;
+            below.gameData.mapLog.push("Sam ducks into a narrow alley and emerges at Honest Abe's Pawn Shop.");
+            maintainMapLog();
+        }, 3)) {
+            below.gameData.mapLog.push("Sam tips his hat at the Sergeant and heads for the door.");
+            maintainMapLog();
+        }
+    }
+    
+    // Walk from Abe's to Rooftop
+    if ((selectedOption.id === "detective_abe_go" || selectedOption.id === "detective_abe_go2") && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, 15, -4, function() {
+            var closeDialogs = ["detective_abe", "detective_abe_char", "detective_abe_medusa", "detective_abe_after", "detective_abe_explain"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_rooftop"; });
+            if (openD) openD.available = true;
+            below.gameData.mapLog.push("Sam leads you through a service alley and up a rusted ladder to a high ledge.");
+            maintainMapLog();
+        }, 3)) {
+            below.gameData.mapLog.push("Sam thanks Abe and heads for the back exit.");
+            maintainMapLog();
+        }
+    }
+    
+    // Walk from Rooftop to The Last Stop Diner
+    if (selectedOption.id === "detective_rooftop_go" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, 7, -9, function() {
+            var closeDialogs = ["detective_rooftop", "detective_rooftop_mouse", "detective_rooftop_after"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_diner"; });
+            if (openD) openD.available = true;
+            below.gameData.mapLog.push("The neon sign of The Last Stop buzzes ahead. Sam picks up the pace.");
+            maintainMapLog();
+        }, 3)) {
+            below.gameData.mapLog.push("Sam climbs down from the ledge without a word.");
+            maintainMapLog();
+        }
+    }
+    
+    // Walk from Diner to Jazz Club
+    if (selectedOption.id === "detective_diner_go" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, 12, -9, function() {
+            var closeDialogs = ["detective_diner", "detective_diner_flo", "detective_diner_after"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_jazz"; });
+            if (openD) openD.available = true;
+            below.gameData.mapLog.push("Sam stops outside a doorway draped in red curtains. Muffled piano drifts through.");
+            maintainMapLog();
+        }, 3)) {
+            below.gameData.mapLog.push("Sam pockets the photograph and heads back out into the street.");
+            maintainMapLog();
+        }
+    }
+    
+    // Walk from Jazz Club to Dock Master
+    if (selectedOption.id === "detective_jazz_go" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, 18, 9, function() {
+            var closeDialogs = ["detective_jazz", "detective_jazz_piano", "detective_jazz_after"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_dockmaster"; });
+            if (openD) openD.available = true;
+            below.gameData.mapLog.push("The Dock Master's office emerges from the mist — a cratewood shack over black water.");
+            maintainMapLog();
+        }, 3)) {
+            below.gameData.mapLog.push("Sam steps away from the jazz club, his jaw tight.");
+            maintainMapLog();
+        }
+    }
+    
+    // Walk from Dock Master to Pier C3
+    if (selectedOption.id === "detective_dockmaster_go" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc && npcWalkTo(samNpc, 12, 12, function() {
+            var closeDialogs = ["detective_dockmaster", "detective_dockmaster_char", "detective_dockmaster_letter", "detective_dockmaster_after", "detective_dockmaster_catch"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_pier"; });
+            if (openD) openD.available = true;
+            below.gameData.mapLog.push("Sam walks to the end of Pier C3. Black water laps against the pilings.");
+            maintainMapLog();
+        }, 3)) {
+            below.gameData.mapLog.push("Sam folds the letter and steps out onto the pier.");
+            maintainMapLog();
+        }
+    }
+    
+    // Handle "Let her go" and "We can still catch her" on dockmaster_after
+    if (selectedOption.id === "detective_dockmaster_leave" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc) {
+            var closeDialogs = ["detective_dockmaster", "detective_dockmaster_char", "detective_dockmaster_letter", "detective_dockmaster_after"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var pierD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_pier"; });
+            if (pierD) pierD.available = true;
+        }
+    }
+    
     if (!below.passwordInput) {
         closeChoiceEvent();
     }

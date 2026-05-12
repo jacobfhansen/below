@@ -7875,15 +7875,399 @@ var belowGameData = {
             {
               "id": "detective_arrival",
               "available": false,
-              "text": "Sam glances around the dim corridor, his hand resting on his coat lapel. 'Alright, kid. We're alone now. Well, as alone as anyone gets in a joint like this. The shadows in this place got shadows of their own. But I've been watching. I've been listenin'. And there's something goin' on down here bigger than any dame with snakes for hair. You want out of this hole? I might just know a way. But it ain't gonna be pretty.'",
+              "text": "Sam settles onto a crate and gestures for you to sit. 'Alright, kid. We're alone now. Well, as alone as anyone gets in a joint like this. I've been on this case for longer than I care to admit. Medusa. The dame with the snake eyes. She's the key to this whole underground maze — I can feel it in my bones. Every lead I get turns to dust. But I've got a few threads left to pull. You in?'",
               "options": [
                 {
-                  "id": "detective_arrival_a1",
-                  "text": "I'm listening.",
+                  "id": "detective_arrival_in",
+                  "text": "I'm in. Where do we start?",
+                  "available": true
+                },
+                {
+                  "id": "detective_arrival_out",
+                  "text": "I don't know, Sam. This seems dangerous.",
                   "available": true,
-                  "closes": [
-                    "detective_arrival"
-                  ]
+                  "chains": ["detective_arrival_doubt"]
+                }
+              ]
+            },
+            {
+              "id": "detective_arrival_doubt",
+              "available": false,
+              "text": "Sam chuckles dryly. 'Kid, everything down here is dangerous. The difference is, I've got a plan. Stick with me.'",
+              "options": [
+                {
+                  "id": "detective_arrival_doubt_in",
+                  "text": "Alright, I'm in.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "detective_precinct",
+              "available": false,
+              "text": "Sam pushes through the creaking door of the precinct and approaches the desk. 'Sergeant. Got a minute?'",
+              "options": [
+                {
+                  "id": "detective_precinct_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_precinct_sgt"]
+                }
+              ]
+            },
+            {
+              "id": "detective_precinct_sgt",
+              "available": false,
+              "speaker": 2,
+              "text": "'Shale! You're still alive. That's either good police work or bad luck.' The Sergeant shuffles a stack of papers noisily. 'What do you want?'",
+              "options": [
+                {
+                  "id": "detective_precinct_sgt_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_precinct_info"]
+                }
+              ]
+            },
+            {
+              "id": "detective_precinct_info",
+              "available": false,
+              "speaker": 2,
+              "text": "'Let me check my... uh... report file.' More shuffling. 'Yeah, I got something. A guy was brought in — vagrant — kept rambling about the snake woman. Said she was heading west. Through the maintenance tunnels.'",
+              "options": [
+                {
+                  "id": "detective_precinct_info_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_precinct_thanks"]
+                }
+              ]
+            },
+            {
+              "id": "detective_precinct_thanks",
+              "available": false,
+              "text": "'Thanks, Sergeant. You've been... helpful.'",
+              "options": [
+                {
+                  "id": "detective_precinct_thanks_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_precinct_sgt_final"]
+                }
+              ]
+            },
+            {
+              "id": "detective_precinct_sgt_final",
+              "available": false,
+              "speaker": 2,
+              "text": "'That's what I'm here for. Serving. Protecting. Filing.'",
+              "options": [
+                {
+                  "id": "detective_precinct_sgt_final_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_precinct_after"]
+                }
+              ]
+            },
+            {
+              "id": "detective_precinct_after",
+              "available": false,
+              "text": "Sam turns to you, lowering his voice. 'The maintenance tunnels are a bust, but if she was heading west, she'd have passed through the old market district. There's a guy there who sees everything — Abe. Runs a pawn shop.'",
+              "options": [
+                {
+                  "id": "detective_precinct_go",
+                  "text": "Let's go see Abe.",
+                  "available": true
+                },
+                {
+                  "id": "detective_precinct_doubt",
+                  "text": "Is the Sergeant reliable?",
+                  "available": true,
+                  "chains": ["detective_precinct_reliable"]
+                }
+              ]
+            },
+            {
+              "id": "detective_precinct_reliable",
+              "available": false,
+              "text": "Sam shrugs. 'About as reliable as a three-dollar watch. But it's all we got.'",
+              "options": [
+                {
+                  "id": "detective_precinct_go2",
+                  "text": "Let's go see Abe.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "detective_abe",
+              "available": false,
+              "text": "A bell jingles as Sam ducks through the bead curtain of Honest Abe's. The shop is packed floor to ceiling with junk and treasures. 'Abe. You in?'",
+              "options": [
+                {
+                  "id": "detective_abe_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_abe_char"]
+                }
+              ]
+            },
+            {
+              "id": "detective_abe_char",
+              "available": false,
+              "speaker": 2,
+              "text": "From behind a mountain of mismatched lamps, a voice replies in a theatrical singsong. 'Sammy Shale! Long time no pawn! You here to sell or to stare at my magnificent collection of stuff?' Abe emerges, grinning too wide. 'I got information. I got misinformation. I got stuff that looks like information but is actually just a potato. You gotta be specific.'",
+              "options": [
+                {
+                  "id": "detective_abe_char_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_abe_medusa"]
+                }
+              ]
+            },
+            {
+              "id": "detective_abe_medusa",
+              "available": false,
+              "speaker": 2,
+              "text": "'Medusa! The name I know, the face I don't. Very mysterious. Very dangerous. Very overrated, if you ask me.' Abe leans on the counter conspiratorially. 'She came through. Bought a compass. Old-fashioned one. Paid with a gold coin that was definitely not minted anywhere official. Asked about the Rooftop. Specifically. Said she needed to see the stars.' He laughs. 'Don't ask me why — there ain't no stars down here.'",
+              "options": [
+                {
+                  "id": "detective_abe_medusa_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_abe_after"]
+                }
+              ]
+            },
+            {
+              "id": "detective_abe_after",
+              "available": false,
+              "text": "Sam nods slowly. 'The Rooftop. That's an old smugglers' lookout. If she was headed there, she was meeting someone.' He turns to you. 'We're taking the service alley.'",
+              "options": [
+                {
+                  "id": "detective_abe_go",
+                  "text": "Let's head to the Rooftop.",
+                  "available": true
+                },
+                {
+                  "id": "detective_abe_what",
+                  "text": "What's on the Rooftop?",
+                  "available": true,
+                  "chains": ["detective_abe_explain"]
+                }
+              ]
+            },
+            {
+              "id": "detective_abe_explain",
+              "available": false,
+              "text": "'A meeting spot. Old smugglers used it to watch for heat coming through the tunnels. If she was headed there, she was waiting for somebody — or something.'",
+              "options": [
+                {
+                  "id": "detective_abe_go2",
+                  "text": "Let's go.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "detective_rooftop",
+              "available": false,
+              "text": "Sam climbs the rusted ladder to a high ledge overlooking the cavern. Stalactites hang low like a stone sky. The wind howls from somewhere deep below. 'He said he'd be here. The informant. Jittery guy — goes by Mouse.'",
+              "options": [
+                {
+                  "id": "detective_rooftop_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_rooftop_mouse"]
+                }
+              ]
+            },
+            {
+              "id": "detective_rooftop_mouse",
+              "available": false,
+              "speaker": 2,
+              "text": "A figure emerges from behind a crate, hunched and twitchy, doing a squeaky voice. 'Shale! Man, you're late! I been standing here for like... a really long time! I got a life, you know!' He glances around nervously. 'The snake woman. I saw her. Three nights ago. She was heading toward the diner — The Last Stop. Met with somebody there. Couldn't see who. But when she left... she was crying.' He shivers. 'Weird, right? What's a dame with snakes for hair got to cry about? I'm out. Don't find me again.' He scurries off.",
+              "options": [
+                {
+                  "id": "detective_rooftop_mouse_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_rooftop_after"]
+                }
+              ]
+            },
+            {
+              "id": "detective_rooftop_after",
+              "available": false,
+              "text": "Sam stares at the spot where Mouse disappeared. 'Crying. That don't sound like the dame I knew. She wasn't the crying type. Something's wrong.' He turns to you. 'The Last Stop. If she was meeting someone there, maybe the waitress saw something. Flo runs that place like a CIA black site — notices everything.'",
+              "options": [
+                {
+                  "id": "detective_rooftop_go",
+                  "text": "Let's check the diner.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "detective_diner",
+              "available": false,
+              "text": "A neon sign buzzes 'THE LAST STOP' in flickering pink. Inside, the counter is cracked formica. Sam slides into a booth. 'Flo. You working?'",
+              "options": [
+                {
+                  "id": "detective_diner_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_diner_flo"]
+                }
+              ]
+            },
+            {
+              "id": "detective_diner_flo",
+              "available": false,
+              "speaker": 2,
+              "text": "A figure in a stained apron appears, wiping the counter with a rag that's seen better days. 'Sam Shale. If it ain't my favorite customer who never orders anything. Coffee's fresh. By which I mean it was made sometime this week.' She leans in. 'You're here about her, ain't you? The snake-eyed dame. Came in three nights ago. Looked like she hadn't slept in a week. Ordered pie. Didn't eat it. Just pushed it around with her fork. Talked to some fella in a long coat. Private booth.' She pulls a photograph from her apron. 'Left this behind.'",
+              "options": [
+                {
+                  "id": "detective_diner_flo_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_diner_after"]
+                }
+              ]
+            },
+            {
+              "id": "detective_diner_after",
+              "available": false,
+              "text": "Sam takes the photograph. It's Medusa — younger, smiling, standing next to a man whose face is torn off. He stares at it for a long moment, then pockets it. 'Thanks, Flo. The man she met — you know him?' Flo shakes her head. 'Wish I did. Would've made better conversation.' Sam turns to you. 'The Dock Master. He's been here longer than anyone. If anybody knows where she went after that meeting, it's him.'",
+              "options": [
+                {
+                  "id": "detective_diner_go",
+                  "text": "Let's go see the Dock Master.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "detective_jazz",
+              "available": false,
+              "text": "Sam stops outside a doorway draped in red curtains. Muffled piano notes drift through. 'Hold up. I know a guy in here. Plays piano. Might've heard something.'",
+              "options": [
+                {
+                  "id": "detective_jazz_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_jazz_piano"]
+                }
+              ]
+            },
+            {
+              "id": "detective_jazz_piano",
+              "available": false,
+              "speaker": 2,
+              "text": "Inside, a figure in a beret plays a upright piano without ever looking up. He speaks in a rambling stream, never missing a note. 'Sam Shale. Heard you was asking around about the Gorgon. She came through. Told me something funny. Said she was looking for a way out. Not the tunnels, not the surface. A way out of something inside her head. Then she ordered a drink. Paid for it. Didn't drink it. Just left. Looked at me when she left. Like she was saying goodbye to everybody, man. To the whole scene.' He finally glances up. 'She had that look. The look of someone who's about to do something they can't take back. Dig?'",
+              "options": [
+                {
+                  "id": "detective_jazz_piano_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_jazz_after"]
+                }
+              ]
+            },
+            {
+              "id": "detective_jazz_after",
+              "available": false,
+              "text": "Sam stands in the doorway, the piano still playing behind him. 'Saying goodbye. To everybody.' He rubs his jaw. 'We need to get to the docks. Now.'",
+              "options": [
+                {
+                  "id": "detective_jazz_go",
+                  "text": "Let's move.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "detective_dockmaster",
+              "available": false,
+              "text": "The Dock Master's office is a cratewood shack overlooking black water. A brass telescope points into the dark. A grizzled figure sits with his boots up on the desk. 'Shale. Figured you'd turn up eventually. She said you would.'",
+              "options": [
+                {
+                  "id": "detective_dockmaster_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_dockmaster_char"]
+                }
+              ]
+            },
+            {
+              "id": "detective_dockmaster_char",
+              "available": false,
+              "speaker": 2,
+              "text": "The Dock Master swings his boots off the desk and reaches into a drawer. 'She talked about nothing but you for about twenty minutes. Said if anyone came looking, it'd be you. Knew you'd follow. Knew you'd never give up.' He slides a folded letter across the desk. 'Gave me this. Said to give it to the detective with the tired eyes.'",
+              "options": [
+                {
+                  "id": "detective_dockmaster_char_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_dockmaster_letter"]
+                }
+              ]
+            },
+            {
+              "id": "detective_dockmaster_letter",
+              "available": false,
+              "text": "Sam takes the letter. His hand trembles slightly as he unfolds it. He reads silently, then reads aloud, his voice rough:",
+              "options": [
+                {
+                  "id": "detective_dockmaster_letter_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_dockmaster_after"]
+                }
+              ]
+            },
+            {
+              "id": "detective_dockmaster_after",
+              "available": false,
+              "text": "Sam, if you're reading this, I'm already gone. Not from the tunnels — from everything. I found what I was looking for. Not escape. Not treasure. Just peace. There's a tunnel beneath Pier C3 that opens into a place the light don't reach. I'm going there. Don't follow. You've got a good heart, Sam Shale. Even if you pretend you don't. — Medusa.",
+              "options": [
+                {
+                  "id": "detective_dockmaster_go",
+                  "text": "We can still catch her.",
+                  "available": true
+                },
+                {
+                  "id": "detective_dockmaster_leave",
+                  "text": "Let her go, Sam.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "detective_dockmaster_catch",
+              "available": false,
+              "text": "Sam shakes his head slowly. 'No, kid. She don't want to be caught. Never did.' He folds the letter carefully and puts it in his pocket. 'Let her have her peace. It's more than most of us get down here.'",
+              "options": [
+                {
+                  "id": "detective_dockmaster_catch_c",
+                  "text": "...",
+                  "available": true,
+                  "chains": ["detective_pier"]
+                }
+              ]
+            },
+            {
+              "id": "detective_pier",
+              "available": false,
+              "text": "Sam walks to the end of Pier C3. The black water laps against the wooden pilings. A tunnel mouth gapes in the cavern wall below — dark, silent, waiting. He stands there for a long time, staring into it. Then he turns away. 'Come on, kid. I'll buy you a cup of coffee. The Last Stop's still open.' He walks back toward the diner without looking back. The search for Medusa is over.",
+              "options": [
+                {
+                  "id": "detective_pier_a1",
+                  "text": "...",
+                  "available": true,
+                  "closes": ["detective_pier"]
                 }
               ]
             }
