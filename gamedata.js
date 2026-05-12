@@ -5335,7 +5335,49 @@ var belowGameData = {
           "x2": 9,
           "y2": -1,
           "description": "A low-ceilinged joint carved out of a natural fissure. The bar is a plank across two barrels. A single bulb buzzes over a game of cards that never finishes. The special today is 'don't ask.'"
-        }        
+        },
+        {
+          "x1": -10,
+          "y1": -7,
+          "x2": -8,
+          "y2": 4,
+          "description": "'The Majestic.' A dusty room with peeling wallpaper, a single bed, a sink, and a window that looks out on a brick wall three inches away. The neon sign buzzes. The lock is broken. The previous guest left in a hurry."
+        },
+        {
+          "x1": -6,
+          "y1": -10,
+          "x2": -4,
+          "y2": -8,
+          "description": " A desk, a cage, a sergeant who's seen too much. The 'station' here is a hollowed-out guard post with wanted posters from the surface world. A single bulb swings over a booking desk that's never booked anyone."
+        },
+        {
+          "x1": -1,
+          "y1": -10,
+          "x2": 2,
+          "y2": -8,
+          "description": "'Honest Abe's.' Every item in the window was stolen twice. The owner knows everything but tells nothing - unless you know what to ask."
+        },
+        {
+          "x1": 6,
+          "y1": -10,
+          "x2": 8,
+          "y2": -8,
+          "description": "'The Last Stop.' A formica counter, a coffee pot that's been on since 1952, and a waitress who calls everybody 'sugar.' The pie is awful. The coffee is worse. The info is golden."
+        },
+        {
+          "x1": 11,
+          "y1": -10,
+          "x2": 14,
+          "y2": -8,
+          "description": "The basement of a basement. Red curtains, a piano player who only knows three songs, and a woman at the bar who's watching everyone."
+        },
+        {
+          "x1": 14,
+          "y1": -5,
+          "x2": 16,
+          "y2": -3,
+          "description": "The Rooftop. The 'sky' is stalactites. The wind comes from somewhere deep below. A good place for a meet that nobody's supposed to see."
+        }
       ],
       "tiles": {
         "xm10y2": {
@@ -7112,6 +7154,286 @@ var belowGameData = {
           "x": -10,
           "y": -1,
           "type": 0
+        },
+        "x7ym7": {
+          "x": 7,
+          "y": -7,
+          "type": 0
+        },
+        "x8ym10": {
+          "x": 8,
+          "y": -10,
+          "type": 2
+        },
+        "x8ym9": {
+          "x": 8,
+          "y": -9,
+          "type": 2
+        },
+        "x8ym8": {
+          "x": 8,
+          "y": -8,
+          "type": 2
+        },
+        "x7ym9": {
+          "x": 7,
+          "y": -9,
+          "type": 2
+        },
+        "x7ym10": {
+          "x": 7,
+          "y": -10,
+          "type": 2
+        },
+        "x7ym8": {
+          "x": 7,
+          "y": -8,
+          "type": 2
+        },
+        "x6ym8": {
+          "x": 6,
+          "y": -8,
+          "type": 2
+        },
+        "x6ym9": {
+          "x": 6,
+          "y": -9,
+          "type": 2
+        },
+        "x6ym10": {
+          "x": 6,
+          "y": -10,
+          "type": 2
+        },
+        "xm8ym4": {
+          "x": -8,
+          "y": -4,
+          "type": 2
+        },
+        "xm8ym5": {
+          "x": -8,
+          "y": -5,
+          "type": 2
+        },
+        "xm8ym6": {
+          "x": -8,
+          "y": -6,
+          "type": 2
+        },
+        "xm8ym7": {
+          "x": -8,
+          "y": -7,
+          "type": 2
+        },
+        "xm9ym7": {
+          "x": -9,
+          "y": -7,
+          "type": 2
+        },
+        "xm9ym6": {
+          "x": -9,
+          "y": -6,
+          "type": 2
+        },
+        "xm9ym5": {
+          "x": -9,
+          "y": -5,
+          "type": 2
+        },
+        "xm9ym4": {
+          "x": -9,
+          "y": -4,
+          "type": 2
+        },
+        "xm10ym4": {
+          "x": -10,
+          "y": -4,
+          "type": 2
+        },
+        "xm10ym5": {
+          "x": -10,
+          "y": -5,
+          "type": 2
+        },
+        "xm10ym6": {
+          "x": -10,
+          "y": -6,
+          "type": 2
+        },
+        "xm10ym7": {
+          "x": -10,
+          "y": -7,
+          "type": 2
+        },
+        "xm7ym5": {
+          "x": -7,
+          "y": -5,
+          "type": 0
+        },
+        "x13ym5": {
+          "x": 13,
+          "y": -5,
+          "type": 0
+        },
+        "x14ym5": {
+          "x": 14,
+          "y": -5,
+          "type": 2
+        },
+        "x14ym4": {
+          "x": 14,
+          "y": -4,
+          "type": 2
+        },
+        "x14ym3": {
+          "x": 14,
+          "y": -3,
+          "type": 2
+        },
+        "x15ym3": {
+          "x": 15,
+          "y": -3,
+          "type": 2
+        },
+        "x15ym4": {
+          "x": 15,
+          "y": -4,
+          "type": 2
+        },
+        "x15ym5": {
+          "x": 15,
+          "y": -5,
+          "type": 2
+        },
+        "x16ym5": {
+          "x": 16,
+          "y": -5,
+          "type": 2
+        },
+        "x16ym4": {
+          "x": 16,
+          "y": -4,
+          "type": 2
+        },
+        "x16ym3": {
+          "x": 16,
+          "y": -3,
+          "type": 2
+        },
+        "xm5ym7": {
+          "x": -5,
+          "y": -7,
+          "type": 0
+        },
+        "xm5ym8": {
+          "x": -5,
+          "y": -8,
+          "type": 2
+        },
+        "xm4ym8": {
+          "x": -4,
+          "y": -8,
+          "type": 2
+        },
+        "xm4ym9": {
+          "x": -4,
+          "y": -9,
+          "type": 2
+        },
+        "xm5ym9": {
+          "x": -5,
+          "y": -9,
+          "type": 2
+        },
+        "xm6ym8": {
+          "x": -6,
+          "y": -8,
+          "type": 2
+        },
+        "xm6ym9": {
+          "x": -6,
+          "y": -9,
+          "type": 2
+        },
+        "xm6ym10": {
+          "x": -6,
+          "y": -10,
+          "type": 2
+        },
+        "xm5ym10": {
+          "x": -5,
+          "y": -10,
+          "type": 2
+        },
+        "xm4ym10": {
+          "x": -4,
+          "y": -10,
+          "type": 2
+        },
+        "x11ym8": {
+          "x": 11,
+          "y": -8,
+          "type": 2
+        },
+        "x11ym9": {
+          "x": 11,
+          "y": -9,
+          "type": 2
+        },
+        "x11ym10": {
+          "x": 11,
+          "y": -10,
+          "type": 2
+        },
+        "x12ym10": {
+          "x": 12,
+          "y": -10,
+          "type": 2
+        },
+        "x12ym9": {
+          "x": 12,
+          "y": -9,
+          "type": 2
+        },
+        "x12ym8": {
+          "x": 12,
+          "y": -8,
+          "type": 2
+        },
+        "x11ym7": {
+          "x": 11,
+          "y": -7,
+          "type": 0
+        },
+        "x13ym10": {
+          "x": 13,
+          "y": -10,
+          "type": 2
+        },
+        "x13ym9": {
+          "x": 13,
+          "y": -9,
+          "type": 2
+        },
+        "x13ym8": {
+          "x": 13,
+          "y": -8,
+          "type": 2
+        },
+        "x14ym8": {
+          "x": 14,
+          "y": -8,
+          "type": 2
+        },
+        "x14ym9": {
+          "x": 14,
+          "y": -9,
+          "type": 2
+        },
+        "x14ym10": {
+          "x": 14,
+          "y": -10,
+          "type": 2
         }
       },
       "monsters": [],
@@ -7175,15 +7497,15 @@ var belowGameData = {
         {
           "type": 13,
           "position": {
-            "x": 1,
-            "y": 0
+            "x": 2,
+            "y": 1
           }
         },
         {
           "type": 13,
           "position": {
-            "x": -1,
-            "y": 0
+            "x": -2,
+            "y": 1
           }
         },
         {
@@ -7281,8 +7603,8 @@ var belowGameData = {
         {
           "type": 13,
           "position": {
-            "x": -3,
-            "y": 3
+            "x": -6,
+            "y": -6
           }
         },
         {
