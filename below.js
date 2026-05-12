@@ -385,6 +385,9 @@ cupboardImg.src = "images/cupboard.png";
 var lightbeamImg = new Image();
 lightbeamImg.src = "images/lightbeam.png";
 
+var lamppostImg = new Image();
+lamppostImg.src = "images/lamppost.png";
+
 var doorClosedImg = new Image();
 doorClosedImg.src = "images/door_closed.png";
 
@@ -437,8 +440,38 @@ function checkWheel(e) {
     }
 }
 
+function showHelp() {
+    document.getElementById("helpOverlay").style.display = "flex";
+}
+function hideHelp() {
+    document.getElementById("helpOverlay").style.display = "none";
+}
+function toggleHelp() {
+    var overlay = document.getElementById("helpOverlay");
+    if (overlay.style.display === "none" || overlay.style.display === "") {
+        showHelp();
+    } else {
+        hideHelp();
+    }
+}
+
 function checkKey(e) {
     e = e || window.event;
+    // Tab toggles help overlay
+    if (e.keyCode === 9) {
+        e.preventDefault();
+        if (below && below.gameData) {
+            toggleHelp();
+        }
+        return;
+    }
+    // Close help with Escape
+    var helpOverlay = document.getElementById("helpOverlay");
+    if (e.keyCode === 27 && helpOverlay.style.display !== "none" && helpOverlay.style.display !== "") {
+        hideHelp();
+        e.preventDefault();
+        return;
+    }
     // Dev teleport toggle (Ctrl+Alt+P)
     if (e.ctrlKey && e.altKey && e.keyCode === 80) {
         if (below.gameData) {
@@ -2359,6 +2392,7 @@ function drawMapCanvas() {
                     else if (iconName === "key1.png") img = keyImg;
                     else if (iconName === "cupboard.png") img = cupboardImg;
                     else if (iconName === "lightbeam.png") img = lightbeamImg;
+                    else if (iconName === "lamppost.png") img = lamppostImg;
                     else if (iconName === "statue1.png") img = statueImg1;
                     else if (iconName === "statue2.png") img = statueImg2;
                     else if (iconName === "statue3.png") img = statueImg3;
@@ -2410,6 +2444,7 @@ function drawMapCanvas() {
                     else if (iconName === "key1.png") img = keyImg;
                     else if (iconName === "cupboard.png") img = cupboardImg;
                     else if (iconName === "lightbeam.png") img = lightbeamImg;
+                    else if (iconName === "lamppost.png") img = lamppostImg;
                     else if (iconName === "statue1.png") img = statueImg1;
                     else if (iconName === "statue2.png") img = statueImg2;
                     else if (iconName === "statue3.png") img = statueImg3;

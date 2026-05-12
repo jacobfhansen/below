@@ -266,6 +266,20 @@ var belowGameData = {
         8,
         3
       ]
+    },
+    "13": {
+      "name": "Lamppost",
+      "description": "A dim street lamp",
+      "color": "#FFFF00",
+      "icon": "lamppost.png",
+      "blocking": false,
+      "drawOrder": 2,
+      "opacity": 0.5,
+      "lightRadius": 1,
+      "choiceEvents": [
+        6,
+        3
+      ]
     }
   },
   "itemTypes": {
@@ -7089,296 +7103,260 @@ var belowGameData = {
       "monsters": [],
       "obstacles": [
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 6,
             "y": -5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -5,
             "y": 0
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -8,
             "y": 3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 2,
             "y": -5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -5,
             "y": 5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -9,
             "y": 8
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 14,
             "y": 10
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -6,
             "y": 8
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 1,
             "y": 0
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -1,
             "y": 0
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -5,
             "y": -3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 2,
             "y": 3
           },
-          "icon": "lightbeam.png",
-          "lightRadius": 2
+"lightRadius": 2
         },
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 2,
             "y": 5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -2,
             "y": 5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -3,
             "y": -5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 2,
             "y": 8
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 11,
             "y": 0
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 13,
             "y": 2
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 9,
             "y": 3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 11,
             "y": 5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 14,
             "y": 8
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 16,
             "y": 3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -10,
             "y": 0
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -3,
             "y": 3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 16,
             "y": 0
           },
-          "icon": "lightbeam.png",
-          "lightRadius": 2
+"lightRadius": 2
         },
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 0,
             "y": 3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 2,
             "y": 10
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 5,
             "y": 3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 6,
             "y": 10
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 10,
             "y": -5
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -2,
             "y": 8
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 6,
             "y": 8
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 10,
             "y": 8
           },
-          "icon": "lightbeam.png",
-          "lightRadius": 2
+"lightRadius": 2
         },
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 12,
             "y": -3
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": -2,
             "y": 10
-          },
-          "icon": "lightbeam.png"
-        },
+          }
+},
         {
-          "type": 6,
+          "type": 13,
           "position": {
             "x": 10,
             "y": 10
           },
-          "icon": "lightbeam.png"
-        }
+}
       ],
       "npcs": [
         {
