@@ -1528,6 +1528,23 @@ function selectChoiceOption(index) {
         setTimeout(function() { showInventory([12]); }, 50);
     }
     
+    // When player leaves Mole's intro dialog (molea4), remove blocking stones on map 2
+    if (selectedOption.id === "molea4") {
+        var stonePositions = [
+            {x:6,y:10},{x:7,y:10},{x:6,y:11},{x:7,y:11},
+            {x:39,y:10},{x:40,y:10},{x:39,y:11},{x:40,y:11},
+            {x:6,y:32},{x:7,y:32},{x:6,y:33},{x:7,y:33}
+        ];
+        var map2Obstacles = below.gameData.mapData[2].obstacles;
+        below.gameData.mapData[2].obstacles = map2Obstacles.filter(function(o) {
+            return !(o.type === 1 && stonePositions.some(function(p) {
+                return o.position.x === p.x && o.position.y === p.y;
+            }));
+        });
+        below.gameData.mapLog.push("The stones tremble and roll away into the darkness.");
+        maintainMapLog();
+    }
+
     if (!below.passwordInput) {
         closeChoiceEvent();
     }
@@ -1535,8 +1552,6 @@ function selectChoiceOption(index) {
 
 function closeChoiceEvent() {
     below.choiceEvent = null;
-    // Clear log messages and UI
-    below.gameData.mapLog = [];
     var gameLogDiv = document.getElementById("gameLogDiv");
     while (gameLogDiv.firstChild) {
         gameLogDiv.removeChild(gameLogDiv.firstChild);
@@ -3309,7 +3324,7 @@ function mapGameLoop() {
                         targetY = mazeEntries[cycle][1];
                         below.gameData.player.mazeCycle = (cycle + 1) % 3;
                         // Reposition the Mole to the current maze area
-                        var molePositions = [[11, 10], [33, 10], [11, 32]];
+                        var molePositions = [[5, 10], [41, 10], [5, 32]];
                         var mole = below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; });
                         if (mole) {
                             mole.position = { x: molePositions[cycle][0], y: molePositions[cycle][1] };

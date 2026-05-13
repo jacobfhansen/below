@@ -109,7 +109,7 @@ var belowGameData = {
       "description": "A rock blocking your way",
       "color": "#433900",
       "icon": "rock.png",
-      "blocking": false,
+      "blocking": true,
       "choiceEvents": [
         1,
         3
@@ -1622,7 +1622,6 @@ var belowGameData = {
               "id": "hermit_antidote_intro",
               "available": false,
               "text": "The Hermit's eyes narrow. He folds his arms.\n'The Mole? Sick from my herbs? Hah! Serves him right for thieving from my stores! I've spent years cultivating those roots - they're not meant to be eaten raw, the fool!'\nHe pauses, stroking his beard.\n'I... do have an antidote. Why should I give it to you?'",
-
               "options": [
                 {
                   "id": "hermit_antidote_plead",
@@ -1662,7 +1661,6 @@ var belowGameData = {
               "id": "hermit_antidote_sympathy",
               "available": false,
               "text": "'Good riddance!' He catches your look and sighs. 'Fine. Why should I care what happens to that tunnel-grubbing wretch?'",
-
               "options": [
                 {
                   "id": "hermit_antidote_sympathy_p1",
@@ -1686,7 +1684,6 @@ var belowGameData = {
               "id": "hermit_antidote_trade_try",
               "available": false,
               "text": "He raises an eyebrow. 'Trade? What could you possibly offer that I'd want more than the satisfaction of watching that whiskered fool squirm?'",
-
               "options": [
                 {
                   "id": "hermit_antidote_trade_try_p1",
@@ -1710,7 +1707,6 @@ var belowGameData = {
               "id": "hermit_antidote_need",
               "available": false,
               "text": "The Hermit chuckles dryly. 'Need him? For what? The only thing that creature's good for is digging holes and stealing my stock.'",
-
               "options": [
                 {
                   "id": "hermit_antidote_need_p1",
@@ -1734,7 +1730,6 @@ var belowGameData = {
               "id": "hermit_antidote_medusa_react",
               "available": false,
               "text": "The Hermit's face shifts. The irritation melts into something softer - concern, perhaps even fondness. He adjusts his spectacles.\n'Medusa? What of her? She came to me once, you know. Wandered into my cave and asked about my herbs. I expected her to steal them. Instead, she laughed. A warm, genuine laugh. She said my little collection reminded her of the gardens she tended... before.'\nHe trails off, then shakes his head.\n'What has happened? Where has she gone?'",
-
               "options": [
                 {
                   "id": "hermit_antidote_medusa_react_p1",
@@ -1758,7 +1753,6 @@ var belowGameData = {
               "id": "hermit_antidote_medusa_convince",
               "available": false,
               "text": "The Hermit is silent for a long moment. He turns to a cluttered shelf and picks up a small vial, holding it up to the faint light.\n'Medusa does not deserve to be lost. She has suffered enough.'\nHe presses the vial into your hand.\n'Take it. Save the Mole. Send him to dig through whatever rubble blocks your path. Find her. Tell her the old hermit remembers her laugh. Tell her... there is always a garden waiting, even in the dark.'\nHe turns away quickly, but not before you see him wipe his eyes.",
-
               "options": [
                 {
                   "id": "hermit_antidote_medusa_convince_a1",
@@ -3612,10 +3606,6 @@ var belowGameData = {
           "x": 29,
           "y": 9
         },
-        "x41y9": {
-          "x": 41,
-          "y": 9
-        },
         "x2y10": {
           "x": 2,
           "y": 10
@@ -3948,10 +3938,6 @@ var belowGameData = {
           "x": 26,
           "y": 12
         },
-        "x41y12": {
-          "x": 41,
-          "y": 12
-        },
         "x5y13": {
           "x": 5,
           "y": 13
@@ -3964,20 +3950,12 @@ var belowGameData = {
           "x": 26,
           "y": 13
         },
-        "x41y13": {
-          "x": 41,
-          "y": 13
-        },
         "x9y14": {
           "x": 9,
           "y": 14
         },
         "x26y14": {
           "x": 26,
-          "y": 14
-        },
-        "x41y14": {
-          "x": 41,
           "y": 14
         },
         "x9y15": {
@@ -3990,10 +3968,6 @@ var belowGameData = {
         },
         "x32y15": {
           "x": 32,
-          "y": 15
-        },
-        "x41y15": {
-          "x": 41,
           "y": 15
         },
         "x10y16": {
@@ -4043,10 +4017,6 @@ var belowGameData = {
         },
         "x37y16": {
           "x": 37,
-          "y": 16
-        },
-        "x41y16": {
-          "x": 41,
           "y": 16
         },
         "x10y17": {
@@ -4892,10 +4862,6 @@ var belowGameData = {
           "x": 38,
           "y": 16
         },
-        "x40y16": {
-          "x": 40,
-          "y": 16
-        },
         "x39y16": {
           "x": 39,
           "y": 16
@@ -5036,17 +5002,9 @@ var belowGameData = {
           "x": 24,
           "y": 18
         },
-        "x7y20": {
-          "x": 7,
-          "y": 20
-        },
         "x31y19": {
           "x": 31,
           "y": 19
-        },
-        "x21y21": {
-          "x": 21,
-          "y": 21
         },
         "x14y4": {
           "x": 14,
@@ -5059,6 +5017,31 @@ var belowGameData = {
         "x13y6": {
           "x": 13,
           "y": 6
+        },
+        "x39y9": {
+          "x": 39,
+          "y": 9,
+          "type": 0
+        },
+        "x39y15": {
+          "x": 39,
+          "y": 15,
+          "type": 0
+        },
+        "x39y14": {
+          "x": 39,
+          "y": 14,
+          "type": 0
+        },
+        "x39y13": {
+          "x": 39,
+          "y": 13,
+          "type": 0
+        },
+        "x39y12": {
+          "x": 39,
+          "y": 12,
+          "type": 0
         }
       },
       "monsters": [],
@@ -5237,6 +5220,90 @@ var belowGameData = {
             "x": 21,
             "y": 32
           }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 6,
+            "y": 10
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 7,
+            "y": 10
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 6,
+            "y": 11
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 7,
+            "y": 11
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 40,
+            "y": 10
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 39,
+            "y": 10
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 39,
+            "y": 11
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 40,
+            "y": 11
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 6,
+            "y": 32
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 7,
+            "y": 32
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 6,
+            "y": 33
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 7,
+            "y": 33
+          }
         }
       ],
       "npcs": [
@@ -5252,7 +5319,6 @@ var belowGameData = {
               "id": "mole_sick",
               "available": false,
               "text": "The Mole is doubled over, clutching his stomach. His whiskers droop and his voice comes in pained gasps.\n'Oh, wretched fortune! Accursed herbs!\nThe Hermit's green poison doth consume me from within!\nMy belly burns like the fires of the underworld!\nI thought them a cure for all my ills,\nBut they are a plague! A pestilence!\nI need an antidote, or I am surely doomed!'\nHe collapses against the tunnel wall, groaning.",
-
               "options": [
                 {
                   "id": "mole_sick_help",
@@ -5276,7 +5342,6 @@ var belowGameData = {
               "id": "mole_cured",
               "available": false,
               "text": "The Mole grabs the vial with trembling paws and drinks it in one desperate gulp. He shudders, then lets out a long, relieved sigh.\n'Ahhh... Sweet relief!\nThe fire in my gut doth fade at last!\nThou hast saved me, stranger - saved me from a grave\nI dug with mine own greed.\nI owe thee a debt I cannot soon repay.\nIf ever thou needest a tunnel dug,\nOr a passage cleared, call upon me.'",
-
               "options": [
                 {
                   "id": "mole_cured_leave",
@@ -9331,7 +9396,6 @@ var belowGameData = {
               "id": "charon_medusa",
               "available": false,
               "text": "Charon's grip tightens on his pole. His voice drops.\n'Medusa - ah, the serpent-crowned one.\nI ferried her across this very lake\nNot long ago - or was it long ago?\nTime slips from me like water from this oar.\nShe spoke of peace. Of finding an end.\nBut there was a shadow in her eyes when she said it -\nAs if she was running from something.\nSomething older than these tunnels.\nA presence that dwells below all other depths.\nShe asked me once if I had ever carried\nA passenger who left no ripple in the water.\nI said the water always remembers.\nShe said: \"No. Some things pass through\nWithout leaving a trace. I have met one.\"\nThen she fell silent and would not speak\nAgain until I reached the shore.\nI do not know what she meant.\nBut I have felt it too - a coldness in the deep.\nA name I cannot grasp.'\nHe stares at the black water, shivering.",
-
               "options": [
                 {
                   "id": "charon_medusa_back",
