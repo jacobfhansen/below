@@ -988,7 +988,7 @@ function selectChoiceOption(index) {
             return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
         });
         
-        // Handle ship part attachment — remove item before chain processing so dialog filters correctly
+        // Handle ship part attachment — remove item and re-render dialog
         if (npc && npc.type === 6) {
             var removeItem = null;
             if (selectedOption.id === "ship_attach_rudder") removeItem = 8;
@@ -1000,11 +1000,53 @@ function selectChoiceOption(index) {
                 if (idx !== -1) {
                     below.gameData.player.inventory.splice(idx, 1);
                     npc.shipParts = (npc.shipParts || 0) + 1;
+                    
+                    var targetD;
                     if (npc.shipParts >= 4) {
-                        var departD = npc.dialogOptions.find(function(d) { return d.id === "ship_depart"; });
-                        if (departD) departD.available = true;
+                        var introD = npc.dialogOptions.find(function(d) { return d.id === "ship_intro"; });
+                        var readyD = npc.dialogOptions.find(function(d) { return d.id === "ship_ready"; });
+                        if (introD) introD.available = false;
+                        if (readyD) {
+                            readyD.available = true;
+                            var departOpt = readyD.options.find(function(o) { return o.id === "ship_depart"; });
+                            if (departOpt) {
+                                departOpt.available = !!below.gameData.player.samQuestComplete;
+                            }
+                        }
+                        targetD = readyD;
+                    } else {
+                        targetD = npc.dialogOptions.find(function(d) { return d.id === "ship_intro"; });
+                    }
+                    
+                    if (targetD) {
+                        var msg = targetD.text;
+                        if (targetD === readyD && !below.gameData.player.samQuestComplete) {
+                            msg += " But you feel like you have unfinished business in the city above. Perhaps you should check on Sam Shale before leaving.";
+                        }
+                        below.choiceEvent.message = msg;
+                        below.choiceEvent.dialogId = targetD.id;
+                        below.choiceEvent.speakerNpcType = below.choiceEvent.npcType;
+                        below.choiceEvent.dialogOptions = targetD.options.filter(function(o) {
+                            if (o.available === false) return false;
+                            if (o.requiresItems) {
+                                var hasItem = o.requiresItems.some(function(itemId) {
+                                    return below.gameData.player.inventory.indexOf(itemId) !== -1;
+                                });
+                                if (!hasItem) return false;
+                            }
+                            if (o.blockedByItems) {
+                                var hasBlocked = o.blockedByItems.some(function(itemId) {
+                                    return below.gameData.player.inventory.indexOf(itemId) !== -1;
+                                });
+                                if (hasBlocked) return false;
+                            }
+                            return true;
+                        });
+                        below.choiceEvent.isChain = true;
+                        renderChoiceEvent();
                     }
                 }
+                return;
             }
         }
         
@@ -1412,6 +1454,31 @@ function selectChoiceOption(index) {
             samNpc.destPos = {};
             var officeD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_office"; });
             if (officeD) officeD.available = true;
+            below.gameData.player.samQuestComplete = true;
+            // Remove Jester from map 1
+            for (var si = below.gameData.mapData[1].npcs.length - 1; si >= 0; si--) {
+                if (below.gameData.mapData[1].npcs[si].type === 2) {
+                    below.gameData.mapData[1].npcs.splice(si, 1);
+                    break;
+                }
+            }
+            // Place Jester at Dock Master office
+            below.gameData.mapData[3].npcs.push({
+                type: 2,
+                position: { x: 18, y: 9 },
+                movement: 0,
+                dialogOptions: [{
+                    id: "jester_dockmaster_ship",
+                    available: true,
+                    text: "The Dock Master — who looks suspiciously like the Jester in an oversized coat and a glued-on mustache — leans on the counter with a grin. 'Well, well, well! Fancy seein' YOU here! Heard you been collectin' boat parts! A ship! At Pier A1! Who woulda thunk it! Fix it up and you can sail right outta here! Course, I wouldn't know anythin' about that. I'm just the Dock Master. Totally legitimate. Ahem.' He winks broadly.",
+                    options: [{
+                        id: "jester_dockmaster_ship_a1",
+                        text: "...",
+                        available: true,
+                        closes: ["jester_dockmaster_ship"]
+                    }]
+                }]
+            });
         }
     }
     
@@ -1753,6 +1820,16 @@ function changeMap(mapId, entryX, entryY, text) {
   below.gameData.mapLog = [];
   if (text) {
     below.gameData.mapLog.push(text);
+  }
+  // One-time removal of Jester and Medusa from map 1 on first visit to The Depths
+  if (mapId === 3 && !below.gameData.player.depthsVisited) {
+    below.gameData.player.depthsVisited = true;
+    for (var ci = below.gameData.mapData[1].npcs.length - 1; ci >= 0; ci--) {
+      var npcType = below.gameData.mapData[1].npcs[ci].type;
+      if (npcType === 2 || npcType === 3) {
+        below.gameData.mapData[1].npcs.splice(ci, 1);
+      }
+    }
   }
   maintainMapLog();
   updateAreaDescription();

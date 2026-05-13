@@ -8001,7 +8001,7 @@ var belowGameData = {
             {
               "id": "detective_ready",
               "available": false,
-              "text": "'Alright, follow my lead. And try to look like you belong — not that anyone down here does.' He pushes off the wall and jerks his head toward the darkness.",
+              "text": "'Alright, follow my lead. And try to look like you belong - not that anyone down here does.' He pushes off the wall and jerks his head toward the darkness.",
               "options": [
                 {
                   "id": "detective_ready_go",
@@ -8024,7 +8024,7 @@ var belowGameData = {
             {
               "id": "detective_arrival",
               "available": false,
-              "text": "Sam settles onto a crate and gestures for you to sit. 'Alright, kid. We're alone now. Well, as alone as anyone gets in a joint like this. I've been on this case for longer than I care to admit. Medusa. The dame with the snake eyes. She's the key to this whole underground maze — I can feel it in my bones. Every lead I get turns to dust. But I've got a few threads left to pull. You in?'",
+              "text": "Sam settles onto a crate and gestures for you to sit. 'Alright, kid. We're alone now. Well, as alone as anyone gets in a joint like this. I've been on this case for longer than I care to admit. Medusa. The dame with the snake eyes. She's the key to this whole underground maze - I can feel it in my bones. Every lead I get turns to dust. But I've got a few threads left to pull. You in?'",
               "options": [
                 {
                   "id": "detective_arrival_in",
@@ -8088,7 +8088,7 @@ var belowGameData = {
               "id": "detective_precinct_info",
               "available": false,
               "speaker": 2,
-              "text": "'Let me check my... uh... report file.' More shuffling. 'Yeah, I got something. A guy was brought in — vagrant — kept rambling about the snake woman. Said she was heading west. Through the maintenance tunnels.'",
+              "text": "'Let me check my... uh... report file.' More shuffling. 'Yeah, I got something. A guy was brought in - vagrant - kept rambling about the snake woman. Said she was heading west. Through the maintenance tunnels.'",
               "options": [
                 {
                   "id": "detective_precinct_info_c",
@@ -8134,7 +8134,7 @@ var belowGameData = {
             {
               "id": "detective_precinct_after",
               "available": false,
-              "text": "Sam turns to you, lowering his voice. 'The maintenance tunnels are a bust, but if she was heading west, she'd have passed through the old market district. There's a guy there who sees everything — Abe. Runs a pawn shop.'",
+              "text": "Sam turns to you, lowering his voice. 'The maintenance tunnels are a bust, but if she was heading west, she'd have passed through the old market district. There's a guy there who sees everything - Abe. Runs a pawn shop.'",
               "options": [
                 {
                   "id": "detective_precinct_go",
@@ -8198,7 +8198,7 @@ var belowGameData = {
               "id": "detective_abe_medusa",
               "available": false,
               "speaker": 2,
-              "text": "'Medusa! The name I know, the face I don't. Very mysterious. Very dangerous. Very overrated, if you ask me.' Abe leans on the counter conspiratorially. 'She came through. Bought a compass. Old-fashioned one. Paid with a gold coin that was definitely not minted anywhere official. Asked about the Rooftop. Specifically. Said she needed to see the stars.' He laughs. 'Don't ask me why — there ain't no stars down here.'",
+              "text": "'Medusa! The name I know, the face I don't. Very mysterious. Very dangerous. Very overrated, if you ask me.' Abe leans on the counter conspiratorially. 'She came through. Bought a compass. Old-fashioned one. Paid with a gold coin that was definitely not minted anywhere official. Asked about the Rooftop. Specifically. Said she needed to see the stars.' He laughs. 'Don't ask me why - there ain't no stars down here.'",
               "options": [
                 {
                   "id": "detective_abe_medusa_c",
@@ -8233,7 +8233,7 @@ var belowGameData = {
             {
               "id": "detective_abe_explain",
               "available": false,
-              "text": "'A meeting spot. Old smugglers used it to watch for heat coming through the tunnels. If she was headed there, she was waiting for somebody — or something.'",
+              "text": "'A meeting spot. Old smugglers used it to watch for heat coming through the tunnels. If she was headed there, she was waiting for somebody - or something.'",
               "options": [
                 {
                   "id": "detective_abe_go2",
@@ -8245,7 +8245,7 @@ var belowGameData = {
             {
               "id": "detective_rooftop",
               "available": false,
-              "text": "Sam climbs the rusted ladder to a high ledge overlooking the cavern. Stalactites hang low like a stone sky. The wind howls from somewhere deep below. 'He said he'd be here. The informant. Jittery guy — goes by Mouse.'",
+              "text": "Sam climbs the rusted ladder to a high ledge overlooking the cavern. Stalactites hang low like a stone sky. The wind howls from somewhere deep below. 'He said he'd be here. The informant. Jittery guy - goes by Mouse.'",
               "options": [
                 {
                   "id": "detective_rooftop_c",
@@ -8261,7 +8261,7 @@ var belowGameData = {
               "id": "detective_rooftop_mouse",
               "available": false,
               "speaker": 2,
-              "text": "A figure emerges from behind a crate, hunched and twitchy, doing a squeaky voice. 'Shale! Man, you're late! I been standing here for like... a really long time! I got a life, you know!' He glances around nervously. 'The snake woman. I saw her. Three nights ago. She was heading toward the diner — The Last Stop. Met with somebody there. Couldn't see who. But when she left... she was crying.' He shivers. 'Weird, right? What's a dame with snakes for hair got to cry about? I'm out. Don't find me again.' He scurries off.",
+              "text": "A figure emerges from behind a crate, hunched and twitchy, doing a squeaky voice. 'Shale! Man, you're late! I been standing here for like... a really long time! I got a life, you know!' He glances around nervously. 'The snake woman. I saw her. Three nights ago. She was heading toward the diner - The Last Stop. Met with somebody there. Couldn't see who. But when she left... she was crying.' He shivers. 'Weird, right? What's a dame with snakes for hair got to cry about? I'm out. Don't find me again.' He scurries off.",
               "options": [
                 {
                   "id": "detective_rooftop_mouse_c",
@@ -8276,7 +8276,7 @@ var belowGameData = {
             {
               "id": "detective_rooftop_after",
               "available": false,
-              "text": "Sam stares at the spot where Mouse disappeared. 'Crying. That don't sound like the dame I knew. She wasn't the crying type. Something's wrong.' He turns to you. 'The Last Stop. If she was meeting someone there, maybe the waitress saw something. Flo runs that place like a CIA black site — notices everything.'",
+              "text": "Sam stares at the spot where Mouse disappeared. 'Crying. That don't sound like the dame I knew. She wasn't the crying type. Something's wrong.' He turns to you. 'The Last Stop. If she was meeting someone there, maybe the waitress saw something. Flo runs that place like a CIA black site - notices everything.'",
               "options": [
                 {
                   "id": "detective_rooftop_go",
@@ -8319,7 +8319,7 @@ var belowGameData = {
             {
               "id": "detective_diner_after",
               "available": false,
-              "text": "Sam takes the photograph. It's Medusa — younger, smiling, standing next to a man whose face is torn off. He stares at it for a long moment, then pockets it. 'Thanks, Flo. The man she met — you know him?' Flo shakes her head. 'Wish I did. Would've made better conversation.' Sam turns to you. 'The Dock Master. He's been here longer than anyone. If anybody knows where she went after that meeting, it's him.'",
+              "text": "Sam takes the photograph. It's Medusa - younger, smiling, standing next to a man whose face is torn off. He stares at it for a long moment, then pockets it. 'Thanks, Flo. The man she met - you know him?' Flo shakes her head. 'Wish I did. Would've made better conversation.' Sam turns to you. 'The Dock Master. He's been here longer than anyone. If anybody knows where she went after that meeting, it's him.'",
               "options": [
                 {
                   "id": "detective_diner_go",
@@ -8420,7 +8420,7 @@ var belowGameData = {
             {
               "id": "detective_dockmaster_after",
               "available": false,
-              "text": "Sam, if you're reading this, I'm already gone. Not from the tunnels — from everything. I found what I was looking for. Not escape. Not treasure. Just peace. A will be crossing the lake to the Beach. There's a tunnel there that opens into a place the light don't reach. I'm going there. Don't follow. You've got a good heart, Sam Shale. Even if you pretend you don't. — Medusa.",
+              "text": "Sam, if you're reading this, I'm already gone. Not from the tunnels - from everything. I found what I was looking for. Not escape. Not treasure. Just peace. A will be crossing the lake to the Beach. There's a tunnel there that opens into a place the light don't reach. I'm going there. Don't follow. You've got a good heart, Sam Shale. Even if you pretend you don't. - Medusa.",
               "options": [
                 {
                   "id": "detective_dockmaster_go",
@@ -8490,36 +8490,44 @@ var belowGameData = {
             {
               "id": "ship_intro",
               "available": true,
-              "text": "A derelict ship lies anchored at the dock, its hull weathered and listing. The vessel is in disrepair — the rudder is gone, the mast is snapped, the steering wheel is missing, and the sail is tattered to shreds. It looks barely seaworthy, but perhaps with the right parts...",
+              "text": "A derelict ship lies anchored at the dock, its hull weathered and listing. The vessel is in disrepair - the rudder is gone, the mast is snapped, the steering wheel is missing, and the sail is tattered to shreds. It looks barely seaworthy, but perhaps with the right parts...",
               "options": [
                 {
                   "id": "ship_attach_rudder",
                   "text": "Attach the rudder",
                   "available": true,
-                  "requiresItems": [8],
-                  "chains": ["ship_intro"]
+                  "requiresItems": [8]
                 },
                 {
                   "id": "ship_attach_mast",
                   "text": "Attach the mast",
                   "available": true,
-                  "requiresItems": [9],
-                  "chains": ["ship_intro"]
+                  "requiresItems": [9]
                 },
                 {
                   "id": "ship_attach_wheel",
                   "text": "Attach the steering wheel",
                   "available": true,
-                  "requiresItems": [10],
-                  "chains": ["ship_intro"]
+                  "requiresItems": [10]
                 },
                 {
                   "id": "ship_attach_sail",
                   "text": "Attach the sail",
                   "available": true,
-                  "requiresItems": [11],
-                  "chains": ["ship_intro"]
+                  "requiresItems": [11]
                 },
+                {
+                  "id": "ship_leave",
+                  "text": "Leave",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "ship_ready",
+              "available": false,
+              "text": "The ship is now fully repaired. The rudder is secured, the mast stands tall, the steering wheel is in place, and the sail catches the faint underground breeze. The derelict vessel looks seaworthy at last.",
+              "options": [
                 {
                   "id": "ship_depart",
                   "text": "Depart",
@@ -8527,10 +8535,9 @@ var belowGameData = {
                   "chains": ["ship_departure"]
                 },
                 {
-                  "id": "ship_leave",
+                  "id": "ship_ready_leave",
                   "text": "Leave",
-                  "available": true,
-                  "closes": ["ship_intro"]
+                  "available": true
                 }
               ]
             },
@@ -8568,7 +8575,7 @@ var belowGameData = {
     {
       "id": 4,
       "name": "The Beach",
-      "defaultDescription": "A vast underground lake stretches before you. The water is still and black, but there is a sandy shore here — the Beach.",
+      "defaultDescription": "A vast underground lake stretches before you. The water is still and black, but there is a sandy shore here - the Beach.",
       "tiles": {
         "x0y0": {
           "x": 0,

@@ -905,6 +905,7 @@ function updateSelectionSection() {
         html += '<label>StatueDesc:</label><textarea onchange="entitySetStr(\'statueDesc\', this.value)">' + (entity.statueDesc || "") + '</textarea>';
         html += '<label>DialogUnlock:</label><input type="text" value="' + (entity.dialogUnlock || "") + '" onchange="entitySetStr(\'dialogUnlock\', this.value)">';
         html += '<label>ChoiceEvents:</label><input type="text" value="' + (entity.choiceEvents ? entity.choiceEvents.join(",") : "") + '" onchange="editChoiceEvents(this)">';
+        html += '<label>ItemType:</label><input type="number" value="' + (entity.itemType || "") + '" onchange="entitySet(\'itemType\', this.value ? Number(this.value) : undefined)">';
     }
     if (etype === "exit") {
         html += '<label>Target Map:</label><input type="number" value="' + entity.targetMap + '" onchange="entitySet(\'targetMap\', parseInt(this.value) || 0)">';
