@@ -280,6 +280,28 @@ var belowGameData = {
         6,
         3
       ]
+    },
+    "14": {
+      "name": "Crate",
+      "description": "A sturdy wooden crate",
+      "color": "#8B5E3C",
+      "icon": "crate.png",
+      "blocking": true,
+      "choiceEvents": [
+        6,
+        3
+      ]
+    },
+    "15": {
+      "name": "Barrel",
+      "description": "A weathered wooden barrel",
+      "color": "#6B4226",
+      "icon": "barrel.png",
+      "blocking": true,
+      "choiceEvents": [
+        6,
+        3
+      ]
     }
   },
   "itemTypes": {
@@ -305,6 +327,30 @@ var belowGameData = {
       "name": "Stone Key",
       "description": "A heavy key carved from solid rock",
       "icon": "stone_key.png",
+      "choiceEvents": []
+    },
+    "8": {
+      "name": "Rudder",
+      "description": "A wooden rudder from a small boat",
+      "icon": "rudder.png",
+      "choiceEvents": []
+    },
+    "9": {
+      "name": "Mast",
+      "description": "A short mast with frayed rope",
+      "icon": "mast.png",
+      "choiceEvents": []
+    },
+    "10": {
+      "name": "Steering Wheel",
+      "description": "A small brass steering wheel",
+      "icon": "steering_wheel.png",
+      "choiceEvents": []
+    },
+    "11": {
+      "name": "Sail",
+      "description": "A patched canvas sail",
+      "icon": "sail.png",
       "choiceEvents": []
     }
   },
@@ -7749,6 +7795,94 @@ var belowGameData = {
             "x": 10,
             "y": 10
           }
+        },
+        {
+          "type": 14,
+          "position": {
+            "x": -9,
+            "y": 2
+          }
+        },
+        {
+          "type": 14,
+          "position": {
+            "x": -1,
+            "y": 12
+          },
+          "itemType": 8
+        },
+        {
+          "type": 14,
+          "position": {
+            "x": 6,
+            "y": 12
+          }
+        },
+        {
+          "type": 14,
+          "position": {
+            "x": 12,
+            "y": 10
+          }
+        },
+        {
+          "type": 14,
+          "position": {
+            "x": -8,
+            "y": 7
+          }
+        },
+        {
+          "type": 14,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "itemType": 10
+        },
+        {
+          "type": 15,
+          "position": {
+            "x": -7,
+            "y": 2
+          }
+        },
+        {
+          "type": 15,
+          "position": {
+            "x": -3,
+            "y": 3
+          }
+        },
+        {
+          "type": 15,
+          "position": {
+            "x": 14,
+            "y": 13
+          },
+          "itemType": 9
+        },
+        {
+          "type": 15,
+          "position": {
+            "x": 3,
+            "y": 2
+          }
+        },
+        {
+          "type": 15,
+          "position": {
+            "x": 10,
+            "y": 9
+          }
+        },
+        {
+          "type": 15,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "itemType": 11
         }
       ],
       "npcs": [
@@ -7886,7 +8020,9 @@ var belowGameData = {
                   "id": "detective_arrival_out",
                   "text": "I don't know, Sam. This seems dangerous.",
                   "available": true,
-                  "chains": ["detective_arrival_doubt"]
+                  "chains": [
+                    "detective_arrival_doubt"
+                  ]
                 }
               ]
             },
@@ -7911,7 +8047,9 @@ var belowGameData = {
                   "id": "detective_precinct_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_precinct_sgt"]
+                  "chains": [
+                    "detective_precinct_sgt"
+                  ]
                 }
               ]
             },
@@ -7925,7 +8063,9 @@ var belowGameData = {
                   "id": "detective_precinct_sgt_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_precinct_info"]
+                  "chains": [
+                    "detective_precinct_info"
+                  ]
                 }
               ]
             },
@@ -7939,7 +8079,9 @@ var belowGameData = {
                   "id": "detective_precinct_info_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_precinct_thanks"]
+                  "chains": [
+                    "detective_precinct_thanks"
+                  ]
                 }
               ]
             },
@@ -7952,7 +8094,9 @@ var belowGameData = {
                   "id": "detective_precinct_thanks_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_precinct_sgt_final"]
+                  "chains": [
+                    "detective_precinct_sgt_final"
+                  ]
                 }
               ]
             },
@@ -7966,7 +8110,9 @@ var belowGameData = {
                   "id": "detective_precinct_sgt_final_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_precinct_after"]
+                  "chains": [
+                    "detective_precinct_after"
+                  ]
                 }
               ]
             },
@@ -7984,7 +8130,9 @@ var belowGameData = {
                   "id": "detective_precinct_doubt",
                   "text": "Is the Sergeant reliable?",
                   "available": true,
-                  "chains": ["detective_precinct_reliable"]
+                  "chains": [
+                    "detective_precinct_reliable"
+                  ]
                 }
               ]
             },
@@ -8009,7 +8157,9 @@ var belowGameData = {
                   "id": "detective_abe_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_abe_char"]
+                  "chains": [
+                    "detective_abe_char"
+                  ]
                 }
               ]
             },
@@ -8023,7 +8173,9 @@ var belowGameData = {
                   "id": "detective_abe_char_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_abe_medusa"]
+                  "chains": [
+                    "detective_abe_medusa"
+                  ]
                 }
               ]
             },
@@ -8037,7 +8189,9 @@ var belowGameData = {
                   "id": "detective_abe_medusa_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_abe_after"]
+                  "chains": [
+                    "detective_abe_after"
+                  ]
                 }
               ]
             },
@@ -8055,7 +8209,9 @@ var belowGameData = {
                   "id": "detective_abe_what",
                   "text": "What's on the Rooftop?",
                   "available": true,
-                  "chains": ["detective_abe_explain"]
+                  "chains": [
+                    "detective_abe_explain"
+                  ]
                 }
               ]
             },
@@ -8080,7 +8236,9 @@ var belowGameData = {
                   "id": "detective_rooftop_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_rooftop_mouse"]
+                  "chains": [
+                    "detective_rooftop_mouse"
+                  ]
                 }
               ]
             },
@@ -8094,7 +8252,9 @@ var belowGameData = {
                   "id": "detective_rooftop_mouse_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_rooftop_after"]
+                  "chains": [
+                    "detective_rooftop_after"
+                  ]
                 }
               ]
             },
@@ -8119,7 +8279,9 @@ var belowGameData = {
                   "id": "detective_diner_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_diner_flo"]
+                  "chains": [
+                    "detective_diner_flo"
+                  ]
                 }
               ]
             },
@@ -8133,7 +8295,9 @@ var belowGameData = {
                   "id": "detective_diner_flo_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_diner_after"]
+                  "chains": [
+                    "detective_diner_after"
+                  ]
                 }
               ]
             },
@@ -8158,7 +8322,9 @@ var belowGameData = {
                   "id": "detective_jazz_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_jazz_piano"]
+                  "chains": [
+                    "detective_jazz_piano"
+                  ]
                 }
               ]
             },
@@ -8172,7 +8338,9 @@ var belowGameData = {
                   "id": "detective_jazz_piano_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_jazz_after"]
+                  "chains": [
+                    "detective_jazz_after"
+                  ]
                 }
               ]
             },
@@ -8197,7 +8365,9 @@ var belowGameData = {
                   "id": "detective_dockmaster_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_dockmaster_char"]
+                  "chains": [
+                    "detective_dockmaster_char"
+                  ]
                 }
               ]
             },
@@ -8211,7 +8381,9 @@ var belowGameData = {
                   "id": "detective_dockmaster_char_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_dockmaster_letter"]
+                  "chains": [
+                    "detective_dockmaster_letter"
+                  ]
                 }
               ]
             },
@@ -8224,14 +8396,16 @@ var belowGameData = {
                   "id": "detective_dockmaster_letter_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_dockmaster_after"]
+                  "chains": [
+                    "detective_dockmaster_after"
+                  ]
                 }
               ]
             },
             {
               "id": "detective_dockmaster_after",
               "available": false,
-              "text": "Sam, if you're reading this, I'm already gone. Not from the tunnels — from everything. I found what I was looking for. Not escape. Not treasure. Just peace. There's a tunnel beneath Pier C3 that opens into a place the light don't reach. I'm going there. Don't follow. You've got a good heart, Sam Shale. Even if you pretend you don't. — Medusa.",
+              "text": "Sam, if you're reading this, I'm already gone. Not from the tunnels — from everything. I found what I was looking for. Not escape. Not treasure. Just peace. A will be crossing the lake to the Beach. There's a tunnel there that opens into a place the light don't reach. I'm going there. Don't follow. You've got a good heart, Sam Shale. Even if you pretend you don't. — Medusa.",
               "options": [
                 {
                   "id": "detective_dockmaster_go",
@@ -8254,20 +8428,37 @@ var belowGameData = {
                   "id": "detective_dockmaster_catch_c",
                   "text": "...",
                   "available": true,
-                  "chains": ["detective_pier"]
+                  "chains": [
+                    "detective_pier"
+                  ]
                 }
               ]
             },
             {
               "id": "detective_pier",
               "available": false,
-              "text": "Sam walks to the end of Pier C3. The black water laps against the wooden pilings. A tunnel mouth gapes in the cavern wall below — dark, silent, waiting. He stands there for a long time, staring into it. Then he turns away. 'Come on, kid. I'll buy you a cup of coffee. The Last Stop's still open.' He walks back toward the diner without looking back. The search for Medusa is over.",
+              "text": "Sam walks to the end of Pier C3. The black water laps against the wooden pilings. He stands there for a long time, staring into it the darkness. Then he turns away. He slowly walks back toward the city without looking back. The search for Medusa is over. At the edge of the pier he pauses and looks back. 'I'll be in my office if you need me.' Then he disappears into the shadows.",
               "options": [
                 {
                   "id": "detective_pier_a1",
                   "text": "...",
                   "available": true,
-                  "closes": ["detective_pier"]
+                  "closes": [
+                    "detective_pier"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "detective_office",
+              "available": false,
+              "text": "Sam is sitting at his crate desk, staring at the photograph of Medusa's silhouette. He doesn't look up when you enter. 'I've been sitting here trying to process it all. Medusa was never the dame I was chasing. She was running from something. From herself, I reckon.' He finally looks at you. 'I spent so long chasing shadows down here that I forgot to ask why she left in the first place.' He offers a faint smile. 'Thanks, kid. For sticking with me to the end. I need some time to figure out what comes next.' He turns the photograph face down on the desk. 'But if you ever need a hand, you know where to find me.'",
+              "options": [
+                {
+                  "id": "detective_office_a1",
+                  "text": "...",
+                  "available": true,
+                  "closes": []
                 }
               ]
             }
@@ -8288,6 +8479,33 @@ var belowGameData = {
           "text": "You climb back up the ancient stairs..."
         }
       ]
+    },
+    {
+      "id": 4,
+      "name": "The Beach",
+      "defaultDescription": "A vast underground lake stretches before you. The water is still and black, but there is a sandy shore here — the Beach.",
+      "tiles": {
+        "x0y0": { "x": 0, "y": 0, "type": 2 },
+        "x0y1": { "x": 0, "y": 1, "type": 2 },
+        "x0y2": { "x": 0, "y": 2, "type": 2 },
+        "x0y3": { "x": 0, "y": 3, "type": 2 },
+        "x1y0": { "x": 1, "y": 0, "type": 2 },
+        "x1y1": { "x": 1, "y": 1, "type": 2 },
+        "x1y2": { "x": 1, "y": 2, "type": 2 },
+        "x1y3": { "x": 1, "y": 3, "type": 2 },
+        "x2y0": { "x": 2, "y": 0, "type": 2 },
+        "x2y1": { "x": 2, "y": 1, "type": 2 },
+        "x2y2": { "x": 2, "y": 2, "type": 2 },
+        "x2y3": { "x": 2, "y": 3, "type": 2 },
+        "x3y0": { "x": 3, "y": 0, "type": 2 },
+        "x3y1": { "x": 3, "y": 1, "type": 2 },
+        "x3y2": { "x": 3, "y": 2, "type": 2 },
+        "x3y3": { "x": 3, "y": 3, "type": 2 }
+      },
+      "monsters": [],
+      "obstacles": [],
+      "npcs": [],
+      "exits": []
     }
   ]
 };

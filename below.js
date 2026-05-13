@@ -418,6 +418,19 @@ statueImg5.src = "images/statue5.png";
 var statueImg6 = new Image();
 statueImg6.src = "images/statue6.png";
 
+var crateImg = new Image();
+crateImg.src = "images/crate.png";
+var barrelImg = new Image();
+barrelImg.src = "images/barrel.png";
+var rudderImg = new Image();
+rudderImg.src = "images/rudder.png";
+var mastImg = new Image();
+mastImg.src = "images/mast.png";
+var steeringWheelImg = new Image();
+steeringWheelImg.src = "images/steering_wheel.png";
+var sailImg = new Image();
+sailImg.src = "images/sail.png";
+
 window.onbeforeunload = confirmExit;
 function confirmExit() {
     saveCurrentGame();
@@ -1365,6 +1378,20 @@ function selectChoiceOption(index) {
         }
     }
     
+    // Teleport Sam to his office after the pier scene
+    if (selectedOption.id === "detective_pier_a1" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc) {
+            samNpc.position = { x: 0, y: -2 };
+            samNpc.destPos = {};
+            var officeD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_office"; });
+            if (officeD) officeD.available = true;
+        }
+    }
+    
     if (!below.passwordInput) {
         closeChoiceEvent();
     }
@@ -1927,7 +1954,7 @@ function getChoiceEventOptions(choiceEventIds) {
                                 if (tile && tile.text) {
                                     below.gameData.mapLog.push(tile.text);
                                 } else {
-                                    below.gameData.mapLog.push("The cupboard is empty.");
+                                    below.gameData.mapLog.push("It is empty.");
                                 }
                                 maintainMapLog();
                             }
@@ -2653,6 +2680,12 @@ function drawMapCanvas() {
                     else if (iconName === "statue5.png") img = statueImg5;
                     else if (iconName === "statue6.png") img = statueImg6;
                     else if (iconName === "gem.png") img = gemImg;
+                    else if (iconName === "crate.png") img = crateImg;
+                    else if (iconName === "barrel.png") img = barrelImg;
+                    else if (iconName === "rudder.png") img = rudderImg;
+                    else if (iconName === "mast.png") img = mastImg;
+                    else if (iconName === "steering_wheel.png") img = steeringWheelImg;
+                    else if (iconName === "sail.png") img = sailImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
@@ -2705,6 +2738,12 @@ function drawMapCanvas() {
                     else if (iconName === "statue5.png") img = statueImg5;
                     else if (iconName === "statue6.png") img = statueImg6;
                     else if (iconName === "gem.png") img = gemImg;
+                    else if (iconName === "crate.png") img = crateImg;
+                    else if (iconName === "barrel.png") img = barrelImg;
+                    else if (iconName === "rudder.png") img = rudderImg;
+                    else if (iconName === "mast.png") img = mastImg;
+                    else if (iconName === "steering_wheel.png") img = steeringWheelImg;
+                    else if (iconName === "sail.png") img = sailImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
