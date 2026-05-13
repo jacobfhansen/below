@@ -7799,15 +7799,15 @@ var belowGameData = {
         {
           "type": 14,
           "position": {
-            "x": -9,
-            "y": 2
+            "x": -10,
+            "y": -1
           }
         },
         {
           "type": 14,
           "position": {
-            "x": -1,
-            "y": 12
+            "x": 15,
+            "y": -1
           },
           "itemType": 8
         },
@@ -7821,66 +7821,66 @@ var belowGameData = {
         {
           "type": 14,
           "position": {
-            "x": 12,
-            "y": 10
-          }
-        },
-        {
-          "type": 14,
-          "position": {
-            "x": -8,
+            "x": 4,
             "y": 7
           }
         },
         {
           "type": 14,
           "position": {
-            "x": 4,
-            "y": 3
+            "x": -10,
+            "y": 7
+          }
+        },
+        {
+          "type": 14,
+          "position": {
+            "x": -8,
+            "y": -7
           },
           "itemType": 10
         },
         {
           "type": 15,
           "position": {
-            "x": -7,
-            "y": 2
+            "x": -6,
+            "y": -8
           }
         },
         {
           "type": 15,
           "position": {
-            "x": -3,
-            "y": 3
+            "x": -4,
+            "y": 11
           }
         },
         {
           "type": 15,
           "position": {
             "x": 14,
-            "y": 13
+            "y": -3
           },
           "itemType": 9
         },
         {
           "type": 15,
           "position": {
-            "x": 3,
-            "y": 2
+            "x": 6,
+            "y": -10
           }
         },
         {
           "type": 15,
           "position": {
-            "x": 10,
-            "y": 9
+            "x": 15,
+            "y": 7
           }
         },
         {
           "type": 15,
           "position": {
-            "x": 1,
-            "y": 3
+            "x": -3,
+            "y": 0
           },
           "itemType": 11
         }
@@ -8485,22 +8485,86 @@ var belowGameData = {
       "name": "The Beach",
       "defaultDescription": "A vast underground lake stretches before you. The water is still and black, but there is a sandy shore here — the Beach.",
       "tiles": {
-        "x0y0": { "x": 0, "y": 0, "type": 2 },
-        "x0y1": { "x": 0, "y": 1, "type": 2 },
-        "x0y2": { "x": 0, "y": 2, "type": 2 },
-        "x0y3": { "x": 0, "y": 3, "type": 2 },
-        "x1y0": { "x": 1, "y": 0, "type": 2 },
-        "x1y1": { "x": 1, "y": 1, "type": 2 },
-        "x1y2": { "x": 1, "y": 2, "type": 2 },
-        "x1y3": { "x": 1, "y": 3, "type": 2 },
-        "x2y0": { "x": 2, "y": 0, "type": 2 },
-        "x2y1": { "x": 2, "y": 1, "type": 2 },
-        "x2y2": { "x": 2, "y": 2, "type": 2 },
-        "x2y3": { "x": 2, "y": 3, "type": 2 },
-        "x3y0": { "x": 3, "y": 0, "type": 2 },
-        "x3y1": { "x": 3, "y": 1, "type": 2 },
-        "x3y2": { "x": 3, "y": 2, "type": 2 },
-        "x3y3": { "x": 3, "y": 3, "type": 2 }
+        "x0y0": {
+          "x": 0,
+          "y": 0,
+          "type": 2
+        },
+        "x0y1": {
+          "x": 0,
+          "y": 1,
+          "type": 2
+        },
+        "x0y2": {
+          "x": 0,
+          "y": 2,
+          "type": 2
+        },
+        "x0y3": {
+          "x": 0,
+          "y": 3,
+          "type": 2
+        },
+        "x1y0": {
+          "x": 1,
+          "y": 0,
+          "type": 2
+        },
+        "x1y1": {
+          "x": 1,
+          "y": 1,
+          "type": 2
+        },
+        "x1y2": {
+          "x": 1,
+          "y": 2,
+          "type": 2
+        },
+        "x1y3": {
+          "x": 1,
+          "y": 3,
+          "type": 2
+        },
+        "x2y0": {
+          "x": 2,
+          "y": 0,
+          "type": 2
+        },
+        "x2y1": {
+          "x": 2,
+          "y": 1,
+          "type": 2
+        },
+        "x2y2": {
+          "x": 2,
+          "y": 2,
+          "type": 2
+        },
+        "x2y3": {
+          "x": 2,
+          "y": 3,
+          "type": 2
+        },
+        "x3y0": {
+          "x": 3,
+          "y": 0,
+          "type": 2
+        },
+        "x3y1": {
+          "x": 3,
+          "y": 1,
+          "type": 2
+        },
+        "x3y2": {
+          "x": 3,
+          "y": 2,
+          "type": 2
+        },
+        "x3y3": {
+          "x": 3,
+          "y": 3,
+          "type": 2
+        }
       },
       "monsters": [],
       "obstacles": [],
