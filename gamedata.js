@@ -8380,7 +8380,7 @@ var belowGameData = {
               "id": "detective_precinct_sgt",
               "available": false,
               "speaker": 2,
-              "text": "'Shale! You're still alive. That's either good police work or bad luck.' The Sergeant shuffles a stack of papers noisily. 'What do you want?'",
+              "text": "'(Jester attempting a gruff cop voice) Shale! You're still alive. That's either good police work or bad luck.' The Sergeant shuffles a stack of papers noisily. 'What do you want?'",
               "options": [
                 {
                   "id": "detective_precinct_sgt_c",
@@ -8490,7 +8490,7 @@ var belowGameData = {
               "id": "detective_abe_char",
               "available": false,
               "speaker": 2,
-              "text": "From behind a mountain of mismatched lamps, a voice replies in a theatrical singsong. 'Sammy Shale! Long time no pawn! You here to sell or to stare at my magnificent collection of stuff?' Abe emerges, grinning too wide. 'I got information. I got misinformation. I got stuff that looks like information but is actually just a potato. You gotta be specific.'",
+              "text": "From behind a mountain of mismatched lamps, a voice replies in a bad Yiddish-coded accent, clearly the Jester having fun: 'Sammy Shale! Long time no pawn! You here to sell or to stare at my magnificent collection of stuff?' Abe emerges, grinning too wide. 'I got information. I got misinformation. I got stuff that looks like information but is actually just a potato. You gotta be specific.'",
               "options": [
                 {
                   "id": "detective_abe_char_c",

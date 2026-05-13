@@ -1528,6 +1528,16 @@ function selectChoiceOption(index) {
         setTimeout(function() { showInventory([12]); }, 50);
     }
     
+    // When player responds to Sam Shale mid-walk dialog
+    if (selectedOption.id === "detective_walk_a1") {
+        below.gameData.mapLog.push("Sam Shale glances at you sidelong. 'Once. Came out with a bullet hole in my coat and a story I can't tell in polite company. Not that there's any polite company down here.'");
+        maintainMapLog();
+    }
+    if (selectedOption.id === "detective_walk_a2") {
+        below.gameData.mapLog.push("Sam Shale nods slowly. 'Yeah. That's the right response to this place.'");
+        maintainMapLog();
+    }
+    
     // When player leaves Mole's intro dialog (molea4), remove blocking stones on map 2
     if (selectedOption.id === "molea4") {
         var stonePositions = [
@@ -2355,6 +2365,34 @@ function handleBlockedInteraction(x, y) {
     
     // Handle NPC dialog system
     if (npc && npc.dialogOptions) {
+        // Special case: Sam Shale mid-walk dialog
+        if (npc.type === 5 && npc.walkPath && npc.walkPath.length > 0) {
+            below.choiceEvent = {
+                selectedIndex: 0,
+                message: "This alley's seen things. Bodies. Deals. Dirty deals about bodies. Stay close and don't touch anything. Actually, don't even look at anything. Just... look at my back. That's safe.",
+                npcPos: { x: x, y: y },
+                npcType: npc.type,
+                speakerNpcType: npc.type,
+                npcAgitated: npc.agitated || false,
+                dialogId: "detective_walking",
+                dialogOptions: [
+                    {
+                        id: "detective_walk_a1",
+                        text: "You've been here before?",
+                        available: true
+                    },
+                    {
+                        id: "detective_walk_a2",
+                        text: "...",
+                        available: true
+                    }
+                ],
+                isDialog: true
+            };
+            renderChoiceEvent();
+            return;
+        }
+
         // Find first available dialog (checking availability and item requirements)
         var availableDialog = npc.dialogOptions.find(function(d) {
             if (!d.available) return false;
