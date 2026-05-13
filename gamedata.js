@@ -450,6 +450,21 @@ var belowGameData = {
       ],
       "agenda": "A derelict ship waiting to be repaired.",
       "personality": "derelict"
+    },
+    "7": {
+      "name": "Charon",
+      "description": "An ancient boatman sitting on the dark shore of an underground lake",
+      "icon": "charon.png",
+      "dialogImg": "charon_dialog.png",
+      "dialog": {
+        "greeting": "The old man stares at the water and does not seem to notice you.",
+        "agitated": "Do not pester me, wanderer! My memory is my own!"
+      },
+      "choiceEvents": [
+        9
+      ],
+      "agenda": "A very old and forgetful boatman who has no short term memory. Speaks in dactylic hexameter.",
+      "personality": "forgetful"
     }
   },
   "mapData": [
@@ -8660,7 +8675,126 @@ var belowGameData = {
       },
       "monsters": [],
       "obstacles": [],
-      "npcs": [],
+      "npcs": [
+        {
+          "type": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "movement": 0,
+          "dialogOptions": [
+            {
+              "id": "charon_intro",
+              "available": true,
+              "text": "An ancient figure sits upon the sand, wrapped in a tattered cloak and gripping a long wooden pole. His eyes are milky, fixed on the black water. He does not turn as you approach, but his voice rumbles like distant thunder:\n'Stranger who walks on this desolate strand,\nSpeak now your name or your purpose,\nFor Charon am I — or so I have been told —\nThe ferryman of these dark and forgotten waters.\nI have carried the lost from one shadow to another\nFor longer than memory serves me.\nI know faces — the Jester who laughs at the dark,\nThe Hermit who hoards his green treasure,\nThe Mole who burrows in circles,\nMedusa with her serpentine crown,\nAnd Shale, that hound of the lost.\nAll have crossed my boat at some time or another.\nBut when? And why? Ah, that I cannot say.\nThe past is a fog that thickens by the moment.\nWhat is it you seek, wanderer, on this lonely shore?'",
+              "options": [
+                {
+                  "id": "charon_intro_self",
+                  "text": "Tell me about yourself.",
+                  "available": true,
+                  "chains": ["charon_self"]
+                },
+                {
+                  "id": "charon_intro_others",
+                  "text": "You mentioned the others — tell me more.",
+                  "available": true,
+                  "chains": ["charon_others"]
+                },
+                {
+                  "id": "charon_intro_exit",
+                  "text": "How do I get off this beach?",
+                  "available": true,
+                  "chains": ["charon_exit"]
+                },
+                {
+                  "id": "charon_intro_leave",
+                  "text": "Goodbye.",
+                  "available": true,
+                  "closes": ["charon_intro"]
+                }
+              ]
+            },
+            {
+              "id": "charon_self",
+              "available": false,
+              "text": "He squints at you, then at his hands, then back at the water.\n'Myself? A question I have not considered\nIn a great many crossings of this black lake.\nI am Charon, they say — the boatman.\nI carry souls from shore to distant shore\nIn a vessel that groans like the dying.\nThe oar remembers the way even when I do not.\nI remember a time before the tunnels,\nWhen the sky was a thing above, not a roof of stone.\nBut that was another age, another Charon.\nThis one sits and waits and ferries.\nWhat else is there for an old man with a boat?'\nHe trails off, staring into the dark water, and seems to forget you asked.",
+
+              "options": [
+                {
+                  "id": "charon_self_back",
+                  "text": "Fascinating. What else?",
+                  "available": true,
+                  "chains": ["charon_self"]
+                },
+                {
+                  "id": "charon_self_others",
+                  "text": "You mentioned others...",
+                  "available": true,
+                  "chains": ["charon_others"]
+                },
+                {
+                  "id": "charon_self_leave",
+                  "text": "I'll leave you to your thoughts.",
+                  "available": true,
+                  "closes": ["charon_self", "charon_intro"]
+                }
+              ]
+            },
+            {
+              "id": "charon_others",
+              "available": false,
+              "text": "He taps his pole on the sand, stirring faint ripples.\n'The Jester — a creature of noise and mischief.\nHe crossed with me once, singing a song\nThat had no beginning and certainly no end.\nHe spoke of the Hermit with cruel affection,\nAnd of Medusa as if she were a riddle to solve.\nHe fears nothing and forgets less than I — a rare gift.\n\nThe Hermit — ah, the hoarder of green.\nHe has sat in his cave so long\nThat the stones have learned his breathing.\nHe trades what he should keep\nAnd keeps what he should trade.\nA fool and a scholar in one skin.\n\nThe Mole — a creature of darkness deep.\nHe digs not for treasure but for purpose,\nCarving his maze in the earth's belly.\nHis words are old and twisted as roots.\nI do not trust him, but I respect his patience.\n\nMedusa — ah, the serpent-crowned one.\nI ferried her across this very lake\nNot long ago — or was it long ago?\nTime slips from me like water from this oar.\nShe spoke of peace. Of finding an end.\nI hope she found what she sought.\n\nSam Shale — the restless one.\nHe has never crossed my lake, but he has asked\nA thousand questions about the far shore.\nHe is looking for something he will not name.\nThat is the most dangerous kind of search.'\nHe falls silent, and you realize he may have forgotten who you are.",
+              "options": [
+                {
+                  "id": "charon_others_back",
+                  "text": "Tell me more about yourself.",
+                  "available": true,
+                  "chains": ["charon_self"]
+                },
+                {
+                  "id": "charon_others_exit",
+                  "text": "How do I leave this place?",
+                  "available": true,
+                  "chains": ["charon_exit"]
+                },
+                {
+                  "id": "charon_others_leave",
+                  "text": "Thank you. I must go.",
+                  "available": true,
+                  "closes": ["charon_others", "charon_intro", "charon_self"]
+                }
+              ]
+            },
+            {
+              "id": "charon_exit",
+              "available": false,
+              "text": "He gestures vaguely at the cave wall behind him.\n'Leave? The word itself has lost its meaning here.\nThere is no exit that I have found in my crossings.\nOnly deeper shores, darker waters.\nIf you seek a way from this underground world,\nYou must go down before you can go up.\nSpeak to the Mole — he knows the cracks in the stone.\nSpeak to Medusa — she has walked where few dare follow.\nSpeak to the Hermit — he has keys you have not imagined.\nAs for me, I will be here when you return.\nI am always here.\nAlways.'\nHe turns back to the water and does not speak again.",
+
+              "options": [
+                {
+                  "id": "charon_exit_back",
+                  "text": "Tell me about yourself.",
+                  "available": true,
+                  "chains": ["charon_self"]
+                },
+                {
+                  "id": "charon_exit_others",
+                  "text": "Tell me about the others.",
+                  "available": true,
+                  "chains": ["charon_others"]
+                },
+                {
+                  "id": "charon_exit_leave",
+                  "text": "I'll be going.",
+                  "available": true,
+                  "closes": ["charon_exit", "charon_intro", "charon_self", "charon_others"]
+                }
+              ]
+            }
+          ]
+        }
+      ],
       "exits": []
     }
   ]

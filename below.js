@@ -370,6 +370,12 @@ detectiveImg.src = "images/detective.png";
 var shipImg = new Image();
 shipImg.src = "images/ship.png";
 
+var charonImg = new Image();
+charonImg.src = "images/charon.png";
+
+var charonDialogImg = new Image();
+charonDialogImg.src = "images/charon_dialog.png";
+
 var tableImg = new Image();
 tableImg.src = "images/table.png";
 
@@ -2740,6 +2746,7 @@ function drawMapCanvas() {
                 else if (type.icon === "mole.png") img = moleImg || new Image();
                 else if (type.icon === "detective.png") img = detectiveImg || new Image();
                 else if (type.icon === "ship.png") img = shipImg || new Image();
+                else if (type.icon === "charon.png") img = charonImg || new Image();
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
