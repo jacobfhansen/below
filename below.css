@@ -98,11 +98,13 @@ html, body {
 }
 .below-game-left-paragraph-current {
     margin: 10px 10px 0px 10px;
-    color: var(--white)
+    color: var(--white);
+    white-space: pre-line;
 }
 .below-game-left-paragraph {
     margin: 10px 10px 0px 10px;
-    color: var(--grey)
+    color: var(--grey);
+    white-space: pre-line;
 }
 .below-game-left-paragraph:hover {
     color: var(--light-grey)

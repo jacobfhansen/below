@@ -1488,10 +1488,17 @@ function selectChoiceOption(index) {
         }
     }
     
+    // Return from The Beach to the docks on map 3
+    if (selectedOption.id === "ship_beach_leave") {
+        setTimeout(function() {
+            changeMap(3, -1, 13, "You sail back across the dark lake. The familiar shape of Pier A1 emerges from the gloom as the ship docks once more.");
+        }, 10);
+    }
+
     // Depart on the repaired ship — transition to The Beach
     if (selectedOption.id === "ship_departure_go") {
         setTimeout(function() {
-            changeMap(4, 0, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
+            changeMap(4, 2, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
         }, 10);
     }
     

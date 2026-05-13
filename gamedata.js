@@ -8511,25 +8511,33 @@ var belowGameData = {
                   "id": "ship_attach_rudder",
                   "text": "Attach the rudder",
                   "available": true,
-                  "requiresItems": [8]
+                  "requiresItems": [
+                    8
+                  ]
                 },
                 {
                   "id": "ship_attach_mast",
                   "text": "Attach the mast",
                   "available": true,
-                  "requiresItems": [9]
+                  "requiresItems": [
+                    9
+                  ]
                 },
                 {
                   "id": "ship_attach_wheel",
                   "text": "Attach the steering wheel",
                   "available": true,
-                  "requiresItems": [10]
+                  "requiresItems": [
+                    10
+                  ]
                 },
                 {
                   "id": "ship_attach_sail",
                   "text": "Attach the sail",
                   "available": true,
-                  "requiresItems": [11]
+                  "requiresItems": [
+                    11
+                  ]
                 },
                 {
                   "id": "ship_leave",
@@ -8547,7 +8555,9 @@ var belowGameData = {
                   "id": "ship_depart",
                   "text": "Depart",
                   "available": false,
-                  "chains": ["ship_departure"]
+                  "chains": [
+                    "ship_departure"
+                  ]
                 },
                 {
                   "id": "ship_ready_leave",
@@ -8565,7 +8575,9 @@ var belowGameData = {
                   "id": "ship_departure_go",
                   "text": "...",
                   "available": true,
-                  "closes": ["ship_departure"]
+                  "closes": [
+                    "ship_departure"
+                  ]
                 }
               ]
             }
@@ -8595,87 +8607,280 @@ var belowGameData = {
         "x0y0": {
           "x": 0,
           "y": 0,
-          "type": 2
-        },
-        "x0y1": {
-          "x": 0,
-          "y": 1,
-          "type": 2
-        },
-        "x0y2": {
-          "x": 0,
-          "y": 2,
-          "type": 2
-        },
-        "x0y3": {
-          "x": 0,
-          "y": 3,
-          "type": 2
+          "type": 0
         },
         "x1y0": {
           "x": 1,
           "y": 0,
-          "type": 2
+          "type": 0
         },
         "x1y1": {
           "x": 1,
           "y": 1,
-          "type": 2
-        },
-        "x1y2": {
-          "x": 1,
-          "y": 2,
-          "type": 2
-        },
-        "x1y3": {
-          "x": 1,
-          "y": 3,
-          "type": 2
+          "type": 0
         },
         "x2y0": {
           "x": 2,
           "y": 0,
-          "type": 2
+          "type": 0
         },
         "x2y1": {
           "x": 2,
           "y": 1,
-          "type": 2
+          "type": 0
         },
         "x2y2": {
           "x": 2,
           "y": 2,
-          "type": 2
-        },
-        "x2y3": {
-          "x": 2,
-          "y": 3,
-          "type": 2
+          "type": 0
         },
         "x3y0": {
           "x": 3,
           "y": 0,
-          "type": 2
+          "type": 1
         },
         "x3y1": {
           "x": 3,
           "y": 1,
-          "type": 2
+          "type": 1
         },
         "x3y2": {
           "x": 3,
           "y": 2,
-          "type": 2
+          "type": 1
+        },
+        "x4y3": {
+          "x": 4,
+          "y": 3,
+          "type": 1
+        },
+        "x4y2": {
+          "x": 4,
+          "y": 2,
+          "type": 1
+        },
+        "x4y1": {
+          "x": 4,
+          "y": 1,
+          "type": 1
+        },
+        "x4y0": {
+          "x": 4,
+          "y": 0,
+          "type": 1
+        },
+        "x2ym1": {
+          "x": 2,
+          "y": -1,
+          "type": 1
+        },
+        "x2ym2": {
+          "x": 2,
+          "y": -2,
+          "type": 1
+        },
+        "x3ym2": {
+          "x": 3,
+          "y": -2,
+          "type": 1
+        },
+        "x4ym1": {
+          "x": 4,
+          "y": -1,
+          "type": 1
+        },
+        "x4ym2": {
+          "x": 4,
+          "y": -2,
+          "type": 1
+        },
+        "x3ym1": {
+          "x": 3,
+          "y": -1,
+          "type": 1
+        },
+        "x1ym1": {
+          "x": 1,
+          "y": -1,
+          "type": 0
+        },
+        "x1ym2": {
+          "x": 1,
+          "y": -2,
+          "type": 0
+        },
+        "x0ym2": {
+          "x": 0,
+          "y": -2,
+          "type": 0
+        },
+        "x0ym1": {
+          "x": 0,
+          "y": -1,
+          "type": 0
         },
         "x3y3": {
           "x": 3,
           "y": 3,
-          "type": 2
+          "type": 0
+        },
+        "x2y3": {
+          "x": 2,
+          "y": 3,
+          "type": 0
+        },
+        "x1y3": {
+          "x": 1,
+          "y": 3,
+          "type": 0
+        },
+        "x1y2": {
+          "x": 1,
+          "y": 2,
+          "type": 0
+        },
+        "x0y2": {
+          "x": 0,
+          "y": 2,
+          "type": 0
+        },
+        "x0y1": {
+          "x": 0,
+          "y": 1,
+          "type": 0
+        },
+        "x0y3": {
+          "x": 0,
+          "y": 3,
+          "type": 0
+        },
+        "x3y4": {
+          "x": 3,
+          "y": 4,
+          "type": 0
+        },
+        "x2y4": {
+          "x": 2,
+          "y": 4,
+          "type": 0
+        },
+        "x0y4": {
+          "x": 0,
+          "y": 4,
+          "type": 0
+        },
+        "x1y4": {
+          "x": 1,
+          "y": 4,
+          "type": 0
+        },
+        "x4y4": {
+          "x": 4,
+          "y": 4,
+          "type": 1
+        },
+        "x5y4": {
+          "x": 5,
+          "y": 4,
+          "type": 1
+        },
+        "x5y3": {
+          "x": 5,
+          "y": 3,
+          "type": 1
+        },
+        "x5y1": {
+          "x": 5,
+          "y": 1,
+          "type": 1
+        },
+        "x5y0": {
+          "x": 5,
+          "y": 0,
+          "type": 1
+        },
+        "x5ym1": {
+          "x": 5,
+          "y": -1,
+          "type": 1
+        },
+        "x5ym2": {
+          "x": 5,
+          "y": -2,
+          "type": 1
+        },
+        "x5y2": {
+          "x": 5,
+          "y": 2,
+          "type": 1
+        },
+        "x4y5": {
+          "x": 4,
+          "y": 5,
+          "type": 1
+        },
+        "x5y5": {
+          "x": 5,
+          "y": 5,
+          "type": 1
+        },
+        "x3y5": {
+          "x": 3,
+          "y": 5,
+          "type": 1
+        },
+        "x2y5": {
+          "x": 2,
+          "y": 5,
+          "type": 0
+        },
+        "x1y5": {
+          "x": 1,
+          "y": 5,
+          "type": 0
+        },
+        "x0y5": {
+          "x": 0,
+          "y": 5,
+          "type": 0
         }
       },
       "monsters": [],
       "obstacles": [],
       "npcs": [
+        {
+          "type": 6,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "movement": 0,
+          "dialogOptions": [
+            {
+              "id": "ship_beach",
+              "available": true,
+              "text": "The ship rests at the water's edge, its repaired hull creaking softly. The dark lake stretches into the distance, still and black, leading back toward the docks you came from.",
+              "options": [
+                {
+                  "id": "ship_beach_leave",
+                  "text": "Board the ship and return to the docks.",
+                  "available": true,
+                  "closes": [
+                    "ship_beach"
+                  ]
+                },
+                {
+                  "id": "ship_beach_stay",
+                  "text": "Not yet. I want to look around.",
+                  "available": true,
+                  "closes": [
+                    "ship_beach"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
         {
           "type": 7,
           "position": {
@@ -8687,108 +8892,371 @@ var belowGameData = {
             {
               "id": "charon_intro",
               "available": true,
-              "text": "An ancient figure sits upon the sand, wrapped in a tattered cloak and gripping a long wooden pole. His eyes are milky, fixed on the black water. He does not turn as you approach, but his voice rumbles like distant thunder:\n'Stranger who walks on this desolate strand,\nSpeak now your name or your purpose,\nFor Charon am I — or so I have been told —\nThe ferryman of these dark and forgotten waters.\nI have carried the lost from one shadow to another\nFor longer than memory serves me.\nI know faces — the Jester who laughs at the dark,\nThe Hermit who hoards his green treasure,\nThe Mole who burrows in circles,\nMedusa with her serpentine crown,\nAnd Shale, that hound of the lost.\nAll have crossed my boat at some time or another.\nBut when? And why? Ah, that I cannot say.\nThe past is a fog that thickens by the moment.\nWhat is it you seek, wanderer, on this lonely shore?'",
+              "text": "An ancient figure sits upon the sand, wrapped in a tattered cloak and gripping a long wooden pole. His eyes are milky, fixed on the black water. He does not turn as you approach, but his voice rumbles like distant thunder:\n'Stranger who walks on this desolate strand,\nSpeak now your name or your purpose,\nFor Charon am I - or so I have been told -\nThe ferryman of these dark and forgotten waters.\nI have carried the lost from one shadow to another\nFor longer than memory serves me.\nI know faces - the Jester, the Hermit, the Mole,\nMedusa with her serpentine crown,\nAnd Shale, that hound of the lost.\nAll have crossed my boat at some time or another.\nBut when? And why? Ah, that I cannot say.\nThe past is a fog that thickens by the moment.\nWhat is it you seek, wanderer, on this lonely shore?'",
               "options": [
+                {
+                  "id": "charon_intro_ask",
+                  "text": "Ask about someone you know.",
+                  "available": true,
+                  "chains": [
+                    "charon_ask"
+                  ]
+                },
                 {
                   "id": "charon_intro_self",
                   "text": "Tell me about yourself.",
                   "available": true,
-                  "chains": ["charon_self"]
-                },
-                {
-                  "id": "charon_intro_others",
-                  "text": "You mentioned the others — tell me more.",
-                  "available": true,
-                  "chains": ["charon_others"]
+                  "chains": [
+                    "charon_self"
+                  ]
                 },
                 {
                   "id": "charon_intro_exit",
                   "text": "How do I get off this beach?",
                   "available": true,
-                  "chains": ["charon_exit"]
+                  "chains": [
+                    "charon_exit"
+                  ]
                 },
                 {
                   "id": "charon_intro_leave",
                   "text": "Goodbye.",
                   "available": true,
-                  "closes": ["charon_intro"]
+                  "closes": [
+                    "charon_intro"
+                  ]
                 }
               ]
             },
             {
               "id": "charon_self",
               "available": false,
-              "text": "He squints at you, then at his hands, then back at the water.\n'Myself? A question I have not considered\nIn a great many crossings of this black lake.\nI am Charon, they say — the boatman.\nI carry souls from shore to distant shore\nIn a vessel that groans like the dying.\nThe oar remembers the way even when I do not.\nI remember a time before the tunnels,\nWhen the sky was a thing above, not a roof of stone.\nBut that was another age, another Charon.\nThis one sits and waits and ferries.\nWhat else is there for an old man with a boat?'\nHe trails off, staring into the dark water, and seems to forget you asked.",
-
+              "text": "He squints at you, then at his hands, then back at the water.\n'Myself? A question I have not considered\nIn a great many crossings of this black lake.\nI am Charon, they say - the boatman.\nI carry souls from shore to distant shore\nIn a vessel that groans like the dying.\nThe oar remembers the way even when I do not.\nI remember a time before the tunnels,\nWhen the sky was a thing above, not a roof of stone.\nBut that was another age, another Charon.\nThis one sits and waits and ferries.\nWhat else is there for an old man with a boat?'\nHe trails off, staring into the dark water, and seems to forget you asked.",
               "options": [
                 {
                   "id": "charon_self_back",
                   "text": "Fascinating. What else?",
                   "available": true,
-                  "chains": ["charon_self"]
+                  "chains": [
+                    "charon_self"
+                  ]
                 },
                 {
-                  "id": "charon_self_others",
-                  "text": "You mentioned others...",
+                  "id": "charon_self_ask",
+                  "text": "Ask about someone you know.",
                   "available": true,
-                  "chains": ["charon_others"]
+                  "chains": [
+                    "charon_ask"
+                  ]
                 },
                 {
                   "id": "charon_self_leave",
                   "text": "I'll leave you to your thoughts.",
                   "available": true,
-                  "closes": ["charon_self", "charon_intro"]
+                  "closes": [
+                    "charon_self",
+                    "charon_intro"
+                  ]
                 }
               ]
             },
             {
-              "id": "charon_others",
+              "id": "charon_ask",
               "available": false,
-              "text": "He taps his pole on the sand, stirring faint ripples.\n'The Jester — a creature of noise and mischief.\nHe crossed with me once, singing a song\nThat had no beginning and certainly no end.\nHe spoke of the Hermit with cruel affection,\nAnd of Medusa as if she were a riddle to solve.\nHe fears nothing and forgets less than I — a rare gift.\n\nThe Hermit — ah, the hoarder of green.\nHe has sat in his cave so long\nThat the stones have learned his breathing.\nHe trades what he should keep\nAnd keeps what he should trade.\nA fool and a scholar in one skin.\n\nThe Mole — a creature of darkness deep.\nHe digs not for treasure but for purpose,\nCarving his maze in the earth's belly.\nHis words are old and twisted as roots.\nI do not trust him, but I respect his patience.\n\nMedusa — ah, the serpent-crowned one.\nI ferried her across this very lake\nNot long ago — or was it long ago?\nTime slips from me like water from this oar.\nShe spoke of peace. Of finding an end.\nI hope she found what she sought.\n\nSam Shale — the restless one.\nHe has never crossed my lake, but he has asked\nA thousand questions about the far shore.\nHe is looking for something he will not name.\nThat is the most dangerous kind of search.'\nHe falls silent, and you realize he may have forgotten who you are.",
+              "text": "He taps his pole on the sand, stirring faint ripples.\n'Which of them would you know about?\nI will tell you what I remember - or what I think I remember.\nChoose, and I shall speak.'",
               "options": [
                 {
-                  "id": "charon_others_back",
-                  "text": "Tell me more about yourself.",
+                  "id": "charon_ask_hermit",
+                  "text": "Tell me about the Hermit.",
                   "available": true,
-                  "chains": ["charon_self"]
+                  "chains": [
+                    "charon_hermit"
+                  ]
                 },
                 {
-                  "id": "charon_others_exit",
+                  "id": "charon_ask_jester",
+                  "text": "Tell me about the Jester.",
+                  "available": true,
+                  "chains": [
+                    "charon_jester"
+                  ]
+                },
+                {
+                  "id": "charon_ask_medusa",
+                  "text": "Tell me about Medusa.",
+                  "available": true,
+                  "chains": [
+                    "charon_medusa"
+                  ]
+                },
+                {
+                  "id": "charon_ask_mole",
+                  "text": "Tell me about the Mole.",
+                  "available": true,
+                  "chains": [
+                    "charon_mole"
+                  ]
+                },
+                {
+                  "id": "charon_ask_sam",
+                  "text": "Tell me about Sam Shale.",
+                  "available": true,
+                  "chains": [
+                    "charon_sam"
+                  ]
+                },
+                {
+                  "id": "charon_ask_leave",
+                  "text": "Never mind.",
+                  "available": true,
+                  "closes": [
+                    "charon_ask"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "charon_hermit",
+              "available": false,
+              "text": "The old boatman leans on his pole, staring into the darkness.\n'The Hermit - ah, the hoarder of green.\nHe has sat in his cave so long\nThat the stones have learned his breathing.\nHe trades what he should keep\nAnd keeps what he should trade.\nA fool and a scholar in one skin.\nHe crossed my boat once, clutching a bundle of herbs\nAs if they were made of gold itself.\nI asked him where he was going.\nHe said: \"Deeper.\"\nThat is all he ever says. Deeper.'",
+              "options": [
+                {
+                  "id": "charon_hermit_back",
+                  "text": "Ask about someone else.",
+                  "available": true,
+                  "chains": [
+                    "charon_ask"
+                  ]
+                },
+                {
+                  "id": "charon_hermit_self",
+                  "text": "Tell me about yourself.",
+                  "available": true,
+                  "chains": [
+                    "charon_self"
+                  ]
+                },
+                {
+                  "id": "charon_hermit_exit",
                   "text": "How do I leave this place?",
                   "available": true,
-                  "chains": ["charon_exit"]
+                  "chains": [
+                    "charon_exit"
+                  ]
                 },
                 {
-                  "id": "charon_others_leave",
-                  "text": "Thank you. I must go.",
+                  "id": "charon_hermit_leave",
+                  "text": "Goodbye.",
                   "available": true,
-                  "closes": ["charon_others", "charon_intro", "charon_self"]
+                  "closes": [
+                    "charon_hermit",
+                    "charon_ask",
+                    "charon_intro",
+                    "charon_self"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "charon_jester",
+              "available": false,
+              "text": "Charon chuckles - a dry, rasping sound.\n'The Jester - a creature of noise and mischief.\nHe crossed with me once, singing a song\nThat had no beginning and certainly no end.\nHe spoke of the Hermit with cruel affection,\nAnd of Medusa as if she were a riddle to solve.\nHe fears nothing and forgets less than I - a rare gift.\nWhen he stepped ashore, he tipped his hat\nAnd said: \"Same time tomorrow, old man!\"\nThen he vanished into the dark, laughing.\nI have not seen him since.\nOr perhaps I have. I cannot recall.'",
+              "options": [
+                {
+                  "id": "charon_jester_back",
+                  "text": "Ask about someone else.",
+                  "available": true,
+                  "chains": [
+                    "charon_ask"
+                  ]
+                },
+                {
+                  "id": "charon_jester_self",
+                  "text": "Tell me about yourself.",
+                  "available": true,
+                  "chains": [
+                    "charon_self"
+                  ]
+                },
+                {
+                  "id": "charon_jester_exit",
+                  "text": "How do I leave this place?",
+                  "available": true,
+                  "chains": [
+                    "charon_exit"
+                  ]
+                },
+                {
+                  "id": "charon_jester_leave",
+                  "text": "Goodbye.",
+                  "available": true,
+                  "closes": [
+                    "charon_jester",
+                    "charon_ask",
+                    "charon_intro",
+                    "charon_self"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "charon_medusa",
+              "available": false,
+              "text": "Charon's grip tightens on his pole. His voice drops.\n'Medusa - ah, the serpent-crowned one.\nI ferried her across this very lake\nNot long ago - or was it long ago?\nTime slips from me like water from this oar.\nShe spoke of peace. Of finding an end.\nBut there was a shadow in her eyes when she said it -\nAs if she was running from something.\nSomething older than these tunnels.\nA presence that dwells below all other depths.\nShe asked me once if I had ever carried\nA passenger who left no ripple in the water.\nI said the water always remembers.\nShe said: \"No. Some things pass through\nWithout leaving a trace. I have met one.\"\nThen she fell silent and would not speak\nAgain until I reached the shore.\nI do not know what she meant.\nBut I have felt it too - a coldness in the deep.\nA name I cannot grasp.'\nHe stares at the black water, shivering.",
+
+              "options": [
+                {
+                  "id": "charon_medusa_back",
+                  "text": "Ask about someone else.",
+                  "available": true,
+                  "chains": [
+                    "charon_ask"
+                  ]
+                },
+                {
+                  "id": "charon_medusa_self",
+                  "text": "Tell me about yourself.",
+                  "available": true,
+                  "chains": [
+                    "charon_self"
+                  ]
+                },
+                {
+                  "id": "charon_medusa_exit",
+                  "text": "How do I leave this place?",
+                  "available": true,
+                  "chains": [
+                    "charon_exit"
+                  ]
+                },
+                {
+                  "id": "charon_medusa_leave",
+                  "text": "Goodbye.",
+                  "available": true,
+                  "closes": [
+                    "charon_medusa",
+                    "charon_ask",
+                    "charon_intro",
+                    "charon_self"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "charon_mole",
+              "available": false,
+              "text": "Charon wrinkles his nose as if catching a bad smell.\n'The Mole - a creature of darkness deep.\nHe digs not for treasure but for purpose,\nCarving his maze in the earth's belly.\nHis words are old and twisted as roots.\nI do not trust him, but I respect his patience.\nWhen I carried him across, he sat in silence\nAnd stared at the water the whole way.\nAs he stepped off, he said:\n\"The earth remembers every tunnel.\nIt remembers the things that crawl in them too.\"\nThen he was gone, into the dark.'",
+              "options": [
+                {
+                  "id": "charon_mole_back",
+                  "text": "Ask about someone else.",
+                  "available": true,
+                  "chains": [
+                    "charon_ask"
+                  ]
+                },
+                {
+                  "id": "charon_mole_self",
+                  "text": "Tell me about yourself.",
+                  "available": true,
+                  "chains": [
+                    "charon_self"
+                  ]
+                },
+                {
+                  "id": "charon_mole_exit",
+                  "text": "How do I leave this place?",
+                  "available": true,
+                  "chains": [
+                    "charon_exit"
+                  ]
+                },
+                {
+                  "id": "charon_mole_leave",
+                  "text": "Goodbye.",
+                  "available": true,
+                  "closes": [
+                    "charon_mole",
+                    "charon_ask",
+                    "charon_intro",
+                    "charon_self"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "charon_sam",
+              "available": false,
+              "text": "Charon squints as if trying to see through fog.\n'Sam Shale - the restless one.\nHe has never crossed my lake, but he has asked\nA thousand questions about the far shore.\nHe is looking for something he will not name.\nThat is the most dangerous kind of search.\nHe came to the water's edge once, alone,\nAnd stood there for an hour, staring across.\nI asked if he wanted to cross.\nHe said: \"Not yet. I'm not done looking.\"\nThen he walked away.\nI have not seen him since.\nHe is still looking. That much I know.'",
+              "options": [
+                {
+                  "id": "charon_sam_back",
+                  "text": "Ask about someone else.",
+                  "available": true,
+                  "chains": [
+                    "charon_ask"
+                  ]
+                },
+                {
+                  "id": "charon_sam_self",
+                  "text": "Tell me about yourself.",
+                  "available": true,
+                  "chains": [
+                    "charon_self"
+                  ]
+                },
+                {
+                  "id": "charon_sam_exit",
+                  "text": "How do I leave this place?",
+                  "available": true,
+                  "chains": [
+                    "charon_exit"
+                  ]
+                },
+                {
+                  "id": "charon_sam_leave",
+                  "text": "Goodbye.",
+                  "available": true,
+                  "closes": [
+                    "charon_sam",
+                    "charon_ask",
+                    "charon_intro",
+                    "charon_self"
+                  ]
                 }
               ]
             },
             {
               "id": "charon_exit",
               "available": false,
-              "text": "He gestures vaguely at the cave wall behind him.\n'Leave? The word itself has lost its meaning here.\nThere is no exit that I have found in my crossings.\nOnly deeper shores, darker waters.\nIf you seek a way from this underground world,\nYou must go down before you can go up.\nSpeak to the Mole — he knows the cracks in the stone.\nSpeak to Medusa — she has walked where few dare follow.\nSpeak to the Hermit — he has keys you have not imagined.\nAs for me, I will be here when you return.\nI am always here.\nAlways.'\nHe turns back to the water and does not speak again.",
-
+              "text": "He gestures vaguely at the cave wall behind him.\n'Leave? The word itself has lost its meaning here.\nThere is no exit that I have found in my crossings.\nOnly deeper shores, darker waters.\nIf you seek a way from this underground world,\nYou must go down before you can go up.\nSpeak to the Mole - he knows the cracks in the stone.\nSpeak to Medusa - she has walked where few dare follow.\nSpeak to the Hermit - he has keys you have not imagined.\nAs for me, I will be here when you return.\nI am always here.\nAlways.'\nHe turns back to the water and does not speak again.",
               "options": [
                 {
-                  "id": "charon_exit_back",
+                  "id": "charon_exit_self",
                   "text": "Tell me about yourself.",
                   "available": true,
-                  "chains": ["charon_self"]
+                  "chains": [
+                    "charon_self"
+                  ]
                 },
                 {
-                  "id": "charon_exit_others",
-                  "text": "Tell me about the others.",
+                  "id": "charon_exit_ask",
+                  "text": "Ask about someone you know.",
                   "available": true,
-                  "chains": ["charon_others"]
+                  "chains": [
+                    "charon_ask"
+                  ]
                 },
                 {
                   "id": "charon_exit_leave",
                   "text": "I'll be going.",
                   "available": true,
-                  "closes": ["charon_exit", "charon_intro", "charon_self", "charon_others"]
+                  "closes": [
+                    "charon_exit",
+                    "charon_intro",
+                    "charon_self",
+                    "charon_ask"
+                  ]
                 }
               ]
             }
