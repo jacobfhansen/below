@@ -435,6 +435,21 @@ var belowGameData = {
       ],
       "agenda": "A noir detective in the Depths. Speaks like Philip Marlowe.",
       "personality": "mysterious"
+    },
+    "6": {
+      "name": "Derelict Ship",
+      "description": "A weathered ship anchored at the dock",
+      "icon": "ship.png",
+      "dialogImg": "ship_dialog.png",
+      "dialog": {
+        "greeting": "The ship groans softly as it rocks in the dark water.",
+        "agitated": "The ship creaks and shifts."
+      },
+      "choiceEvents": [
+        9
+      ],
+      "agenda": "A derelict ship waiting to be repaired.",
+      "personality": "derelict"
     }
   },
   "mapData": [
@@ -8459,6 +8474,76 @@ var belowGameData = {
                   "text": "...",
                   "available": true,
                   "closes": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": 6,
+          "position": {
+            "x": 0,
+            "y": 13
+          },
+          "movement": 0,
+          "dialogOptions": [
+            {
+              "id": "ship_intro",
+              "available": true,
+              "text": "A derelict ship lies anchored at the dock, its hull weathered and listing. The vessel is in disrepair — the rudder is gone, the mast is snapped, the steering wheel is missing, and the sail is tattered to shreds. It looks barely seaworthy, but perhaps with the right parts...",
+              "options": [
+                {
+                  "id": "ship_attach_rudder",
+                  "text": "Attach the rudder",
+                  "available": true,
+                  "requiresItems": [8],
+                  "chains": ["ship_intro"]
+                },
+                {
+                  "id": "ship_attach_mast",
+                  "text": "Attach the mast",
+                  "available": true,
+                  "requiresItems": [9],
+                  "chains": ["ship_intro"]
+                },
+                {
+                  "id": "ship_attach_wheel",
+                  "text": "Attach the steering wheel",
+                  "available": true,
+                  "requiresItems": [10],
+                  "chains": ["ship_intro"]
+                },
+                {
+                  "id": "ship_attach_sail",
+                  "text": "Attach the sail",
+                  "available": true,
+                  "requiresItems": [11],
+                  "chains": ["ship_intro"]
+                },
+                {
+                  "id": "ship_depart",
+                  "text": "Depart",
+                  "available": false,
+                  "chains": ["ship_departure"]
+                },
+                {
+                  "id": "ship_leave",
+                  "text": "Leave",
+                  "available": true,
+                  "closes": ["ship_intro"]
+                }
+              ]
+            },
+            {
+              "id": "ship_departure",
+              "available": false,
+              "text": "The ship groans as it pulls away from the dock. The dark water of the underground lake ripples beneath you as the vessel glides forward into the unknown...",
+              "options": [
+                {
+                  "id": "ship_departure_go",
+                  "text": "...",
+                  "available": true,
+                  "closes": ["ship_departure"]
                 }
               ]
             }

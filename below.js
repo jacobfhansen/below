@@ -367,6 +367,9 @@ moleImg.src = "images/mole.png";
 var detectiveImg = new Image();
 detectiveImg.src = "images/detective.png";
 
+var shipImg = new Image();
+shipImg.src = "images/ship.png";
+
 var tableImg = new Image();
 tableImg.src = "images/table.png";
 
@@ -985,6 +988,26 @@ function selectChoiceOption(index) {
             return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
         });
         
+        // Handle ship part attachment — remove item before chain processing so dialog filters correctly
+        if (npc && npc.type === 6) {
+            var removeItem = null;
+            if (selectedOption.id === "ship_attach_rudder") removeItem = 8;
+            else if (selectedOption.id === "ship_attach_mast") removeItem = 9;
+            else if (selectedOption.id === "ship_attach_wheel") removeItem = 10;
+            else if (selectedOption.id === "ship_attach_sail") removeItem = 11;
+            if (removeItem !== null) {
+                var idx = below.gameData.player.inventory.indexOf(removeItem);
+                if (idx !== -1) {
+                    below.gameData.player.inventory.splice(idx, 1);
+                    npc.shipParts = (npc.shipParts || 0) + 1;
+                    if (npc.shipParts >= 4) {
+                        var departD = npc.dialogOptions.find(function(d) { return d.id === "ship_depart"; });
+                        if (departD) departD.available = true;
+                    }
+                }
+            }
+        }
+        
         if (npc && npc.dialogOptions) {
             // Process "opens" - set available to true (do this first so chained dialog is available)
             if (selectedOption.opens) {
@@ -1390,6 +1413,13 @@ function selectChoiceOption(index) {
             var officeD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_office"; });
             if (officeD) officeD.available = true;
         }
+    }
+    
+    // Depart on the repaired ship — transition to The Beach
+    if (selectedOption.id === "ship_departure_go") {
+        setTimeout(function() {
+            changeMap(4, 0, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
+        }, 10);
     }
     
     if (!below.passwordInput) {
@@ -2632,6 +2662,7 @@ function drawMapCanvas() {
                 else if (type.icon === "medusa.png") img = medusaImg || new Image();
                 else if (type.icon === "mole.png") img = moleImg || new Image();
                 else if (type.icon === "detective.png") img = detectiveImg || new Image();
+                else if (type.icon === "ship.png") img = shipImg || new Image();
                 if (!img.complete) img.src = "images/" + type.icon;
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
