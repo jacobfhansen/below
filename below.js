@@ -440,6 +440,9 @@ steeringWheelImg.src = "images/steering_wheel.png";
 var sailImg = new Image();
 sailImg.src = "images/sail.png";
 
+var antidoteImg = new Image();
+antidoteImg.src = "images/antidote.png";
+
 window.onbeforeunload = confirmExit;
 function confirmExit() {
     saveCurrentGame();
@@ -1495,11 +1498,34 @@ function selectChoiceOption(index) {
         }, 10);
     }
 
-    // Depart on the repaired ship — transition to The Beach
+    // Enable Mole's sick dialog when player departs to The Beach
     if (selectedOption.id === "ship_departure_go") {
+        var moleNpc = below.gameData.mapData[2].npcs ? below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; }) : null;
+        if (moleNpc && moleNpc.dialogOptions) {
+            var sickD = moleNpc.dialogOptions.find(function(d) { return d.id === "mole_sick"; });
+            if (sickD) sickD.available = true;
+        }
         setTimeout(function() {
             changeMap(4, 2, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
         }, 10);
+    }
+
+    // When player offers to find help for the Mole, enable Hermit's antidote dialog
+    if (selectedOption.id === "mole_sick_help") {
+        var hermitNpc = below.gameData.mapData[0].npcs ? below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; }) : null;
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (hermitq0 && hermitq0.options) {
+                var antidoteOpt = hermitq0.options.find(function(o) { return o.id === "hermit_ask_antidote"; });
+                if (antidoteOpt) antidoteOpt.available = true;
+            }
+        }
+    }
+
+    // Hermit grants the antidote
+    if (selectedOption.id === "hermit_antidote_give_a1") {
+        below.gameData.player.inventory.push(12);
+        setTimeout(function() { showInventory([12]); }, 50);
     }
     
     if (!below.passwordInput) {
@@ -2808,6 +2834,7 @@ function drawMapCanvas() {
                     else if (iconName === "mast.png") img = mastImg;
                     else if (iconName === "steering_wheel.png") img = steeringWheelImg;
                     else if (iconName === "sail.png") img = sailImg;
+                    else if (iconName === "antidote.png") img = antidoteImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
@@ -2866,6 +2893,7 @@ function drawMapCanvas() {
                     else if (iconName === "mast.png") img = mastImg;
                     else if (iconName === "steering_wheel.png") img = steeringWheelImg;
                     else if (iconName === "sail.png") img = sailImg;
+                    else if (iconName === "antidote.png") img = antidoteImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;

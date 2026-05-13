@@ -352,6 +352,12 @@ var belowGameData = {
       "description": "A patched canvas sail",
       "icon": "sail.png",
       "choiceEvents": []
+    },
+    "12": {
+      "name": "Antidote",
+      "description": "A small vial of bitter-smelling liquid. The Hermit's handwriting on the label reads: 'For internal poisoning. One dose only.'",
+      "icon": "antidote.png",
+      "choiceEvents": []
     }
   },
   "npcTypes": {
@@ -1270,6 +1276,14 @@ var belowGameData = {
                   ]
                 },
                 {
+                  "id": "hermit_ask_antidote",
+                  "text": "The Mole is sick from your herbs. Do you have an antidote?",
+                  "available": false,
+                  "chains": [
+                    "hermit_antidote_intro"
+                  ]
+                },
+                {
                   "id": "hermit_ask_wayout",
                   "text": "Can you tell me the way out of here?",
                   "available": true,
@@ -1601,6 +1615,179 @@ var belowGameData = {
                   "id": "hermit_jester2a",
                   "text": "I'll keep that in mind.",
                   "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_antidote_intro",
+              "available": false,
+              "text": "The Hermit's eyes narrow. He folds his arms.\n'The Mole? Sick from my herbs? Hah! Serves him right for thieving from my stores! I've spent years cultivating those roots - they're not meant to be eaten raw, the fool!'\nHe pauses, stroking his beard.\n'I... do have an antidote. Why should I give it to you?'",
+
+              "options": [
+                {
+                  "id": "hermit_antidote_plead",
+                  "text": "He'll die without it.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_sympathy"
+                  ]
+                },
+                {
+                  "id": "hermit_antidote_trade",
+                  "text": "I can trade you something for it.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_trade_try"
+                  ]
+                },
+                {
+                  "id": "hermit_antidote_medusa",
+                  "text": "He can dig through rubble to find Medusa.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_medusa_react"
+                  ]
+                },
+                {
+                  "id": "hermit_antidote_leave",
+                  "text": "Never mind.",
+                  "available": true,
+                  "closes": [
+                    "hermit_antidote_intro"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_antidote_sympathy",
+              "available": false,
+              "text": "'Good riddance!' He catches your look and sighs. 'Fine. Why should I care what happens to that tunnel-grubbing wretch?'",
+
+              "options": [
+                {
+                  "id": "hermit_antidote_sympathy_p1",
+                  "text": "No one deserves to die like that.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_give"
+                  ]
+                },
+                {
+                  "id": "hermit_antidote_sympathy_p2",
+                  "text": "Because I need him. He can help me reach Medusa.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_medusa_react"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_antidote_trade_try",
+              "available": false,
+              "text": "He raises an eyebrow. 'Trade? What could you possibly offer that I'd want more than the satisfaction of watching that whiskered fool squirm?'",
+
+              "options": [
+                {
+                  "id": "hermit_antidote_trade_try_p1",
+                  "text": "I have herbs... wait, no. The Mole ate them all.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_need"
+                  ]
+                },
+                {
+                  "id": "hermit_antidote_trade_try_p2",
+                  "text": "Information about the surface. I'll tell you what's changed up there.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_give"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_antidote_need",
+              "available": false,
+              "text": "The Hermit chuckles dryly. 'Need him? For what? The only thing that creature's good for is digging holes and stealing my stock.'",
+
+              "options": [
+                {
+                  "id": "hermit_antidote_need_p1",
+                  "text": "He can dig through rubble blocking the path to Medusa.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_medusa_react"
+                  ]
+                },
+                {
+                  "id": "hermit_antidote_need_p2",
+                  "text": "Just trust me. It's important.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_give"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_antidote_medusa_react",
+              "available": false,
+              "text": "The Hermit's face shifts. The irritation melts into something softer - concern, perhaps even fondness. He adjusts his spectacles.\n'Medusa? What of her? She came to me once, you know. Wandered into my cave and asked about my herbs. I expected her to steal them. Instead, she laughed. A warm, genuine laugh. She said my little collection reminded her of the gardens she tended... before.'\nHe trails off, then shakes his head.\n'What has happened? Where has she gone?'",
+
+              "options": [
+                {
+                  "id": "hermit_antidote_medusa_react_p1",
+                  "text": "She ran off in despair. The Mole can dig through the rocks to reach her.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_medusa_convince"
+                  ]
+                },
+                {
+                  "id": "hermit_antidote_medusa_react_p2",
+                  "text": "She's in trouble. I need to find her before it's too late.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_medusa_convince"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_antidote_medusa_convince",
+              "available": false,
+              "text": "The Hermit is silent for a long moment. He turns to a cluttered shelf and picks up a small vial, holding it up to the faint light.\n'Medusa does not deserve to be lost. She has suffered enough.'\nHe presses the vial into your hand.\n'Take it. Save the Mole. Send him to dig through whatever rubble blocks your path. Find her. Tell her the old hermit remembers her laugh. Tell her... there is always a garden waiting, even in the dark.'\nHe turns away quickly, but not before you see him wipe his eyes.",
+
+              "options": [
+                {
+                  "id": "hermit_antidote_medusa_convince_a1",
+                  "text": "I will. Thank you.",
+                  "available": true,
+                  "chains": [
+                    "hermit_antidote_give"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_antidote_give",
+              "available": false,
+              "text": "The Hermit grumbles, shuffles to a dusty corner, and retrieves a small vial. He holds it up to the light before handing it over.\n'Fine. Take it. But tell that tunneling pest he owes me. And if he dares show his whiskered face near my cave again, I'll be brewing something far less pleasant.'\nHe drops the vial into your hand and turns away, muttering about ungrateful rodents.",
+              "options": [
+                {
+                  "id": "hermit_antidote_give_a1",
+                  "text": "...",
+                  "available": true,
+                  "closes": [
+                    "hermit_antidote_intro",
+                    "hermit_antidote_sympathy",
+                    "hermit_antidote_trade_try",
+                    "hermit_antidote_need",
+                    "hermit_antidote_medusa_react",
+                    "hermit_antidote_medusa_convince",
+                    "hermit_antidote_give"
+                  ]
                 }
               ]
             }
@@ -5061,6 +5248,47 @@ var belowGameData = {
           },
           "destPos": {},
           "dialogOptions": [
+            {
+              "id": "mole_sick",
+              "available": false,
+              "text": "The Mole is doubled over, clutching his stomach. His whiskers droop and his voice comes in pained gasps.\n'Oh, wretched fortune! Accursed herbs!\nThe Hermit's green poison doth consume me from within!\nMy belly burns like the fires of the underworld!\nI thought them a cure for all my ills,\nBut they are a plague! A pestilence!\nI need an antidote, or I am surely doomed!'\nHe collapses against the tunnel wall, groaning.",
+
+              "options": [
+                {
+                  "id": "mole_sick_help",
+                  "text": "I'll find help.",
+                  "available": true
+                },
+                {
+                  "id": "mole_sick_give",
+                  "text": "I have the antidote here.",
+                  "available": true,
+                  "requiresItems": [
+                    12
+                  ],
+                  "chains": [
+                    "mole_cured"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mole_cured",
+              "available": false,
+              "text": "The Mole grabs the vial with trembling paws and drinks it in one desperate gulp. He shudders, then lets out a long, relieved sigh.\n'Ahhh... Sweet relief!\nThe fire in my gut doth fade at last!\nThou hast saved me, stranger - saved me from a grave\nI dug with mine own greed.\nI owe thee a debt I cannot soon repay.\nIf ever thou needest a tunnel dug,\nOr a passage cleared, call upon me.'",
+
+              "options": [
+                {
+                  "id": "mole_cured_leave",
+                  "text": "Get some rest.",
+                  "available": true,
+                  "closes": [
+                    "mole_sick",
+                    "mole_cured"
+                  ]
+                }
+              ]
+            },
             {
               "id": "moleq1",
               "available": true,
