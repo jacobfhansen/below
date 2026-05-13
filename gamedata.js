@@ -35,6 +35,36 @@ var belowGameData = {
       "name": "wood",
       "fill": "#4a2a10",
       "border": "#7a4a20"
+    },
+    "6": {
+      "name": "sand",
+      "fill": "#C9C16E",
+      "border": "#C18A4B"
+    },
+    "7": {
+      "name": "dirt",
+      "fill": "#7B5C3E",
+      "border": "#5B5B5B"
+    },
+    "8": {
+      "name": "ice",
+      "fill": "#6DC2CA",
+      "border": "#7F9FC9"
+    },
+    "9": {
+      "name": "marble",
+      "fill": "#B5B5B5",
+      "border": "#8B8B8B"
+    },
+    "10": {
+      "name": "mud",
+      "fill": "#5FAB5F",
+      "border": "#4A6B9A"
+    },
+    "11": {
+      "name": "blood",
+      "fill": "#CB4B4B",
+      "border": "#8B8B8B"
     }
   },
   "player": {
@@ -506,6 +536,13 @@ var belowGameData = {
           "x2": 9,
           "y2": 0,
           "description": "A cosy room with a red carpet on the floor"
+        },
+        {
+          "x1": -6,
+          "y1": 1,
+          "x2": -4,
+          "y2": 3,
+          "description": "A room with a table. A giant rat scurries around."
         }
       ],
       "tiles": {
@@ -978,7 +1015,8 @@ var belowGameData = {
         },
         "xm1ym6": {
           "x": -1,
-          "y": -6
+          "y": -6,
+          "type": 0
         },
         "xm1ym5": {
           "x": -1,
@@ -1004,77 +1042,20 @@ var belowGameData = {
           "x": -8,
           "y": 0
         },
-        "xm8ym1": {
-          "x": -8,
-          "y": -1
-        },
-        "xm7ym1": {
-          "x": -7,
-          "y": -1
-        },
-        "xm6ym1": {
-          "x": -6,
-          "y": -1
-        },
-        "xm5ym1": {
-          "x": -5,
-          "y": -1
-        },
-        "xm4ym1": {
-          "x": -4,
-          "y": -1
-        },
-        "xm3ym1": {
-          "x": -3,
-          "y": -1
-        },
-        "xm3ym2": {
-          "x": -3,
-          "y": -2
-        },
-        "xm6ym2": {
-          "x": -6,
-          "y": -2
-        },
-        "xm4ym2": {
-          "x": -4,
-          "y": -2
-        },
-        "xm5ym2": {
-          "x": -5,
-          "y": -2
-        },
-        "xm7ym2": {
-          "x": -7,
-          "y": -2
-        },
-        "xm8ym2": {
-          "x": -8,
-          "y": -2
-        },
         "xm8ym3": {
           "x": -8,
-          "y": -3
+          "y": -3,
+          "type": 9
         },
         "xm7ym3": {
           "x": -7,
-          "y": -3
+          "y": -3,
+          "type": 9
         },
         "xm6ym3": {
           "x": -6,
-          "y": -3
-        },
-        "xm5ym3": {
-          "x": -5,
-          "y": -3
-        },
-        "xm4ym3": {
-          "x": -4,
-          "y": -3
-        },
-        "xm3ym3": {
-          "x": -3,
-          "y": -3
+          "y": -3,
+          "type": 9
         },
         "xm3ym5": {
           "x": -3,
@@ -1083,6 +1064,81 @@ var belowGameData = {
         "xm3ym4": {
           "x": -3,
           "y": -4
+        },
+        "xm5ym3": {
+          "x": -5,
+          "y": -3,
+          "type": 9
+        },
+        "xm4ym3": {
+          "x": -4,
+          "y": -3,
+          "type": 9
+        },
+        "xm3ym3": {
+          "x": -3,
+          "y": -3,
+          "type": 9
+        },
+        "xm3ym2": {
+          "x": -3,
+          "y": -2,
+          "type": 9
+        },
+        "xm3ym1": {
+          "x": -3,
+          "y": -1,
+          "type": 9
+        },
+        "xm5ym1": {
+          "x": -5,
+          "y": -1,
+          "type": 9
+        },
+        "xm4ym1": {
+          "x": -4,
+          "y": -1,
+          "type": 9
+        },
+        "xm4ym2": {
+          "x": -4,
+          "y": -2,
+          "type": 9
+        },
+        "xm5ym2": {
+          "x": -5,
+          "y": -2,
+          "type": 9
+        },
+        "xm6ym2": {
+          "x": -6,
+          "y": -2,
+          "type": 9
+        },
+        "xm6ym1": {
+          "x": -6,
+          "y": -1,
+          "type": 9
+        },
+        "xm7ym2": {
+          "x": -7,
+          "y": -2,
+          "type": 9
+        },
+        "xm8ym2": {
+          "x": -8,
+          "y": -2,
+          "type": 9
+        },
+        "xm8ym1": {
+          "x": -8,
+          "y": -1,
+          "type": 9
+        },
+        "xm7ym1": {
+          "x": -7,
+          "y": -1,
+          "type": 9
         }
       },
       "monsters": [
@@ -1217,6 +1273,29 @@ var belowGameData = {
           "position": {
             "x": 7,
             "y": -4
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 8,
+            "y": 2
+          }
+        },
+        {
+          "type": 4,
+          "position": {
+            "x": -7,
+            "y": 3
+          },
+          "closed": false,
+          "blocking": false
+        },
+        {
+          "type": 6,
+          "position": {
+            "x": -5,
+            "y": -3
           }
         }
       ],
@@ -2695,6 +2774,20 @@ var belowGameData = {
                   "chains": [
                     "medusam1"
                   ]
+                },
+                {
+                  "id": "medusaa1j",
+                  "text": "I met a jester in the caves above.",
+                  "available": false,
+                  "opens": [
+                    "medusaj1"
+                  ],
+                  "closes": [
+                    "medusaq1"
+                  ],
+                  "chains": [
+                    "medusaj1"
+                  ]
                 }
               ]
             },
@@ -3015,6 +3108,21 @@ var belowGameData = {
                   "id": "medusama4r",
                   "text": "Whatever.",
                   "available": true
+                }
+              ]
+            },
+            {
+              "id": "medusaj1",
+              "available": false,
+              "text": "The Jester. He talks enough for both of us. I find it soothing, like rain on stone. He thinks he's being clever, but I've known true cleverness - it doesn't announce itself. Still, he means no harm. Mostly.",
+              "options": [
+                {
+                  "id": "medusaj1a",
+                  "text": "I see...",
+                  "available": true,
+                  "closes": [
+                    "medusaj1"
+                  ]
                 }
               ]
             }
@@ -8905,27 +9013,27 @@ var belowGameData = {
         "x1y0": {
           "x": 1,
           "y": 0,
-          "type": 0
+          "type": 6
         },
         "x1y1": {
           "x": 1,
           "y": 1,
-          "type": 0
+          "type": 6
         },
         "x2y0": {
           "x": 2,
           "y": 0,
-          "type": 0
+          "type": 6
         },
         "x2y1": {
           "x": 2,
           "y": 1,
-          "type": 0
+          "type": 6
         },
         "x2y2": {
           "x": 2,
           "y": 2,
-          "type": 0
+          "type": 6
         },
         "x3y0": {
           "x": 3,
@@ -8995,42 +9103,42 @@ var belowGameData = {
         "x1ym1": {
           "x": 1,
           "y": -1,
-          "type": 0
+          "type": 6
         },
         "x1ym2": {
           "x": 1,
           "y": -2,
-          "type": 0
+          "type": 6
         },
         "x0ym2": {
           "x": 0,
           "y": -2,
-          "type": 0
+          "type": 6
         },
         "x0ym1": {
           "x": 0,
           "y": -1,
-          "type": 0
+          "type": 6
         },
         "x3y3": {
           "x": 3,
           "y": 3,
-          "type": 0
+          "type": 6
         },
         "x2y3": {
           "x": 2,
           "y": 3,
-          "type": 0
+          "type": 6
         },
         "x1y3": {
           "x": 1,
           "y": 3,
-          "type": 0
+          "type": 6
         },
         "x1y2": {
           "x": 1,
           "y": 2,
-          "type": 0
+          "type": 6
         },
         "x0y2": {
           "x": 0,
@@ -9050,12 +9158,12 @@ var belowGameData = {
         "x3y4": {
           "x": 3,
           "y": 4,
-          "type": 0
+          "type": 6
         },
         "x2y4": {
           "x": 2,
           "y": 4,
-          "type": 0
+          "type": 6
         },
         "x0y4": {
           "x": 0,
@@ -9065,7 +9173,7 @@ var belowGameData = {
         "x1y4": {
           "x": 1,
           "y": 4,
-          "type": 0
+          "type": 6
         },
         "x4y4": {
           "x": 4,
@@ -9125,17 +9233,167 @@ var belowGameData = {
         "x2y5": {
           "x": 2,
           "y": 5,
-          "type": 0
+          "type": 6
         },
         "x1y5": {
           "x": 1,
           "y": 5,
-          "type": 0
+          "type": 6
         },
         "x0y5": {
           "x": 0,
           "y": 5,
           "type": 0
+        },
+        "x2y6": {
+          "x": 2,
+          "y": 6,
+          "type": 6
+        },
+        "x1y7": {
+          "x": 1,
+          "y": 7,
+          "type": 6
+        },
+        "x1y6": {
+          "x": 1,
+          "y": 6,
+          "type": 6
+        },
+        "x0y7": {
+          "x": 0,
+          "y": 7,
+          "type": 6
+        },
+        "x0y8": {
+          "x": 0,
+          "y": 8,
+          "type": 6
+        },
+        "x0y6": {
+          "x": 0,
+          "y": 6,
+          "type": 0
+        },
+        "x3y6": {
+          "x": 3,
+          "y": 6,
+          "type": 1
+        },
+        "x4y6": {
+          "x": 4,
+          "y": 6,
+          "type": 1
+        },
+        "x5y6": {
+          "x": 5,
+          "y": 6,
+          "type": 1
+        },
+        "x5y7": {
+          "x": 5,
+          "y": 7,
+          "type": 1
+        },
+        "x4y7": {
+          "x": 4,
+          "y": 7,
+          "type": 1
+        },
+        "x3y7": {
+          "x": 3,
+          "y": 7,
+          "type": 1
+        },
+        "x2y7": {
+          "x": 2,
+          "y": 7,
+          "type": 1
+        },
+        "x1y8": {
+          "x": 1,
+          "y": 8,
+          "type": 1
+        },
+        "x2y8": {
+          "x": 2,
+          "y": 8,
+          "type": 1
+        },
+        "x3y8": {
+          "x": 3,
+          "y": 8,
+          "type": 1
+        },
+        "x4y8": {
+          "x": 4,
+          "y": 8,
+          "type": 1
+        },
+        "x5y8": {
+          "x": 5,
+          "y": 8,
+          "type": 1
+        },
+        "x1ym3": {
+          "x": 1,
+          "y": -3,
+          "type": 6
+        },
+        "x0ym3": {
+          "x": 0,
+          "y": -3,
+          "type": 6
+        },
+        "x0ym4": {
+          "x": 0,
+          "y": -4,
+          "type": 6
+        },
+        "x1ym4": {
+          "x": 1,
+          "y": -4,
+          "type": 1
+        },
+        "x2ym4": {
+          "x": 2,
+          "y": -4,
+          "type": 1
+        },
+        "x2ym3": {
+          "x": 2,
+          "y": -3,
+          "type": 1
+        },
+        "x3ym3": {
+          "x": 3,
+          "y": -3,
+          "type": 1
+        },
+        "x3ym4": {
+          "x": 3,
+          "y": -4,
+          "type": 1
+        },
+        "x4ym4": {
+          "x": 4,
+          "y": -4,
+          "type": 1
+        },
+        "x4ym3": {
+          "x": 4,
+          "y": -3,
+          "type": 1
+        },
+        "x5ym3": {
+          "x": 5,
+          "y": -3,
+          "type": 1
+        },
+        "x5ym4": {
+          "x": 5,
+          "y": -4,
+          "type": 1
         }
       },
       "monsters": [],

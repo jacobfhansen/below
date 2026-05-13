@@ -1243,6 +1243,14 @@ function selectChoiceOption(index) {
                 if (askJester) askJester.available = true;
             }
         }
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        if (medusaNpc && medusaNpc.dialogOptions) {
+            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+            if (medusaq0 && medusaq0.options) {
+                var jesterOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1j"; });
+                if (jesterOpt) jesterOpt.available = true;
+            }
+        }
     }
     
     // When player finishes Mole trap dialog, restore normal dialog
