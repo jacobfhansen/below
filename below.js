@@ -856,21 +856,6 @@ function showDialogMessage(gameLogDiv) {
         msgNode.className = "below-game-left-paragraph-current";
         msgNode.textContent = (below.choiceEvent.npcAgitated ? npcType.dialog.agitated : npcType.dialog.greeting) || "A character blocks your path.";
         gameLogDiv.appendChild(msgNode);
-    } else if (below.choiceEvent.monsterType !== null && below.choiceEvent.monsterType !== undefined) {
-        var monsterType = below.gameData.monsterTypes[below.choiceEvent.monsterType];
-        var msgNode = document.createElement("P");
-        msgNode.className = "below-game-left-paragraph-current";
-        if (below.choiceEvent.monsterPos) {
-            var monster = below.gameData.mapData[below.gameData.player.currentMap].monsters.find(function(m) {
-                return m.position.x === below.choiceEvent.monsterPos.x && m.position.y === below.choiceEvent.monsterPos.y;
-            });
-            if (monster && !isMonsterAloof(monster)) {
-                msgNode.textContent = monsterType.aloofFalseMsg || "An angry monster attacks you!";
-            } else {
-                msgNode.textContent = monsterType.aloofTrueMsg || "A monster. It ignores you.";
-            }
-        }
-        gameLogDiv.appendChild(msgNode);
     } else if (below.choiceEvent.message) {
         var msgNode = document.createElement("P");
         msgNode.className = "below-game-left-paragraph-current";
@@ -1942,17 +1927,6 @@ function isBlocked(x, y) {
         return n.position && n.position.x === x && n.position.y === y;
     });
     if (blockedByNPC) return true;
-    // Check monsters - only block if monster is aloof
-    var blockedByMonster = below.gameData.mapData[curMap].monsters.some(function(m) {
-        if (!m.position) return false;
-        var type = below.gameData.monsterTypes[m.type];
-        if (!type) return false; // Skip if monster type undefined (e.g., NPC in monster array)
-        var isAloof = m.aloof !== undefined ? m.aloof : type.aloof;
-        return m.position.x === x && m.position.y === y && 
-               type.blocking && 
-               isAloof;
-    });
-    if (blockedByMonster) return true;
     // Check obstacles - instance blocking overrides type
     var obstacles = below.gameData.mapData[curMap].obstacles || [];
     var blockedByObstacle = obstacles.some(function(o) {
@@ -1987,16 +1961,6 @@ function getBlockedMessage(x, y) {
     if (npc) {
         var npcType = below.gameData.npcTypes[npc.type];
         return (npcType ? npcType.description : "") || "The character blocks your path.";
-    }
-    // Check monsters
-    var monster = (below.gameData.mapData[curMap].monsters || []).find(function(m) {
-        if (!m.position) return false;
-        var mType = below.gameData.monsterTypes[m.type];
-        return m.position.x === x && m.position.y === y && mType && mType.blocking;
-    });
-    if (monster) {
-        var mType = below.gameData.monsterTypes[monster.type];
-        return (mType ? mType.description : "") || "Not sure what good that would do";
     }
     // Check obstacles
     var obstacle = (below.gameData.mapData[curMap].obstacles || []).find(function(o) {
@@ -2057,23 +2021,6 @@ function getChoiceEventOptions(choiceEventIds) {
                     var desc = below.gameData.monsterTypes[below.choiceEvent.monsterType].beholdDesc || "A creature";
                     below.gameData.mapLog.push(desc);
                     maintainMapLog();
-                }
-            };
-        } else if (id === 5) {
-            option.action = function() {
-                if (below.choiceEvent && below.choiceEvent.monsterPos) {
-                    var curMap = below.gameData.player.currentMap;
-                    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
-                        return m.position.x === below.choiceEvent.monsterPos.x && m.position.y === below.choiceEvent.monsterPos.y;
-                    });
-                    if (monster) {
-                        monster.aloof = false;
-                        monster.agitatedTicks = 10;
-                        var monsterType = below.gameData.monsterTypes[monster.type];
-                        var msg = monsterType.aloofFalseMsg || "The creature becomes agitated!";
-                        below.gameData.mapLog.push(msg);
-                        maintainMapLog();
-                    }
                 }
             };
         } else if (id === 6) {
@@ -2335,13 +2282,6 @@ function getBlockedChoiceEvents(x, y) {
     if (npc && below.gameData.npcTypes[npc.type].choiceEvents) {
         return getChoiceEventOptions(below.gameData.npcTypes[npc.type].choiceEvents);
     }
-    // Check monsters
-    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
-        return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
-    });
-    if (monster && below.gameData.monsterTypes[monster.type].choiceEvents) {
-        return getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents);
-    }
     // Check obstacles
     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
         return o.position.x === x && o.position.y === y;
@@ -2365,12 +2305,6 @@ function handleBlockedInteraction(x, y) {
     var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
         return n.position && n.position.x === x && n.position.y === y;
     });
-    // Check for monster
-    var monster = below.gameData.mapData[curMap].monsters.find(function(m) {
-        if (!m.position) return false;
-        return m.position.x === x && m.position.y === y && below.gameData.monsterTypes[m.type].blocking;
-    });
-    
     // Handle NPC dialog system
     if (npc && npc.dialogOptions) {
         // Special case: Sam Shale mid-walk dialog
@@ -2451,13 +2385,6 @@ function handleBlockedInteraction(x, y) {
         if (npc) {
             var npcType = below.gameData.npcTypes[npc.type];
             msg = (npc.agitated ? npcType.dialog.agitated : npcType.dialog.greeting) || "A character blocks your path.";
-        } else if (monster) {
-            var monsterType = below.gameData.monsterTypes[monster.type];
-            if (isMonsterAloof(monster)) {
-                msg = monsterType.aloofTrueMsg || "A monster. It ignores you.";
-            } else {
-                msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
-            }
         } else {
             msg = getBlockedMessage(x, y);
         }
@@ -2465,8 +2392,6 @@ function handleBlockedInteraction(x, y) {
             selectedIndex: 0,
             message: msg,
             obstaclePos: { x: x, y: y },
-            monsterPos: monster ? { x: x, y: y } : null,
-            monsterType: monster ? monster.type : null,
             npcPos: npc ? { x: x, y: y } : null,
             npcType: npc ? npc.type : null,
             npcAgitated: npc ? npc.agitated : false,
@@ -2484,11 +2409,7 @@ function handleBlockedInteraction(x, y) {
 
 
 
-function isMonsterAloof(m) {
-    // Check instance first (set after attack), then fall back to type definition
-    if (m.aloof !== undefined) return m.aloof;
-    return below.gameData.monsterTypes[m.type].aloof;
-}
+
 
 function pushObstacle(obstaclePos) {
     var curMap = below.gameData.player.currentMap;
@@ -3127,97 +3048,26 @@ function mapGameLoop() {
     if (below.tick % below.tickSpeed === 1) {
         // Calculate new monster movement
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
-            // Decrement agitated timer
-            if (monster.agitatedTicks !== undefined) {
-                monster.agitatedTicks--;
-                if (monster.agitatedTicks <= 0) {
-                    delete monster.agitatedTicks;
-                    delete monster.aloof;
-                }
-            }
-            // Initialize destPos if missing
             if (!monster.destPos) monster.destPos = { x: null, y: null, xVelocity: null, yVelocity: null };
-            // First, do monster move?
             var type = below.gameData.monsterTypes[monster.type];
-            if (!type) return; // Skip if monster type is undefined
+            if (!type) return;
             if (Math.random() < type.movement) {
-                // What direction do it move?
                 var dir = (Math.floor(Math.random() * 4)) + 1;
-                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1)) {
-                    if (monster.position.x === below.gameData.player.currentLocation.x && monster.position.y - 1 === below.gameData.player.currentLocation.y) {
-                        if (!isMonsterAloof(monster)) {
-                            var monsterType = below.gameData.monsterTypes[monster.type];
-                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
-                            below.choiceEvent = {
-                                selectedIndex: 0,
-                                message: msg,
-                                monsterPos: { x: monster.position.x, y: monster.position.y },
-                                monsterType: monster.type,
-                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
-                            };
-                            renderChoiceEvent();
-                        }
-                    } else if (!isBlocked(monster.position.x, monster.position.y - 1) && isTileAllowed(monster, monster.position.x, monster.position.y - 1)) {
-                        monster.destPos.yVelocity = -1;
-                        monster.destPos.y = monster.position.y - 1;
-                    }
+                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1) && !isBlocked(monster.position.x, monster.position.y - 1) && isTileAllowed(monster, monster.position.x, monster.position.y - 1)) {
+                    monster.destPos.yVelocity = -1;
+                    monster.destPos.y = monster.position.y - 1;
                 }
-                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1)) {
-                    if (monster.position.x === below.gameData.player.currentLocation.x && monster.position.y + 1 === below.gameData.player.currentLocation.y) {
-                        if (!isMonsterAloof(monster)) {
-                            var monsterType = below.gameData.monsterTypes[monster.type];
-                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
-                            below.choiceEvent = {
-                                selectedIndex: 0,
-                                message: msg,
-                                monsterPos: { x: monster.position.x, y: monster.position.y },
-                                monsterType: monster.type,
-                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
-                            };
-                            renderChoiceEvent();
-                        }
-                    } else if (!isBlocked(monster.position.x, monster.position.y + 1) && isTileAllowed(monster, monster.position.x, monster.position.y + 1)) {
-                        monster.destPos.yVelocity = 1;
-                        monster.destPos.y = monster.position.y + 1;
-                    }
+                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1) && !isBlocked(monster.position.x, monster.position.y + 1) && isTileAllowed(monster, monster.position.x, monster.position.y + 1)) {
+                    monster.destPos.yVelocity = 1;
+                    monster.destPos.y = monster.position.y + 1;
                 }
-                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y)) {
-                    if (monster.position.x - 1 === below.gameData.player.currentLocation.x && monster.position.y === below.gameData.player.currentLocation.y) {
-                        if (!isMonsterAloof(monster)) {
-                            var monsterType = below.gameData.monsterTypes[monster.type];
-                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
-                            below.choiceEvent = {
-                                selectedIndex: 0,
-                                message: msg,
-                                monsterPos: { x: monster.position.x, y: monster.position.y },
-                                monsterType: monster.type,
-                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
-                            };
-                            renderChoiceEvent();
-                        }
-                    } else if (!isBlocked(monster.position.x - 1, monster.position.y) && isTileAllowed(monster, monster.position.x - 1, monster.position.y)) {
-                        monster.destPos.xVelocity = -1;
-                        monster.destPos.x = monster.position.x -1;
-                    }
+                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y) && !isBlocked(monster.position.x - 1, monster.position.y) && isTileAllowed(monster, monster.position.x - 1, monster.position.y)) {
+                    monster.destPos.xVelocity = -1;
+                    monster.destPos.x = monster.position.x - 1;
                 }
-                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y)) {
-                    if (monster.position.x + 1 === below.gameData.player.currentLocation.x && monster.position.y === below.gameData.player.currentLocation.y) {
-                        if (!isMonsterAloof(monster)) {
-                            var monsterType = below.gameData.monsterTypes[monster.type];
-                            var msg = monsterType.aloofFalseMsg || "An angry monster attacks you!";
-                            below.choiceEvent = {
-                                selectedIndex: 0,
-                                message: msg,
-                                monsterPos: { x: monster.position.x, y: monster.position.y },
-                                monsterType: monster.type,
-                                options: getChoiceEventOptions(below.gameData.monsterTypes[monster.type].choiceEvents)
-                            };
-                            renderChoiceEvent();
-                        }
-                    } else if (!isBlocked(monster.position.x + 1, monster.position.y) && isTileAllowed(monster, monster.position.x + 1, monster.position.y)) {
-                        monster.destPos.xVelocity = 1;
-                        monster.destPos.x = monster.position.x + 1;
-                    }
+                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y) && !isBlocked(monster.position.x + 1, monster.position.y) && isTileAllowed(monster, monster.position.x + 1, monster.position.y)) {
+                    monster.destPos.xVelocity = 1;
+                    monster.destPos.x = monster.position.x + 1;
                 }
             }
         });

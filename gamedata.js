@@ -85,17 +85,7 @@ var belowGameData = {
       "movement": 0.3,
       "color": "#9A6759",
       "icon": "rat.png",
-      "blocking": true,
-      "aloof": true,
-      "description": "A giant rat blocks your way",
-      "aloofTrueMsg": "A giant rat. It ignores you.",
-      "aloofFalseMsg": "An angry giant rat attacks you!",
-      "beholdDesc": "A large rat with sharp teeth",
-      "choiceEvents": [
-        4,
-        5,
-        3
-      ]
+      "blocking": false
     },
     "2": {
       "name": "Bat",
@@ -103,34 +93,14 @@ var belowGameData = {
       "movement": 0.6,
       "color": "#433900",
       "icon": "bat.png",
-      "blocking": false,
-      "aloof": true,
-      "description": "A bat is in your way",
-      "aloofTrueMsg": "A bat screeches and ignores you.",
-      "aloofFalseMsg": "A furious bat dives at you!",
-      "beholdDesc": "A screeching bat with sharp claws",
-      "choiceEvents": [
-        4,
-        5,
-        3
-      ]
+      "blocking": false
     },
     "3": {
       "name": "Centipede",
       "fraction": 1,
       "movement": 0.1,
       "icon": "centipede.png",
-      "blocking": true,
-      "aloof": true,
-      "description": "A centipede blocks the path",
-      "aloofTrueMsg": "A centipede crawls right past you.",
-      "aloofFalseMsg": "A centipede strikes at your ankles!",
-      "beholdDesc": "A multi-segmented centipede",
-      "choiceEvents": [
-        4,
-        5,
-        3
-      ]
+      "blocking": false
     }
   },
   "obstacleTypes": {
