@@ -85,7 +85,8 @@ var belowGameData = {
       "movement": 0.3,
       "color": "#9A6759",
       "icon": "rat.png",
-      "blocking": false
+      "blocking": false,
+      "restChance": 0.3
     },
     "2": {
       "name": "Bat",
@@ -93,14 +94,16 @@ var belowGameData = {
       "movement": 0.6,
       "color": "#433900",
       "icon": "bat.png",
-      "blocking": false
+      "blocking": false,
+      "restChance": 0
     },
     "3": {
       "name": "Centipede",
       "fraction": 1,
       "movement": 0.1,
       "icon": "centipede.png",
-      "blocking": false
+      "blocking": false,
+      "restChance": 0.2
     }
   },
   "obstacleTypes": {
@@ -512,7 +515,7 @@ var belowGameData = {
           "y1": 1,
           "x2": -4,
           "y2": 3,
-          "description": "A room with a table. A giant rat scurries around."
+          "description": "A dim chamber. A rickety table stands in the corner, its surface streaked with grime. Shadows shift beneath it — rats."
         }
       ],
       "tiles": {
@@ -1118,13 +1121,8 @@ var belowGameData = {
             "x": -6,
             "y": 3
           },
+          "speed": 0.03,
           "status": 1,
-          "destPos": {
-            "yVelocity": null,
-            "y": 3,
-            "xVelocity": null,
-            "x": -6
-          },
           "allowedTiles": [
             {
               "x": -6,
@@ -1147,8 +1145,90 @@ var belowGameData = {
               "y": 2
             },
             {
-              "x": -7,
+              "x": -6,
               "y": 3
+            },
+            {
+              "x": -5,
+              "y": 3
+            },
+            {
+              "x": -4,
+              "y": 3
+            }
+          ]
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": -4,
+            "y": 2
+          },
+          "speed": 0.04,
+          "status": 1,
+          "allowedTiles": [
+            {
+              "x": -6,
+              "y": 1
+            },
+            {
+              "x": -5,
+              "y": 1
+            },
+            {
+              "x": -4,
+              "y": 1
+            },
+            {
+              "x": -5,
+              "y": 2
+            },
+            {
+              "x": -4,
+              "y": 2
+            },
+            {
+              "x": -6,
+              "y": 3
+            },
+            {
+              "x": -5,
+              "y": 3
+            },
+            {
+              "x": -4,
+              "y": 3
+            }
+          ]
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": -4,
+            "y": 1
+          },
+          "speed": 0.06,
+          "status": 1,
+          "allowedTiles": [
+            {
+              "x": -6,
+              "y": 1
+            },
+            {
+              "x": -5,
+              "y": 1
+            },
+            {
+              "x": -4,
+              "y": 1
+            },
+            {
+              "x": -5,
+              "y": 2
+            },
+            {
+              "x": -4,
+              "y": 2
             },
             {
               "x": -6,
@@ -1170,13 +1250,7 @@ var belowGameData = {
             "x": 11,
             "y": 0
           },
-          "status": 1,
-          "destPos": {
-            "xVelocity": null,
-            "x": 11,
-            "yVelocity": null,
-            "y": 0
-          }
+          "status": 1
         }
       ],
       "obstacles": [
@@ -2499,8 +2573,7 @@ var belowGameData = {
             "x": 0,
             "y": 1
           },
-          "status": 1,
-          "destPos": {}
+          "status": 1
         }
       ],
       "obstacles": [

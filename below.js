@@ -3046,31 +3046,6 @@ function mapGameLoop() {
     }
     
     if (below.tick % below.tickSpeed === 1) {
-        // Calculate new monster movement
-        below.gameData.mapData[curMap].monsters.forEach(function(monster) {
-            if (!monster.destPos) monster.destPos = { x: null, y: null, xVelocity: null, yVelocity: null };
-            var type = below.gameData.monsterTypes[monster.type];
-            if (!type) return;
-            if (Math.random() < type.movement) {
-                var dir = (Math.floor(Math.random() * 4)) + 1;
-                if (dir === 1 && foundTile(monster.position.x, monster.position.y - 1) && !isBlocked(monster.position.x, monster.position.y - 1) && isTileAllowed(monster, monster.position.x, monster.position.y - 1)) {
-                    monster.destPos.yVelocity = -1;
-                    monster.destPos.y = monster.position.y - 1;
-                }
-                else if (dir === 2 && foundTile(monster.position.x, monster.position.y + 1) && !isBlocked(monster.position.x, monster.position.y + 1) && isTileAllowed(monster, monster.position.x, monster.position.y + 1)) {
-                    monster.destPos.yVelocity = 1;
-                    monster.destPos.y = monster.position.y + 1;
-                }
-                else if (dir === 3 && foundTile(monster.position.x - 1, monster.position.y) && !isBlocked(monster.position.x - 1, monster.position.y) && isTileAllowed(monster, monster.position.x - 1, monster.position.y)) {
-                    monster.destPos.xVelocity = -1;
-                    monster.destPos.x = monster.position.x - 1;
-                }
-                else if (dir === 4 && foundTile(monster.position.x + 1, monster.position.y) && !isBlocked(monster.position.x + 1, monster.position.y) && isTileAllowed(monster, monster.position.x + 1, monster.position.y)) {
-                    monster.destPos.xVelocity = 1;
-                    monster.destPos.x = monster.position.x + 1;
-                }
-            }
-        });
         // NPC movement
         below.gameData.mapData[curMap].npcs.forEach(function(npc) {
             var type = below.gameData.npcTypes[npc.type];
@@ -3143,10 +3118,10 @@ function mapGameLoop() {
     var moving = false;
     // Player moving?
     if (below.gameData.player.destinationLocation.xVelocity || below.gameData.player.destinationLocation.yVelocity) moving = true;
-    // Monster moving?
+    // Monster moving (decorative continuous movement)
     if (!moving) {
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
-            if (monster.destPos && (monster.destPos.xVelocity || monster.destPos.yVelocity)) {
+            if (monster.moveAngle !== undefined) {
                 moving = true;
                 return;
             }
@@ -3231,22 +3206,39 @@ function mapGameLoop() {
                 }
             }
         }
+        // Free continuous movement for decorative monsters
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
-            if (monster.destPos && monster.destPos.xVelocity) {
-                monster.position.x += (monster.destPos.xVelocity/below.tickSpeed);
-                if (below.tick % below.tickSpeed === 0) {
-                    monster.position.x = monster.destPos.x;
-                    monster.destPos.xVelocity = null;
-                    saveCurrentGame();
-                }
+            var type = below.gameData.monsterTypes[monster.type];
+            if (!type || !type.movement) return;
+            if (monster.restTimer === undefined) monster.restTimer = 0;
+            if (monster.moveAngle === undefined) {
+                monster.moveAngle = Math.random() * Math.PI * 2;
             }
-            if (monster.destPos && monster.destPos.yVelocity) {
-                monster.position.y += (monster.destPos.yVelocity/below.tickSpeed);
-                if (below.tick % below.tickSpeed === 0) {
-                    monster.position.y = monster.destPos.y;
-                    monster.destPos.yVelocity = null;
-                    saveCurrentGame();
+            if (monster.restTimer > 0) {
+                monster.restTimer--;
+                return;
+            }
+            if (monster.directionTimer === undefined || monster.directionTimer <= 0) {
+                var restChance = type.restChance || 0;
+                if (Math.random() < restChance) {
+                    monster.restTimer = Math.floor(Math.random() * 60) + 30;
+                    monster.directionTimer = 0;
+                    return;
                 }
+                monster.moveAngle = Math.random() * Math.PI * 2;
+                monster.directionTimer = Math.floor(Math.random() * 60) + 60;
+            }
+            monster.directionTimer--;
+            var speed = monster.speed !== undefined ? monster.speed : 0.015 * type.movement * 3;
+            var newX = monster.position.x + Math.cos(monster.moveAngle) * speed;
+            var newY = monster.position.y + Math.sin(monster.moveAngle) * speed;
+            var tileX = Math.round(newX);
+            var tileY = Math.round(newY);
+            if (foundTile(tileX, tileY) && !isBlocked(tileX, tileY) && isTileAllowed(monster, tileX, tileY)) {
+                monster.position.x = newX;
+                monster.position.y = newY;
+            } else {
+                monster.moveAngle = Math.random() * Math.PI * 2;
             }
         });
         below.gameData.mapData[curMap].npcs.forEach(function(npc) {
