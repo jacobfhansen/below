@@ -1548,6 +1548,74 @@ function selectChoiceOption(index) {
         maintainMapLog();
     }
 
+    // When player insists on help and follows the Hermit, walk to door and unlock it
+    if (selectedOption.id === "hermit_insist_follow" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && npcWalkTo(hermitNpc, -1, 3, function() {
+            var doorObstacle = below.gameData.mapData[0].obstacles.find(function(o) {
+                return o.position.x === -2 && o.position.y === 2;
+            });
+            if (doorObstacle) {
+                doorObstacle.closed = false;
+                doorObstacle.blocking = false;
+                doorObstacle.icon = "door_open.png";
+            }
+            showSplash({
+                image: "rat.png",
+                text: "The old stone door grinds open. Beyond it, a dark chamber stirs with movement — rats scatter in the shadows, their eyes glinting like tiny jewels.",
+                shake: false
+            });
+            // Make Hermit's rat-spray dialog available for next conversation
+            var hermitNpcArr = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+            if (hermitNpcArr && hermitNpcArr.dialogOptions) {
+                var sprayD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
+                var baseD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+                if (sprayD) sprayD.available = true;
+                if (baseD) baseD.available = false;
+            }
+        }, 3)) {
+            below.gameData.mapLog.push("Alistair gathers his cloak and gestures for you to follow.");
+            maintainMapLog();
+        }
+    }
+
+    // When player accepts the rat-spray quest, give them the silver key
+    if (selectedOption.id === "hermit_rat_spray_accept" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var sprayD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
+            var baseD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (sprayD) sprayD.available = false;
+            if (baseD) baseD.available = true;
+            below.gameData.player.inventory.push(4);
+            setTimeout(function() { showInventory([4]); }, 50);
+            below.gameData.mapLog.push("Alistair hands you a small silver key. 'For your trouble. And hurry back — the rats won't wait.'");
+            maintainMapLog();
+        }
+    }
+    
+    // If player declines the rat-spray quest, return to normal dialog
+    if (selectedOption.id === "hermit_rat_spray_decline" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var sprayD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
+            var baseD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (sprayD) sprayD.available = false;
+            if (baseD) baseD.available = true;
+            below.gameData.mapLog.push("Alistair shrugs. 'Suit yourself. The offer stands if you change your mind.'");
+            maintainMapLog();
+        }
+    }
+
     if (!below.passwordInput) {
         closeChoiceEvent();
     }
@@ -2464,6 +2532,19 @@ function tryAutoPush(x, y, fromX, fromY) {
     return true;
 }
 
+function isRatBlocked(x, y) {
+    if (below.ratsCleared) return false;
+    var curMap = below.gameData.player.currentMap;
+    if (curMap !== 0) return false;
+    return x >= -6 && x <= -4 && y >= 1 && y <= 3;
+}
+
+var ratSplashData = {
+    image: "rat.png",
+    text: "As you step through the doorway, a sea of rats surges forward — teeth bared, claws skittering on stone. They swarm around your feet, forcing you back. There's no getting past them without something to drive them away.",
+    shake: true
+};
+
 function moveOnMap(e) {
     // Don't process movement if choice event is active
     if (below.choiceEvent) return;
@@ -2484,6 +2565,10 @@ function moveOnMap(e) {
     }
     if ((e.keyCode === 38 || e.keyCode === 87) && foundTile(curX, curY -1)) {
         var destY = curY - 1;
+        if (isRatBlocked(curX, destY)) {
+            showSplash(ratSplashData);
+            return;
+        }
         if (tryAutoPush(curX, destY, curX, curY) || !isBlocked(curX, destY)) {
             if (!playerMoved) {
                 below.gameData.player.destinationLocation.yVelocity = -1;
@@ -2496,6 +2581,10 @@ function moveOnMap(e) {
     }
     else if ((e.keyCode === 40 || e.keyCode === 83) && foundTile(curX, curY +1)) {
         var destY = curY + 1;
+        if (isRatBlocked(curX, destY)) {
+            showSplash(ratSplashData);
+            return;
+        }
         if (tryAutoPush(curX, destY, curX, curY) || !isBlocked(curX, destY)) {
             if (!playerMoved) {
                 below.gameData.player.destinationLocation.y = destY;
@@ -2508,6 +2597,10 @@ function moveOnMap(e) {
     }
     else if ((e.keyCode === 37 || e.keyCode === 65) && foundTile(curX -1, curY)) {
         var destX = curX - 1;
+        if (isRatBlocked(destX, curY)) {
+            showSplash(ratSplashData);
+            return;
+        }
         if (tryAutoPush(destX, curY, curX, curY) || !isBlocked(destX, curY)) {
             if (!playerMoved) {
                 below.gameData.player.destinationLocation.xVelocity = -1;
@@ -2520,6 +2613,10 @@ function moveOnMap(e) {
     }
     else if ((e.keyCode === 39 || e.keyCode === 68) && foundTile(curX +1, curY)) {
         var destX = curX + 1;
+        if (isRatBlocked(destX, curY)) {
+            showSplash(ratSplashData);
+            return;
+        }
         if (tryAutoPush(destX, curY, curX, curY) || !isBlocked(destX, curY)) {
             if (!playerMoved) {
                 below.gameData.player.destinationLocation.xVelocity = 1;

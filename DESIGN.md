@@ -23,7 +23,8 @@ A lost soul consumed in his own delusions. A former botanist. Trades keys for he
 - Is amused and befuddled by Medusa taking interest in his hobby
 - Despises the Mole for his evil ways
 - Finds the Jester annoying for teasing him all the time
-- Does not get Sam Shale at all
+- Does not get Sam Shale at all.
+- Is paranoid about others wantin gto steal his herbs, that being the other NPC's, monsters and beings that do not exist.
 
 ### Medusa
 Aloof and dreaming. A former "stoner" who turned people to stone with her gaze, but has reformed and no longer does that.

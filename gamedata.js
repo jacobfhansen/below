@@ -305,6 +305,28 @@ var belowGameData = {
         6,
         3
       ]
+    },
+    "16": {
+      "name": "Bed",
+      "description": "A rickety old bed",
+      "color": "#8B5E3C",
+      "icon": "bed.png",
+      "blocking": true,
+      "choiceEvents": [
+        6,
+        3
+      ]
+    },
+    "17": {
+      "name": "Chair",
+      "description": "A wooden chair",
+      "color": "#6B4226",
+      "icon": "chair.png",
+      "blocking": true,
+      "choiceEvents": [
+        6,
+        3
+      ]
     }
   },
   "itemTypes": {
@@ -360,6 +382,24 @@ var belowGameData = {
       "name": "Antidote",
       "description": "A small vial of bitter-smelling liquid. The Hermit's handwriting on the label reads: 'For internal poisoning. One dose only.'",
       "icon": "antidote.png",
+      "choiceEvents": []
+    },
+    "13": {
+      "name": "Rat Spray",
+      "description": "A rusty canister marked 'RAT-A-WAY — Guaranteed to clear any rodent infestation'",
+      "icon": "rat_spray.png",
+      "choiceEvents": []
+    },
+    "14": {
+      "name": "Bat Swatter",
+      "description": "A sturdy swatter with a reinforced mesh head and a long handle",
+      "icon": "bat_swatter.png",
+      "choiceEvents": []
+    },
+    "15": {
+      "name": "Centipede Cleaner",
+      "description": "A bottle of thick, foul-smelling liquid. 'CRAWL-END — For all your centipede problems'",
+      "icon": "centipede_cleaner.png",
       "choiceEvents": []
     }
   },
@@ -1278,8 +1318,7 @@ var belowGameData = {
           "position": {
             "x": -6,
             "y": 2
-          },
-          "itemType": 4
+          }
         },
         {
           "type": 4,
@@ -1315,8 +1354,8 @@ var belowGameData = {
         {
           "type": 3,
           "position": {
-            "x": 7,
-            "y": -4
+            "x": 8,
+            "y": -2
           }
         },
         {
@@ -1340,6 +1379,43 @@ var belowGameData = {
           "position": {
             "x": -5,
             "y": -3
+          }
+        },
+        {
+          "type": 4,
+          "position": {
+            "x": -2,
+            "y": 2
+          },
+          "closed": true
+        },
+        {
+          "type": 4,
+          "position": {
+            "x": 11,
+            "y": 1
+          },
+          "closed": true
+        },
+        {
+          "type": 16,
+          "position": {
+            "x": 8,
+            "y": -4
+          }
+        },
+        {
+          "type": 5,
+          "position": {
+            "x": 7,
+            "y": 0
+          }
+        },
+        {
+          "type": 17,
+          "position": {
+            "x": 7,
+            "y": -2
           }
         }
       ],
@@ -1706,6 +1782,53 @@ var belowGameData = {
                     "hermit_intro4",
                     "hermit_intro5"
                   ]
+                },
+                {
+                  "id": "hermit_insist_help",
+                  "text": "Please, I need your help. Show me the way.",
+                  "available": true,
+                  "chains": [
+                    "hermit_insist_response"
+                  ],
+                  "closes": [
+                    "hermit_intro1",
+                    "hermit_intro2",
+                    "hermit_intro3",
+                    "hermit_intro4",
+                    "hermit_intro5"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_insist_response",
+              "available": false,
+              "text": "He sighs heavily, setting down his herbs. 'You're not going to let this go, are you?' He pauses, studying you. 'Very well. I know a way past the old stone door. There's an old storeroom beyond it... infested with rats, but there might be something useful. Follow me.'",
+              "options": [
+                {
+                  "id": "hermit_insist_follow",
+                  "text": "Follow the Hermit",
+                  "available": true,
+                  "closes": [
+                    "hermit_insist_response"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_rat_spray",
+              "available": false,
+              "text": "'The rats have overrun the place,' he mutters, peering through the doorway. 'I used to keep a spray for them — my own recipe. Strong enough to drive 'em out for good. But I left it behind when I moved to my herb garden. Fetch it for me, would you? It should be somewhere in my old chambers.'",
+              "options": [
+                {
+                  "id": "hermit_rat_spray_accept",
+                  "text": "I'll find your spray. What's in it for me?",
+                  "available": true
+                },
+                {
+                  "id": "hermit_rat_spray_decline",
+                  "text": "Maybe later.",
+                  "available": true
                 }
               ]
             },
@@ -1913,8 +2036,8 @@ var belowGameData = {
         {
           "type": 2,
           "position": {
-            "x": 5,
-            "y": -3
+            "x": 10,
+            "y": 3
           },
           "dialogOptions": [
             {
