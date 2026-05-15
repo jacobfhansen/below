@@ -132,6 +132,7 @@ var belowGameData = {
       "color": "#433900",
       "icon": "table.png",
       "blocking": true,
+      "visionBlocking": false,
       "choiceEvents": [
         6,
         3
@@ -164,7 +165,7 @@ var belowGameData = {
       "color": "#433900",
       "icon": "cupboard.png",
       "blocking": true,
-      "itemType": 5,
+      "visionBlocking": false,
       "drawOrder": 1,
       "opacity": 1,
       "choiceEvents": [
@@ -290,6 +291,7 @@ var belowGameData = {
       "color": "#8B5E3C",
       "icon": "crate.png",
       "blocking": true,
+      "visionBlocking": false,
       "choiceEvents": [
         6,
         3
@@ -301,6 +303,7 @@ var belowGameData = {
       "color": "#6B4226",
       "icon": "barrel.png",
       "blocking": true,
+      "visionBlocking": false,
       "choiceEvents": [
         6,
         3
@@ -312,6 +315,7 @@ var belowGameData = {
       "color": "#8B5E3C",
       "icon": "bed.png",
       "blocking": true,
+      "visionBlocking": false,
       "choiceEvents": [
         6,
         3
@@ -323,6 +327,7 @@ var belowGameData = {
       "color": "#6B4226",
       "icon": "chair.png",
       "blocking": true,
+      "visionBlocking": false,
       "choiceEvents": [
         6,
         3
@@ -1400,7 +1405,7 @@ var belowGameData = {
         {
           "type": 16,
           "position": {
-            "x": 8,
+            "x": 7,
             "y": -4
           }
         },

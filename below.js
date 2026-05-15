@@ -443,6 +443,11 @@ sailImg.src = "images/sail.png";
 var antidoteImg = new Image();
 antidoteImg.src = "images/antidote.png";
 
+var bedImg = new Image();
+bedImg.src = "images/bed.png";
+var chairImg = new Image();
+chairImg.src = "images/chair.png";
+
 window.onbeforeunload = confirmExit;
 function confirmExit() {
     saveCurrentGame();
@@ -2016,7 +2021,9 @@ function isVisionBlocked(x, y) {
         if (!o.position) return false;
         var obsType = below.gameData.obstacleTypes[o.type];
         var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
-        return o.position.x === x && o.position.y === y && isBlocking;
+        if (!isBlocking) return false;
+        var blocksVision = obsType ? (obsType.visionBlocking !== undefined ? obsType.visionBlocking : true) : true;
+        return o.position.x === x && o.position.y === y && blocksVision;
     });
 }
 
@@ -2914,6 +2921,8 @@ function drawMapCanvas() {
                     else if (iconName === "steering_wheel.png") img = steeringWheelImg;
                     else if (iconName === "sail.png") img = sailImg;
                     else if (iconName === "antidote.png") img = antidoteImg;
+                    else if (iconName === "bed.png") img = bedImg;
+                    else if (iconName === "chair.png") img = chairImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
@@ -2973,6 +2982,8 @@ function drawMapCanvas() {
                     else if (iconName === "steering_wheel.png") img = steeringWheelImg;
                     else if (iconName === "sail.png") img = sailImg;
                     else if (iconName === "antidote.png") img = antidoteImg;
+                    else if (iconName === "bed.png") img = bedImg;
+                    else if (iconName === "chair.png") img = chairImg;
                     else img = new Image();
                 }
                 if (!img.complete) img.src = "images/" + iconName;
