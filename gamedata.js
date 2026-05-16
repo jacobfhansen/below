@@ -339,73 +339,85 @@ var belowGameData = {
       "name": "Key",
       "description": "A silver key",
       "icon": "key1.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You fumble with the silver key, but there's nothing here to unlock."
     },
     "5": {
       "name": "Key",
       "description": "A bronze key",
       "icon": "key2.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You turn the bronze key over in your hand, looking for a lock."
     },
     "6": {
       "name": "Herbs",
       "description": "A bundle of dried cave herbs. Smells awful, dont look very tasty",
       "icon": "herbs.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You sniff the herbs. They smell awful. You put them away."
     },
     "7": {
       "name": "Stone Key",
       "description": "A heavy key carved from solid rock",
       "icon": "stone_key.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "The stone key is too heavy to swing effectively."
     },
     "8": {
       "name": "Rudder",
       "description": "A wooden rudder from a small boat",
       "icon": "rudder.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You brandish the rudder like a club, but there's nothing to strike."
     },
     "9": {
       "name": "Mast",
       "description": "A short mast with frayed rope",
       "icon": "mast.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "The mast is too long and awkward to use as a weapon."
     },
     "10": {
       "name": "Steering Wheel",
       "description": "A small brass steering wheel",
       "icon": "steering_wheel.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You spin the steering wheel. Nothing happens."
     },
     "11": {
       "name": "Sail",
       "description": "A patched canvas sail",
       "icon": "sail.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You wave the sail like a flag. No effect."
     },
     "12": {
       "name": "Antidote",
       "description": "A small vial of bitter-smelling liquid. The Hermit's handwriting on the label reads: 'For internal poisoning. One dose only.'",
       "icon": "antidote.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You're not poisoned. Drinking this would be a waste."
     },
     "13": {
       "name": "Rat Spray",
       "description": "A rusty canister marked 'RAT-A-WAY — Guaranteed to clear any rodent infestation'",
       "icon": "rat_spray.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You give the canister a quick spray. Nothing but stale air."
     },
     "14": {
       "name": "Bat Swatter",
       "description": "A sturdy swatter with a reinforced mesh head and a long handle",
       "icon": "bat_swatter.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You swing the bat swatter. Nothing to hit here."
     },
     "15": {
       "name": "Centipede Cleaner",
       "description": "A bottle of thick, foul-smelling liquid. 'CRAWL-END — For all your centipede problems'",
       "icon": "centipede_cleaner.png",
-      "choiceEvents": []
+      "choiceEvents": [],
+      "useText": "You sniff the bottle. Your eyes water. You put it away."
     }
   },
   "npcTypes": {
@@ -1325,9 +1337,78 @@ var belowGameData = {
           "speed": 0.06,
           "status": 1,
           "allowedTiles": [
-            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
-            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
-            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+            {
+              "x": -8,
+              "y": -3
+            },
+            {
+              "x": -7,
+              "y": -3
+            },
+            {
+              "x": -6,
+              "y": -3
+            },
+            {
+              "x": -5,
+              "y": -3
+            },
+            {
+              "x": -4,
+              "y": -3
+            },
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": -8,
+              "y": -2
+            },
+            {
+              "x": -7,
+              "y": -2
+            },
+            {
+              "x": -6,
+              "y": -2
+            },
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": -4,
+              "y": -2
+            },
+            {
+              "x": -3,
+              "y": -2
+            },
+            {
+              "x": -8,
+              "y": -1
+            },
+            {
+              "x": -7,
+              "y": -1
+            },
+            {
+              "x": -6,
+              "y": -1
+            },
+            {
+              "x": -5,
+              "y": -1
+            },
+            {
+              "x": -4,
+              "y": -1
+            },
+            {
+              "x": -3,
+              "y": -1
+            }
           ]
         },
         {
@@ -1339,9 +1420,78 @@ var belowGameData = {
           "speed": 0.05,
           "status": 1,
           "allowedTiles": [
-            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
-            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
-            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+            {
+              "x": -8,
+              "y": -3
+            },
+            {
+              "x": -7,
+              "y": -3
+            },
+            {
+              "x": -6,
+              "y": -3
+            },
+            {
+              "x": -5,
+              "y": -3
+            },
+            {
+              "x": -4,
+              "y": -3
+            },
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": -8,
+              "y": -2
+            },
+            {
+              "x": -7,
+              "y": -2
+            },
+            {
+              "x": -6,
+              "y": -2
+            },
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": -4,
+              "y": -2
+            },
+            {
+              "x": -3,
+              "y": -2
+            },
+            {
+              "x": -8,
+              "y": -1
+            },
+            {
+              "x": -7,
+              "y": -1
+            },
+            {
+              "x": -6,
+              "y": -1
+            },
+            {
+              "x": -5,
+              "y": -1
+            },
+            {
+              "x": -4,
+              "y": -1
+            },
+            {
+              "x": -3,
+              "y": -1
+            }
           ]
         },
         {
@@ -1353,9 +1503,78 @@ var belowGameData = {
           "speed": 0.04,
           "status": 1,
           "allowedTiles": [
-            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
-            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
-            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+            {
+              "x": -8,
+              "y": -3
+            },
+            {
+              "x": -7,
+              "y": -3
+            },
+            {
+              "x": -6,
+              "y": -3
+            },
+            {
+              "x": -5,
+              "y": -3
+            },
+            {
+              "x": -4,
+              "y": -3
+            },
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": -8,
+              "y": -2
+            },
+            {
+              "x": -7,
+              "y": -2
+            },
+            {
+              "x": -6,
+              "y": -2
+            },
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": -4,
+              "y": -2
+            },
+            {
+              "x": -3,
+              "y": -2
+            },
+            {
+              "x": -8,
+              "y": -1
+            },
+            {
+              "x": -7,
+              "y": -1
+            },
+            {
+              "x": -6,
+              "y": -1
+            },
+            {
+              "x": -5,
+              "y": -1
+            },
+            {
+              "x": -4,
+              "y": -1
+            },
+            {
+              "x": -3,
+              "y": -1
+            }
           ]
         },
         {
@@ -1367,9 +1586,78 @@ var belowGameData = {
           "speed": 0.07,
           "status": 1,
           "allowedTiles": [
-            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
-            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
-            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+            {
+              "x": -8,
+              "y": -3
+            },
+            {
+              "x": -7,
+              "y": -3
+            },
+            {
+              "x": -6,
+              "y": -3
+            },
+            {
+              "x": -5,
+              "y": -3
+            },
+            {
+              "x": -4,
+              "y": -3
+            },
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": -8,
+              "y": -2
+            },
+            {
+              "x": -7,
+              "y": -2
+            },
+            {
+              "x": -6,
+              "y": -2
+            },
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": -4,
+              "y": -2
+            },
+            {
+              "x": -3,
+              "y": -2
+            },
+            {
+              "x": -8,
+              "y": -1
+            },
+            {
+              "x": -7,
+              "y": -1
+            },
+            {
+              "x": -6,
+              "y": -1
+            },
+            {
+              "x": -5,
+              "y": -1
+            },
+            {
+              "x": -4,
+              "y": -1
+            },
+            {
+              "x": -3,
+              "y": -1
+            }
           ]
         },
         {
@@ -1381,9 +1669,78 @@ var belowGameData = {
           "speed": 0.03,
           "status": 1,
           "allowedTiles": [
-            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
-            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
-            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+            {
+              "x": -8,
+              "y": -3
+            },
+            {
+              "x": -7,
+              "y": -3
+            },
+            {
+              "x": -6,
+              "y": -3
+            },
+            {
+              "x": -5,
+              "y": -3
+            },
+            {
+              "x": -4,
+              "y": -3
+            },
+            {
+              "x": -3,
+              "y": -3
+            },
+            {
+              "x": -8,
+              "y": -2
+            },
+            {
+              "x": -7,
+              "y": -2
+            },
+            {
+              "x": -6,
+              "y": -2
+            },
+            {
+              "x": -5,
+              "y": -2
+            },
+            {
+              "x": -4,
+              "y": -2
+            },
+            {
+              "x": -3,
+              "y": -2
+            },
+            {
+              "x": -8,
+              "y": -1
+            },
+            {
+              "x": -7,
+              "y": -1
+            },
+            {
+              "x": -6,
+              "y": -1
+            },
+            {
+              "x": -5,
+              "y": -1
+            },
+            {
+              "x": -4,
+              "y": -1
+            },
+            {
+              "x": -3,
+              "y": -1
+            }
           ]
         }
       ],
@@ -1472,8 +1829,8 @@ var belowGameData = {
         {
           "type": 6,
           "position": {
-            "x": -5,
-            "y": -3
+            "x": -1,
+            "y": 1
           }
         },
         {

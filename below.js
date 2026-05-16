@@ -8,6 +8,7 @@ const below = {
     currentSlot: undefined,
     choiceEvent: null,
     splashActive: false,
+    equippedItem: null,
     gameData: null // Loaded from gamedata.js
 };
 
@@ -1558,7 +1559,7 @@ function selectChoiceOption(index) {
                 return o.position.x === p.x && o.position.y === p.y;
             }));
         });
-        below.gameData.mapLog.push("The stones tremble and roll away into the darkness.");
+        below.gameData.mapLog.push("Them mole smashes at the rocks and they roll away into the darkness.");
         maintainMapLog();
     }
 
@@ -1953,13 +1954,12 @@ function showInventory(newItems) {
                 var iconCell = row.insertCell();
                 var img = document.createElement('img');
                 img.src = "images/" + itemType.icon;
-                img.style.width = '64px'; // 2x size
+                img.style.width = '64px';
                 img.style.height = '64px';
                 iconCell.appendChild(img);
                 
                 // Name + Description cell
                 var infoCell = row.insertCell();
-                // Highlight newly acquired items
                 if (newItems && newItems.indexOf(itemTypeId) !== -1) {
                     iconCell.classList.add("inventory-new-item");
                     infoCell.classList.add("inventory-new-item");
@@ -1975,6 +1975,35 @@ function showInventory(newItems) {
                 descDiv.style.color = '#666';
                 descDiv.style.fontStyle = 'italic';
                 infoCell.appendChild(descDiv);
+                
+                // Equip indicator or badge
+                if (below.equippedItem === itemTypeId) {
+                    iconCell.classList.add("inventory-equipped");
+                    infoCell.classList.add("inventory-equipped");
+                    var eqBadge = document.createElement('span');
+                    eqBadge.textContent = '✓ Equipped';
+                    eqBadge.style.color = '#4CAF50';
+                    eqBadge.style.fontSize = '0.75em';
+                    eqBadge.style.fontWeight = 'bold';
+                    eqBadge.style.display = 'inline-block';
+                    eqBadge.style.marginTop = '2px';
+                    infoCell.appendChild(eqBadge);
+                } else {
+                    // Make the item cells clickable to equip
+                    var clickHandler = (function(id) {
+                        return function(e) {
+                            e.stopPropagation();
+                            below.equippedItem = id;
+                            showInventory();
+                        };
+                    })(itemTypeId);
+                    iconCell.style.cursor = 'pointer';
+                    iconCell.title = 'Click to equip';
+                    infoCell.style.cursor = 'pointer';
+                    infoCell.title = 'Click to equip';
+                    iconCell.addEventListener('click', clickHandler);
+                    infoCell.addEventListener('click', clickHandler);
+                }
                 
                 colCount++;
             }
@@ -2646,14 +2675,26 @@ function moveOnMap(e) {
         playerMoved = false;
     
     if (e.keyCode === 69) {
-        // Bat swatter swing (map 0 only)
-        if (below.gameData.player.currentMap === 0 && below.gameData.player.inventory.indexOf(14) !== -1) {
+        e.preventDefault();
+        if (below.equippedItem === null) {
+            below.gameData.mapLog.push("You have nothing equipped. Press Q to open inventory and equip an item.");
+            maintainMapLog();
+        } else if (below.equippedItem === 14 && below.gameData.player.currentMap === 0) {
             var bats = below.gameData.mapData[0].monsters.filter(function(m) { return m.type === 2; });
             if (bats.length > 0) {
                 below.gameData.mapLog.push("You swing the bat swatter but the bats weave through the air too fast in this darkness.");
                 maintainMapLog();
             } else {
-                below.gameData.mapLog.push("There's nothing left to swing at.");
+                below.gameData.mapLog.push("You swing the bat swatter. Nothing to hit here.");
+                maintainMapLog();
+            }
+        } else {
+            var itemType = below.gameData.itemTypes[below.equippedItem];
+            if (itemType && itemType.useText) {
+                below.gameData.mapLog.push(itemType.useText);
+                maintainMapLog();
+            } else {
+                below.gameData.mapLog.push("You use the " + (itemType ? itemType.name : "item") + " but nothing happens.");
                 maintainMapLog();
             }
         }
@@ -3424,7 +3465,7 @@ function mapGameLoop() {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type || !type.movement) return;
 
-            // Seeking bats
+            // Seeking bats — direct movement toward light, no collision checks
             if (batDoorOpen && monster.type === 2) {
                 var dx = -12 - monster.position.x;
                 var dy = -2 - monster.position.y;
@@ -3433,9 +3474,10 @@ function mapGameLoop() {
                     monster.removeMe = true;
                     return;
                 }
-                monster.moveAngle = Math.atan2(dy, dx);
-                monster.restTimer = 0;
-                monster.directionTimer = Infinity;
+                var speed = monster.speed !== undefined ? monster.speed : 0.015 * type.movement * 3;
+                monster.position.x += Math.cos(Math.atan2(dy, dx)) * speed;
+                monster.position.y += Math.sin(Math.atan2(dy, dx)) * speed;
+                return;
             } else {
                 if (monster.restTimer === undefined) monster.restTimer = 0;
                 if (monster.moveAngle === undefined) {

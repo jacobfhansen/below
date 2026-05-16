@@ -242,6 +242,10 @@ html, body {
 .inventory-new-item {
     animation: inventory-glow 1.5s ease-in-out infinite;
 }
+.inventory-equipped {
+    background: rgba(76, 175, 80, 0.15) !important;
+    border-radius: 4px;
+}
 @keyframes inventory-glow {
     0%, 100% { background: rgba(255, 255, 0, 0); }
     50% { background: rgba(255, 255, 0, 0.3); }
