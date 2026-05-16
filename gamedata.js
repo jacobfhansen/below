@@ -1754,14 +1754,6 @@ var belowGameData = {
               "text": "'The way out...' He strokes his beard thoughtfully. 'There are layers to this place, child. You came from the surface. Below these caves lies a maze. Below that... deeper chambers, sealed by ancient doors. The secret isn't in finding the way up - it's in how far down you're willing to go.'",
               "options": [
                 {
-                  "id": "hermit_intro4a",
-                  "text": "What's at the bottom?",
-                  "available": true,
-                  "chains": [
-                    "hermit_intro5"
-                  ]
-                },
-                {
                   "id": "hermit_intro4b",
                   "text": "I just want to escape.",
                   "available": true,

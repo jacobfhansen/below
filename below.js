@@ -376,6 +376,15 @@ charonImg.src = "images/charon.png";
 var charonDialogImg = new Image();
 charonDialogImg.src = "images/charon_dialog.png";
 
+var ratsDialogImg = new Image();
+ratsDialogImg.src = "images/rats_dialog.png";
+
+var batsDialogImg = new Image();
+batsDialogImg.src = "images/bats_dialog.png";
+
+var centipedesDialogImg = new Image();
+centipedesDialogImg.src = "images/centipedes_dialog.png";
+
 var tableImg = new Image();
 tableImg.src = "images/table.png";
 
@@ -1403,7 +1412,7 @@ function selectChoiceOption(index) {
             });
             var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_dockmaster"; });
             if (openD) openD.available = true;
-            below.gameData.mapLog.push("The Dock Master's office emerges from the mist — a cratewood shack over black water.");
+            below.gameData.mapLog.push("The Dock Master's office emerges from the mist - a cratewood shack over black water.");
             maintainMapLog();
         }, 3)) {
             below.gameData.mapLog.push("Sam steps away from the jazz club, his jaw tight.");
@@ -1477,7 +1486,7 @@ function selectChoiceOption(index) {
                 dialogOptions: [{
                     id: "jester_dockmaster_ship",
                     available: true,
-                    text: "The Dock Master — who looks suspiciously like the Jester in an oversized coat and a glued-on mustache — leans on the counter with a grin. 'Well, well, well! Fancy seein' YOU here! Heard you been collectin' boat parts! A ship! At Pier A1! Who woulda thunk it! Fix it up and you can sail right outta here! Course, I wouldn't know anythin' about that. I'm just the Dock Master. Totally legitimate. Ahem.' He winks broadly.",
+                    text: "The Dock Master - who looks suspiciously like the Jester in an oversized coat and a glued-on mustache - leans on the counter with a grin. 'Well, well, well! Fancy seein' YOU here! Heard you been collectin' boat parts! A ship! At Pier A1! Who woulda thunk it! Fix it up and you can sail right outta here! Course, I wouldn't know anythin' about that. I'm just the Dock Master. Totally legitimate. Ahem.' He winks broadly.",
                     options: [{
                         id: "jester_dockmaster_ship_a1",
                         text: "...",
@@ -1569,8 +1578,8 @@ function selectChoiceOption(index) {
                 doorObstacle.icon = "door_open.png";
             }
             showSplash({
-                image: "rat.png",
-                text: "The old stone door grinds open. Beyond it, a dark chamber stirs with movement — rats scatter in the shadows, their eyes glinting like tiny jewels.",
+                image: "rats_dialog.png",
+                text: "The old stone door grinds open. Beyond it, a dark chamber stirs with movement - rats scatter in the shadows, their eyes glinting like tiny jewels.",
                 shake: false
             });
             // Make Hermit's rat-spray dialog available for next conversation
@@ -1600,7 +1609,7 @@ function selectChoiceOption(index) {
             if (baseD) baseD.available = true;
             below.gameData.player.inventory.push(4);
             setTimeout(function() { showInventory([4]); }, 50);
-            below.gameData.mapLog.push("Alistair hands you a small silver key. 'For your trouble. And hurry back — the rats won't wait.'");
+            below.gameData.mapLog.push("Alistair hands you a small silver key. 'Take this for the door, beyond is my room. And hurry back - the rats won't wait.'");
             maintainMapLog();
         }
     }
@@ -2547,8 +2556,8 @@ function isRatBlocked(x, y) {
 }
 
 var ratSplashData = {
-    image: "rat.png",
-    text: "As you step through the doorway, a sea of rats surges forward — teeth bared, claws skittering on stone. They swarm around your feet, forcing you back. There's no getting past them without something to drive them away.",
+    image: "rats_dialog.png",
+    text: "As you step through the doorway, a sea of rats surges forward - teeth bared, claws skittering on stone. They swarm around your feet, forcing you back. There's no getting past them without something to drive them away.",
     shake: true
 };
 
