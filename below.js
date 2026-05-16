@@ -1604,9 +1604,9 @@ function selectChoiceOption(index) {
         });
         if (hermitNpc && hermitNpc.dialogOptions) {
             var sprayD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
-            var baseD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            var waitD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray_wait"; });
             if (sprayD) sprayD.available = false;
-            if (baseD) baseD.available = true;
+            if (waitD) waitD.available = true;
             below.gameData.player.inventory.push(4);
             setTimeout(function() { showInventory([4]); }, 50);
             below.gameData.mapLog.push("Alistair hands you a small silver key. 'Take this for the door, beyond is my room. And hurry back - the rats won't wait.'");
@@ -1627,6 +1627,63 @@ function selectChoiceOption(index) {
             if (baseD) baseD.available = true;
             below.gameData.mapLog.push("Alistair shrugs. 'Suit yourself. The offer stands if you change your mind.'");
             maintainMapLog();
+        }
+    }
+
+    // When player hands over the rat spray, Hermit walks into rat chamber and clears it
+    if (selectedOption.id === "hermit_rat_spray_give_hand" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            // Remove rat spray from inventory
+            var sprayIdx = below.gameData.player.inventory.indexOf(13);
+            if (sprayIdx !== -1) {
+                below.gameData.player.inventory.splice(sprayIdx, 1);
+            }
+            if (npcWalkTo(hermitNpc, -3, 2, function() {
+                below.ratsCleared = true;
+                showSplash({
+                    image: "hermit_dialog.png",
+                    text: "Alistair storms through the doorway, rat spray hissing. 'THIEVING VERMIN! STEALING MY HERBS! THINK YOU CAN CHEAT ALISTAIR THE HERMIT?!' He sprays wildly — rats scatter, shrieking, fleeing through cracks and crevices. Within moments, the chamber is silent. He stands panting, canister still raised. 'And stay OUT!' he bellows at the empty room. Then, quieter: 'That was... satisfying.'",
+                    shake: true
+                });
+                below.pendingRatClear = true;
+            }, 3)) {
+                below.gameData.mapLog.push("Alistair snatches the canister and storms off toward the storeroom, muttering about thieving rats.");
+                maintainMapLog();
+            }
+        }
+    }
+
+    // When player hands over the bat swatter, Hermit unlocks the west door and returns to his post
+    if (selectedOption.id === "hermit_bat_swatter_give_hand" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMapB = below.gameData.player.currentMap;
+        var hermitNpcB = below.gameData.mapData[curMapB].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpcB && hermitNpcB.dialogOptions) {
+            // Unlock the door at (-7,3) — it becomes non-blocking
+            var obstacles = below.gameData.mapData[curMapB].obstacles;
+            for (var oi = 0; oi < obstacles.length; oi++) {
+                if (obstacles[oi].position.x === -7 && obstacles[oi].position.y === 3) {
+                    obstacles[oi].closed = false;
+                    obstacles[oi].blocking = false;
+                    break;
+                }
+            }
+            // Walk Hermit back to (3,3)
+            if (npcWalkTo(hermitNpcB, 3, 3, function() {
+                var introD = hermitNpcB.dialogOptions.find(function(d) { return d.id === "hermit_bat_intro"; });
+                if (introD) introD.available = true;
+                var greetD = hermitNpcB.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+                if (greetD) greetD.available = true;
+                maintainMapLog();
+            }, 3)) {
+                below.gameData.mapLog.push("Alistair shuffles back toward the main chamber, rubbing his lower back.");
+                maintainMapLog();
+            }
         }
     }
 
@@ -1693,6 +1750,25 @@ function hideSplash() {
                 if (postD) postD.available = true;
             }
         }
+    }
+    // Handle post-rat-clear actions (teleport Hermit, enable bat swatter dialog, remove rats)
+    if (below.pendingRatClear) {
+        below.pendingRatClear = false;
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === 1; });
+        if (hermitNpc) {
+            hermitNpc.position.x = -6;
+            hermitNpc.position.y = 3;
+            var batD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_bat_swatter"; });
+            if (batD) batD.available = true;
+            var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (introD) introD.available = false;
+        }
+        // Remove rat monsters (type 1) from map
+        below.gameData.mapData[curMap].monsters = below.gameData.mapData[curMap].monsters.filter(function(m) {
+            return m.type !== 1;
+        });
+        maintainMapLog();
     }
     below.splashPos = null;
     below.splashData = null;
@@ -2570,6 +2646,17 @@ function moveOnMap(e) {
         playerMoved = false;
     
     if (e.keyCode === 69) {
+        // Bat swatter swing (map 0 only)
+        if (below.gameData.player.currentMap === 0 && below.gameData.player.inventory.indexOf(14) !== -1) {
+            var bats = below.gameData.mapData[0].monsters.filter(function(m) { return m.type === 2; });
+            if (bats.length > 0) {
+                below.gameData.mapLog.push("You swing the bat swatter but the bats weave through the air too fast in this darkness.");
+                maintainMapLog();
+            } else {
+                below.gameData.mapLog.push("There's nothing left to swing at.");
+                maintainMapLog();
+            }
+        }
     }
     if (e.keyCode === 81) {
         toggleInventory();
@@ -3324,28 +3411,52 @@ function mapGameLoop() {
             }
         }
         // Free continuous movement for decorative monsters
+        // Bat seeking behavior — bats on map 0 seek light at (-12,-2) when door at (-9,-2) is open
+        var batDoorOpen = false;
+        if (curMap === 0) {
+            var batDoor = below.gameData.mapData[0].obstacles.find(function(o) {
+                return o.position.x === -9 && o.position.y === -2;
+            });
+            batDoorOpen = batDoor && !batDoor.closed;
+        }
+
         below.gameData.mapData[curMap].monsters.forEach(function(monster) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type || !type.movement) return;
-            if (monster.restTimer === undefined) monster.restTimer = 0;
-            if (monster.moveAngle === undefined) {
-                monster.moveAngle = Math.random() * Math.PI * 2;
-            }
-            if (monster.restTimer > 0) {
-                monster.restTimer--;
-                return;
-            }
-            if (monster.directionTimer === undefined || monster.directionTimer <= 0) {
-                var restChance = type.restChance || 0;
-                if (Math.random() < restChance) {
-                    monster.restTimer = Math.floor(Math.random() * 60) + 30;
-                    monster.directionTimer = 0;
+
+            // Seeking bats
+            if (batDoorOpen && monster.type === 2) {
+                var dx = -12 - monster.position.x;
+                var dy = -2 - monster.position.y;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 0.4) {
+                    monster.removeMe = true;
                     return;
                 }
-                monster.moveAngle = Math.random() * Math.PI * 2;
-                monster.directionTimer = Math.floor(Math.random() * 60) + 60;
+                monster.moveAngle = Math.atan2(dy, dx);
+                monster.restTimer = 0;
+                monster.directionTimer = Infinity;
+            } else {
+                if (monster.restTimer === undefined) monster.restTimer = 0;
+                if (monster.moveAngle === undefined) {
+                    monster.moveAngle = Math.random() * Math.PI * 2;
+                }
+                if (monster.restTimer > 0) {
+                    monster.restTimer--;
+                    return;
+                }
+                if (monster.directionTimer === undefined || monster.directionTimer <= 0) {
+                    var restChance = type.restChance || 0;
+                    if (Math.random() < restChance) {
+                        monster.restTimer = Math.floor(Math.random() * 60) + 30;
+                        monster.directionTimer = 0;
+                        return;
+                    }
+                    monster.moveAngle = Math.random() * Math.PI * 2;
+                    monster.directionTimer = Math.floor(Math.random() * 60) + 60;
+                }
+                monster.directionTimer--;
             }
-            monster.directionTimer--;
             var speed = monster.speed !== undefined ? monster.speed : 0.015 * type.movement * 3;
             var newX = monster.position.x + Math.cos(monster.moveAngle) * speed;
             var newY = monster.position.y + Math.sin(monster.moveAngle) * speed;
@@ -3358,6 +3469,22 @@ function mapGameLoop() {
                 monster.moveAngle = Math.random() * Math.PI * 2;
             }
         });
+        // Remove bats that reached the light
+        var removedCount = 0;
+        below.gameData.mapData[curMap].monsters = below.gameData.mapData[curMap].monsters.filter(function(m) {
+            if (m.removeMe) {
+                removedCount++;
+                return false;
+            }
+            return true;
+        });
+        if (removedCount > 0) {
+            var remaining = below.gameData.mapData[curMap].monsters.filter(function(m) { return m.type === 2; });
+            if (remaining.length === 0) {
+                below.gameData.mapLog.push("The last bat vanishes into the light. The passage is clear.");
+                maintainMapLog();
+            }
+        }
         below.gameData.mapData[curMap].npcs.forEach(function(npc) {
             if (npc.destPos && npc.destPos.xVelocity) {
                 npc.position.x += (npc.destPos.xVelocity/below.tickSpeed);

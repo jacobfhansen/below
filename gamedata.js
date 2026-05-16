@@ -561,6 +561,13 @@ var belowGameData = {
           "x2": -4,
           "y2": 3,
           "description": "A dim chamber. A rickety table stands in the corner, its surface streaked with grime. Shadows shift beneath it — rats."
+        },
+        {
+          "x1": -12,
+          "y1": -3,
+          "x2": -3,
+          "y2": -1,
+          "description": "A wide marble corridor stretches west. Faint squeaking echoes from above — bats dart through the darkness, their leathery wings stirring the stale air. A draft tickles your face from somewhere further west."
         }
       ],
       "tiles": {
@@ -1157,6 +1164,26 @@ var belowGameData = {
           "x": -7,
           "y": -1,
           "type": 9
+        },
+        "xm9ym2": {
+          "x": -9,
+          "y": -2,
+          "type": 9
+        },
+        "xm10ym2": {
+          "x": -10,
+          "y": -2,
+          "type": 9
+        },
+        "xm11ym2": {
+          "x": -11,
+          "y": -2,
+          "type": 9
+        },
+        "xm12ym2": {
+          "x": -12,
+          "y": -2,
+          "type": 9
         }
       },
       "monsters": [
@@ -1292,10 +1319,72 @@ var belowGameData = {
         {
           "type": 2,
           "position": {
-            "x": 11,
-            "y": 0
+            "x": -5,
+            "y": -2
           },
-          "status": 1
+          "speed": 0.06,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
+            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
+            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+          ]
+        },
+        {
+          "type": 2,
+          "position": {
+            "x": -7,
+            "y": -3
+          },
+          "speed": 0.05,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
+            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
+            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+          ]
+        },
+        {
+          "type": 2,
+          "position": {
+            "x": -4,
+            "y": -1
+          },
+          "speed": 0.04,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
+            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
+            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+          ]
+        },
+        {
+          "type": 2,
+          "position": {
+            "x": -8,
+            "y": -1
+          },
+          "speed": 0.07,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
+            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
+            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+          ]
+        },
+        {
+          "type": 2,
+          "position": {
+            "x": -3,
+            "y": -3
+          },
+          "speed": 0.03,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -8, "y": -3 }, { "x": -7, "y": -3 }, { "x": -6, "y": -3 }, { "x": -5, "y": -3 }, { "x": -4, "y": -3 }, { "x": -3, "y": -3 },
+            { "x": -8, "y": -2 }, { "x": -7, "y": -2 }, { "x": -6, "y": -2 }, { "x": -5, "y": -2 }, { "x": -4, "y": -2 }, { "x": -3, "y": -2 },
+            { "x": -8, "y": -1 }, { "x": -7, "y": -1 }, { "x": -6, "y": -1 }, { "x": -5, "y": -1 }, { "x": -4, "y": -1 }, { "x": -3, "y": -1 }
+          ]
         }
       ],
       "obstacles": [
@@ -1323,7 +1412,8 @@ var belowGameData = {
           "position": {
             "x": -6,
             "y": 2
-          }
+          },
+          "itemType": 14
         },
         {
           "type": 4,
@@ -1376,8 +1466,8 @@ var belowGameData = {
             "x": -7,
             "y": 3
           },
-          "closed": false,
-          "blocking": false
+          "closed": true,
+          "blocking": true
         },
         {
           "type": 6,
@@ -1414,12 +1504,29 @@ var belowGameData = {
           "position": {
             "x": 7,
             "y": 0
-          }
+          },
+          "itemType": 13
         },
         {
           "type": 17,
           "position": {
             "x": 7,
+            "y": -2
+          }
+        },
+        {
+          "type": 4,
+          "position": {
+            "x": -9,
+            "y": -2
+          },
+          "closed": true,
+          "blocking": true
+        },
+        {
+          "type": 6,
+          "position": {
+            "x": -12,
             "y": -2
           }
         }
@@ -1800,7 +1907,7 @@ var belowGameData = {
             {
               "id": "hermit_insist_response",
               "available": false,
-              "text": "He sighs heavily, setting down his herbs. 'You're not going to let this go, are you?' He pauses, studying you. 'Very well. I know a way past the old stone door. There's an old storeroom beyond it... infested with rats, but there might be something useful. Follow me.'",
+              "text": "He sighs heavily, setting down his herbs. 'You're not going to let this go, are you?' He pauses, studying you. 'Very well. Follow me to the old storeroom, there might be something useful. Follow me.'",
               "options": [
                 {
                   "id": "hermit_insist_follow",
@@ -1815,11 +1922,11 @@ var belowGameData = {
             {
               "id": "hermit_rat_spray",
               "available": false,
-              "text": "'The rats have overrun the place,' he mutters, peering through the doorway. 'I used to keep a spray for them — my own recipe. Strong enough to drive 'em out for good. But I left it behind when I moved to my herb garden. Fetch it for me, would you? It should be somewhere in my old chambers.'",
+              "text": "'The rats have overrun the place,' he mutters, peering through the doorway. 'I used to keep a spray for them — my own recipe. Strong enough to drive 'em out for good. Fetch it for me, would you? It should be somewhere in my old chambers. Here take this key to unlock the door. I have to stay here and guard my herbs.'",
               "options": [
                 {
                   "id": "hermit_rat_spray_accept",
-                  "text": "I'll find your spray. What's in it for me?",
+                  "text": "I'll find your spray.",
                   "available": true
                 },
                 {
@@ -1828,6 +1935,110 @@ var belowGameData = {
                   "available": true
                 }
               ]
+            },
+            {
+              "id": "hermit_rat_spray_wait",
+              "available": false,
+              "text": "'Well? Did you find it?' He taps his foot impatiently.",
+              "options": [
+                {
+                  "id": "hermit_rat_spray_hand_over",
+                  "text": "I have the spray right here.",
+                  "available": true,
+                  "requiresItems": [
+                    13
+                  ],
+                  "chains": [
+                    "hermit_rat_spray_give"
+                  ]
+                },
+                {
+                  "id": "hermit_rat_spray_still_looking",
+                  "text": "Not yet. I'm still looking.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_rat_spray_give",
+              "available": false,
+              "text": "'Finally! Give it here!' He snatches the canister from your hands, his eyes lighting up with a manic gleam. 'Those thieving vermin have been feasting on my herb stores for weeks! Time to return the favor!' He storms toward the storeroom door, rat spray held high.",
+              "options": [
+                {
+                  "id": "hermit_rat_spray_give_hand",
+                  "text": "Here, take it.",
+                  "available": true,
+                  "closes": [
+                    "hermit_rat_spray_give",
+                    "hermit_rat_spray_wait"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_bat_swatter",
+              "available": false,
+              "text": "'Ah, there you are!' He dusts off his hands. 'Now that the rats are dealt with, there's another matter. I used to keep a bat swatter around here — the bats in the western caves have been getting bold. It should be somewhere in this room. Fetch it for me, would you?'",
+              "options": [
+                {
+                  "id": "hermit_bat_swatter_accept",
+                  "text": "I'll find the swatter.",
+                  "available": true,
+                  "chains": [
+                    "hermit_bat_swatter_wait"
+                  ]
+                },
+                {
+                  "id": "hermit_bat_swatter_decline",
+                  "text": "Maybe later.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_bat_swatter_wait",
+              "available": false,
+              "text": "'Found it yet? The bats grow bolder by the hour.'",
+              "options": [
+                {
+                  "id": "hermit_bat_swatter_hand_over",
+                  "text": "I have the swatter right here.",
+                  "available": true,
+                  "requiresItems": [
+                    14
+                  ],
+                  "chains": [
+                    "hermit_bat_swatter_give"
+                  ]
+                },
+                {
+                  "id": "hermit_bat_swatter_still_looking",
+                  "text": "Not yet. Still looking.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_bat_swatter_give",
+              "available": false,
+              "text": "'Ah, you found it! Let me —' He reaches for it, then winces, clutching his lower back. 'Oof. I've gotten too stiff for this. My backhand swings aren't what they used to be.' He sighs. 'You keep it. I've unlocked the old door to the west. Go clear those bats out. I'll be at my post if you need me.' He shuffles back toward the main chamber.",
+              "options": [
+                {
+                  "id": "hermit_bat_swatter_give_hand",
+                  "text": "I'll take care of it.",
+                  "available": true,
+                  "closes": [
+                    "hermit_bat_swatter_give",
+                    "hermit_bat_swatter_wait"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_bat_intro",
+              "available": false,
+              "text": "'The western door is open. The bats won't clear themselves, you know. Take that swatter and show them who's boss.'",
+              "options": []
             },
             {
               "id": "hermit_jester1",
