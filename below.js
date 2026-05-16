@@ -9,6 +9,12 @@ const below = {
     choiceEvent: null,
     splashActive: false,
     equippedItem: null,
+    cutScene: null,
+    cutSceneCuts: null,
+    cutSceneIndex: 0,
+    cutSceneStart: null,
+    cutSceneCallback: null,
+    cutScenePlayed: {},
     gameData: null // Loaded from gamedata.js
 };
 
@@ -509,6 +515,12 @@ function checkKey(e) {
     var helpOverlay = document.getElementById("helpOverlay");
     if (e.keyCode === 27 && helpOverlay.style.display !== "none" && helpOverlay.style.display !== "") {
         hideHelp();
+        e.preventDefault();
+        return;
+    }
+    // Skip cut-scene with Escape
+    if (e.keyCode === 27 && below.cutScene) {
+        endCutScene();
         e.preventDefault();
         return;
     }
@@ -1774,6 +1786,100 @@ function hideSplash() {
     below.splashPos = null;
     below.splashData = null;
     drawMapCanvas();
+}
+
+// ── Cut-scene system ─────────────────────────────────
+
+function playCutScene(sceneId, callback) {
+    var scene = below.gameData.cutScenes && below.gameData.cutScenes[sceneId];
+    if (!scene || !scene.cuts || scene.cuts.length === 0) {
+        if (callback) callback();
+        return;
+    }
+    below.cutScene = sceneId;
+    below.cutSceneCuts = scene.cuts;
+    below.cutSceneIndex = 0;
+    below.cutSceneStart = null;
+    below.cutSceneCallback = callback || null;
+    document.getElementById("cutsceneOverlay").style.display = "flex";
+    cutSceneLoop();
+}
+
+function cutSceneLoop(timestamp) {
+    if (!below.cutScene) return;
+    if (!below.cutSceneStart) below.cutSceneStart = timestamp || performance.now();
+    var now = timestamp || performance.now();
+    var elapsed = now - below.cutSceneStart;
+
+    var stage = document.getElementById("cutsceneStage");
+    stage.innerHTML = "";
+
+    var allDone = true;
+    var cumTime = 0;
+
+    for (var i = 0; i < below.cutSceneCuts.length; i++) {
+        var cut = below.cutSceneCuts[i];
+        var total = cut.fadeIn + cut.hold + cut.fadeOut;
+        var cutElapsed = elapsed - cumTime;
+
+        if (cutElapsed < 0) break;
+        if (cutElapsed < total) allDone = false;
+
+        var opacity = 1;
+        if (cutElapsed < cut.fadeIn) {
+            opacity = cutElapsed / cut.fadeIn;
+        } else if (cutElapsed < cut.fadeIn + cut.hold) {
+            opacity = 1;
+        } else if (cutElapsed < total) {
+            opacity = 1 - (cutElapsed - cut.fadeIn - cut.hold) / cut.fadeOut;
+        } else {
+            cumTime += total;
+            continue;
+        }
+
+        if (opacity <= 0) { cumTime += total; continue; }
+
+        var driftX = (cut.driftX || 0) * (cutElapsed / total);
+        var driftY = (cut.driftY || 0) * (cutElapsed / total);
+
+        if (cut.type === "fade") {
+            var fadeDiv = document.createElement("div");
+            fadeDiv.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:" + (cut.color || "#000") + ";opacity:" + opacity + ";z-index:4999;pointer-events:none;";
+            document.body.appendChild(fadeDiv);
+        } else if (cut.type === "image") {
+            var img = document.createElement("img");
+            img.src = "images/" + cut.src;
+            img.style.cssText = "left:" + cut.x + "%;top:" + cut.y + "%;width:" + (cut.width || 200) + "px;opacity:" + opacity + ";transform:translate(" + driftX + "px," + driftY + "px);";
+            stage.appendChild(img);
+        } else if (cut.type === "text") {
+            var textDiv = document.createElement("div");
+            textDiv.className = "cutscene-text";
+            textDiv.textContent = cut.text || "";
+            textDiv.style.cssText = "left:" + cut.x + "%;top:" + cut.y + "%;font-size:" + (cut.fontSize || 18) + "px;opacity:" + opacity + ";transform:translate(" + driftX + "px," + driftY + "px);" + (cut.fontStyle ? "font-style:" + cut.fontStyle + ";" : "");
+            stage.appendChild(textDiv);
+        }
+        cumTime += total;
+    }
+
+    if (allDone) {
+        endCutScene();
+    } else {
+        window.requestAnimationFrame(cutSceneLoop);
+    }
+}
+
+function endCutScene() {
+    below.cutScene = null;
+    below.cutSceneCuts = null;
+    below.cutSceneIndex = 0;
+    below.cutSceneStart = null;
+    // Remove any fade divs
+    var fades = document.querySelectorAll("div[style*='z-index:4999']");
+    fades.forEach(function(f) { f.remove(); });
+    document.getElementById("cutsceneOverlay").style.display = "none";
+    var cb = below.cutSceneCallback;
+    below.cutSceneCallback = null;
+    if (cb) cb();
 }
 
 function dropTrapRocks(rockDrop, playerX, playerY, moleTeleport) {
@@ -3447,7 +3553,15 @@ function mapGameLoop() {
                             mole.destPos = {};
                         }
                     }
-                    changeMap(exit.targetMap, targetX, targetY, exit.text);
+                    // Trigger "after_map0" cut-scene when leaving map 0 for map 1 the first time
+                    if (curMap === 0 && exit.targetMap === 1 && !below.cutScenePlayed.after_map0) {
+                        below.cutScenePlayed.after_map0 = true;
+                        playCutScene("after_map0", function() {
+                            changeMap(exit.targetMap, targetX, targetY, exit.text);
+                        });
+                    } else {
+                        changeMap(exit.targetMap, targetX, targetY, exit.text);
+                    }
                 }
             }
         }

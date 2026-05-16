@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cut-Scene Editor</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #1e1e2e; color: #cdd6f4; height: 100vh;
+    display: flex; flex-direction: column;
+}
+header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 16px; background: #181825;
+    border-bottom: 1px solid #313244; flex-shrink: 0;
+}
+header h1 { font-size: 16px; font-weight: 600; color: #cba6f7; margin-right: auto; }
+header .count { color: #a6adc8; font-size: 13px; }
+header button, .btn {
+    padding: 6px 14px; border: 1px solid #45475a; border-radius: 6px;
+    background: #313244; color: #cdd6f4; cursor: pointer; font-size: 13px;
+}
+header button:hover, .btn:hover { background: #45475a; }
+.btn-primary { background: #cba6f7; color: #1e1e2e; border-color: #cba6f7; font-weight: 600; }
+.btn-primary:hover { background: #b4befe; }
+.btn-danger { border-color: #f38ba8; color: #f38ba8; }
+.btn-danger:hover { background: #f38ba8; color: #1e1e2e; }
+.btn-success { background: #a6e3a1; color: #1e1e2e; border-color: #a6e3a1; font-weight: 600; }
+.btn-success:hover { background: #94e2d5; }
+#main { display: flex; flex: 1; overflow: hidden; }
+.panel { display: flex; flex-direction: column; border-right: 1px solid #313244; overflow: hidden; min-width: 200px; }
+.panel:last-child { border-right: none; flex: 1; }
+.panel h2 {
+    font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 8px 12px; background: #181825; color: #a6adc8;
+    border-bottom: 1px solid #313244; flex-shrink: 0;
+}
+.panel-body { flex: 1; overflow-y: auto; padding: 8px; }
+.scene-list { list-style: none; }
+.scene-list li {
+    padding: 8px 10px; cursor: pointer; border-radius: 6px;
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid transparent; margin-bottom: 4px;
+}
+.scene-list li:hover { background: #313244; }
+.scene-list li.active { background: #45475a; border-color: #cba6f7; }
+.scene-list li .name { flex: 1; }
+.scene-list li .del { color: #f38ba8; cursor: pointer; font-size: 14px; }
+.scene-list li .del:hover { color: #ff0000; }
+.cut-card {
+    background: #181825; border: 1px solid #313244; border-radius: 8px;
+    padding: 12px; margin-bottom: 8px; position: relative;
+}
+.cut-card.dragging { opacity: 0.5; }
+.cut-card .cut-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.cut-card .cut-header .handle { cursor: grab; color: #585b70; font-size: 16px; }
+.cut-card .cut-header .type-badge {
+    padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase;
+}
+.type-badge.image { background: #f5c2e7; color: #1e1e2e; }
+.type-badge.text { background: #89b4fa; color: #1e1e2e; }
+.type-badge.fade { background: #585b70; color: #cdd6f4; }
+.cut-card .cut-header .del-cut { margin-left: auto; color: #f38ba8; cursor: pointer; font-size: 14px; }
+.cut-card .cut-header .del-cut:hover { color: #ff0000; }
+.form-row {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 4px;
+    font-size: 13px;
+}
+.form-row label { min-width: 70px; color: #a6adc8; }
+.form-row input, .form-row select, .form-row textarea {
+    background: #313244; border: 1px solid #45475a; border-radius: 4px;
+    color: #cdd6f4; padding: 4px 8px; font-size: 13px; flex: 1;
+}
+.form-row textarea { resize: vertical; min-height: 40px; }
+.form-row input[type="range"] { flex: 2; }
+.form-row .range-value { min-width: 50px; text-align: right; color: #cba6f7; }
+.toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: #a6e3a1; color: #1e1e2e; padding: 10px 20px; border-radius: 8px;
+    font-size: 14px; font-weight: 600; z-index: 9999;
+    animation: fadeInOut 2s ease-in-out;
+}
+@keyframes fadeInOut { 0% { opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Preview overlay */
+#previewOverlay {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; background: #000; z-index: 10000;
+}
+#previewOverlay.active { display: flex; align-items: center; justify-content: center; }
+#previewStage {
+    position: relative; width: 90%; height: 90%; max-width: 1200px; max-height: 800px;
+}
+#previewStage img, #previewStage .preview-text {
+    position: absolute;
+}
+.preview-text {
+    color: #cdd6f4; font-family: "Courier New", Courier, monospace;
+    line-height: 1.5; text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+#previewClose {
+    position: fixed; bottom: 20px; right: 20px;
+    padding: 8px 16px; border: 1px solid #45475a; border-radius: 6px;
+    background: #313244; color: #cdd6f4; cursor: pointer; z-index: 10001; font-size: 14px;
+}
+#previewClose:hover { background: #45475a; }
+</style>
+</head>
+<body>
+<header>
+    <h1>Cut-Scene Editor</h1>
+    <span class="count" id="sceneCount">0 scenes</span>
+    <button onclick="addScene()">+ New Scene</button>
+    <button onclick="previewScene()" class="btn-primary">Preview</button>
+    <button onclick="exportData()" class="btn-success">Export</button>
+</header>
+<div id="main">
+    <div class="panel" style="width:250px;">
+        <h2>Scenes</h2>
+        <div class="panel-body">
+            <ul class="scene-list" id="sceneList"></ul>
+        </div>
+    </div>
+    <div class="panel" style="width:500px;">
+        <h2>Cuts <span id="cutCount" style="font-weight:normal;font-size:11px;color:#a6adc8;"></span></h2>
+        <div class="panel-body" id="cutsPanel">
+            <p style="color:#585b70;text-align:center;margin-top:40px;">Select a scene to edit its cuts</p>
+        </div>
+    </div>
+    <div class="panel" style="flex:1;">
+        <h2>Cut Properties</h2>
+        <div class="panel-body" id="propsPanel">
+            <p style="color:#585b70;text-align:center;margin-top:40px;">Select a cut to edit properties</p>
+        </div>
+    </div>
+</div>
+<div id="previewOverlay">
+    <div id="previewStage"></div>
+    <button id="previewClose" onclick="closePreview()">Esc to close</button>
+</div>
+<script src="../gamedata.js"></script>
+<script>
+var data = null;
+var currentScene = null;
+var selectedCut = null;
+
+function init() {
+    data = belowGameData;
+    if (!data.cutScenes) data.cutScenes = {};
+    renderSceneList();
+}
+
+function renderSceneList() {
+    var list = document.getElementById("sceneList");
+    list.innerHTML = "";
+    var keys = Object.keys(data.cutScenes);
+    document.getElementById("sceneCount").textContent = keys.length + " scenes";
+    keys.forEach(function(id) {
+        var li = document.createElement("li");
+        li.className = currentScene === id ? "active" : "";
+        li.innerHTML = '<span class="name">' + id + '</span><span class="del" onclick="event.stopPropagation();deleteScene(\'' + id + '\')">✕</span>';
+        li.onclick = function() { selectScene(id); };
+        list.appendChild(li);
+    });
+}
+
+function selectScene(id) {
+    currentScene = id;
+    selectedCut = null;
+    renderSceneList();
+    renderCuts();
+    document.getElementById("propsPanel").innerHTML = '<p style="color:#585b70;text-align:center;margin-top:40px;">Select a cut to edit properties</p>';
+}
+
+function addScene() {
+    var name = prompt("Scene ID (e.g. after_map0):");
+    if (!name) return;
+    if (data.cutScenes[name]) { alert("Scene '" + name + "' already exists."); return; }
+    data.cutScenes[name] = { cuts: [
+        { type: "image", src: "hermit_cut.png", x: 15, y: 15, width: 280,
+          fadeIn: 1000, hold: 3000, fadeOut: 800, driftX: 0, driftY: 0 },
+        { type: "text", text: "Your text here...", x: 50, y: 40, fontSize: 22,
+          fadeIn: 1000, hold: 3000, fadeOut: 800 }
+    ] };
+    selectScene(name);
+}
+
+function deleteScene(id) {
+    if (!confirm("Delete scene '" + id + "'?")) return;
+    delete data.cutScenes[id];
+    if (currentScene === id) { currentScene = null; selectedCut = null; }
+    renderSceneList();
+    document.getElementById("cutsPanel").innerHTML = '<p style="color:#585b70;text-align:center;margin-top:40px;">Select a scene to edit its cuts</p>';
+    document.getElementById("propsPanel").innerHTML = '<p style="color:#585b70;text-align:center;margin-top:40px;">Select a cut to edit properties</p>';
+}
+
+function renderCuts() {
+    var panel = document.getElementById("cutsPanel");
+    if (!currentScene || !data.cutScenes[currentScene]) {
+        panel.innerHTML = '<p style="color:#585b70;text-align:center;margin-top:40px;">Select a scene to edit its cuts</p>';
+        return;
+    }
+    var cuts = data.cutScenes[currentScene].cuts;
+    document.getElementById("cutCount").textContent = "(" + cuts.length + " cuts)";
+    panel.innerHTML = "";
+    cuts.forEach(function(cut, i) {
+        var card = document.createElement("div");
+        card.className = "cut-card" + (selectedCut === i ? " active" : "");
+        card.draggable = true;
+        card.innerHTML = '<div class="cut-header">' +
+            '<span class="handle" draggable="true">⠿</span>' +
+            '<span class="type-badge ' + cut.type + '">' + cut.type + '</span>' +
+            '<span style="font-size:12px;color:#a6adc8;">#' + i + (cut.type === "image" ? " " + cut.src : cut.type === "text" ? " " + (cut.text || "").substring(0, 30) + "..." : " fade") + '</span>' +
+            '<span class="del-cut" onclick="deleteCut(' + i + ')">✕</span>' +
+        '</div>';
+        card.onclick = function() { selectCut(i); };
+        // Drag events for reordering
+        card.addEventListener("dragstart", function(e) { e.dataTransfer.setData("text/plain", i); card.classList.add("dragging"); });
+        card.addEventListener("dragend", function() { card.classList.remove("dragging"); });
+        card.addEventListener("dragover", function(e) { e.preventDefault(); });
+        card.addEventListener("drop", function(e) {
+            e.preventDefault();
+            var from = parseInt(e.dataTransfer.getData("text/plain"));
+            if (from === i) return;
+            var item = cuts.splice(from, 1)[0];
+            cuts.splice(i, 0, item);
+            selectedCut = i;
+            renderCuts();
+            selectCut(i);
+        });
+        panel.appendChild(card);
+    });
+    // Add cut button
+    var addBtn = document.createElement("div");
+    addBtn.style.cssText = "text-align:center;padding:8px;";
+    addBtn.innerHTML = '<button onclick="addCut()" class="btn" style="width:100%;">+ Add Cut</button>';
+    panel.appendChild(addBtn);
+}
+
+function selectCut(i) {
+    selectedCut = i;
+    renderCuts();
+    var cuts = data.cutScenes[currentScene].cuts;
+    if (i < 0 || i >= cuts.length) return;
+    var cut = cuts[i];
+    var panel = document.getElementById("propsPanel");
+    panel.innerHTML = "<h3 style='font-size:14px;color:#cba6f7;margin-bottom:8px;'>Cut #" + i + "</h3>";
+    
+    // Type
+    var typeRow = createRow("Type", '<select id="propType" onchange="onTypeChange()">' +
+        '<option value="image"' + (cut.type === "image" ? " selected" : "") + '>Image</option>' +
+        '<option value="text"' + (cut.type === "text" ? " selected" : "") + '>Text</option>' +
+        '<option value="fade"' + (cut.type === "fade" ? " selected" : "") + '>Fade</option>' +
+    '</select>');
+    panel.appendChild(typeRow);
+    
+    if (cut.type === "image") {
+        panel.appendChild(createRow("Image", '<input type="text" id="propSrc" value="' + (cut.src || "") + '" onchange="onPropChange()" placeholder="hermit_cut.png">'));
+        panel.appendChild(createRangeRow("Width", "propWidth", cut.width || 280, 50, 800, 10));
+        panel.appendChild(createRangeRow("X %", "propX", cut.x || 15, 0, 100, 1));
+        panel.appendChild(createRangeRow("Y %", "propY", cut.y || 15, 0, 100, 1));
+    } else if (cut.type === "text") {
+        panel.appendChild(createRow("Text", '<textarea id="propText" onchange="onPropChange()" rows="3">' + (cut.text || "") + '</textarea>'));
+        panel.appendChild(createRangeRow("Font Size", "propFontSize", cut.fontSize || 20, 10, 48, 1));
+        panel.appendChild(createRangeRow("X %", "propX", cut.x || 50, 0, 100, 1));
+        panel.appendChild(createRangeRow("Y %", "propY", cut.y || 40, 0, 100, 1));
+        var italicCheck = cut.fontStyle === "italic" ? " checked" : "";
+        panel.appendChild(createRow("Italic", '<input type="checkbox" id="propFontStyle"' + italicCheck + ' onchange="onPropChange()">'));
+    } else if (cut.type === "fade") {
+        panel.appendChild(createRow("Color", '<input type="text" id="propColor" value="' + (cut.color || "#000000") + '" onchange="onPropChange()" placeholder="#000000">'));
+    }
+    
+    panel.appendChild(createRangeRow("Fade In (ms)", "propFadeIn", cut.fadeIn || 1000, 0, 10000, 100));
+    panel.appendChild(createRangeRow("Hold (ms)", "propHold", cut.hold || 3000, 0, 30000, 100));
+    panel.appendChild(createRangeRow("Fade Out (ms)", "propFadeOut", cut.fadeOut || 800, 0, 10000, 100));
+    panel.appendChild(createRangeRow("Drift X (px)", "propDriftX", cut.driftX || 0, -100, 100, 1));
+    panel.appendChild(createRangeRow("Drift Y (px)", "propDriftY", cut.driftY || 0, -100, 100, 1));
+}
+
+function createRow(label, html) {
+    var div = document.createElement("div");
+    div.className = "form-row";
+    div.innerHTML = '<label>' + label + '</label>' + html;
+    return div;
+}
+
+function createRangeRow(label, id, value, min, max, step) {
+    var div = document.createElement("div");
+    div.className = "form-row";
+    div.innerHTML = '<label>' + label + '</label>' +
+        '<input type="range" id="' + id + '" min="' + min + '" max="' + max + '" step="' + step + '" value="' + value + '" oninput="onPropChange()">' +
+        '<span class="range-value" id="' + id + 'Val">' + value + '</span>';
+    return div;
+}
+
+function onTypeChange() {
+    if (selectedCut === null || !currentScene) return;
+    var cut = data.cutScenes[currentScene].cuts[selectedCut];
+    var newType = document.getElementById("propType").value;
+    if (cut.type === newType) return;
+    // Reset type-specific properties
+    cut.type = newType;
+    if (newType === "image") { cut.src = "hermit_cut.png"; cut.width = 280; cut.x = 15; cut.y = 15; }
+    else if (newType === "text") { cut.text = "Text here"; cut.fontSize = 20; cut.x = 50; cut.y = 40; delete cut.fontStyle; }
+    else if (newType === "fade") { cut.color = "#000000"; }
+    selectCut(selectedCut);
+    renderCuts();
+}
+
+function onPropChange() {
+    if (selectedCut === null || !currentScene) return;
+    var cut = data.cutScenes[currentScene].cuts[selectedCut];
+    cut.type = document.getElementById("propType").value;
+    if (cut.type === "image") {
+        cut.src = document.getElementById("propSrc").value;
+        cut.width = parseFloat(document.getElementById("propWidth").value);
+        cut.x = parseFloat(document.getElementById("propX").value);
+        cut.y = parseFloat(document.getElementById("propY").value);
+    } else if (cut.type === "text") {
+        cut.text = document.getElementById("propText").value;
+        cut.fontSize = parseInt(document.getElementById("propFontSize").value);
+        cut.x = parseFloat(document.getElementById("propX").value);
+        cut.y = parseFloat(document.getElementById("propY").value);
+        cut.fontStyle = document.getElementById("propFontStyle").checked ? "italic" : undefined;
+        if (!cut.fontStyle) delete cut.fontStyle;
+    } else if (cut.type === "fade") {
+        cut.color = document.getElementById("propColor").value;
+    }
+    cut.fadeIn = parseInt(document.getElementById("propFadeIn").value);
+    cut.hold = parseInt(document.getElementById("propHold").value);
+    cut.fadeOut = parseInt(document.getElementById("propFadeOut").value);
+    cut.driftX = parseFloat(document.getElementById("propDriftX").value);
+    cut.driftY = parseFloat(document.getElementById("propDriftY").value);
+    // Clean up zero drift
+    if (!cut.driftX) delete cut.driftX;
+    if (!cut.driftY) delete cut.driftY;
+    // Update displayed values
+    ["propFadeIn","propHold","propFadeOut","propDriftX","propDriftY","propWidth","propX","propY","propFontSize"].forEach(function(id) {
+        var el = document.getElementById(id);
+        var valEl = document.getElementById(id + "Val");
+        if (el && valEl) valEl.textContent = el.value;
+    });
+    renderCuts();
+}
+
+function deleteCut(i) {
+    if (!currentScene) return;
+    var cuts = data.cutScenes[currentScene].cuts;
+    cuts.splice(i, 1);
+    if (selectedCut === i) selectedCut = null;
+    else if (selectedCut > i) selectedCut--;
+    renderCuts();
+    if (selectedCut !== null) selectCut(selectedCut);
+    else document.getElementById("propsPanel").innerHTML = '<p style="color:#585b70;text-align:center;margin-top:40px;">Select a cut to edit properties</p>';
+}
+
+function addCut() {
+    if (!currentScene) return;
+    data.cutScenes[currentScene].cuts.push({
+        type: "image", src: "hermit_cut.png", x: 15, y: 15, width: 280,
+        fadeIn: 1000, hold: 3000, fadeOut: 800
+    });
+    selectedCut = data.cutScenes[currentScene].cuts.length - 1;
+    renderCuts();
+    selectCut(selectedCut);
+}
+
+// Preview
+var previewRaf = null;
+function previewScene() {
+    if (!currentScene) return;
+    var overlay = document.getElementById("previewOverlay");
+    var stage = document.getElementById("previewStage");
+    overlay.className = "active";
+    stage.innerHTML = "";
+    
+    var cuts = JSON.parse(JSON.stringify(data.cutScenes[currentScene].cuts));
+    var startTime = null;
+    var running = true;
+    
+    function render(ts) {
+        if (!running) return;
+        if (!startTime) startTime = ts || performance.now();
+        if (ts - startTime > 30000) { closePreview(); return; } // Safety timeout
+        var elapsed = performance.now() - startTime;
+        stage.innerHTML = "";
+        // Remove old fades
+        document.querySelectorAll("#previewOverlay > div[style*='z-index']").forEach(function(f) { f.remove(); });
+        
+        var allDone = true;
+        var cumTime = 0;
+        for (var i = 0; i < cuts.length; i++) {
+            var cut = cuts[i];
+            var total = cut.fadeIn + cut.hold + cut.fadeOut;
+            var cutElapsed = elapsed - cumTime;
+            if (cutElapsed < 0) break;
+            if (cutElapsed < total) allDone = false;
+            var opacity = 1;
+            if (cutElapsed < cut.fadeIn) opacity = cutElapsed / cut.fadeIn;
+            else if (cutElapsed < cut.fadeIn + cut.hold) opacity = 1;
+            else if (cutElapsed < total) opacity = 1 - (cutElapsed - cut.fadeIn - cut.hold) / cut.fadeOut;
+            else { cumTime += total; continue; }
+            if (opacity <= 0) { cumTime += total; continue; }
+            var driftX = (cut.driftX || 0) * (cutElapsed / total);
+            var driftY = (cut.driftY || 0) * (cutElapsed / total);
+            
+            if (cut.type === "fade") {
+                var f = document.createElement("div");
+                f.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:" + (cut.color || "#000") + ";opacity:" + opacity + ";z-index:9999;pointer-events:none;";
+                overlay.appendChild(f);
+            } else if (cut.type === "image") {
+                var img = document.createElement("img");
+                img.src = "../images/" + cut.src;
+                img.style.cssText = "left:" + cut.x + "%;top:" + cut.y + "%;width:" + (cut.width || 200) + "px;opacity:" + opacity + ";transform:translate(" + driftX + "px," + driftY + "px);position:absolute;";
+                stage.appendChild(img);
+            } else if (cut.type === "text") {
+                var t = document.createElement("div");
+                t.className = "preview-text";
+                t.textContent = cut.text || "";
+                t.style.cssText = "left:" + cut.x + "%;top:" + cut.y + "%;font-size:" + (cut.fontSize || 18) + "px;opacity:" + opacity + ";transform:translate(" + driftX + "px," + driftY + "px);position:absolute;" + (cut.fontStyle ? "font-style:" + cut.fontStyle + ";" : "");
+                stage.appendChild(t);
+            }
+            cumTime += total;
+        }
+        if (allDone) { closePreview(); return; }
+        previewRaf = requestAnimationFrame(render);
+    }
+    previewRaf = requestAnimationFrame(render);
+}
+
+function closePreview() {
+    if (previewRaf) cancelAnimationFrame(previewRaf);
+    previewRaf = null;
+    document.getElementById("previewOverlay").className = "";
+    document.getElementById("previewStage").innerHTML = "";
+}
+document.getElementById("previewOverlay").addEventListener("click", function(e) {
+    if (e.target === this) closePreview();
+});
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && document.getElementById("previewOverlay").className === "active") closePreview();
+});
+
+// Export
+function exportData() {
+    var json = JSON.stringify(data, null, 2);
+    var js = 'var belowGameData = ' + json + ';\n';
+    var blob = new Blob([js], { type: "application/javascript" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "gamedata.js";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast("Exported gamedata.js");
+}
+
+function showToast(msg) {
+    var t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 2000);
+}
+
+init();
+</script>
+</body>
+</html>

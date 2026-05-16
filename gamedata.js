@@ -78,6 +78,48 @@ var belowGameData = {
     "vision": 3,
     "inventory": []
   },
+  "cutScenes": {
+    "after_map0": {
+      "cuts": [
+        { "type": "image", "src": "hermit_cut.png", "x": 15, "y": 15, "width": 280,
+          "fadeIn": 1000, "hold": 4000, "fadeOut": 1000, "driftX": 5, "driftY": -2 },
+        { "type": "text", "text": "In the darkness below, you found Alistair the Hermit — a reclusive old man surrounded by herbs and keys. He needed help clearing his home of pests.", "x": 55, "y": 20, "fontSize": 22,
+          "fadeIn": 1500, "hold": 3500, "fadeOut": 1000, "driftX": -3, "driftY": -1 },
+        { "type": "image", "src": "rats_cut.png", "x": 30, "y": 35, "width": 120,
+          "fadeIn": 400, "hold": 1200, "fadeOut": 400, "driftX": 0, "driftY": 3 },
+        { "type": "image", "src": "rats_cut.png", "x": 45, "y": 38, "width": 120,
+          "fadeIn": 600, "hold": 1200, "fadeOut": 400, "driftX": 0, "driftY": 3 },
+        { "type": "image", "src": "rats_cut.png", "x": 60, "y": 35, "width": 120,
+          "fadeIn": 800, "hold": 1200, "fadeOut": 400, "driftX": 0, "driftY": 3 },
+        { "type": "text", "text": "...to clear out the rats from his storeroom...", "x": 30, "y": 65, "fontSize": 20,
+          "fadeIn": 1000, "hold": 2000, "fadeOut": 800 },
+        { "type": "image", "src": "bats_cut.png", "x": 25, "y": 32, "width": 100,
+          "fadeIn": 300, "hold": 800, "fadeOut": 300, "driftX": 15, "driftY": -5 },
+        { "type": "image", "src": "bats_cut.png", "x": 40, "y": 35, "width": 100,
+          "fadeIn": 400, "hold": 900, "fadeOut": 300, "driftX": 15, "driftY": -5 },
+        { "type": "image", "src": "bats_cut.png", "x": 55, "y": 33, "width": 100,
+          "fadeIn": 500, "hold": 1000, "fadeOut": 300, "driftX": 15, "driftY": -5 },
+        { "type": "image", "src": "bats_cut.png", "x": 70, "y": 36, "width": 100,
+          "fadeIn": 600, "hold": 1000, "fadeOut": 300, "driftX": 15, "driftY": -5 },
+        { "type": "image", "src": "bats_cut.png", "x": 30, "y": 38, "width": 100,
+          "fadeIn": 700, "hold": 900, "fadeOut": 300, "driftX": 15, "driftY": -5 },
+        { "type": "text", "text": "...then the bats from the marble passage...", "x": 30, "y": 65, "fontSize": 20,
+          "fadeIn": 800, "hold": 2000, "fadeOut": 800 },
+        { "type": "image", "src": "centipedes_cut.png", "x": 40, "y": 30, "width": 160,
+          "fadeIn": 1000, "hold": 2500, "fadeOut": 1000, "driftX": 3, "driftY": 2 },
+        { "type": "text", "text": "...and the centipedes await below.", "x": 40, "y": 65, "fontSize": 20,
+          "fadeIn": 1200, "hold": 2300, "fadeOut": 800 },
+        { "type": "fade", "color": "#000000",
+          "fadeIn": 800, "hold": 500, "fadeOut": 200 },
+        { "type": "image", "src": "jester_cut.png", "x": 30, "y": 15, "width": 260,
+          "fadeIn": 1500, "hold": 5000, "fadeOut": 1000, "driftX": 4, "driftY": -2 },
+        { "type": "text", "text": "But the Jester has been watching. He finds your obedience amusing — for now.", "x": 55, "y": 22, "fontSize": 22,
+          "fadeIn": 2000, "hold": 4500, "fadeOut": 1000 },
+        { "type": "text", "text": "\"Not everything is as it seems in these caves, little helper...\"", "x": 55, "y": 50, "fontSize": 20, "fontStyle": "italic",
+          "fadeIn": 2500, "hold": 4000, "fadeOut": 1500 }
+      ]
+    }
+  },
   "monsterTypes": {
     "1": {
       "name": "Giant rat",
