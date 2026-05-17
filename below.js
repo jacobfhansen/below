@@ -1815,29 +1815,31 @@ function cutSceneLoop(timestamp) {
     stage.innerHTML = "";
 
     var allDone = true;
-    var cumTime = 0;
+    var maxEndTime = 0;
 
     for (var i = 0; i < below.cutSceneCuts.length; i++) {
         var cut = below.cutSceneCuts[i];
         var total = cut.fadeIn + cut.hold + cut.fadeOut;
-        var cutElapsed = elapsed - cumTime;
+        var cutStart = cut.start !== undefined ? cut.start : maxEndTime;
+        var cutEnd = cutStart + total;
+        var cutElapsed = elapsed - cutStart;
 
-        if (cutElapsed < 0) break;
-        if (cutElapsed < total) allDone = false;
+        if (cutElapsed < 0) continue;
+        maxEndTime = Math.max(maxEndTime, cutEnd);
+
+        if (cutElapsed >= total) continue;
+        allDone = false;
 
         var opacity = 1;
         if (cutElapsed < cut.fadeIn) {
             opacity = cutElapsed / cut.fadeIn;
         } else if (cutElapsed < cut.fadeIn + cut.hold) {
             opacity = 1;
-        } else if (cutElapsed < total) {
-            opacity = 1 - (cutElapsed - cut.fadeIn - cut.hold) / cut.fadeOut;
         } else {
-            cumTime += total;
-            continue;
+            opacity = 1 - (cutElapsed - cut.fadeIn - cut.hold) / cut.fadeOut;
         }
 
-        if (opacity <= 0) { cumTime += total; continue; }
+        if (opacity <= 0) continue;
 
         var driftX = (cut.driftX || 0) * (cutElapsed / total);
         var driftY = (cut.driftY || 0) * (cutElapsed / total);

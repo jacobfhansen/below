@@ -108,6 +108,62 @@ header button:hover, .btn:hover { background: #45475a; }
     background: #313244; color: #cdd6f4; cursor: pointer; z-index: 10001; font-size: 14px;
 }
 #previewClose:hover { background: #45475a; }
+
+/* ── Gantt chart ───────────────────────────────────── */
+.gantt-wrap {
+    margin-top: 12px; border-top: 1px solid #313244; padding-top: 8px;
+}
+.gantt-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+}
+.gantt-header h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; color: #a6adc8; margin: 0; }
+.gantt-header .gantt-legend { margin-left: auto; display: flex; gap: 10px; font-size: 10px; }
+.gantt-legend span { display: flex; align-items: center; gap: 3px; }
+.gantt-legend .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.gantt-scroll {
+    overflow-x: auto; overflow-y: hidden;
+    border: 1px solid #313244; border-radius: 6px;
+    background: #11111b;
+}
+.gantt-table { position: relative; min-width: 100%; }
+.gantt-time-axis {
+    display: flex; height: 20px; border-bottom: 1px solid #313244;
+    position: sticky; top: 0; background: #11111b; z-index: 2;
+}
+.gantt-time-axis .tick {
+    flex-shrink: 0; text-align: center; font-size: 9px; color: #585b70;
+    border-left: 1px solid #313244; padding-top: 3px;
+}
+.gantt-row {
+    display: flex; align-items: center; height: 22px;
+    border-bottom: 1px solid #1e1e2e; cursor: pointer;
+}
+.gantt-row:hover { background: rgba(255,255,255,0.03); }
+.gantt-row.selected { background: rgba(203, 166, 247, 0.1); }
+.gantt-row .gantt-label {
+    width: 40px; flex-shrink: 0; font-size: 10px; color: #585b70;
+    text-align: right; padding-right: 6px; overflow: hidden;
+}
+.gantt-row .gantt-track {
+    flex: 1; position: relative; height: 18px; min-width: 200px;
+}
+.gantt-bar {
+    position: absolute; height: 14px; top: 2px; border-radius: 3px;
+    min-width: 2px; overflow: hidden; font-size: 9px; line-height: 14px;
+    padding-left: 4px; white-space: nowrap; text-overflow: ellipsis;
+    cursor: pointer;
+}
+.gantt-bar.type-image { background: #cba6f7; color: #1e1e2e; }
+.gantt-bar.type-text { background: #89b4fa; color: #1e1e2e; }
+.gantt-bar.type-fade { background: #585b70; color: #cdd6f4; }
+.gantt-bar .gantt-fadein {
+    position: absolute; top: 0; left: 0; height: 100%;
+    background: rgba(255,255,255,0.2);
+}
+.gantt-bar .gantt-fadeout {
+    position: absolute; top: 0; right: 0; height: 100%;
+    background: rgba(0,0,0,0.2);
+}
 </style>
 </head>
 <body>
@@ -239,6 +295,123 @@ function renderCuts() {
     addBtn.style.cssText = "text-align:center;padding:8px;";
     addBtn.innerHTML = '<button onclick="addCut()" class="btn" style="width:100%;">+ Add Cut</button>';
     panel.appendChild(addBtn);
+    // ── Gantt chart ──
+    renderGantt(panel);
+}
+
+function renderGantt(container) {
+    var cuts = data.cutScenes[currentScene].cuts;
+    if (!cuts.length) return;
+
+    // Compute end times & total duration
+    var barData = cuts.map(function(c, i) {
+        var start = c.start || 0;
+        var fi = c.fadeIn || 0;
+        var h = c.hold || 0;
+        var fo = c.fadeOut || 0;
+        return { idx: i, start: start, fi: fi, hold: h, fo: fo, end: start + fi + h + fo };
+    });
+    var total = barData.reduce(function(m, b) { return Math.max(m, b.end); }, 0);
+    total = Math.max(total, 1000); // minimum 1s for empty-ish scenes
+
+    // Scale: leave 44px for label column, rest is track; at least 200px track
+    var wrap = document.createElement("div");
+    wrap.className = "gantt-wrap";
+    wrap.innerHTML = '<div class="gantt-header">' +
+        '<h3>Timeline</h3>' +
+        '<div class="gantt-legend">' +
+            '<span><span class="swatch" style="background:#cba6f7;"></span> image</span>' +
+            '<span><span class="swatch" style="background:#89b4fa;"></span> text</span>' +
+            '<span><span class="swatch" style="background:#585b70;"></span> fade</span>' +
+        '</div></div>';
+
+    var scroll = document.createElement("div");
+    scroll.className = "gantt-scroll";
+
+    var table = document.createElement("div");
+    table.className = "gantt-table";
+
+    // Figure out track width: at least 200px, scale so total time fills ~800px
+    var trackW = Math.max(200, Math.min(2000, total * 0.04));
+    var pxPerMs = trackW / total;
+
+    // Tick spacing — aim for 5–10 ticks
+    var tickUnit = 2000; // 2s ticks
+    var niceTicks = [500, 1000, 2000, 5000, 10000, 20000];
+    var targetTicks = Math.max(4, Math.floor(trackW / 120));
+    for (var ti = 0; ti < niceTicks.length; ti++) {
+        if (total / niceTicks[ti] <= targetTicks) { tickUnit = niceTicks[ti]; break; }
+    }
+    var tickCount = Math.ceil(total / tickUnit);
+
+    // Time axis row
+    var axis = document.createElement("div");
+    axis.className = "gantt-time-axis";
+    axis.style.width = (40 + trackW) + "px";
+    // label placeholder
+    var axisLabel = document.createElement("div");
+    axisLabel.style.cssText = "width:40px;flex-shrink:0;";
+    axis.appendChild(axisLabel);
+    for (var t = 0; t <= tickCount; t++) {
+        var tick = document.createElement("div");
+        tick.className = "tick";
+        var ms = t * tickUnit;
+        tick.style.width = (t < tickCount ? (tickUnit * pxPerMs) : Math.max(0, total - (tickCount-1)*tickUnit) * pxPerMs) + "px";
+        tick.textContent = (ms / 1000).toFixed(1) + "s";
+        axis.appendChild(tick);
+    }
+    table.appendChild(axis);
+
+    // Rows
+    barData.forEach(function(b) {
+        var row = document.createElement("div");
+        row.className = "gantt-row" + (selectedCut === b.idx ? " selected" : "");
+        row.style.width = (40 + trackW) + "px";
+
+        var label = document.createElement("div");
+        label.className = "gantt-label";
+        label.textContent = "#" + b.idx;
+        row.appendChild(label);
+
+        var track = document.createElement("div");
+        track.className = "gantt-track";
+
+        var bar = document.createElement("div");
+        bar.className = "gantt-bar type-" + cuts[b.idx].type;
+        var barLeft = b.start * pxPerMs;
+        var barW = (b.end - b.start) * pxPerMs;
+        barW = Math.max(barW, 3); // min visible
+        bar.style.left = barLeft + "px";
+        bar.style.width = barW + "px";
+        // Label inside bar if wide enough
+        if (barW > 30) bar.textContent = "#" + b.idx;
+
+        // Fade-in overlay
+        if (b.fi > 0) {
+            var fiDiv = document.createElement("div");
+            fiDiv.className = "gantt-fadein";
+            fiDiv.style.width = (b.fi * pxPerMs) + "px";
+            bar.appendChild(fiDiv);
+        }
+        // Fade-out overlay
+        if (b.fo > 0) {
+            var foDiv = document.createElement("div");
+            foDiv.className = "gantt-fadeout";
+            foDiv.style.width = (b.fo * pxPerMs) + "px";
+            foDiv.style.right = "0";
+            foDiv.style.left = "auto";
+            bar.appendChild(foDiv);
+        }
+
+        bar.onclick = function(i) { return function() { selectCut(i); }; }(b.idx);
+        track.appendChild(bar);
+        row.appendChild(track);
+        table.appendChild(row);
+    });
+
+    scroll.appendChild(table);
+    wrap.appendChild(scroll);
+    container.appendChild(wrap);
 }
 
 function selectCut(i) {
@@ -274,6 +447,7 @@ function selectCut(i) {
         panel.appendChild(createRow("Color", '<input type="text" id="propColor" value="' + (cut.color || "#000000") + '" onchange="onPropChange()" placeholder="#000000">'));
     }
     
+    panel.appendChild(createRangeRow("Start (ms)", "propStart", cut.start !== undefined ? cut.start : 0, 0, 60000, 100));
     panel.appendChild(createRangeRow("Fade In (ms)", "propFadeIn", cut.fadeIn || 1000, 0, 10000, 100));
     panel.appendChild(createRangeRow("Hold (ms)", "propHold", cut.hold || 3000, 0, 30000, 100));
     panel.appendChild(createRangeRow("Fade Out (ms)", "propFadeOut", cut.fadeOut || 800, 0, 10000, 100));
@@ -301,12 +475,14 @@ function onTypeChange() {
     if (selectedCut === null || !currentScene) return;
     var cut = data.cutScenes[currentScene].cuts[selectedCut];
     var newType = document.getElementById("propType").value;
-    if (cut.type === newType) return;
+    if (cut.type === newType) { selectCut(selectedCut); return; }
     // Reset type-specific properties
+    var oldStart = cut.start;
     cut.type = newType;
     if (newType === "image") { cut.src = "hermit_cut.png"; cut.width = 280; cut.x = 15; cut.y = 15; }
     else if (newType === "text") { cut.text = "Text here"; cut.fontSize = 20; cut.x = 50; cut.y = 40; delete cut.fontStyle; }
     else if (newType === "fade") { cut.color = "#000000"; }
+    if (oldStart !== undefined) cut.start = oldStart;
     selectCut(selectedCut);
     renderCuts();
 }
@@ -333,13 +509,14 @@ function onPropChange() {
     cut.fadeIn = parseInt(document.getElementById("propFadeIn").value);
     cut.hold = parseInt(document.getElementById("propHold").value);
     cut.fadeOut = parseInt(document.getElementById("propFadeOut").value);
+    cut.start = parseInt(document.getElementById("propStart").value);
     cut.driftX = parseFloat(document.getElementById("propDriftX").value);
     cut.driftY = parseFloat(document.getElementById("propDriftY").value);
-    // Clean up zero drift
+    if (!cut.start) delete cut.start;
     if (!cut.driftX) delete cut.driftX;
     if (!cut.driftY) delete cut.driftY;
     // Update displayed values
-    ["propFadeIn","propHold","propFadeOut","propDriftX","propDriftY","propWidth","propX","propY","propFontSize"].forEach(function(id) {
+    ["propFadeIn","propHold","propFadeOut","propStart","propDriftX","propDriftY","propWidth","propX","propY","propFontSize"].forEach(function(id) {
         var el = document.getElementById(id);
         var valEl = document.getElementById(id + "Val");
         if (el && valEl) valEl.textContent = el.value;
@@ -392,19 +569,22 @@ function previewScene() {
         document.querySelectorAll("#previewOverlay > div[style*='z-index']").forEach(function(f) { f.remove(); });
         
         var allDone = true;
-        var cumTime = 0;
+        var maxEndTime = 0;
         for (var i = 0; i < cuts.length; i++) {
             var cut = cuts[i];
             var total = cut.fadeIn + cut.hold + cut.fadeOut;
-            var cutElapsed = elapsed - cumTime;
-            if (cutElapsed < 0) break;
-            if (cutElapsed < total) allDone = false;
+            var cutStart = cut.start !== undefined ? cut.start : maxEndTime;
+            var cutEnd = cutStart + total;
+            var cutElapsed = elapsed - cutStart;
+            if (cutElapsed < 0) { allDone = false; continue; }
+            maxEndTime = Math.max(maxEndTime, cutEnd);
+            if (cutElapsed >= total) continue;
+            allDone = false;
             var opacity = 1;
             if (cutElapsed < cut.fadeIn) opacity = cutElapsed / cut.fadeIn;
             else if (cutElapsed < cut.fadeIn + cut.hold) opacity = 1;
-            else if (cutElapsed < total) opacity = 1 - (cutElapsed - cut.fadeIn - cut.hold) / cut.fadeOut;
-            else { cumTime += total; continue; }
-            if (opacity <= 0) { cumTime += total; continue; }
+            else opacity = 1 - (cutElapsed - cut.fadeIn - cut.hold) / cut.fadeOut;
+            if (opacity <= 0) continue;
             var driftX = (cut.driftX || 0) * (cutElapsed / total);
             var driftY = (cut.driftY || 0) * (cutElapsed / total);
             
@@ -424,7 +604,6 @@ function previewScene() {
                 t.style.cssText = "left:" + cut.x + "%;top:" + cut.y + "%;font-size:" + (cut.fontSize || 18) + "px;opacity:" + opacity + ";transform:translate(" + driftX + "px," + driftY + "px);position:absolute;" + (cut.fontStyle ? "font-style:" + cut.fontStyle + ";" : "");
                 stage.appendChild(t);
             }
-            cumTime += total;
         }
         if (allDone) { closePreview(); return; }
         previewRaf = requestAnimationFrame(render);

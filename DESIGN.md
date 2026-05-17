@@ -44,6 +44,19 @@ Film noir detective. Endlessly searching for Medusa, lost in his fake Chicago-li
 - Sam Slate is a two-dimensional character that only exists in his film-noir hard-bioled detective universe and
 can not understand and ignores anything that fals out of that context.
 
+### Charon
+Ferryman of the underdark. Have sailed the river of forgetfullness for so long that he is suffering from dementia.
+Speaks in dactylic hexameter. Is rather annoyed about being reminded that he forgets stuff. 
+
+### The Rotten Sisters
+They are dead. They could not care less. Have been so long in The Fissure that they have forgotten why they have
+not passed on but who cares? They are bored to death (pun intended) having only demented Charon as company. Charon
+being the most b.o.r.i.n.g person in existence.
+
+### The Devil
+Evil incarnate. All fear him. All do not dare speak about him. Only demented Charon forgets how dangerous it is
+and occasionaly mentions something about a dark presence wating in the deepest areas of Below.
+
 ---
 
 ## Maps & Roadmap
@@ -68,23 +81,16 @@ Three-section maze with Mole, traps, pushable rocks, shimmering walls, locked st
 - Real quest is finding parts for a derelict boat that is harbored on one of the piers to repair it and sail on to map 4.
 - Sam Slate recognises boat parts as evidence in his investigation, but player can see what the items truly are.
 
-### Map 4 — The Glowing Caves *(planned)*
-- Bioluminescent mushrooms, glowing flora
-- Lightbeam reflection puzzles: pushable mirrors/reflectors redirect lightbeams to open paths
-- New NPC: mushroom farmer or glowing creature
+### Map 4 — The Beach
+Medusa passed through here. Gave out a horrid scream that made the intrance to The Fissure collapse.
+Player need to muster The Mole to dig through rocks. But the Mole have eaten the Hermits herbs and have gone
+terribly sick and need an antidote only the Hermit can provide.
+- NPC: Charon
 
-### Map 5 — The Underground Sea *(planned)*
-- Boat assembly mechanic: collect parts (planks, sail, rudder) as inventory items from maps 3–4
-- Launch point + sailing across an underground sea
-- New NPC: ferryman or sea creature
+### Map 5 — The Fissure
+- New NPC: The Rotten Sisters
 
-### Map 6 — The Library *(planned)*
-- Wacky librarian NPC with confusing lore about Below's history and NPC origins
-- Books with clues about NPC relationships, weaknesses, passwords
-- Cipher puzzles, catalog system
-- **Victory**: after Map 6, exit to the surface
-
-### Maps 7–10 *(open)*
+### Map 6–10 *(open)*
 Reserved for future inspiration.
 
 ---
