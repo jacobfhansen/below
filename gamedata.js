@@ -332,6 +332,171 @@ var belowGameData = {
           "start": 19500
         }
       ]
+    },
+    "after_map5": {
+      "cuts": [
+        {
+          "type": "fade",
+          "color": "#000000",
+          "fadeIn": 800,
+          "hold": 500,
+          "fadeOut": 200,
+          "start": 0
+        },
+        {
+          "type": "image",
+          "src": "sisters_cut.png",
+          "x": 50,
+          "y": 25,
+          "width": 300,
+          "fadeIn": 2000,
+          "hold": 22000,
+          "fadeOut": 1500,
+          "driftX": 2,
+          "driftY": -1,
+          "start": 800
+        },
+        {
+          "type": "image",
+          "src": "mushroom_blue.png",
+          "x": 15,
+          "y": 60,
+          "width": 60,
+          "fadeIn": 1500,
+          "hold": 3000,
+          "fadeOut": 1000,
+          "driftX": 3,
+          "driftY": -2,
+          "start": 1500
+        },
+        {
+          "type": "image",
+          "src": "crystal_pink.png",
+          "x": 80,
+          "y": 55,
+          "width": 50,
+          "fadeIn": 1800,
+          "hold": 2500,
+          "fadeOut": 1000,
+          "driftX": -2,
+          "driftY": -3,
+          "start": 2500
+        },
+        {
+          "type": "image",
+          "src": "mushroom_yellow.png",
+          "x": 70,
+          "y": 70,
+          "width": 50,
+          "fadeIn": 1200,
+          "hold": 2000,
+          "fadeOut": 800,
+          "driftX": -3,
+          "driftY": 1,
+          "start": 4000
+        },
+        {
+          "type": "text",
+          "text": "\"1, 2, 3... is this one on?\"",
+          "x": 50,
+          "y": 15,
+          "fontSize": 24,
+          "fontStyle": "italic",
+          "fadeIn": 1500,
+          "hold": 2500,
+          "fadeOut": 1000,
+          "start": 1000
+        },
+        {
+          "type": "text",
+          "text": "\"It's on, you fool. Just speak into it.\"",
+          "x": 50,
+          "y": 15,
+          "fontSize": 22,
+          "fontStyle": "italic",
+          "fadeIn": 1000,
+          "hold": 2000,
+          "fadeOut": 1000,
+          "start": 5000
+        },
+        {
+          "type": "text",
+          "text": "\"Right. You found us in the Fissure. Two dead girls with nothing better to do.\"",
+          "x": 50,
+          "y": 15,
+          "fontSize": 22,
+          "fadeIn": 1500,
+          "hold": 3000,
+          "fadeOut": 1000,
+          "start": 8000
+        },
+        {
+          "type": "text",
+          "text": "\"We played hide and seek. Then tag. You caught us both.\"",
+          "x": 50,
+          "y": 15,
+          "fontSize": 22,
+          "fadeIn": 1500,
+          "hold": 2500,
+          "fadeOut": 1000,
+          "start": 12500
+        },
+        {
+          "type": "text",
+          "text": "\"No one's done that in centuries. We were... almost impressed.\"",
+          "x": 50,
+          "y": 15,
+          "fontSize": 22,
+          "fontStyle": "italic",
+          "fadeIn": 1500,
+          "hold": 2500,
+          "fadeOut": 1000,
+          "start": 16000
+        },
+        {
+          "type": "fade",
+          "color": "#000000",
+          "fadeIn": 1000,
+          "hold": 500,
+          "fadeOut": 500,
+          "start": 19500
+        },
+        {
+          "type": "text",
+          "text": "\"So we showed you the way. Deeper. Down into the dark where even we don't go.\"",
+          "x": 50,
+          "y": 35,
+          "fontSize": 22,
+          "fadeIn": 2000,
+          "hold": 3000,
+          "fadeOut": 1500,
+          "start": 21000
+        },
+        {
+          "type": "text",
+          "text": "\"Good luck down there.\"",
+          "x": 50,
+          "y": 55,
+          "fontSize": 20,
+          "fontStyle": "italic",
+          "fadeIn": 1500,
+          "hold": 2000,
+          "fadeOut": 1500,
+          "start": 25000
+        },
+        {
+          "type": "text",
+          "text": "\"You'll need it.\"",
+          "x": 50,
+          "y": 65,
+          "fontSize": 20,
+          "fontStyle": "italic",
+          "fadeIn": 1500,
+          "hold": 2000,
+          "fadeOut": 2000,
+          "start": 27000
+        }
+      ]
     }
   },
   "monsterTypes": {
@@ -598,10 +763,7 @@ var belowGameData = {
       "blocking": true,
       "visionBlocking": false,
       "lightRadius": 2,
-      "lightColor": "rgba(112, 164, 178, 0.30)",
-      "choiceEvents": [
-        3
-      ]
+      "lightColor": "rgba(112, 164, 178, 0.30)"
     },
     "19": {
       "name": "Purple Mushroom",
@@ -611,10 +773,7 @@ var belowGameData = {
       "blocking": true,
       "visionBlocking": false,
       "lightRadius": 2,
-      "lightColor": "rgba(111, 61, 134, 0.30)",
-      "choiceEvents": [
-        3
-      ]
+      "lightColor": "rgba(111, 61, 134, 0.30)"
     },
     "20": {
       "name": "Yellow Mushroom",
@@ -624,10 +783,7 @@ var belowGameData = {
       "blocking": true,
       "visionBlocking": false,
       "lightRadius": 2,
-      "lightColor": "rgba(184, 199, 111, 0.30)",
-      "choiceEvents": [
-        3
-      ]
+      "lightColor": "rgba(184, 199, 111, 0.30)"
     },
     "21": {
       "name": "Pink Crystal",
@@ -637,10 +793,7 @@ var belowGameData = {
       "blocking": true,
       "visionBlocking": false,
       "lightRadius": 1,
-      "lightColor": "rgba(154, 103, 89, 0.30)",
-      "choiceEvents": [
-        3
-      ]
+      "lightColor": "rgba(154, 103, 89, 0.30)"
     }
   },
   "itemTypes": {
@@ -12259,8 +12412,8 @@ var belowGameData = {
           },
           "targetMap": 5,
           "targetPosition": {
-            "x": 14,
-            "y": 18
+            "x": 13,
+            "y": 1
           },
           "text": "A narrow crack in the cliff face - barely wide enough to slip through."
         }
@@ -15490,6 +15643,14 @@ var belowGameData = {
             "x": 25,
             "y": 13
           }
+        },
+        {
+          "type": 19,
+          "position": {
+            "x": 10,
+            "y": 11
+          },
+          "description": "A cluster of purple mushrooms blocks a crack in the floor. Faint air seeps through from below."
         }
       ],
       "npcs": [
@@ -15499,8 +15660,51 @@ var belowGameData = {
             "x": 15,
             "y": 10
           },
-          "icon": "sisters1.png",
+           "icon": "sisters1.png",
           "dialogOptions": [
+            {
+              "id": "sisters_exhausted",
+              "available": false,
+              "text": "SISTER: *wheeze* 'Please... just... wait at our spot. We'll get there. Eventually.'",
+              "options": [
+                {
+                  "id": "sisters_exhausted_close",
+                  "text": "Fine, I'll wait.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_congratulations",
+              "available": false,
+              "text": "The sisters lounge against the wall, looking at you with something approaching respect.\n\nSISTER ONE: 'You actually caught us. Both of us.'\nSISTER TWO: 'No one's done that in... how long has it been?'\nSISTER ONE: 'Centuries. Maybe longer. Time is boring down here.'\nSISTER TWO: 'I suppose you've earned something.'",
+              "options": [
+                {
+                  "id": "sisters_congratulations_exit",
+                  "text": "So where's the way deeper down?",
+                  "available": true,
+                  "chains": ["sisters_exit_reveal"]
+                },
+                {
+                  "id": "sisters_congratulations_leave",
+                  "text": "Thanks. See you around.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_exit_reveal",
+              "available": false,
+              "text": "SISTER TWO: 'Past the crystal formations. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
+              "options": [
+                {
+                  "id": "sisters_exit_reveal_close",
+                  "text": "Thanks. I'll check it out.",
+                  "available": true,
+                  "closes": ["sisters_congratulations"]
+                }
+              ]
+            },
             {
               "id": "sisters_hideandseek_found",
               "available": false,
@@ -15516,13 +15720,69 @@ var belowGameData = {
             {
               "id": "sisters_hideandseek_complete",
               "available": false,
-              "text": "Both sisters are back at their spot, looking... almost pleased.\n\nSISTER ONE: 'You found us. Well played.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Watch out for what lives down there. It doesn't play games.'",
+              "text": "Both sisters are back at their spot, looking... almost pleased.\n\nSISTER ONE: 'You found us. Well played.'\nSISTER TWO: 'But that was too easy. Surely you want a real challenge?'\nSISTER ONE: 'Tag. You're it.'\nSISTER TWO: 'Come find us when you're ready to play again.'",
               "options": [
                 {
                   "id": "sisters_hideandseek_complete_close",
-                  "text": "Thanks. I'll check it out.",
+                  "text": "Thanks. I'll be back.",
                   "available": true,
                   "closes": ["sisters_hideandseek_complete"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_intro",
+              "available": false,
+              "text": "SISTER ONE: 'Oh look, you're back. How tedious.'\nSISTER TWO: 'We had a deal though. Games.'\nSISTER ONE: 'Fine. Tag. You're it. Try to catch us.'\nSISTER TWO: 'Not that we care. Obviously bored by all of this.'\nSISTER ONE: 'Extremely bored.'",
+              "options": [
+                {
+                  "id": "sisters_tag_agree",
+                  "text": "OK, let's play tag.",
+                  "available": true,
+                  "chains": ["sisters_tag_start"]
+                },
+                {
+                  "id": "sisters_tag_decline",
+                  "text": "Maybe another time.",
+                  "available": true,
+                  "closes": ["sisters_tag_intro"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_start",
+              "available": false,
+              "text": "SISTER TWO: 'Count to ten, then come find us.'\nSISTER ONE: 'Like hide and seek. But we won't hide. We'll just... stand somewhere else.'\nSISTER TWO: 'Very slowly.'\nSISTER ONE: 'We're dead, you know. Running is not really our thing.'",
+              "options": [
+                {
+                  "id": "sisters_tag_count",
+                  "text": "...three? ...four? ...five? ...six? ...seven? ...eight? ...nine? ...ten! Ready or not!",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_found",
+              "available": false,
+              "text": "SISTER: 'Tag! You got me.'\nShe taps you lightly on the shoulder, then looks around as if someone might have seen.\nSISTER: 'I suppose you want the other one too.'",
+              "options": [
+                {
+                  "id": "sisters_tag_found_close",
+                  "text": "Got you!",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_complete",
+              "available": false,
+              "text": "Both sisters have shuffled back, looking utterly exhausted by the exertion.\n\nSISTER ONE: 'You caught us. Both of us. Impressive. I think.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Now please. No more games. We need to nap.'\nSISTER TWO: 'For a century or two.'",
+              "options": [
+                {
+                  "id": "sisters_tag_complete_close",
+                  "text": "Thanks. Rest well.",
+                  "available": true,
+                  "closes": ["sisters_tag_complete"]
                 }
               ]
             },
@@ -15690,6 +15950,49 @@ var belowGameData = {
           "icon": "sisters2.png",
           "dialogOptions": [
             {
+              "id": "sisters_exhausted",
+              "available": false,
+              "text": "SISTER: *wheeze* 'Please... just... wait at our spot. We'll get there. Eventually.'",
+              "options": [
+                {
+                  "id": "sisters_exhausted_close",
+                  "text": "Fine, I'll wait.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_congratulations",
+              "available": false,
+              "text": "The sisters lounge against the wall, looking at you with something approaching respect.\n\nSISTER ONE: 'You actually caught us. Both of us.'\nSISTER TWO: 'No one's done that in... how long has it been?'\nSISTER ONE: 'Centuries. Maybe longer. Time is boring down here.'\nSISTER TWO: 'I suppose you've earned something.'",
+              "options": [
+                {
+                  "id": "sisters_congratulations_exit",
+                  "text": "So where's the way deeper down?",
+                  "available": true,
+                  "chains": ["sisters_exit_reveal"]
+                },
+                {
+                  "id": "sisters_congratulations_leave",
+                  "text": "Thanks. See you around.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_exit_reveal",
+              "available": false,
+              "text": "SISTER TWO: 'Past the crystal formations. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
+              "options": [
+                {
+                  "id": "sisters_exit_reveal_close",
+                  "text": "Thanks. I'll check it out.",
+                  "available": true,
+                  "closes": ["sisters_congratulations"]
+                }
+              ]
+            },
+            {
               "id": "sisters_hideandseek_found",
               "available": false,
               "text": "She claps slowly with exaggerated enthusiasm.\n\nSISTER: 'Found me! Good job.'\nSISTER: 'Now find my sister.'",
@@ -15704,13 +16007,69 @@ var belowGameData = {
             {
               "id": "sisters_hideandseek_complete",
               "available": false,
-              "text": "Both sisters are back at their spot, looking... almost pleased.\n\nSISTER ONE: 'You found us. Well played.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Watch out for what lives down there. It doesn't play games.'",
+              "text": "Both sisters are back at their spot, looking... almost pleased.\n\nSISTER ONE: 'You found us. Well played.'\nSISTER TWO: 'But that was too easy. Surely you want a real challenge?'\nSISTER ONE: 'Tag. You're it.'\nSISTER TWO: 'Come find us when you're ready to play again.'",
               "options": [
                 {
                   "id": "sisters_hideandseek_complete_close",
-                  "text": "Thanks. I'll check it out.",
+                  "text": "Thanks. I'll be back.",
                   "available": true,
                   "closes": ["sisters_hideandseek_complete"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_intro",
+              "available": false,
+              "text": "SISTER ONE: 'Oh look, you're back. How tedious.'\nSISTER TWO: 'We had a deal though. Games.'\nSISTER ONE: 'Fine. Tag. You're it. Try to catch us.'\nSISTER TWO: 'Not that we care. Obviously bored by all of this.'\nSISTER ONE: 'Extremely bored.'",
+              "options": [
+                {
+                  "id": "sisters_tag_agree",
+                  "text": "OK, let's play tag.",
+                  "available": true,
+                  "chains": ["sisters_tag_start"]
+                },
+                {
+                  "id": "sisters_tag_decline",
+                  "text": "Maybe another time.",
+                  "available": true,
+                  "closes": ["sisters_tag_intro"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_start",
+              "available": false,
+              "text": "SISTER TWO: 'Count to ten, then come find us.'\nSISTER ONE: 'Like hide and seek. But we won't hide. We'll just... stand somewhere else.'\nSISTER TWO: 'Very slowly.'\nSISTER ONE: 'We're dead, you know. Running is not really our thing.'",
+              "options": [
+                {
+                  "id": "sisters_tag_count",
+                  "text": "...three? ...four? ...five? ...six? ...seven? ...eight? ...nine? ...ten! Ready or not!",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_found",
+              "available": false,
+              "text": "SISTER: 'Tag! You got me.'\nShe taps you lightly on the shoulder, then looks around as if someone might have seen.\nSISTER: 'I suppose you want the other one too.'",
+              "options": [
+                {
+                  "id": "sisters_tag_found_close",
+                  "text": "Got you!",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_tag_complete",
+              "available": false,
+              "text": "Both sisters have shuffled back, looking utterly exhausted by the exertion.\n\nSISTER ONE: 'You caught us. Both of us. Impressive. I think.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Now please. No more games. We need to nap.'\nSISTER TWO: 'For a century or two.'",
+              "options": [
+                {
+                  "id": "sisters_tag_complete_close",
+                  "text": "Thanks. Rest well.",
+                  "available": true,
+                  "closes": ["sisters_tag_complete"]
                 }
               ]
             },
@@ -15882,6 +16241,63 @@ var belowGameData = {
             "y": 1
           },
           "text": "The fissure narrows ahead. Faint light seeps through a crack in the rock above."
+        },
+        {
+          "position": {
+            "x": 10,
+            "y": 11
+          },
+          "targetMap": 6,
+          "targetPosition": {
+            "x": 0,
+            "y": 5
+          },
+          "text": "You squeeze through the crack in the floor. The darkness below swallows you whole."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "The Deeper Dark",
+      "defaultDescription": "The air grows colder. The walls close in. Something ancient stirs far below.",
+      "areaDescriptions": [],
+      "tiles": {
+        "x0y0": { "x": 0, "y": 0, "type": 4 },
+        "x1y0": { "x": 1, "y": 0, "type": 4 },
+        "x0y1": { "x": 0, "y": 1, "type": 4 },
+        "x1y1": { "x": 1, "y": 1, "type": 4 },
+        "x0y2": { "x": 0, "y": 2, "type": 4 },
+        "x1y2": { "x": 1, "y": 2, "type": 4 },
+        "x0y3": { "x": 0, "y": 3, "type": 4 },
+        "x1y3": { "x": 1, "y": 3, "type": 4 },
+        "x0y4": { "x": 0, "y": 4, "type": 4 },
+        "x1y4": { "x": 1, "y": 4, "type": 4 },
+        "x0y5": { "x": 0, "y": 5, "type": 4 },
+        "x1y5": { "x": 1, "y": 5, "type": 4 },
+        "x0y6": { "x": 0, "y": 6, "type": 4 },
+        "x1y6": { "x": 1, "y": 6, "type": 4 },
+        "x0y7": { "x": 0, "y": 7, "type": 4 },
+        "x1y7": { "x": 1, "y": 7, "type": 4 },
+        "x0y8": { "x": 0, "y": 8, "type": 4 },
+        "x1y8": { "x": 1, "y": 8, "type": 4 },
+        "x0y9": { "x": 0, "y": 9, "type": 4 },
+        "x1y9": { "x": 1, "y": 9, "type": 4 }
+      },
+      "obstacles": [],
+      "npcs": [],
+      "monsters": [],
+      "exits": [
+        {
+          "position": {
+            "x": 0,
+            "y": 9
+          },
+          "targetMap": 5,
+          "targetPosition": {
+            "x": 10,
+            "y": 12
+          },
+          "text": "You climb back up through the crack. The familiar glow of the Fissure greets you."
         }
       ]
     }

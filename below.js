@@ -735,6 +735,8 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Initialize map 5 hide-and-seek state
     below.map5TilesMoved = 0;
+    below.tagActive = false;
+    below.sistersReturnContext = null;
 
     // Initialize fog particles
     below.fogParticles = [];
@@ -1791,11 +1793,19 @@ function selectChoiceOption(index) {
         return;
     }
 
-    // Handle hide-and-seek completion — restore normal conversation
+    // Handle tag countdown start
+    if (selectedOption.id === "sisters_tag_count" && below.choiceEvent && below.choiceEvent.npcPos) {
+        startTagGame();
+        return;
+    }
+
+    // Handle hide-and-seek completion — restore normal conversation, enable tag
     if (selectedOption.id === "sisters_hideandseek_complete_close" && below.choiceEvent && below.choiceEvent.npcPos) {
         below.gameData.mapData[5].npcs.forEach(function(n) {
             var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_intro"; });
             if (introD) introD.available = true;
+            var tagIntroD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_intro"; });
+            if (tagIntroD) tagIntroD.available = true;
         });
     }
 
@@ -1819,6 +1829,7 @@ function selectChoiceOption(index) {
                     var startD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_start"; });
                     if (startD) startD.available = false;
                 });
+                below.sistersReturnContext = "hideandseek";
                 startSistersReturn();
             }
         }
@@ -1826,6 +1837,87 @@ function selectChoiceOption(index) {
             closeChoiceEvent();
         }
         return;
+    }
+
+    // Handle tagging a sister during tag game
+    if (selectedOption.id === "sisters_tag_found_close" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (npc) {
+            npc._tagFound = true;
+            var foundD = npc.dialogOptions.find(function(d) { return d.id === "sisters_tag_found"; });
+            if (foundD) foundD.available = false;
+            var allTagged = below.gameData.mapData[5].npcs.every(function(n) { return n._tagFound; });
+            if (allTagged) {
+                below.tagActive = false;
+                below.gameData.mapData[5].npcs.forEach(function(n) {
+                    var completeD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_complete"; });
+                    if (completeD) completeD.available = true;
+                    var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_intro"; });
+                    if (introD) introD.available = false;
+                    var startD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_start"; });
+                    if (startD) startD.available = false;
+                    n._tagFleeing = false;
+                });
+                below.sistersReturnContext = "tag";
+                startSistersReturn();
+                below.gameData.mapLog.push("You tagged them both! The sisters shuffle back, looking winded.");
+                maintainMapLog();
+            } else {
+                below.gameData.mapLog.push("One down! Keep chasing the other one!");
+                maintainMapLog();
+            }
+        }
+        if (!below.passwordInput) {
+            closeChoiceEvent();
+        }
+        return;
+    }
+
+    // Handle tag completion — restore congratulations dialog
+    if (selectedOption.id === "sisters_tag_complete_close" && below.choiceEvent && below.choiceEvent.npcPos) {
+        below.gameData.mapData[5].npcs.forEach(function(n) {
+            var congratsD = n.dialogOptions.find(function(d) { return d.id === "sisters_congratulations"; });
+            if (congratsD) congratsD.available = true;
+        });
+    }
+
+    // Handle exit reveal — remove mushroom and walk sisters to show the exit
+    if (selectedOption.id === "sisters_exit_reveal_close" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var map5 = below.gameData.mapData[5];
+        map5.obstacles = map5.obstacles.filter(function(o) {
+            return !(o.position.x === 10 && o.position.y === 11);
+        });
+        below.gameData.mapLog.push("A deep rumble echoes through the fissure. The mushrooms near the crack shudder and collapse.");
+        maintainMapLog();
+
+        // Sisters walk to the exit to show the player (comic effect)
+        var sisters = map5.npcs;
+        var exitTargets = [{ x: 9, y: 11 }, { x: 11, y: 11 }];
+        sisters.forEach(function(n, i) {
+            n.dialogOptions.forEach(function(d) { d.available = false; });
+            var exhD = n.dialogOptions.find(function(d) { return d.id === "sisters_exhausted"; });
+            if (exhD) exhD.available = true;
+            var target = exitTargets[i % exitTargets.length];
+            npcWalkTo(n, target.x, target.y, function() {
+                n.dialogOptions.forEach(function(d) { d.available = false; });
+                var congratsD = n.dialogOptions.find(function(d) { return d.id === "sisters_congratulations"; });
+                if (congratsD) congratsD.available = true;
+                var allArrived = sisters.every(function(s) {
+                    return !s.walkPath || s.walkPath.length === 0;
+                });
+                if (allArrived) {
+                    below.gameData.mapLog.push("The sisters gesture lazily toward the crack. 'There. Now please leave. We need a nap.'");
+                    maintainMapLog();
+                    setTimeout(function() {
+                        below.sistersReturnContext = "tag";
+                        startSistersReturn();
+                    }, 2000);
+                }
+            }, 20);
+        });
     }
 
     if (!below.passwordInput) {
@@ -1917,10 +2009,82 @@ function startHideAndSeek() {
     }, 600);
 }
 
+function startTagGame() {
+    closeChoiceEvent();
+
+    var gameDivCenter = document.getElementById("gameDivCenter");
+    gameDivCenter.style.opacity = "0.5";
+    gameDivCenter.style.pointerEvents = "none";
+
+    var fadeDiv = document.createElement("div");
+    fadeDiv.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:#000;opacity:0;z-index:4999;pointer-events:none;transition:opacity 0.5s;";
+    document.body.appendChild(fadeDiv);
+    setTimeout(function() { fadeDiv.style.opacity = "1"; }, 50);
+
+    setTimeout(function() {
+        var countDiv = document.createElement("div");
+        countDiv.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:5000;color:#70A4B2;font-size:72px;font-family:'Courier New',monospace;pointer-events:none;text-shadow:0 0 20px rgba(112,164,178,0.5);";
+        countDiv.id = "tagCount";
+        document.body.appendChild(countDiv);
+
+        var count = 1;
+        var countInterval = setInterval(function() {
+            countDiv.textContent = count;
+            count++;
+            if (count > 10) {
+                clearInterval(countInterval);
+                countDiv.textContent = "READY OR NOT, HERE I COME!";
+                setTimeout(function() {
+                    var sisters = below.gameData.mapData[5].npcs;
+                    var playerX = Math.round(below.gameData.player.currentLocation.x);
+                    var playerY = Math.round(below.gameData.player.currentLocation.y);
+                    var startSpots = [
+                        { x: playerX + 4, y: playerY - 3 },
+                        { x: playerX - 4, y: playerY + 3 }
+                    ];
+                    sisters.forEach(function(n, i) {
+                        var spot = startSpots[i % startSpots.length];
+                        n.position.x = spot.x;
+                        n.position.y = spot.y;
+                        n._tagFound = false;
+                        n._tagFleeing = true;
+                        n._tagFleeTimer = 0;
+                    });
+                    sisters.forEach(function(n) {
+                        n.dialogOptions.forEach(function(d) {
+                            if (d.id !== "sisters_tag_found") {
+                                d.available = false;
+                            }
+                        });
+                        var foundD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_found"; });
+                        if (foundD) foundD.available = true;
+                    });
+                    below.tagActive = true;
+                    fadeDiv.style.opacity = "0";
+                    setTimeout(function() {
+                        fadeDiv.remove();
+                        countDiv.remove();
+                        gameDivCenter.style.opacity = "1";
+                        gameDivCenter.style.pointerEvents = "auto";
+                        below.gameData.mapLog.push("The sisters shamble away from you at an almost insulting pace. Tag them!");
+                        maintainMapLog();
+                        drawMapCanvas();
+                    }, 500);
+                }, 1500);
+            }
+        }, 700);
+    }, 600);
+}
+
 function startSistersReturn() {
+    var returnContext = below.sistersReturnContext || "hideandseek";
     below.gameData.mapData[5].npcs.forEach(function(n) {
         n._hidden = false;
         n._zombieReturn = true;
+        // Disable all dialogs, enable exhausted during walk-back
+        n.dialogOptions.forEach(function(d) { d.available = false; });
+        var exhD = n.dialogOptions.find(function(d) { return d.id === "sisters_exhausted"; });
+        if (exhD) exhD.available = true;
         // Generate walk path back to (15, 10)
         var path = [];
         var cx = Math.round(n.position.x);
@@ -1948,6 +2112,19 @@ function startSistersReturn() {
                 return !n2.walkPath || n2.walkPath.length === 0;
             });
             if (allArrived) {
+                // Restore appropriate dialogs based on context
+                below.gameData.mapData[5].npcs.forEach(function(s) {
+                    s.dialogOptions.forEach(function(d) { d.available = false; });
+                    if (returnContext === "tag") {
+                        var congratsD = s.dialogOptions.find(function(d) { return d.id === "sisters_congratulations"; });
+                        if (congratsD) congratsD.available = true;
+                    } else {
+                        var introD = s.dialogOptions.find(function(d) { return d.id === "sisters_intro"; });
+                        if (introD) introD.available = true;
+                        var tagIntroD = s.dialogOptions.find(function(d) { return d.id === "sisters_tag_intro"; });
+                        if (tagIntroD) tagIntroD.available = true;
+                    }
+                });
                 below.gameData.mapLog.push("The sisters shuffle back to their spot, looking exhausted by the effort.");
                 maintainMapLog();
             }
@@ -2400,6 +2577,14 @@ function switchPage(page) {
 }
 
 function changeMap(mapId, entryX, entryY, text) {
+  // Cancel tag game if leaving map 5
+  if (below.gameData.player.currentMap === 5 && below.tagActive) {
+    below.tagActive = false;
+    below.gameData.mapData[5].npcs.forEach(function(n) {
+      n._tagFleeing = false;
+      n._tagFound = false;
+    });
+  }
   below.gameData.player.currentMap = mapId;
   below.gameData.player.currentLocation.x = entryX;
   below.gameData.player.currentLocation.y = entryY;
@@ -2510,7 +2695,7 @@ function getBlockedMessage(x, y) {
     });
     if (obstacle) {
         var obsType = below.gameData.obstacleTypes[obstacle.type];
-        return (obsType ? obsType.description : "") || "Not sure what good that would do";
+        return obstacle.description || (obsType ? obsType.description : "") || "Not sure what good that would do";
     }
     // Empty tile - check for searchMsg on tile first, then return random default message
     var tileIndex = 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
@@ -3601,7 +3786,7 @@ function drawMapCanvas() {
         if (opacity < 1.0) context.globalAlpha = 1.0;
     });
     
-    // EXITS (drawn on top of everything)
+    // EXITS (drawn on top of everything, but not if blocked by an obstacle)
     var exits = below.gameData.mapData[curMap].exits;
     if (exits) {
         exits.forEach(function(exit) {
@@ -3609,6 +3794,13 @@ function drawMapCanvas() {
             var distYE = (exit.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
             var distanceE = Math.sqrt(distXE * distXE + distYE * distYE);
             if (distanceE <= visionPixels && visibleTiles[exit.position.x + "," + exit.position.y]) {
+                // Don't draw exit marker if a blocking obstacle is at the same position
+                var blockedByObstacle = (below.gameData.mapData[curMap].obstacles || []).some(function(o) {
+                    if (!o.position || o.position.x !== exit.position.x || o.position.y !== exit.position.y) return false;
+                    var oType = below.gameData.obstacleTypes[o.type];
+                    return o.blocking !== undefined ? o.blocking : (oType ? oType.blocking : false);
+                });
+                if (blockedByObstacle) return;
                 if (!exitImg.complete) exitImg.src = "images/exit.png";
                 context.drawImage(exitImg, (exit.position.x * width) + verticalCenter - horizontalOffset - (width/2), (exit.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             }
@@ -3782,6 +3974,57 @@ function mapGameLoop() {
                 delete npc.walkPath;
                 delete npc.onPathComplete;
                 cb();
+            } else if (npc._tagFleeing && below.tagActive) {
+                // Zombie flee behavior during tag game
+                if (!npc._tagFleeTimer) npc._tagFleeTimer = 0;
+                npc._tagFleeTimer++;
+                if (npc._tagFleeTimer < 15) return;
+                npc._tagFleeTimer = 0;
+
+                var npcX = Math.round(npc.position.x);
+                var npcY = Math.round(npc.position.y);
+                var plrX = Math.round(below.gameData.player.currentLocation.x);
+                var plrY = Math.round(below.gameData.player.currentLocation.y);
+                var dist = Math.abs(npcX - plrX) + Math.abs(npcY - plrY);
+
+                var candidates = [];
+                if (dist <= 5) {
+                    // Flee: prefer direction away from player
+                    var dx = npcX - plrX;
+                    var dy = npcY - plrY;
+                    if (Math.abs(dx) >= Math.abs(dy)) {
+                        candidates.push({ x: npcX + (dx > 0 ? 1 : -1), y: npcY });
+                        if (dy !== 0) candidates.push({ x: npcX, y: npcY + (dy > 0 ? 1 : -1) });
+                        candidates.push({ x: npcX, y: npcY + (dy > 0 ? 1 : -1) });
+                    } else {
+                        candidates.push({ x: npcX, y: npcY + (dy > 0 ? 1 : -1) });
+                        if (dx !== 0) candidates.push({ x: npcX + (dx > 0 ? 1 : -1), y: npcY });
+                        candidates.push({ x: npcX + (dx > 0 ? 1 : -1), y: npcY });
+                    }
+                }
+                // Always add random options as fallback
+                var dirs = [{x:0,y:-1},{x:0,y:1},{x:-1,y:0},{x:1,y:0}];
+                for (var ri = dirs.length - 1; ri > 0; ri--) {
+                    var rj = Math.floor(Math.random() * (ri + 1));
+                    var tmp = dirs[ri]; dirs[ri] = dirs[rj]; dirs[rj] = tmp;
+                }
+                for (var di = 0; di < dirs.length; di++) {
+                    candidates.push({ x: npcX + dirs[di].x, y: npcY + dirs[di].y });
+                }
+
+                for (var ci = 0; ci < candidates.length; ci++) {
+                    var cx = candidates[ci].x;
+                    var cy = candidates[ci].y;
+                    if (foundTile(cx, cy) && !isPathBlocked(cx, cy)) {
+                        var ddx = cx - npcX;
+                        var ddy = cy - npcY;
+                        if (ddx === 1) { npc.destPos.xVelocity = 1; npc.destPos.x = cx; }
+                        else if (ddx === -1) { npc.destPos.xVelocity = -1; npc.destPos.x = cx; }
+                        else if (ddy === 1) { npc.destPos.yVelocity = 1; npc.destPos.y = cy; }
+                        else if (ddy === -1) { npc.destPos.yVelocity = -1; npc.destPos.y = cy; }
+                        break;
+                    }
+                }
             } else if (type.movement && Math.random() < type.movement) {
                 var dir = (Math.floor(Math.random() * 4)) + 1;
                 if (dir === 1 && foundTile(npc.position.x, npc.position.y - 1)) {
@@ -3910,6 +4153,13 @@ function mapGameLoop() {
                     if (curMap === 0 && exit.targetMap === 1 && !below.cutScenePlayed.after_map0) {
                         below.cutScenePlayed.after_map0 = true;
                         playCutScene("after_map0", function() {
+                            changeMap(exit.targetMap, targetX, targetY, exit.text);
+                        });
+                    }
+                    // Trigger "after_map5" cut-scene when leaving map 5 for map 6 the first time
+                    else if (curMap === 5 && exit.targetMap === 6 && !below.cutScenePlayed.after_map5) {
+                        below.cutScenePlayed.after_map5 = true;
+                        playCutScene("after_map5", function() {
                             changeMap(exit.targetMap, targetX, targetY, exit.text);
                         });
                     } else {
