@@ -394,6 +394,15 @@ charonImg.src = "images/charon.png";
 var charonDialogImg = new Image();
 charonDialogImg.src = "images/charon_dialog.png";
 
+var sisters1Img = new Image();
+sisters1Img.src = "images/sisters1.png";
+
+var sisters2Img = new Image();
+sisters2Img.src = "images/sisters2.png";
+
+var sistersDialogImg = new Image();
+sistersDialogImg.src = "images/sisters_dialog.png";
+
 var ratsDialogImg = new Image();
 ratsDialogImg.src = "images/rats_dialog.png";
 
@@ -3233,16 +3242,19 @@ function drawMapCanvas() {
             var type = below.gameData.npcTypes[npc.type];
             if (!type) return; // Skip if NPC type is undefined
                 if (type.icon) {
+                var iconName = npc.icon || type.icon;
                 var img = new Image();
-                if (type.icon === "hermit.png") img = hermitImg || new Image();
-                else if (type.icon === "jester.png") img = jesterImg || new Image();
-                else if (type.icon === "merchant.png") img = merchantImg || new Image();
-                else if (type.icon === "medusa.png") img = medusaImg || new Image();
-                else if (type.icon === "mole.png") img = moleImg || new Image();
-                else if (type.icon === "detective.png") img = detectiveImg || new Image();
-                else if (type.icon === "ship.png") img = shipImg || new Image();
-                else if (type.icon === "charon.png") img = charonImg || new Image();
-                if (!img.complete) img.src = "images/" + type.icon;
+                if (iconName === "hermit.png") img = hermitImg || new Image();
+                else if (iconName === "jester.png") img = jesterImg || new Image();
+                else if (iconName === "merchant.png") img = merchantImg || new Image();
+                else if (iconName === "medusa.png") img = medusaImg || new Image();
+                else if (iconName === "mole.png") img = moleImg || new Image();
+                else if (iconName === "detective.png") img = detectiveImg || new Image();
+                else if (iconName === "ship.png") img = shipImg || new Image();
+                else if (iconName === "charon.png") img = charonImg || new Image();
+                else if (iconName === "sisters1.png") img = sisters1Img || new Image();
+                else if (iconName === "sisters2.png") img = sisters2Img || new Image();
+                if (!img.complete) img.src = "images/" + iconName;
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
                 context.fillStyle = type.color || "#00aa00";

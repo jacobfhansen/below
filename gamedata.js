@@ -753,11 +753,23 @@ var belowGameData = {
         "greeting": "The old man stares at the water and does not seem to notice you.",
         "agitated": "Do not pester me, wanderer! My memory is my own!"
       },
-      "choiceEvents": [
-        9
-      ],
+      "choiceEvents": [9],
       "agenda": "A very old and forgetful boatman who has no short term memory. Speaks in dactylic hexameter.",
       "personality": "forgetful"
+    },
+    "8": {
+      "name": "The Rotten Sisters",
+      "description": "Two decaying figures lounging in the fissure",
+      "icon": "sisters1.png",
+      "dialogImg": "sisters_dialog.png",
+      "dialog": {
+        "greeting": "Two sets of hollow eyes turn toward you. 'A visitor? How... tedious.'",
+        "agitated": "'Oh, do shut up. You're disturbing the quiet.'"
+      },
+      "choiceEvents": [9, 10, 11],
+      "agenda": "Dead so long they've forgotten why they haven't moved on. Bored beyond measure.",
+      "personality": "bored and apathetic",
+      "movement": 0.08
     }
   },
   "mapData": [
@@ -2579,39 +2591,6 @@ var belowGameData = {
           },
           "closed": true,
           "blocking": true
-        },
-        {
-          "type": 1,
-          "position": {
-            "x": -1,
-            "y": 4
-          },
-          "width": 2,
-          "height": 1,
-          "blocking": true,
-          "icon": "rock_2x1.png"
-        },
-        {
-          "type": 1,
-          "position": {
-            "x": 1,
-            "y": 2
-          },
-          "width": 1,
-          "height": 2,
-          "blocking": true,
-          "icon": "rock_1x2.png"
-        },
-        {
-          "type": 1,
-          "position": {
-            "x": 2,
-            "y": 0
-          },
-          "width": 2,
-          "height": 2,
-          "blocking": true,
-          "icon": "rock_2x2.png"
         }
       ],
       "npcs": [
@@ -2898,7 +2877,7 @@ var belowGameData = {
             {
               "id": "hermit_intro2",
               "available": false,
-              "text": "'I was exploring a fissure in the old quarry — found luminescent moss, crystals that hum with energy. Then the earth moved.' He shrugs. 'This is no mere survival, child — this is a lifetime's work! Every herb holds a secret. The moss cures wounds that would fester above ground. There's a whole world down here that surface-dwellers know nothing about.' He strokes his beard. 'The secret isn't going up — it's how far down you're willing to go. Below these caves lies a maze. Below that, deeper chambers sealed by ancient doors.'",
+              "text": "'I was exploring a fissure in the old quarry - found luminescent moss, crystals that hum with energy. Then the earth moved.' He shrugs. 'This is no mere survival, child - this is a lifetime's work! Every herb holds a secret. The moss cures wounds that would fester above ground. There's a whole world down here that surface-dwellers know nothing about.' He strokes his beard. 'The secret isn't going up - it's how far down you're willing to go. Below these caves lies a maze. Below that, deeper chambers sealed by ancient doors.'",
               "options": [
                 {
                   "id": "hermit_intro2a",
@@ -2918,7 +2897,7 @@ var belowGameData = {
             {
               "id": "hermit_intro3",
               "available": false,
-              "text": "'Seek the woman with snakes for hair — Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
+              "text": "'Seek the woman with snakes for hair - Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
               "options": [
                 {
                   "id": "hermit_intro_end",
@@ -3088,7 +3067,7 @@ var belowGameData = {
             {
               "id": "hermit_centipede_intro",
               "available": false,
-              "text": "'You've cleared the bats! I can hear myself think again.' He leans on his staff. 'There's one last thing — centipedes. They've infested the old storage room through the east wall. Nasty creatures. I'd deal with them myself but my back —' he winces — 'well, you've got the swatter. There's a bottle of Crawl-End in here somewhere that should do the trick. If you're willing, say the word and I'll open the way.'",
+              "text": "'You've cleared the bats! I can hear myself think again.' He leans on his staff. 'There's one last thing - centipedes. They've infested the old storage room through the east wall. Nasty creatures. I'd deal with them myself but my back -' he winces - 'well, you've got the swatter. There's a bottle of Crawl-End in here somewhere that should do the trick. If you're willing, say the word and I'll open the way.'",
               "options": [
                 {
                   "id": "hermit_centipede_accept",
@@ -3126,7 +3105,7 @@ var belowGameData = {
             {
               "id": "hermit_centipede_done",
               "available": false,
-              "text": "'The centipedes — gone? Truly?' He lets out a long breath. 'Thank you. I can finally rest easy knowing this place is clean.' He gazes into the middle distance. 'I don't have much to offer in thanks —' He trails off, then brightens. 'Actually, I do have some of my cave herbs put by. Best I've ever grown.'",
+              "text": "'The centipedes - gone? Truly?' He lets out a long breath. 'Thank you. I can finally rest easy knowing this place is clean.' He gazes into the middle distance. 'I don't have much to offer in thanks -' He trails off, then brightens. 'Actually, I do have some of my cave herbs put by. Best I've ever grown.'",
               "options": [
                 {
                   "id": "hermit_centipede_ask_herbs",
@@ -11352,6 +11331,381 @@ var belowGameData = {
           "x": -4,
           "y": 10,
           "type": 0
+        },
+        "x0ym5": {
+          "x": 0,
+          "y": -5,
+          "type": 1
+        },
+        "x1ym5": {
+          "x": 1,
+          "y": -5,
+          "type": 1
+        },
+        "x2ym5": {
+          "x": 2,
+          "y": -5,
+          "type": 1
+        },
+        "x3ym5": {
+          "x": 3,
+          "y": -5,
+          "type": 1
+        },
+        "x4ym5": {
+          "x": 4,
+          "y": -5,
+          "type": 1
+        },
+        "x5ym5": {
+          "x": 5,
+          "y": -5,
+          "type": 1
+        },
+        "x2ym6": {
+          "x": 2,
+          "y": -6,
+          "type": 1
+        },
+        "x3ym6": {
+          "x": 3,
+          "y": -6,
+          "type": 1
+        },
+        "x4ym6": {
+          "x": 4,
+          "y": -6,
+          "type": 1
+        },
+        "x5ym6": {
+          "x": 5,
+          "y": -6,
+          "type": 1
+        },
+        "x4ym7": {
+          "x": 4,
+          "y": -7,
+          "type": 1
+        },
+        "x3ym7": {
+          "x": 3,
+          "y": -7,
+          "type": 1
+        },
+        "x3ym8": {
+          "x": 3,
+          "y": -8,
+          "type": 1
+        },
+        "x4ym8": {
+          "x": 4,
+          "y": -8,
+          "type": 1
+        },
+        "x5ym8": {
+          "x": 5,
+          "y": -8,
+          "type": 1
+        },
+        "x5ym7": {
+          "x": 5,
+          "y": -7,
+          "type": 1
+        },
+        "x4ym9": {
+          "x": 4,
+          "y": -9,
+          "type": 1
+        },
+        "x5ym9": {
+          "x": 5,
+          "y": -9,
+          "type": 1
+        },
+        "x3ym9": {
+          "x": 3,
+          "y": -9,
+          "type": 1
+        },
+        "x1y9": {
+          "x": 1,
+          "y": 9,
+          "type": 1
+        },
+        "x2y9": {
+          "x": 2,
+          "y": 9,
+          "type": 1
+        },
+        "x3y9": {
+          "x": 3,
+          "y": 9,
+          "type": 1
+        },
+        "x4y9": {
+          "x": 4,
+          "y": 9,
+          "type": 1
+        },
+        "x5y9": {
+          "x": 5,
+          "y": 9,
+          "type": 1
+        },
+        "x5y10": {
+          "x": 5,
+          "y": 10,
+          "type": 1
+        },
+        "x3y10": {
+          "x": 3,
+          "y": 10,
+          "type": 1
+        },
+        "x2y10": {
+          "x": 2,
+          "y": 10,
+          "type": 1
+        },
+        "x1y10": {
+          "x": 1,
+          "y": 10,
+          "type": 1
+        },
+        "x0y10": {
+          "x": 0,
+          "y": 10,
+          "type": 1
+        },
+        "x4y10": {
+          "x": 4,
+          "y": 10,
+          "type": 1
+        },
+        "xm5ym4": {
+          "x": -5,
+          "y": -4,
+          "type": 0
+        },
+        "xm5ym7": {
+          "x": -5,
+          "y": -7,
+          "type": 0
+        },
+        "xm5ym9": {
+          "x": -5,
+          "y": -9,
+          "type": 0
+        },
+        "xm5ym8": {
+          "x": -5,
+          "y": -8,
+          "type": 0
+        },
+        "xm5ym6": {
+          "x": -5,
+          "y": -6,
+          "type": 0
+        },
+        "xm5ym5": {
+          "x": -5,
+          "y": -5,
+          "type": 0
+        },
+        "xm5ym3": {
+          "x": -5,
+          "y": -3,
+          "type": 0
+        },
+        "xm5ym2": {
+          "x": -5,
+          "y": -2,
+          "type": 0
+        },
+        "xm5ym1": {
+          "x": -5,
+          "y": -1,
+          "type": 0
+        },
+        "xm5y0": {
+          "x": -5,
+          "y": 0,
+          "type": 0
+        },
+        "xm5y1": {
+          "x": -5,
+          "y": 1,
+          "type": 0
+        },
+        "xm5y3": {
+          "x": -5,
+          "y": 3,
+          "type": 0
+        },
+        "xm5y2": {
+          "x": -5,
+          "y": 2,
+          "type": 0
+        },
+        "xm5y4": {
+          "x": -5,
+          "y": 4,
+          "type": 0
+        },
+        "xm5y5": {
+          "x": -5,
+          "y": 5,
+          "type": 0
+        },
+        "xm5y6": {
+          "x": -5,
+          "y": 6,
+          "type": 0
+        },
+        "xm5y8": {
+          "x": -5,
+          "y": 8,
+          "type": 0
+        },
+        "xm5y7": {
+          "x": -5,
+          "y": 7,
+          "type": 0
+        },
+        "xm5y9": {
+          "x": -5,
+          "y": 9,
+          "type": 0
+        },
+        "xm5y10": {
+          "x": -5,
+          "y": 10,
+          "type": 0
+        },
+        "xm6y10": {
+          "x": -6,
+          "y": 10,
+          "type": 0
+        },
+        "xm6y9": {
+          "x": -6,
+          "y": 9,
+          "type": 0
+        },
+        "xm6y7": {
+          "x": -6,
+          "y": 7,
+          "type": 0
+        },
+        "xm6y6": {
+          "x": -6,
+          "y": 6,
+          "type": 0
+        },
+        "xm6y8": {
+          "x": -6,
+          "y": 8,
+          "type": 0
+        },
+        "xm6y5": {
+          "x": -6,
+          "y": 5,
+          "type": 0
+        },
+        "xm6y4": {
+          "x": -6,
+          "y": 4,
+          "type": 0
+        },
+        "xm6y3": {
+          "x": -6,
+          "y": 3,
+          "type": 0
+        },
+        "xm6y2": {
+          "x": -6,
+          "y": 2,
+          "type": 0
+        },
+        "xm6y1": {
+          "x": -6,
+          "y": 1,
+          "type": 0
+        },
+        "xm6y0": {
+          "x": -6,
+          "y": 0,
+          "type": 0
+        },
+        "xm6ym1": {
+          "x": -6,
+          "y": -1,
+          "type": 0
+        },
+        "xm6ym2": {
+          "x": -6,
+          "y": -2,
+          "type": 0
+        },
+        "xm6ym4": {
+          "x": -6,
+          "y": -4,
+          "type": 0
+        },
+        "xm6ym3": {
+          "x": -6,
+          "y": -3,
+          "type": 0
+        },
+        "xm6ym5": {
+          "x": -6,
+          "y": -5,
+          "type": 0
+        },
+        "xm6ym6": {
+          "x": -6,
+          "y": -6,
+          "type": 0
+        },
+        "xm6ym8": {
+          "x": -6,
+          "y": -8,
+          "type": 0
+        },
+        "xm6ym7": {
+          "x": -6,
+          "y": -7,
+          "type": 0
+        },
+        "xm6ym9": {
+          "x": -6,
+          "y": -9,
+          "type": 0
+        },
+        "xm7y1": {
+          "x": -7,
+          "y": 1,
+          "type": 0
+        },
+        "xm8y1": {
+          "x": -8,
+          "y": 1,
+          "type": 0
+        },
+        "xm9y1": {
+          "x": -9,
+          "y": 1,
+          "type": 0
+        },
+        "xm10y1": {
+          "x": -10,
+          "y": 1,
+          "type": 0
+        },
+        "xm11y1": {
+          "x": -11,
+          "y": 1,
+          "type": 0
         }
       },
       "monsters": [],
@@ -11810,7 +12164,275 @@ var belowGameData = {
           ]
         }
       ],
-      "exits": []
+      "exits": [
+        {
+          "position": {
+            "x": -11,
+            "y": 1
+          },
+          "targetMap": 5,
+          "targetPosition": {
+            "x": 2,
+            "y": 3
+          },
+          "text": "A narrow crack in the cliff face - barely wide enough to slip through."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "The Fissure",
+      "defaultDescription": "A narrow chasm splits the earth, walls slick with moisture. Faint echoes ripple from somewhere below.",
+      "areaDescriptions": [],
+      "tiles": {
+        "x0y0": { "x": 0, "y": 0 },
+        "x0y1": { "x": 0, "y": 1 },
+        "x0y2": { "x": 0, "y": 2 },
+        "x0y3": { "x": 0, "y": 3 },
+        "x0y4": { "x": 0, "y": 4 },
+        "x1y0": { "x": 1, "y": 0 },
+        "x1y1": { "x": 1, "y": 1 },
+        "x1y2": { "x": 1, "y": 2 },
+        "x1y3": { "x": 1, "y": 3 },
+        "x1y4": { "x": 1, "y": 4 },
+        "x2y0": { "x": 2, "y": 0 },
+        "x2y1": { "x": 2, "y": 1 },
+        "x2y2": { "x": 2, "y": 2 },
+        "x2y3": { "x": 2, "y": 3 },
+        "x2y4": { "x": 2, "y": 4 },
+        "x3y0": { "x": 3, "y": 0 },
+        "x3y1": { "x": 3, "y": 1 },
+        "x3y2": { "x": 3, "y": 2 },
+        "x3y3": { "x": 3, "y": 3 },
+        "x3y4": { "x": 3, "y": 4 }
+      },
+      "obstacles": [],
+      "npcs": [
+        {
+          "type": 8,
+          "position": { "x": 2, "y": 1 },
+          "icon": "sisters1.png",
+          "movement": 0.06,
+          "dialogOptions": [
+            {
+              "id": "sisters_intro",
+              "available": true,
+              "text": "Two figures lounge against the fissure wall, their forms decayed yet strangely preserved. They turn in unison, hollow eyes fixing on you.\n\nSISTER ONE: 'Oh. A visitor. How dreadfully boring.'\nSISTER TWO: 'Don't get excited. They always leave.'\nSISTER ONE: 'Or die. Usually both.'\nSISTER TWO: 'Remember the last one? Kept screaming about Charon. Wept for days.'\nSISTER ONE: 'Entertaining, for a while. Then it got tedious.'\nSISTER TWO: 'Everything gets tedious eventually.'\nSISTER ONE: 'Even being dead.'\n\nThey stare at you with empty interest, like cats watching a moth.",
+              "options": [
+                {
+                  "id": "sisters_intro_who",
+                  "text": "Who are you?",
+                  "available": true,
+                  "chains": ["sisters_who"]
+                },
+                {
+                  "id": "sisters_intro_what",
+                  "text": "What is this place?",
+                  "available": true,
+                  "chains": ["sisters_what"]
+                },
+                {
+                  "id": "sisters_intro_leave",
+                  "text": "Never mind.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_who",
+              "available": false,
+              "text": "SISTER ONE: 'We were somebody, once. I think. It's been so long I've forgotten the details.'\nSISTER TWO: 'There was a village. Above ground. Sunlight. Horribly bright stuff.'\nSISTER ONE: 'Then we died. Fell down here. Couldn't be bothered to leave.'\nSISTER TWO: 'Charon keeps offering us a ride across his stupid river. We keep saying no.'\nSISTER ONE: 'The view here is better. More... consistent.'\nSISTER TWO: 'Nothing changes. That's the appeal.'",
+              "options": [
+                {
+                  "id": "sisters_who_charon",
+                  "text": "What's Charon like?",
+                  "available": true,
+                  "chains": ["sisters_charon"]
+                },
+                {
+                  "id": "sisters_who_wayout",
+                  "text": "Do you know a way out of here?",
+                  "available": true,
+                  "chains": ["sisters_wayout"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_what",
+              "available": false,
+              "text": "SISTER TWO: 'The Fissure. Deep crack in the world. Goes down further than you'd want to go.'\nSISTER ONE: 'Up there -' she gestures vaguely at the ceiling - 'is the beach. Charon's lake. Dreadfully damp.'\nSISTER TWO: 'Down there -' she points at the floor - 'is where even we don't go. Something lives down there. Something old.'\nSISTER ONE: 'You can feel it breathing sometimes. When the air goes still.'\nSISTER TWO: 'We don't talk about it. Not because we're scared. Because it's boring.'",
+              "options": [
+                {
+                  "id": "sisters_what_beach",
+                  "text": "Tell me more about the beach.",
+                  "available": true,
+                  "chains": ["sisters_beach"]
+                },
+                {
+                  "id": "sisters_what_deeper",
+                  "text": "What lives down there?",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_charon",
+              "available": false,
+              "text": "SISTER ONE: 'Old. Forgets everything. Speaks in that ridiculous rhythm -' \nSISTER TWO: '- da-DUM da-DUM da-DUM -' \nSISTER ONE: 'Yes. That. He's been ferrying souls so long his own has leaked out through his ears.'\nSISTER TWO: 'He keeps offering to take us across the Styx. We keep telling him we're not ready.'\nSISTER ONE: 'He forgets. Offers again next time. Very consistent service, if nothing else.'",
+              "options": [
+                {
+                  "id": "sisters_charon_back",
+                  "text": "Thanks for telling me.",
+                  "available": true,
+                  "closes": ["sisters_charon"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_wayout",
+              "available": false,
+              "text": "SISTER TWO: 'Out? Why would you want out? It's terrible up there.'\nSISTER ONE: 'Sun. Rain. Responsibilities.'\nSISTER TWO: 'The beach is your best bet. Charon's boat can take you across the lake - there are tunnels on the far side that lead up.'\nSISTER ONE: 'Or you could stay here and rot with us. The companionship is minimal but the rent is unbeatable.'",
+              "options": [
+                {
+                  "id": "sisters_wayout_back",
+                  "text": "I'll think about staying. Goodbye.",
+                  "available": true,
+                  "closes": ["sisters_wayout"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_beach",
+              "available": false,
+              "text": "SISTER ONE: 'Big lake. Black water. Charon sits on the shore like a forgotten statue.'\nSISTER TWO: 'There's a boat. Repaired it, apparently. Someone passed through recently - Medusa, we heard.'\nSISTER ONE: 'She screamed. Made the entrance to our lovely fissure collapse. Rude.'\nSISTER TWO: 'But also convenient. Fewer visitors.'",
+              "options": [
+                {
+                  "id": "sisters_beach_back",
+                  "text": "That's helpful. Thanks.",
+                  "available": true,
+                  "closes": ["sisters_beach"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": 8,
+          "position": { "x": 1, "y": 3 },
+          "icon": "sisters2.png",
+          "movement": 0.06,
+          "dialogOptions": [
+            {
+              "id": "sisters_intro",
+              "available": true,
+              "text": "Two figures lounge against the fissure wall, their forms decayed yet strangely preserved. They turn in unison, hollow eyes fixing on you.\n\nSISTER ONE: 'Oh. A visitor. How dreadfully boring.'\nSISTER TWO: 'Don't get excited. They always leave.'\nSISTER ONE: 'Or die. Usually both.'\nSISTER TWO: 'Remember the last one? Kept screaming about Charon. Wept for days.'\nSISTER ONE: 'Entertaining, for a while. Then it got tedious.'\nSISTER TWO: 'Everything gets tedious eventually.'\nSISTER ONE: 'Even being dead.'\n\nThey stare at you with empty interest, like cats watching a moth.",
+              "options": [
+                {
+                  "id": "sisters_intro_who",
+                  "text": "Who are you?",
+                  "available": true,
+                  "chains": ["sisters_who"]
+                },
+                {
+                  "id": "sisters_intro_what",
+                  "text": "What is this place?",
+                  "available": true,
+                  "chains": ["sisters_what"]
+                },
+                {
+                  "id": "sisters_intro_leave",
+                  "text": "Never mind.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_who",
+              "available": false,
+              "text": "SISTER ONE: 'We were somebody, once. I think. It's been so long I've forgotten the details.'\nSISTER TWO: 'There was a village. Above ground. Sunlight. Horribly bright stuff.'\nSISTER ONE: 'Then we died. Fell down here. Couldn't be bothered to leave.'\nSISTER TWO: 'Charon keeps offering us a ride across his stupid river. We keep saying no.'\nSISTER ONE: 'The view here is better. More... consistent.'\nSISTER TWO: 'Nothing changes. That's the appeal.'",
+              "options": [
+                {
+                  "id": "sisters_who_charon",
+                  "text": "What's Charon like?",
+                  "available": true,
+                  "chains": ["sisters_charon"]
+                },
+                {
+                  "id": "sisters_who_wayout",
+                  "text": "Do you know a way out of here?",
+                  "available": true,
+                  "chains": ["sisters_wayout"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_what",
+              "available": false,
+              "text": "SISTER TWO: 'The Fissure. Deep crack in the world. Goes down further than you'd want to go.'\nSISTER ONE: 'Up there -' she gestures vaguely at the ceiling - 'is the beach. Charon's lake. Dreadfully damp.'\nSISTER TWO: 'Down there -' she points at the floor - 'is where even we don't go. Something lives down there. Something old.'\nSISTER ONE: 'You can feel it breathing sometimes. When the air goes still.'\nSISTER TWO: 'We don't talk about it. Not because we're scared. Because it's boring.'",
+              "options": [
+                {
+                  "id": "sisters_what_beach",
+                  "text": "Tell me more about the beach.",
+                  "available": true,
+                  "chains": ["sisters_beach"]
+                },
+                {
+                  "id": "sisters_what_deeper",
+                  "text": "What lives down there?",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_charon",
+              "available": false,
+              "text": "SISTER ONE: 'Old. Forgets everything. Speaks in that ridiculous rhythm -' \nSISTER TWO: '- da-DUM da-DUM da-DUM -' \nSISTER ONE: 'Yes. That. He's been ferrying souls so long his own has leaked out through his ears.'\nSISTER TWO: 'He keeps offering to take us across the Styx. We keep telling him we're not ready.'\nSISTER ONE: 'He forgets. Offers again next time. Very consistent service, if nothing else.'",
+              "options": [
+                {
+                  "id": "sisters_charon_back",
+                  "text": "Thanks for telling me.",
+                  "available": true,
+                  "closes": ["sisters_charon"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_wayout",
+              "available": false,
+              "text": "SISTER TWO: 'Out? Why would you want out? It's terrible up there.'\nSISTER ONE: 'Sun. Rain. Responsibilities.'\nSISTER TWO: 'The beach is your best bet. Charon's boat can take you across the lake - there are tunnels on the far side that lead up.'\nSISTER ONE: 'Or you could stay here and rot with us. The companionship is minimal but the rent is unbeatable.'",
+              "options": [
+                {
+                  "id": "sisters_wayout_back",
+                  "text": "I'll think about staying. Goodbye.",
+                  "available": true,
+                  "closes": ["sisters_wayout"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_beach",
+              "available": false,
+              "text": "SISTER ONE: 'Big lake. Black water. Charon sits on the shore like a forgotten statue.'\nSISTER TWO: 'There's a boat. Repaired it, apparently. Someone passed through recently - Medusa, we heard.'\nSISTER ONE: 'She screamed. Made the entrance to our lovely fissure collapse. Rude.'\nSISTER TWO: 'But also convenient. Fewer visitors.'",
+              "options": [
+                {
+                  "id": "sisters_beach_back",
+                  "text": "That's helpful. Thanks.",
+                  "available": true,
+                  "closes": ["sisters_beach"]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exits": [
+        {
+          "position": { "x": 2, "y": 3 },
+          "targetMap": 4,
+          "targetPosition": { "x": -11, "y": 1 },
+          "text": "The crack widens into the cavern beyond. You can hear water lapping against a shore."
+        }
+      ]
     }
   ]
 };
