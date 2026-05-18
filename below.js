@@ -433,6 +433,18 @@ rock1x2Img.src = "images/rock_1x2.png";
 var rock2x2Img = new Image();
 rock2x2Img.src = "images/rock_2x2.png";
 
+var mushroomBlueImg = new Image();
+mushroomBlueImg.src = "images/mushroom_blue.png";
+
+var mushroomPurpleImg = new Image();
+mushroomPurpleImg.src = "images/mushroom_purple.png";
+
+var mushroomYellowImg = new Image();
+mushroomYellowImg.src = "images/mushroom_yellow.png";
+
+var crystalPinkImg = new Image();
+crystalPinkImg.src = "images/crystal_pink.png";
+
 var cupboardImg = new Image();
 cupboardImg.src = "images/cupboard.png";
 
@@ -3293,6 +3305,10 @@ function drawMapCanvas() {
         if (iconName === "antidote.png") return antidoteImg;
         if (iconName === "bed.png") return bedImg;
         if (iconName === "chair.png") return chairImg;
+        if (iconName === "mushroom_blue.png") return mushroomBlueImg;
+        if (iconName === "mushroom_purple.png") return mushroomPurpleImg;
+        if (iconName === "mushroom_yellow.png") return mushroomYellowImg;
+        if (iconName === "crystal_pink.png") return crystalPinkImg;
         return null;
     }
     
@@ -3447,24 +3463,30 @@ function drawMapCanvas() {
             if (lampX > -100 && lampX < canvas.width + 100 && lampY > -100 && lampY < canvas.height + 100) {
                 var glowSize = lr * width * 2.5;
                 var glow = context.createRadialGradient(lampX, lampY, 0, lampX, lampY, glowSize);
-                glow.addColorStop(0, 'rgba(200, 200, 150, 0.35)');
-                glow.addColorStop(0.5, 'rgba(200, 200, 150, 0.1)');
-                glow.addColorStop(1, 'rgba(200, 200, 150, 0)');
+                var lightColor = obsType ? (obsType.lightColor || 'rgba(200, 200, 150, 0.35)') : 'rgba(200, 200, 150, 0.35)';
+                var midColor = lightColor.replace(/[\d.]+\)$/, '0.1)');
+                var endColor = lightColor.replace(/[\d.]+\)$/, '0)');
+                glow.addColorStop(0, lightColor);
+                glow.addColorStop(0.5, midColor);
+                glow.addColorStop(1, endColor);
                 context.fillStyle = glow;
                 context.fillRect(lampX - glowSize, lampY - glowSize, glowSize * 2, glowSize * 2);
             }
         }
     });
     
-    // Fog overlay (drawn on top of everything, only on map 3)
-    if (curMap === 3 && below.fogParticles) {
+    // Fog overlay (drawn on top of everything, only on map 3 and map 5)
+    if ((curMap === 3 || curMap === 5) && below.fogParticles) {
+        var fogColor = curMap === 5 ? 'rgba(100, 180, 170' : 'rgba(180, 180, 180';
         below.fogParticles.forEach(function(p) {
             var fogX = (p.x * canvas.width);
             var fogY = (p.y * canvas.height);
-            var fogSize = p.size * width * 3;
+            var density = curMap === 5 ? 2.5 : 3.0;
+            var fogSize = p.size * width * density;
             var fogGrad = context.createRadialGradient(fogX, fogY, 0, fogX, fogY, fogSize);
-            fogGrad.addColorStop(0, 'rgba(180, 180, 180, ' + p.opacity + ')');
-            fogGrad.addColorStop(1, 'rgba(180, 180, 180, 0)');
+            var particleOpacity = curMap === 5 ? p.opacity * 0.7 : p.opacity;
+            fogGrad.addColorStop(0, fogColor + ', ' + particleOpacity + ')');
+            fogGrad.addColorStop(1, fogColor + ', 0)');
             context.fillStyle = fogGrad;
             context.fillRect(fogX - fogSize, fogY - fogSize, fogSize * 2, fogSize * 2);
         });
@@ -3537,7 +3559,7 @@ function mapGameLoop() {
     if (below.choiceEvent || below.splashActive) return;
     
     // Update fog particles (drift left to right, screen-space independent of player)
-    if (below.fogParticles && curMap === 3) {
+    if (below.fogParticles && (curMap === 3 || curMap === 5)) {
         below.fogParticles.forEach(function(p) {
             p.x += p.speed;
             if (p.x > 1.5) p.x = -0.5;
@@ -3633,7 +3655,7 @@ function mapGameLoop() {
     if (below.gameData.player.destinationLocation.xVelocity || below.gameData.player.destinationLocation.yVelocity) moving = true;
     // Monster moving (decorative continuous movement)
     if (!moving) {
-        below.gameData.mapData[curMap].monsters.forEach(function(monster) {
+        (below.gameData.mapData[curMap].monsters || []).forEach(function(monster) {
             if (monster.moveAngle !== undefined) {
                 moving = true;
                 return;
@@ -3737,7 +3759,7 @@ function mapGameLoop() {
             batDoorOpen = batDoor && !batDoor.closed;
         }
 
-        below.gameData.mapData[curMap].monsters.forEach(function(monster) {
+        (below.gameData.mapData[curMap].monsters || []).forEach(function(monster) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type || !type.movement) return;
 
@@ -3789,15 +3811,17 @@ function mapGameLoop() {
         });
         // Remove bats that reached the light
         var removedCount = 0;
-        below.gameData.mapData[curMap].monsters = below.gameData.mapData[curMap].monsters.filter(function(m) {
-            if (m.removeMe) {
-                removedCount++;
-                return false;
-            }
-            return true;
-        });
+        if (below.gameData.mapData[curMap].monsters) {
+            below.gameData.mapData[curMap].monsters = below.gameData.mapData[curMap].monsters.filter(function(m) {
+                if (m.removeMe) {
+                    removedCount++;
+                    return false;
+                }
+                return true;
+            });
+        }
         if (removedCount > 0) {
-            var remaining = below.gameData.mapData[curMap].monsters.filter(function(m) { return m.type === 2; });
+            var remaining = (below.gameData.mapData[curMap].monsters || []).filter(function(m) { return m.type === 2; });
             if (remaining.length === 0) {
                 below.gameData.mapLog.push("The last bat vanishes into the light. The passage is clear.");
                 maintainMapLog();

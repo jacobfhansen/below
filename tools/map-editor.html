@@ -404,7 +404,7 @@ function getTileKey(x, y) {
 }
 
 // ────── Entity queries ──────────────────────────────
-function getMonsters() { return gameData.mapData[selectedMap].monsters; }
+function getMonsters() { return gameData.mapData[selectedMap].monsters || []; }
 function getNPCs() { return gameData.mapData[selectedMap].npcs; }
 function getObstacles() { return gameData.mapData[selectedMap].obstacles; }
 function getExits() { return gameData.mapData[selectedMap].exits; }
@@ -443,6 +443,10 @@ function entitiesAtTile(tileX, tileY) {
 function getEntityTypeName(etype) {
     var names = { monster: "Monster", npc: "NPC", obstacle: "Obstacle", exit: "Exit" };
     return names[etype] || etype;
+}
+function escHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 function getEntitySubtypeName(entity, etype) {
     if (etype === "monster") {
@@ -823,7 +827,7 @@ function updateCountSection() {
     var map = gameData.mapData[selectedMap];
     if (!map) { el.innerHTML = ''; return; }
     el.innerHTML = '<h3>Counts</h3>'
-        + '<div class="row">Monsters: <span class="val">' + map.monsters.length + '</span>'
+        + '<div class="row">Monsters: <span class="val">' + (map.monsters || []).length + '</span>'
         + ' &nbsp; NPCs: <span class="val">' + map.npcs.length + '</span></div>'
         + '<div class="row">Obstacles: <span class="val">' + map.obstacles.length + '</span>'
         + ' &nbsp; Exits: <span class="val">' + map.exits.length + '</span></div>'
