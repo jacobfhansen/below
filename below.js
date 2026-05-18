@@ -733,6 +733,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // Splash continue button
     document.getElementById("splashBtn").addEventListener("click", hideSplash);
     
+    // Initialize map 5 hide-and-seek state
+    below.map5TilesMoved = 0;
+
     // Initialize fog particles
     below.fogParticles = [];
     for (var fi = 0; fi < 25; fi++) {
@@ -1782,6 +1785,49 @@ function selectChoiceOption(index) {
         }
     }
 
+    // Handle hide-and-seek countdown start
+    if (selectedOption.id === "sisters_hideandseek_count" && below.choiceEvent && below.choiceEvent.npcPos) {
+        startHideAndSeek();
+        return;
+    }
+
+    // Handle hide-and-seek completion — restore normal conversation
+    if (selectedOption.id === "sisters_hideandseek_complete_close" && below.choiceEvent && below.choiceEvent.npcPos) {
+        below.gameData.mapData[5].npcs.forEach(function(n) {
+            var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_intro"; });
+            if (introD) introD.available = true;
+        });
+    }
+
+    // Handle finding a sister during hide-and-seek
+    if (selectedOption.id === "sisters_hideandseek_found_close" && below.choiceEvent && below.choiceEvent.npcPos) {
+        var curMap = below.gameData.player.currentMap;
+        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (npc) {
+            npc._found = true;
+            var foundD = npc.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_found"; });
+            if (foundD) foundD.available = false;
+            var allFound = below.gameData.mapData[5].npcs.every(function(n) { return n._found; });
+            if (allFound) {
+                below.gameData.mapData[5].npcs.forEach(function(n) {
+                    var completeD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_complete"; });
+                    if (completeD) completeD.available = true;
+                    var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_intro"; });
+                    if (introD) introD.available = false;
+                    var startD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_start"; });
+                    if (startD) startD.available = false;
+                });
+                startSistersReturn();
+            }
+        }
+        if (!below.passwordInput) {
+            closeChoiceEvent();
+        }
+        return;
+    }
+
     if (!below.passwordInput) {
         closeChoiceEvent();
     }
@@ -1800,6 +1846,113 @@ function closeChoiceEvent() {
     gameDivCenter.style.opacity = "1";
     gameDivCenter.style.pointerEvents = "auto";
     maintainMapLog();
+}
+
+function startHideAndSeek() {
+    // Close the current choice event
+    closeChoiceEvent();
+
+    var gameDivCenter = document.getElementById("gameDivCenter");
+    gameDivCenter.style.opacity = "0.5";
+    gameDivCenter.style.pointerEvents = "none";
+
+    // Create fade overlay
+    var fadeDiv = document.createElement("div");
+    fadeDiv.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:#000;opacity:0;z-index:4999;pointer-events:none;transition:opacity 0.5s;";
+    document.body.appendChild(fadeDiv);
+    setTimeout(function() { fadeDiv.style.opacity = "1"; }, 50);
+
+    // After fade completes, show countdown
+    setTimeout(function() {
+        var countDiv = document.createElement("div");
+        countDiv.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;z-index:5000;color:#70A4B2;font-size:72px;font-family:'Courier New',monospace;pointer-events:none;text-shadow:0 0 20px rgba(112,164,178,0.5);";
+        countDiv.id = "hideSeekCount";
+        document.body.appendChild(countDiv);
+
+        var count = 1;
+        var countInterval = setInterval(function() {
+            countDiv.textContent = count;
+            count++;
+            if (count > 10) {
+                clearInterval(countInterval);
+                countDiv.textContent = "READY OR NOT, HERE I COME!";
+                setTimeout(function() {
+                    // Teleport sisters to hiding positions
+                    var sisters = below.gameData.mapData[5].npcs;
+                    var hidingSpots = [
+                        { x: 12, y: 5 },
+                        { x: 18, y: 12 }
+                    ];
+                    sisters.forEach(function(n, i) {
+                        var spot = hidingSpots[i % hidingSpots.length];
+                        n.position.x = spot.x;
+                        n.position.y = spot.y;
+                        n._hidden = true;
+                        n._found = false;
+                    });
+                    // Disable all normal dialogs, enable found dialog
+                    sisters.forEach(function(n) {
+                        n.dialogOptions.forEach(function(d) {
+                            if (d.id !== "sisters_hideandseek_found") {
+                                d.available = false;
+                            }
+                        });
+                        var foundD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_found"; });
+                        if (foundD) foundD.available = true;
+                    });
+                    // Fade back in
+                    fadeDiv.style.opacity = "0";
+                    setTimeout(function() {
+                        fadeDiv.remove();
+                        countDiv.remove();
+                        gameDivCenter.style.opacity = "1";
+                        gameDivCenter.style.pointerEvents = "auto";
+                        below.gameData.mapLog.push("The sisters have vanished into the cavern. Time to find them.");
+                        maintainMapLog();
+                        drawMapCanvas();
+                    }, 500);
+                }, 1500);
+            }
+        }, 700);
+    }, 600);
+}
+
+function startSistersReturn() {
+    below.gameData.mapData[5].npcs.forEach(function(n) {
+        n._hidden = false;
+        n._zombieReturn = true;
+        // Generate walk path back to (15, 10)
+        var path = [];
+        var cx = Math.round(n.position.x);
+        var cy = Math.round(n.position.y);
+        var targetX = 15;
+        var targetY = 10;
+        // Simple path: move horizontally first, then vertically
+        while (cx !== targetX) {
+            cx += (cx < targetX) ? 1 : -1;
+            path.push({ x: cx, y: cy });
+        }
+        while (cy !== targetY) {
+            cy += (cy < targetY) ? 1 : -1;
+            path.push({ x: cx, y: cy });
+        }
+        n.walkPath = path;
+        n.walkDelay = 20;
+        n.onPathComplete = function() {
+            n.position.x = 15;
+            n.position.y = 10;
+            n.walkPath = null;
+            n.onPathComplete = null;
+            n._zombieReturn = false;
+            var allArrived = below.gameData.mapData[5].npcs.every(function(n2) {
+                return !n2.walkPath || n2.walkPath.length === 0;
+            });
+            if (allArrived) {
+                below.gameData.mapLog.push("The sisters shuffle back to their spot, looking exhausted by the effort.");
+                maintainMapLog();
+            }
+        };
+    });
 }
 
 function showSplash(splash) {
@@ -3002,7 +3155,23 @@ function moveOnMap(e) {
         }
     }
     if (playerMoved) {        
-        // Tile text will be shown when player arrives at destination
+        // Track tiles moved on map 5 for hide-and-seek unlock
+        if (below.gameData.player.currentMap === 5) {
+            below.map5TilesMoved = (below.map5TilesMoved || 0) + 1;
+            if (below.map5TilesMoved === 50) {
+                below.gameData.mapData[5].npcs.forEach(function(n) {
+                    n.dialogOptions.forEach(function(d) {
+                        if (d.id === "sisters_intro") {
+                            d.options.forEach(function(o) {
+                                if (o.id === "sisters_intro_waydeeper") o.available = true;
+                            });
+                        }
+                    });
+                });
+                below.gameData.mapLog.push("The sisters seem more animated than before, as if expecting something.");
+                maintainMapLog();
+            }
+        }
     }
     
     //drawMapCanvas();
@@ -3600,7 +3769,7 @@ function mapGameLoop() {
                     var nextStep = npc.walkPath[0];
                     var dx = nextStep.x - Math.round(npc.position.x);
                     var dy = nextStep.y - Math.round(npc.position.y);
-                    if (Math.abs(dx) + Math.abs(dy) === 1 && foundTile(nextStep.x, nextStep.y) && !isPathBlocked(nextStep.x, nextStep.y)) {
+                    if (Math.abs(dx) + Math.abs(dy) === 1 && foundTile(nextStep.x, nextStep.y) && (npc._zombieReturn || !isPathBlocked(nextStep.x, nextStep.y))) {
                         if (dx === 1) { npc.destPos.xVelocity = 1; npc.destPos.x = nextStep.x; }
                         else if (dx === -1) { npc.destPos.xVelocity = -1; npc.destPos.x = nextStep.x; }
                         else if (dy === 1) { npc.destPos.yVelocity = 1; npc.destPos.y = nextStep.y; }

@@ -15502,6 +15502,31 @@ var belowGameData = {
           "icon": "sisters1.png",
           "dialogOptions": [
             {
+              "id": "sisters_hideandseek_found",
+              "available": false,
+              "text": "She claps slowly with exaggerated enthusiasm.\n\nSISTER: 'Found me! Good job.'\nSISTER: 'Now find my sister.'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_found_close",
+                  "text": "One down, one to go.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_hideandseek_complete",
+              "available": false,
+              "text": "Both sisters are back at their spot, looking... almost pleased.\n\nSISTER ONE: 'You found us. Well played.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Watch out for what lives down there. It doesn't play games.'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_complete_close",
+                  "text": "Thanks. I'll check it out.",
+                  "available": true,
+                  "closes": ["sisters_hideandseek_complete"]
+                }
+              ]
+            },
+            {
               "id": "sisters_intro",
               "available": true,
               "text": "Two figures lounge against the fissure wall, their forms decayed yet strangely preserved. They turn in unison, hollow eyes fixing on you.\n\nSISTER ONE: 'Oh. A visitor. How dreadfully boring.'\nSISTER TWO: 'Don't get excited. They always leave.'\nSISTER ONE: 'Or die. Usually both.'\nSISTER TWO: 'Remember the last one? Kept screaming about Charon. Wept for days.'\nSISTER ONE: 'Entertaining, for a while. Then it got tedious.'\nSISTER TWO: 'Everything gets tedious eventually.'\nSISTER ONE: 'Even being dead.'\n\nThey stare at you with empty interest, like cats watching a moth.",
@@ -15525,6 +15550,43 @@ var belowGameData = {
                 {
                   "id": "sisters_intro_leave",
                   "text": "Never mind.",
+                  "available": true
+                },
+                {
+                  "id": "sisters_intro_waydeeper",
+                  "text": "Excuse me, can you tell me the way deeper down?",
+                  "available": false,
+                  "chains": ["sisters_hideandseek_intro"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_hideandseek_intro",
+              "available": false,
+              "text": "SISTER ONE: 'The way deeper? Oh, we know it. But we can't just tell you. That would be too easy.'\nSISTER TWO: 'And easy is boring.'\nSISTER ONE: 'Play with us first. A game.'\nSISTER TWO: 'Hide and seek. First one to find us both wins... the information you want.'\nSISTER ONE: 'Close your eyes and count to ten.'\nSISTER TWO: 'No peeking.'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_agree",
+                  "text": "OK, I'll play hide and seek.",
+                  "available": true,
+                  "chains": ["sisters_hideandseek_start"]
+                },
+                {
+                  "id": "sisters_hideandseek_decline",
+                  "text": "Maybe another time.",
+                  "available": true,
+                  "closes": ["sisters_hideandseek_intro"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_hideandseek_start",
+              "available": false,
+              "text": "SISTER TWO: 'Splendid! Here's how it works.'\nSISTER ONE: 'We'll hide. You count to ten. Then come find us.'\nSISTER TWO: 'Close your eyes. No peeking.'\nSISTER ONE: 'One... two...'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_count",
+                  "text": "...three? ...four? ...five? ...six? ...seven? ...eight? ...nine? ...ten! Ready or not, here I come!",
                   "available": true
                 }
               ]
@@ -15628,6 +15690,31 @@ var belowGameData = {
           "icon": "sisters2.png",
           "dialogOptions": [
             {
+              "id": "sisters_hideandseek_found",
+              "available": false,
+              "text": "She claps slowly with exaggerated enthusiasm.\n\nSISTER: 'Found me! Good job.'\nSISTER: 'Now find my sister.'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_found_close",
+                  "text": "One down, one to go.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "sisters_hideandseek_complete",
+              "available": false,
+              "text": "Both sisters are back at their spot, looking... almost pleased.\n\nSISTER ONE: 'You found us. Well played.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Watch out for what lives down there. It doesn't play games.'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_complete_close",
+                  "text": "Thanks. I'll check it out.",
+                  "available": true,
+                  "closes": ["sisters_hideandseek_complete"]
+                }
+              ]
+            },
+            {
               "id": "sisters_intro",
               "available": true,
               "text": "Two figures lounge against the fissure wall, their forms decayed yet strangely preserved. They turn in unison, hollow eyes fixing on you.\n\nSISTER ONE: 'Oh. A visitor. How dreadfully boring.'\nSISTER TWO: 'Don't get excited. They always leave.'\nSISTER ONE: 'Or die. Usually both.'\nSISTER TWO: 'Remember the last one? Kept screaming about Charon. Wept for days.'\nSISTER ONE: 'Entertaining, for a while. Then it got tedious.'\nSISTER TWO: 'Everything gets tedious eventually.'\nSISTER ONE: 'Even being dead.'\n\nThey stare at you with empty interest, like cats watching a moth.",
@@ -15651,6 +15738,43 @@ var belowGameData = {
                 {
                   "id": "sisters_intro_leave",
                   "text": "Never mind.",
+                  "available": true
+                },
+                {
+                  "id": "sisters_intro_waydeeper",
+                  "text": "Excuse me, can you tell me the way deeper down?",
+                  "available": false,
+                  "chains": ["sisters_hideandseek_intro"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_hideandseek_intro",
+              "available": false,
+              "text": "SISTER ONE: 'The way deeper? Oh, we know it. But we can't just tell you. That would be too easy.'\nSISTER TWO: 'And easy is boring.'\nSISTER ONE: 'Play with us first. A game.'\nSISTER TWO: 'Hide and seek. First one to find us both wins... the information you want.'\nSISTER ONE: 'Close your eyes and count to ten.'\nSISTER TWO: 'No peeking.'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_agree",
+                  "text": "OK, I'll play hide and seek.",
+                  "available": true,
+                  "chains": ["sisters_hideandseek_start"]
+                },
+                {
+                  "id": "sisters_hideandseek_decline",
+                  "text": "Maybe another time.",
+                  "available": true,
+                  "closes": ["sisters_hideandseek_intro"]
+                }
+              ]
+            },
+            {
+              "id": "sisters_hideandseek_start",
+              "available": false,
+              "text": "SISTER TWO: 'Splendid! Here's how it works.'\nSISTER ONE: 'We'll hide. You count to ten. Then come find us.'\nSISTER TWO: 'Close your eyes. No peeking.'\nSISTER ONE: 'One... two...'",
+              "options": [
+                {
+                  "id": "sisters_hideandseek_count",
+                  "text": "...three? ...four? ...five? ...six? ...seven? ...eight? ...nine? ...ten! Ready or not, here I come!",
                   "available": true
                 }
               ]
