@@ -409,6 +409,13 @@ function getNPCs() { return gameData.mapData[selectedMap].npcs; }
 function getObstacles() { return gameData.mapData[selectedMap].obstacles; }
 function getExits() { return gameData.mapData[selectedMap].exits; }
 
+function obstacleOccupies(o, x, y) {
+    if (!o || !o.position) return false;
+    var w = o.width || 1;
+    var h = o.height || 1;
+    return x >= o.position.x && x < o.position.x + w && y >= o.position.y && y < o.position.y + h;
+}
+
 function entitiesAtTile(tileX, tileY) {
     var result = [];
     var exits = getExits();
@@ -418,7 +425,7 @@ function entitiesAtTile(tileX, tileY) {
     }
     var obs = getObstacles();
     for (var i = 0; i < obs.length; i++) {
-        if (obs[i].position && obs[i].position.x === tileX && obs[i].position.y === tileY)
+        if (obs[i].position && obstacleOccupies(obs[i], tileX, tileY))
             result.push({ type: "obstacle", entity: obs[i], index: i });
     }
     var npcs = getNPCs();
@@ -766,19 +773,27 @@ function drawCanvas() {
 }
 
 function drawObstacle(ctx, o, ot, w, cx, cy) {
-    var s = tileToScreen(o.position.x, o.position.y);
+    var ow = o.width || 1;
+    var oh = o.height || 1;
     var color = ot ? ot.color || "#433900" : "#433900";
-    ctx.fillStyle = color;
-    ctx.fillRect(s.x - w/2, s.y - w/2, w, w);
-    ctx.strokeStyle = "#000";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(s.x - w/2, s.y - w/2, w, w);
+    for (var dy = 0; dy < oh; dy++) {
+        for (var dx = 0; dx < ow; dx++) {
+            var s = tileToScreen(o.position.x + dx, o.position.y + dy);
+            ctx.fillStyle = color;
+            ctx.fillRect(s.x - w/2, s.y - w/2, w, w);
+            ctx.strokeStyle = "#000";
+            ctx.lineWidth = 1;
+            ctx.strokeRect(s.x - w/2, s.y - w/2, w, w);
+        }
+    }
+    // Label on the anchor tile only
+    var s0 = tileToScreen(o.position.x, o.position.y);
     ctx.fillStyle = "#fff";
     ctx.font = "bold " + Math.max(8, w * 0.22) + "px monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     var label = ot ? ot.name || "O" : "O";
-    ctx.fillText(label.substring(0, 3), s.x, s.y);
+    ctx.fillText(label.substring(0, 3), s0.x, s0.y);
 }
 
 // ────── Info panel ──────────────────────────────────
@@ -900,6 +915,10 @@ function updateSelectionSection() {
         html += '<div class="form-row">';
         html += '<label><input type="checkbox" ' + (entity.blocking !== false ? "checked" : "") + ' onchange="entitySet(\'blocking\', this.checked)"> Blocking</label>';
         html += '<label><input type="checkbox" ' + (entity.closed ? "checked" : "") + ' onchange="entitySet(\'closed\', this.checked)"> Closed</label>';
+        html += '</div>';
+        html += '<div class="form-row">';
+        html += '<label>W:<input type="number" min="1" value="' + (entity.width || 1) + '" onchange="entitySet(\'width\', parseInt(this.value) || 1)" style="width:50px"></label>';
+        html += '<label>H:<input type="number" min="1" value="' + (entity.height || 1) + '" onchange="entitySet(\'height\', parseInt(this.value) || 1)" style="width:50px"></label>';
         html += '</div>';
         html += '<label>Password:</label><input type="text" value="' + (entity.password || "") + '" onchange="entitySetStr(\'password\', this.value)">';
         html += '<label>StatueDesc:</label><textarea onchange="entitySetStr(\'statueDesc\', this.value)">' + (entity.statueDesc || "") + '</textarea>';

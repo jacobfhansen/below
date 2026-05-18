@@ -339,6 +339,7 @@ var belowGameData = {
       "color": "#433900",
       "icon": "rock.png",
       "blocking": true,
+      "visionBlocking": false,
       "choiceEvents": [
         1,
         3
@@ -1979,28 +1980,76 @@ var belowGameData = {
         {
           "type": 3,
           "position": {
-            "x": -1,
+            "x": 1,
             "y": -8
           },
           "speed": 0.03,
           "status": 1,
           "allowedTiles": [
-            { "x": -1, "y": -8 },
-            { "x": 0, "y": -8 },
-            { "x": 1, "y": -8 },
-            { "x": 2, "y": -8 },
-            { "x": -1, "y": -7 },
-            { "x": 0, "y": -7 },
-            { "x": 1, "y": -7 },
-            { "x": 2, "y": -7 },
-            { "x": -1, "y": -6 },
-            { "x": 0, "y": -6 },
-            { "x": 1, "y": -6 },
-            { "x": 2, "y": -6 },
-            { "x": -1, "y": -5 },
-            { "x": 0, "y": -5 },
-            { "x": 1, "y": -5 },
-            { "x": 2, "y": -5 }
+            {
+              "x": -1,
+              "y": -8
+            },
+            {
+              "x": 0,
+              "y": -8
+            },
+            {
+              "x": 1,
+              "y": -8
+            },
+            {
+              "x": 2,
+              "y": -8
+            },
+            {
+              "x": -1,
+              "y": -7
+            },
+            {
+              "x": 0,
+              "y": -7
+            },
+            {
+              "x": 1,
+              "y": -7
+            },
+            {
+              "x": 2,
+              "y": -7
+            },
+            {
+              "x": -1,
+              "y": -6
+            },
+            {
+              "x": 0,
+              "y": -6
+            },
+            {
+              "x": 1,
+              "y": -6
+            },
+            {
+              "x": 2,
+              "y": -6
+            },
+            {
+              "x": -1,
+              "y": -5
+            },
+            {
+              "x": 0,
+              "y": -5
+            },
+            {
+              "x": 1,
+              "y": -5
+            },
+            {
+              "x": 2,
+              "y": -5
+            }
           ]
         },
         {
@@ -2012,22 +2061,70 @@ var belowGameData = {
           "speed": 0.04,
           "status": 1,
           "allowedTiles": [
-            { "x": -1, "y": -8 },
-            { "x": 0, "y": -8 },
-            { "x": 1, "y": -8 },
-            { "x": 2, "y": -8 },
-            { "x": -1, "y": -7 },
-            { "x": 0, "y": -7 },
-            { "x": 1, "y": -7 },
-            { "x": 2, "y": -7 },
-            { "x": -1, "y": -6 },
-            { "x": 0, "y": -6 },
-            { "x": 1, "y": -6 },
-            { "x": 2, "y": -6 },
-            { "x": -1, "y": -5 },
-            { "x": 0, "y": -5 },
-            { "x": 1, "y": -5 },
-            { "x": 2, "y": -5 }
+            {
+              "x": -1,
+              "y": -8
+            },
+            {
+              "x": 0,
+              "y": -8
+            },
+            {
+              "x": 1,
+              "y": -8
+            },
+            {
+              "x": 2,
+              "y": -8
+            },
+            {
+              "x": -1,
+              "y": -7
+            },
+            {
+              "x": 0,
+              "y": -7
+            },
+            {
+              "x": 1,
+              "y": -7
+            },
+            {
+              "x": 2,
+              "y": -7
+            },
+            {
+              "x": -1,
+              "y": -6
+            },
+            {
+              "x": 0,
+              "y": -6
+            },
+            {
+              "x": 1,
+              "y": -6
+            },
+            {
+              "x": 2,
+              "y": -6
+            },
+            {
+              "x": -1,
+              "y": -5
+            },
+            {
+              "x": 0,
+              "y": -5
+            },
+            {
+              "x": 1,
+              "y": -5
+            },
+            {
+              "x": 2,
+              "y": -5
+            }
           ]
         },
         {
@@ -2039,22 +2136,70 @@ var belowGameData = {
           "speed": 0.05,
           "status": 1,
           "allowedTiles": [
-            { "x": -1, "y": -8 },
-            { "x": 0, "y": -8 },
-            { "x": 1, "y": -8 },
-            { "x": 2, "y": -8 },
-            { "x": -1, "y": -7 },
-            { "x": 0, "y": -7 },
-            { "x": 1, "y": -7 },
-            { "x": 2, "y": -7 },
-            { "x": -1, "y": -6 },
-            { "x": 0, "y": -6 },
-            { "x": 1, "y": -6 },
-            { "x": 2, "y": -6 },
-            { "x": -1, "y": -5 },
-            { "x": 0, "y": -5 },
-            { "x": 1, "y": -5 },
-            { "x": 2, "y": -5 }
+            {
+              "x": -1,
+              "y": -8
+            },
+            {
+              "x": 0,
+              "y": -8
+            },
+            {
+              "x": 1,
+              "y": -8
+            },
+            {
+              "x": 2,
+              "y": -8
+            },
+            {
+              "x": -1,
+              "y": -7
+            },
+            {
+              "x": 0,
+              "y": -7
+            },
+            {
+              "x": 1,
+              "y": -7
+            },
+            {
+              "x": 2,
+              "y": -7
+            },
+            {
+              "x": -1,
+              "y": -6
+            },
+            {
+              "x": 0,
+              "y": -6
+            },
+            {
+              "x": 1,
+              "y": -6
+            },
+            {
+              "x": 2,
+              "y": -6
+            },
+            {
+              "x": -1,
+              "y": -5
+            },
+            {
+              "x": 0,
+              "y": -5
+            },
+            {
+              "x": 1,
+              "y": -5
+            },
+            {
+              "x": 2,
+              "y": -5
+            }
           ]
         },
         {
@@ -2066,22 +2211,70 @@ var belowGameData = {
           "speed": 0.03,
           "status": 1,
           "allowedTiles": [
-            { "x": -1, "y": -8 },
-            { "x": 0, "y": -8 },
-            { "x": 1, "y": -8 },
-            { "x": 2, "y": -8 },
-            { "x": -1, "y": -7 },
-            { "x": 0, "y": -7 },
-            { "x": 1, "y": -7 },
-            { "x": 2, "y": -7 },
-            { "x": -1, "y": -6 },
-            { "x": 0, "y": -6 },
-            { "x": 1, "y": -6 },
-            { "x": 2, "y": -6 },
-            { "x": -1, "y": -5 },
-            { "x": 0, "y": -5 },
-            { "x": 1, "y": -5 },
-            { "x": 2, "y": -5 }
+            {
+              "x": -1,
+              "y": -8
+            },
+            {
+              "x": 0,
+              "y": -8
+            },
+            {
+              "x": 1,
+              "y": -8
+            },
+            {
+              "x": 2,
+              "y": -8
+            },
+            {
+              "x": -1,
+              "y": -7
+            },
+            {
+              "x": 0,
+              "y": -7
+            },
+            {
+              "x": 1,
+              "y": -7
+            },
+            {
+              "x": 2,
+              "y": -7
+            },
+            {
+              "x": -1,
+              "y": -6
+            },
+            {
+              "x": 0,
+              "y": -6
+            },
+            {
+              "x": 1,
+              "y": -6
+            },
+            {
+              "x": 2,
+              "y": -6
+            },
+            {
+              "x": -1,
+              "y": -5
+            },
+            {
+              "x": 0,
+              "y": -5
+            },
+            {
+              "x": 1,
+              "y": -5
+            },
+            {
+              "x": 2,
+              "y": -5
+            }
           ]
         },
         {
@@ -2093,22 +2286,70 @@ var belowGameData = {
           "speed": 0.06,
           "status": 1,
           "allowedTiles": [
-            { "x": -1, "y": -8 },
-            { "x": 0, "y": -8 },
-            { "x": 1, "y": -8 },
-            { "x": 2, "y": -8 },
-            { "x": -1, "y": -7 },
-            { "x": 0, "y": -7 },
-            { "x": 1, "y": -7 },
-            { "x": 2, "y": -7 },
-            { "x": -1, "y": -6 },
-            { "x": 0, "y": -6 },
-            { "x": 1, "y": -6 },
-            { "x": 2, "y": -6 },
-            { "x": -1, "y": -5 },
-            { "x": 0, "y": -5 },
-            { "x": 1, "y": -5 },
-            { "x": 2, "y": -5 }
+            {
+              "x": -1,
+              "y": -8
+            },
+            {
+              "x": 0,
+              "y": -8
+            },
+            {
+              "x": 1,
+              "y": -8
+            },
+            {
+              "x": 2,
+              "y": -8
+            },
+            {
+              "x": -1,
+              "y": -7
+            },
+            {
+              "x": 0,
+              "y": -7
+            },
+            {
+              "x": 1,
+              "y": -7
+            },
+            {
+              "x": 2,
+              "y": -7
+            },
+            {
+              "x": -1,
+              "y": -6
+            },
+            {
+              "x": 0,
+              "y": -6
+            },
+            {
+              "x": 1,
+              "y": -6
+            },
+            {
+              "x": 2,
+              "y": -6
+            },
+            {
+              "x": -1,
+              "y": -5
+            },
+            {
+              "x": 0,
+              "y": -5
+            },
+            {
+              "x": 1,
+              "y": -5
+            },
+            {
+              "x": 2,
+              "y": -5
+            }
           ]
         },
         {
@@ -2120,22 +2361,70 @@ var belowGameData = {
           "speed": 0.04,
           "status": 1,
           "allowedTiles": [
-            { "x": -1, "y": -8 },
-            { "x": 0, "y": -8 },
-            { "x": 1, "y": -8 },
-            { "x": 2, "y": -8 },
-            { "x": -1, "y": -7 },
-            { "x": 0, "y": -7 },
-            { "x": 1, "y": -7 },
-            { "x": 2, "y": -7 },
-            { "x": -1, "y": -6 },
-            { "x": 0, "y": -6 },
-            { "x": 1, "y": -6 },
-            { "x": 2, "y": -6 },
-            { "x": -1, "y": -5 },
-            { "x": 0, "y": -5 },
-            { "x": 1, "y": -5 },
-            { "x": 2, "y": -5 }
+            {
+              "x": -1,
+              "y": -8
+            },
+            {
+              "x": 0,
+              "y": -8
+            },
+            {
+              "x": 1,
+              "y": -8
+            },
+            {
+              "x": 2,
+              "y": -8
+            },
+            {
+              "x": -1,
+              "y": -7
+            },
+            {
+              "x": 0,
+              "y": -7
+            },
+            {
+              "x": 1,
+              "y": -7
+            },
+            {
+              "x": 2,
+              "y": -7
+            },
+            {
+              "x": -1,
+              "y": -6
+            },
+            {
+              "x": 0,
+              "y": -6
+            },
+            {
+              "x": 1,
+              "y": -6
+            },
+            {
+              "x": 2,
+              "y": -6
+            },
+            {
+              "x": -1,
+              "y": -5
+            },
+            {
+              "x": 0,
+              "y": -5
+            },
+            {
+              "x": 1,
+              "y": -5
+            },
+            {
+              "x": 2,
+              "y": -5
+            }
           ]
         }
       ],
@@ -2290,6 +2579,39 @@ var belowGameData = {
           },
           "closed": true,
           "blocking": true
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": -1,
+            "y": 4
+          },
+          "width": 2,
+          "height": 1,
+          "blocking": true,
+          "icon": "rock_2x1.png"
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "width": 1,
+          "height": 2,
+          "blocking": true,
+          "icon": "rock_1x2.png"
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "width": 2,
+          "height": 2,
+          "blocking": true,
+          "icon": "rock_2x2.png"
         }
       ],
       "npcs": [
@@ -2772,8 +3094,12 @@ var belowGameData = {
                   "id": "hermit_centipede_accept",
                   "text": "I'll clear the centipedes. Open the door.",
                   "available": true,
-                  "chains": ["hermit_centipede_give"],
-                  "closes": ["hermit_centipede_intro"]
+                  "chains": [
+                    "hermit_centipede_give"
+                  ],
+                  "closes": [
+                    "hermit_centipede_intro"
+                  ]
                 },
                 {
                   "id": "hermit_centipede_decline",
@@ -2791,15 +3117,52 @@ var belowGameData = {
                   "id": "hermit_centipede_give_ok",
                   "text": "I'm on it.",
                   "available": true,
-                  "closes": ["hermit_centipede_give"]
+                  "closes": [
+                    "hermit_centipede_give"
+                  ]
                 }
               ]
             },
             {
               "id": "hermit_centipede_done",
               "available": false,
-              "text": "'The centipedes — gone? Truly?' He lets out a long breath. 'Thank you. I can finally rest easy knowing this place is clean.' He gazes into the middle distance. 'I don't have much to offer in thanks, but know this — if you ever need a place to rest or a story to lift your spirits, my door is open.'",
-              "options": []
+              "text": "'The centipedes — gone? Truly?' He lets out a long breath. 'Thank you. I can finally rest easy knowing this place is clean.' He gazes into the middle distance. 'I don't have much to offer in thanks —' He trails off, then brightens. 'Actually, I do have some of my cave herbs put by. Best I've ever grown.'",
+              "options": [
+                {
+                  "id": "hermit_centipede_ask_herbs",
+                  "text": "I'd be grateful for some herbs, Alistair.",
+                  "available": true,
+                  "chains": [
+                    "hermit_centipede_thanks"
+                  ],
+                  "closes": [
+                    "hermit_centipede_done"
+                  ]
+                },
+                {
+                  "id": "hermit_centipede_no_herbs",
+                  "text": "No thanks, just glad to help.",
+                  "available": true,
+                  "closes": [
+                    "hermit_centipede_done"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "hermit_centipede_thanks",
+              "available": false,
+              "text": "'Of course, of course!' He rummages through his satchel and pulls out a bundle of dried herbs. 'My finest cave-grown batch. Good for tea, poultices... and quite valuable if you find the right buyer.' He presses them into your hands. 'I'll be at my usual spot if you ever need me again.' He shuffles off toward the main chamber, leaning on his staff.",
+              "options": [
+                {
+                  "id": "hermit_centipede_thanks_accept",
+                  "text": "Thank you, Alistair.",
+                  "available": true,
+                  "closes": [
+                    "hermit_centipede_thanks"
+                  ]
+                }
+              ]
             },
             {
               "id": "hermit_jester1",
@@ -10143,7 +10506,7 @@ var belowGameData = {
         "x0y0": {
           "x": 0,
           "y": 0,
-          "type": 0
+          "type": 6
         },
         "x1y0": {
           "x": 1,
@@ -10529,10 +10892,509 @@ var belowGameData = {
           "x": 5,
           "y": -4,
           "type": 1
+        },
+        "xm1ym4": {
+          "x": -1,
+          "y": -4,
+          "type": 6
+        },
+        "xm1ym3": {
+          "x": -1,
+          "y": -3,
+          "type": 6
+        },
+        "xm1ym5": {
+          "x": -1,
+          "y": -5,
+          "type": 6
+        },
+        "x0ym6": {
+          "x": 0,
+          "y": -6,
+          "type": 6
+        },
+        "xm1ym6": {
+          "x": -1,
+          "y": -6,
+          "type": 6
+        },
+        "x1ym6": {
+          "x": 1,
+          "y": -6,
+          "type": 6
+        },
+        "x1ym7": {
+          "x": 1,
+          "y": -7,
+          "type": 6
+        },
+        "x1ym8": {
+          "x": 1,
+          "y": -8,
+          "type": 6
+        },
+        "x2ym8": {
+          "x": 2,
+          "y": -8,
+          "type": 6
+        },
+        "x2ym7": {
+          "x": 2,
+          "y": -7,
+          "type": 6
+        },
+        "x0ym7": {
+          "x": 0,
+          "y": -7,
+          "type": 6
+        },
+        "x0ym8": {
+          "x": 0,
+          "y": -8,
+          "type": 6
+        },
+        "xm1ym7": {
+          "x": -1,
+          "y": -7,
+          "type": 6
+        },
+        "xm2ym6": {
+          "x": -2,
+          "y": -6,
+          "type": 6
+        },
+        "xm2ym5": {
+          "x": -2,
+          "y": -5,
+          "type": 6
+        },
+        "xm2ym4": {
+          "x": -2,
+          "y": -4,
+          "type": 6
+        },
+        "xm1ym2": {
+          "x": -1,
+          "y": -2,
+          "type": 6
+        },
+        "x0y9": {
+          "x": 0,
+          "y": 9,
+          "type": 6
+        },
+        "xm1y10": {
+          "x": -1,
+          "y": 10,
+          "type": 6
+        },
+        "xm1y9": {
+          "x": -1,
+          "y": 9,
+          "type": 6
+        },
+        "xm1y8": {
+          "x": -1,
+          "y": 8,
+          "type": 6
+        },
+        "xm1y7": {
+          "x": -1,
+          "y": 7,
+          "type": 6
+        },
+        "xm1y6": {
+          "x": -1,
+          "y": 6,
+          "type": 0
+        },
+        "xm1y4": {
+          "x": -1,
+          "y": 4,
+          "type": 0
+        },
+        "xm1y5": {
+          "x": -1,
+          "y": 5,
+          "type": 0
+        },
+        "xm2y4": {
+          "x": -2,
+          "y": 4,
+          "type": 0
+        },
+        "xm2y5": {
+          "x": -2,
+          "y": 5,
+          "type": 0
+        },
+        "xm2y6": {
+          "x": -2,
+          "y": 6,
+          "type": 0
+        },
+        "xm2y7": {
+          "x": -2,
+          "y": 7,
+          "type": 0
+        },
+        "xm2y8": {
+          "x": -2,
+          "y": 8,
+          "type": 0
+        },
+        "xm2y9": {
+          "x": -2,
+          "y": 9,
+          "type": 0
+        },
+        "xm2y10": {
+          "x": -2,
+          "y": 10,
+          "type": 0
+        },
+        "xm1y3": {
+          "x": -1,
+          "y": 3,
+          "type": 0
+        },
+        "xm3y3": {
+          "x": -3,
+          "y": 3,
+          "type": 0
+        },
+        "xm2y2": {
+          "x": -2,
+          "y": 2,
+          "type": 0
+        },
+        "xm1y2": {
+          "x": -1,
+          "y": 2,
+          "type": 0
+        },
+        "xm2y3": {
+          "x": -2,
+          "y": 3,
+          "type": 0
+        },
+        "xm2y1": {
+          "x": -2,
+          "y": 1,
+          "type": 0
+        },
+        "xm1y1": {
+          "x": -1,
+          "y": 1,
+          "type": 0
+        },
+        "xm1y0": {
+          "x": -1,
+          "y": 0,
+          "type": 0
+        },
+        "xm2y0": {
+          "x": -2,
+          "y": 0,
+          "type": 0
+        },
+        "xm2ym1": {
+          "x": -2,
+          "y": -1,
+          "type": 0
+        },
+        "xm1ym1": {
+          "x": -1,
+          "y": -1,
+          "type": 0
+        },
+        "xm2ym2": {
+          "x": -2,
+          "y": -2,
+          "type": 0
+        },
+        "xm2ym3": {
+          "x": -2,
+          "y": -3,
+          "type": 0
+        },
+        "xm3ym3": {
+          "x": -3,
+          "y": -3,
+          "type": 0
+        },
+        "xm3ym2": {
+          "x": -3,
+          "y": -2,
+          "type": 0
+        },
+        "xm3ym1": {
+          "x": -3,
+          "y": -1,
+          "type": 0
+        },
+        "xm3y0": {
+          "x": -3,
+          "y": 0,
+          "type": 0
+        },
+        "xm3y1": {
+          "x": -3,
+          "y": 1,
+          "type": 0
+        },
+        "xm3y2": {
+          "x": -3,
+          "y": 2,
+          "type": 0
+        },
+        "xm3y4": {
+          "x": -3,
+          "y": 4,
+          "type": 0
+        },
+        "xm3y5": {
+          "x": -3,
+          "y": 5,
+          "type": 0
+        },
+        "xm3y6": {
+          "x": -3,
+          "y": 6,
+          "type": 0
+        },
+        "xm3y7": {
+          "x": -3,
+          "y": 7,
+          "type": 0
+        },
+        "xm3y8": {
+          "x": -3,
+          "y": 8,
+          "type": 0
+        },
+        "xm3y9": {
+          "x": -3,
+          "y": 9,
+          "type": 0
+        },
+        "xm3y10": {
+          "x": -3,
+          "y": 10,
+          "type": 0
+        },
+        "xm3ym4": {
+          "x": -3,
+          "y": -4,
+          "type": 0
+        },
+        "xm3ym5": {
+          "x": -3,
+          "y": -5,
+          "type": 0
+        },
+        "xm3ym7": {
+          "x": -3,
+          "y": -7,
+          "type": 0
+        },
+        "xm2ym7": {
+          "x": -2,
+          "y": -7,
+          "type": 0
+        },
+        "xm2ym8": {
+          "x": -2,
+          "y": -8,
+          "type": 0
+        },
+        "xm1ym8": {
+          "x": -1,
+          "y": -8,
+          "type": 0
+        },
+        "xm4ym8": {
+          "x": -4,
+          "y": -8,
+          "type": 0
+        },
+        "xm3ym8": {
+          "x": -3,
+          "y": -8,
+          "type": 0
+        },
+        "xm3ym6": {
+          "x": -3,
+          "y": -6,
+          "type": 0
+        },
+        "xm4ym7": {
+          "x": -4,
+          "y": -7,
+          "type": 0
+        },
+        "xm4ym6": {
+          "x": -4,
+          "y": -6,
+          "type": 0
+        },
+        "xm2ym9": {
+          "x": -2,
+          "y": -9,
+          "type": 0
+        },
+        "xm1ym9": {
+          "x": -1,
+          "y": -9,
+          "type": 6
+        },
+        "x0ym9": {
+          "x": 0,
+          "y": -9,
+          "type": 6
+        },
+        "x1ym9": {
+          "x": 1,
+          "y": -9,
+          "type": 6
+        },
+        "x2ym9": {
+          "x": 2,
+          "y": -9,
+          "type": 6
+        },
+        "xm3ym9": {
+          "x": -3,
+          "y": -9,
+          "type": 0
+        },
+        "xm4ym9": {
+          "x": -4,
+          "y": -9,
+          "type": 0
+        },
+        "xm4ym5": {
+          "x": -4,
+          "y": -5,
+          "type": 0
+        },
+        "xm4ym4": {
+          "x": -4,
+          "y": -4,
+          "type": 0
+        },
+        "xm4ym3": {
+          "x": -4,
+          "y": -3,
+          "type": 0
+        },
+        "xm4ym2": {
+          "x": -4,
+          "y": -2,
+          "type": 0
+        },
+        "xm4ym1": {
+          "x": -4,
+          "y": -1,
+          "type": 0
+        },
+        "xm4y0": {
+          "x": -4,
+          "y": 0,
+          "type": 0
+        },
+        "xm4y1": {
+          "x": -4,
+          "y": 1,
+          "type": 0
+        },
+        "xm4y2": {
+          "x": -4,
+          "y": 2,
+          "type": 0
+        },
+        "xm4y3": {
+          "x": -4,
+          "y": 3,
+          "type": 0
+        },
+        "xm4y4": {
+          "x": -4,
+          "y": 4,
+          "type": 0
+        },
+        "xm4y5": {
+          "x": -4,
+          "y": 5,
+          "type": 0
+        },
+        "xm4y6": {
+          "x": -4,
+          "y": 6,
+          "type": 0
+        },
+        "xm4y7": {
+          "x": -4,
+          "y": 7,
+          "type": 0
+        },
+        "xm4y8": {
+          "x": -4,
+          "y": 8,
+          "type": 0
+        },
+        "xm4y9": {
+          "x": -4,
+          "y": 9,
+          "type": 0
+        },
+        "xm4y10": {
+          "x": -4,
+          "y": 10,
+          "type": 0
         }
       },
       "monsters": [],
-      "obstacles": [],
+      "obstacles": [
+        {
+          "type": 1,
+          "position": {
+            "x": -2,
+            "y": -9
+          },
+          "width": 2,
+          "height": 2,
+          "blocking": true,
+          "icon": "rock_2x2.png"
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 0,
+            "y": -9
+          },
+          "width": 2,
+          "height": 2,
+          "icon": "rock_2x2.png"
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": 2,
+            "y": -9
+          }
+        },
+        {
+          "type": 1,
+          "position": {
+            "x": -4,
+            "y": -9
+          },
+          "width": 2,
+          "height": 2,
+          "icon": "rock_2x2.png"
+        }
+      ],
       "npcs": [
         {
           "type": 6,

@@ -248,8 +248,19 @@ function syncGameData() {
         // Obstacles: add new ones from fresh data, keep existing instance state
         (freshMap.obstacles || []).forEach(function(freshObs) {
             if (!freshObs.position) return;
+            var fw = freshObs.width || 1;
+            var fh = freshObs.height || 1;
             var exists = (curMap.obstacles || []).some(function(o) {
-                return o.position && o.position.x === freshObs.position.x && o.position.y === freshObs.position.y;
+                if (!o.position) return false;
+                // Check if any tile of the fresh obstacle overlaps with any tile of the existing obstacle
+                for (var fdx = 0; fdx < fw; fdx++) {
+                    for (var fdy = 0; fdy < fh; fdy++) {
+                        if (obstacleOccupies(o, freshObs.position.x + fdx, freshObs.position.y + fdy)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             });
             if (!exists) {
                 curMap.obstacles.push(JSON.parse(JSON.stringify(freshObs)));
@@ -403,6 +414,15 @@ bloodImg.src = "images/blood.png";
 
 var rockImg = new Image();
 rockImg.src = "images/rock.png";
+
+var rock2x1Img = new Image();
+rock2x1Img.src = "images/rock_2x1.png";
+
+var rock1x2Img = new Image();
+rock1x2Img.src = "images/rock_1x2.png";
+
+var rock2x2Img = new Image();
+rock2x2Img.src = "images/rock_2x2.png";
 
 var cupboardImg = new Image();
 cupboardImg.src = "images/cupboard.png";
@@ -1231,6 +1251,30 @@ function selectChoiceOption(index) {
         setTimeout(function() { showInventory([15]); }, 50);
     }
     
+    // When player accepts herbs from Hermit after centipede quest
+    if (selectedOption.id === "hermit_centipede_thanks_accept" && below.choiceEvent && below.choiceEvent.npcPos) {
+        below.gameData.player.inventory.push(6);
+        below.gameData.mapLog.push("The Hermit hands you a bundle of dried cave herbs.");
+        maintainMapLog();
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        if (hermitNpc) {
+            // Disable all quest/trade/greeting dialogs, keep only thanks stub
+            hermitNpc.dialogOptions.forEach(function(d) {
+                if (d.id !== "hermit_centipede_thanks") {
+                    d.available = false;
+                }
+            });
+            // Move Hermit back to his original spot
+            hermitNpc.position.x = 3;
+            hermitNpc.position.y = 3;
+        }
+        // Re-enable the thanks dialog as the permanent stub
+        var thanksD = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; }).dialogOptions.find(function(d) { return d.id === "hermit_centipede_thanks"; });
+        if (thanksD) thanksD.available = true;
+        setTimeout(function() { showInventory([6]); }, 50);
+        drawMapCanvas();
+    }
+
     // When player first talks to the Mole, enable Medusa's mole dialog option
     if (selectedOption.id === "molea1q") {
         var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
@@ -1969,7 +2013,7 @@ function submitPassword() {
     
     var curMap = below.gameData.player.currentMap;
     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-        return o.position.x === below.passwordInput.obstaclePos.x && o.position.y === below.passwordInput.obstaclePos.y;
+        return obstacleOccupies(o, below.passwordInput.obstaclePos.x, below.passwordInput.obstaclePos.y);
     });
     
     var container = document.getElementById("passwordInputContainer");
@@ -2232,6 +2276,14 @@ function isTileBlocking(x, y) {
     var tileType = tile.type !== undefined ? below.gameData.tileTypes[tile.type] : null;
     return tileType ? !!tileType.blocking : false;
 }
+function obstacleOccupies(o, x, y) {
+    if (!o || !o.position) return false;
+    var w = o.width || 1;
+    var h = o.height || 1;
+    return x >= o.position.x && x < o.position.x + w &&
+           y >= o.position.y && y < o.position.y + h;
+}
+
 function isBlocked(x, y) {
     var curMap = below.gameData.player.currentMap;
     // Check NPCs - they always block (unless attacked/intimidated)
@@ -2245,7 +2297,7 @@ function isBlocked(x, y) {
         if (!o.position) return false;
         var obsType = below.gameData.obstacleTypes[o.type];
         var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
-        return o.position.x === x && o.position.y === y && isBlocking;
+        return obstacleOccupies(o, x, y) && isBlocking;
     });
     if (blockedByObstacle) return true;
     // Check blocking tiles (e.g. water)
@@ -2262,7 +2314,7 @@ function isVisionBlocked(x, y) {
         var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
         if (!isBlocking) return false;
         var blocksVision = obsType ? (obsType.visionBlocking !== undefined ? obsType.visionBlocking : true) : true;
-        return o.position.x === x && o.position.y === y && blocksVision;
+        return obstacleOccupies(o, x, y) && blocksVision;
     });
 }
 
@@ -2280,7 +2332,7 @@ function getBlockedMessage(x, y) {
     var obstacle = (below.gameData.mapData[curMap].obstacles || []).find(function(o) {
         if (!o.position) return false;
         var oType = below.gameData.obstacleTypes[o.type];
-        return o.position.x === x && o.position.y === y && oType && oType.blocking;
+        return obstacleOccupies(o, x, y) && oType && oType.blocking;
     });
     if (obstacle) {
         var obsType = below.gameData.obstacleTypes[obstacle.type];
@@ -2342,7 +2394,7 @@ function getChoiceEventOptions(choiceEventIds) {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
                     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                        return obstacleOccupies(o, below.choiceEvent.obstaclePos.x, below.choiceEvent.obstaclePos.y);
                     });
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
@@ -2407,7 +2459,7 @@ function getChoiceEventOptions(choiceEventIds) {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
                     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                        return obstacleOccupies(o, below.choiceEvent.obstaclePos.x, below.choiceEvent.obstaclePos.y);
                     });
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
@@ -2443,7 +2495,7 @@ function getChoiceEventOptions(choiceEventIds) {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
                     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                        return obstacleOccupies(o, below.choiceEvent.obstaclePos.x, below.choiceEvent.obstaclePos.y);
                     });
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
@@ -2500,7 +2552,7 @@ function getChoiceEventOptions(choiceEventIds) {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
                     var curMap = below.gameData.player.currentMap;
                     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-                        return o.position.x === below.choiceEvent.obstaclePos.x && o.position.y === below.choiceEvent.obstaclePos.y;
+                        return obstacleOccupies(o, below.choiceEvent.obstaclePos.x, below.choiceEvent.obstaclePos.y);
                     });
                     if (obstacle) {
                         var isClosed = obstacle.closed !== undefined ? obstacle.closed : true;
@@ -2537,7 +2589,7 @@ function isPathBlocked(x, y) {
         if (!o.position) return false;
         var obsType = below.gameData.obstacleTypes[o.type];
         var isBlocking = o.blocking !== undefined ? o.blocking : (obsType ? obsType.blocking : false);
-        return o.position.x === x && o.position.y === y && isBlocking;
+        return obstacleOccupies(o, x, y) && isBlocking;
     });
     if (blockedByObstacle) return true;
     // Check blocking tiles
@@ -2598,7 +2650,7 @@ function getBlockedChoiceEvents(x, y) {
     }
     // Check obstacles
     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-        return o.position.x === x && o.position.y === y;
+        return obstacleOccupies(o, x, y);
     });
     if (obstacle) {
         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
@@ -2748,9 +2800,17 @@ function pushObstacle(obstaclePos) {
     }
     // Find and move the obstacle
     var obstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
-        return o.position.x === obstaclePos.x && o.position.y === obstaclePos.y;
+        return obstacleOccupies(o, obstaclePos.x, obstaclePos.y);
     });
     if (obstacle) {
+        // Only single-tile obstacles can be pushed
+        var ow = obstacle.width || 1;
+        var oh = obstacle.height || 1;
+        if (ow > 1 || oh > 1) {
+            below.gameData.mapLog.push("The obstacle is too large to push.");
+            maintainMapLog();
+            return false;
+        }
         obstacle.position.x = newX;
         obstacle.position.y = newY;
         below.gameData.mapLog.push("You push the rock.");
@@ -2814,6 +2874,7 @@ function moveOnMap(e) {
                 maintainMapLog();
             }
         } else if (below.equippedItem === 15 && below.gameData.player.currentMap === 0) {
+            console.log("[below] centipede cleaner used on map 0, player at", curX, curY);
             var curMap = below.gameData.player.currentMap;
             var px = Math.round(curX);
             var py = Math.round(curY);
@@ -2831,21 +2892,7 @@ function moveOnMap(e) {
                 below.gameData.mapData[curMap].monsters.splice(centIdx, 1);
                 below.gameData.mapLog.push("You squirt the centipede with Crawl-End. It shrivels and dissolves.");
                 maintainMapLog();
-                // Check if any centipedes remain
-                var remaining = below.gameData.mapData[curMap].monsters.filter(function(m) { return m.type === 3; });
-                if (remaining.length === 0) {
-                    below.gameData.mapLog.push("All centipedes have been cleared from the storage room!");
-                    maintainMapLog();
-                    var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
-                    if (hermitNpc) {
-                        hermitNpc.position.x = 2;
-                        hermitNpc.position.y = -7;
-                        var doneD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_done"; });
-                        if (doneD) doneD.available = true;
-                        var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
-                        if (introD) introD.available = false;
-                    }
-                }
+                handleAllCentipedesCleared();
             } else {
                 below.gameData.mapLog.push("You squirt the Crawl-End on the floor. Nothing happens. There are no centipedes here.");
                 maintainMapLog();
@@ -2938,6 +2985,36 @@ function moveOnMap(e) {
     }
     
     //drawMapCanvas();
+}
+
+function handleAllCentipedesCleared() {
+    if (below.centipedesHandled) { console.log("[below] centipede: already handled, skipping"); return; }
+    var map0 = below.gameData.mapData[0];
+    var remaining = map0.monsters.filter(function(m) { return m.type === 3; });
+    console.log("[below] centipede: remaining =", remaining.length);
+    if (remaining.length > 0) return;
+    below.centipedesHandled = true;
+    console.log("[below] All centipedes cleared — moving Hermit to (2,-7)");
+    below.gameData.mapLog.push("All centipedes have been cleared from the storage room!");
+    maintainMapLog();
+    console.log("[below] centipede: log pushed, now looking for Hermit NPC on map 0");
+    var hermitNpc = map0.npcs.find(function(n) { return n.type === 1; });
+    console.log("[below] centipede: hermitNpc =", hermitNpc);
+    if (hermitNpc) {
+        hermitNpc.position.x = 2;
+        hermitNpc.position.y = -7;
+        console.log("[below] centipede: Hermit moved to 2,-7");
+        var doneD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_done"; });
+        console.log("[below] centipede: doneD =", doneD);
+        if (doneD) doneD.available = true;
+        var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
+        if (introD) introD.available = false;
+        console.log("[below] centipede: dialogs updated");
+    } else {
+        console.log("[below] centipede: HERMIT NPC NOT FOUND ON MAP 0!");
+    }
+    drawMapCanvas();
+    console.log("[below] centipede: drawMapCanvas called");
 }
 
 function maintainMapLog() {
@@ -3176,59 +3253,113 @@ function drawMapCanvas() {
         }
     });
     // OBSTACLES - Draw in two passes: below player (drawOrder=1), then on top (drawOrder=2)
+    // Resolve an icon name to an Image object (for non-door icons)
+    function getIconImage(iconName) {
+        if (iconName === "rock.png") return rockImg;
+        if (iconName === "rock_2x1.png") return rock2x1Img;
+        if (iconName === "rock_1x2.png") return rock1x2Img;
+        if (iconName === "rock_2x2.png") return rock2x2Img;
+        if (iconName === "blood.png") return bloodImg;
+        if (iconName === "table.png") return tableImg;
+        if (iconName === "key1.png") return keyImg;
+        if (iconName === "cupboard.png") return cupboardImg;
+        if (iconName === "lightbeam.png") return lightbeamImg;
+        if (iconName === "lamppost.png") return lamppostImg;
+        if (iconName === "statue1.png") return statueImg1;
+        if (iconName === "statue2.png") return statueImg2;
+        if (iconName === "statue3.png") return statueImg3;
+        if (iconName === "statue4.png") return statueImg4;
+        if (iconName === "statue5.png") return statueImg5;
+        if (iconName === "statue6.png") return statueImg6;
+        if (iconName === "gem.png") return gemImg;
+        if (iconName === "crate.png") return crateImg;
+        if (iconName === "barrel.png") return barrelImg;
+        if (iconName === "rudder.png") return rudderImg;
+        if (iconName === "mast.png") return mastImg;
+        if (iconName === "steering_wheel.png") return steeringWheelImg;
+        if (iconName === "sail.png") return sailImg;
+        if (iconName === "antidote.png") return antidoteImg;
+        if (iconName === "bed.png") return bedImg;
+        if (iconName === "chair.png") return chairImg;
+        return null;
+    }
+    
+    // Draw a large multi-tile obstacle icon spanning all its tiles
+    function drawMultiObstacle(obstacle, type, ow, oh) {
+        var iconName = obstacle.icon || type.icon;
+        var img = null;
+        if (iconName === "door_closed.png" || iconName === "door_open.png") {
+            var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+            img = isClosed ? doorClosedImg : doorOpenImg;
+        } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
+            var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+            img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
+        } else {
+            img = getIconImage(iconName);
+            if (!img) { img = new Image(); if (!img.complete) img.src = "images/" + iconName; }
+        }
+        if (!img.complete) img.src = "images/" + iconName;
+        var drawX = (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2);
+        var drawY = (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2);
+        context.drawImage(img, drawX, drawY, ow * width, oh * width);
+    }
+    
+    // Helper to draw an obstacle tile at a given position
+    function drawObstacleTile(ox, oy, obstacle, type) {
+        var distXOT = (ox * width + verticalCenter - horizontalOffset) - verticalCenter;
+        var distYOT = (oy * width + horizontalCenter - verticalOffset) - horizontalCenter;
+        var distanceOT = Math.sqrt(distXOT * distXOT + distYOT * distYOT);
+        if (distanceOT > visionPixels) return;
+        if (!visibleTiles[ox + "," + oy]) return;
+        if (type.icon) {
+            var iconName = obstacle.icon || type.icon;
+            var img = null;
+            if (iconName === "door_closed.png" || iconName === "door_open.png") {
+                var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+                img = isClosed ? doorClosedImg : doorOpenImg;
+            } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
+                var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
+                img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
+            } else {
+                img = getIconImage(iconName);
+                if (!img) { img = new Image(); if (!img.complete) img.src = "images/" + iconName; }
+            }
+            if (!img.complete) img.src = "images/" + iconName;
+            context.drawImage(img, (ox * width) + verticalCenter - horizontalOffset - (width/2), (oy * width) + horizontalCenter - verticalOffset - (width/2), width, width);
+        } else {
+            context.fillStyle = type.color || "#433900";
+            context.fillRect((ox * width) - (width/2) + verticalCenter - horizontalOffset, (oy * width) - (width/2) + horizontalCenter - verticalOffset, width, width);
+        }
+    }
+    
     // First pass: draw obstacles with drawOrder=1 (below player)
     (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {
         var type = below.gameData.obstacleTypes[obstacle.type];
-        var drawOrder = type.drawOrder || 1; // Default: draw below player
-        if (drawOrder !== 1) return; // Skip for now
-        
-        // Calculate distance for vision check
-        var distXO = (obstacle.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
-        var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
-        var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
-        
-        // Check vision and line-of-sight
-        if (distanceO <= visionPixels && visibleTiles[obstacle.position.x + "," + obstacle.position.y]) {
-            if (type.icon) {
-                var iconName = obstacle.icon || type.icon;
-                var img = null;
-                if (iconName === "door_closed.png" || iconName === "door_open.png") {
-                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                    img = isClosed ? doorClosedImg : doorOpenImg;
-                } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
-                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                    img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
-                } else {
-                    if (iconName === "rock.png") img = rockImg;
-                    else if (iconName === "blood.png") img = bloodImg;
-                    else if (iconName === "table.png") img = tableImg;
-                    else if (iconName === "key1.png") img = keyImg;
-                    else if (iconName === "cupboard.png") img = cupboardImg;
-                    else if (iconName === "lightbeam.png") img = lightbeamImg;
-                    else if (iconName === "lamppost.png") img = lamppostImg;
-                    else if (iconName === "statue1.png") img = statueImg1;
-                    else if (iconName === "statue2.png") img = statueImg2;
-                    else if (iconName === "statue3.png") img = statueImg3;
-                    else if (iconName === "statue4.png") img = statueImg4;
-                    else if (iconName === "statue5.png") img = statueImg5;
-                    else if (iconName === "statue6.png") img = statueImg6;
-                    else if (iconName === "gem.png") img = gemImg;
-                    else if (iconName === "crate.png") img = crateImg;
-                    else if (iconName === "barrel.png") img = barrelImg;
-                    else if (iconName === "rudder.png") img = rudderImg;
-                    else if (iconName === "mast.png") img = mastImg;
-                    else if (iconName === "steering_wheel.png") img = steeringWheelImg;
-                    else if (iconName === "sail.png") img = sailImg;
-                    else if (iconName === "antidote.png") img = antidoteImg;
-                    else if (iconName === "bed.png") img = bedImg;
-                    else if (iconName === "chair.png") img = chairImg;
-                    else img = new Image();
+        var drawOrder = type.drawOrder || 1;
+        if (drawOrder !== 1) return;
+        var ow = obstacle.width || 1;
+        var oh = obstacle.height || 1;
+        if ((ow > 1 || oh > 1) && obstacle.icon) {
+            var anyVisible = false;
+            for (var vdy = 0; vdy < oh && !anyVisible; vdy++) {
+                for (var vdx = 0; vdx < ow && !anyVisible; vdx++) {
+                    var vtx = obstacle.position.x + vdx;
+                    var vty = obstacle.position.y + vdy;
+                    var vdX = (vtx * width + verticalCenter - horizontalOffset) - verticalCenter;
+                    var vdY = (vty * width + horizontalCenter - verticalOffset) - horizontalCenter;
+                    if (Math.sqrt(vdX * vdX + vdY * vdY) <= visionPixels && visibleTiles[vtx + "," + vty]) {
+                        anyVisible = true;
+                    }
                 }
-                if (!img.complete) img.src = "images/" + iconName;
-                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2), (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
-            } else {
-                context.fillStyle = type.color || "#433900";
-                context.fillRect((obstacle.position.x * width) - (width/2) + verticalCenter - horizontalOffset, (obstacle.position.y * width) - (width/2) + horizontalCenter - verticalOffset, width, width);
+            }
+            if (anyVisible) {
+                drawMultiObstacle(obstacle, type, ow, oh);
+            }
+        } else {
+            for (var dy = 0; dy < oh; dy++) {
+                for (var dx = 0; dx < ow; dx++) {
+                    drawObstacleTile(obstacle.position.x + dx, obstacle.position.y + dy, obstacle, type);
+                }
             }
         }
     });
@@ -3242,72 +3373,35 @@ function drawMapCanvas() {
     (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {
         var type = below.gameData.obstacleTypes[obstacle.type];
         var drawOrder = type.drawOrder || 1;
-        if (drawOrder !== 2) return; // Skip - only draw top-layer obstacles
-        
-        // Calculate distance for vision check
-        var distXO = (obstacle.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
-        var distYO = (obstacle.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
-        var distanceO = Math.sqrt(distXO * distXO + distYO * distYO);
-        
-        if (distanceO <= visionPixels && visibleTiles[obstacle.position.x + "," + obstacle.position.y]) {
-            if (type.icon) {
-                var iconName = obstacle.icon || type.icon;
-                var img = null;
-                if (iconName === "door_closed.png" || iconName === "door_open.png") {
-                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                    img = isClosed ? doorClosedImg : doorOpenImg;
-                } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
-                    var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                    img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
-                } else {
-                    if (iconName === "rock.png") img = rockImg;
-                    else if (iconName === "blood.png") img = bloodImg;
-                    else if (iconName === "table.png") img = tableImg;
-                    else if (iconName === "key1.png") img = keyImg;
-                    else if (iconName === "cupboard.png") img = cupboardImg;
-                    else if (iconName === "lightbeam.png") img = lightbeamImg;
-                    else if (iconName === "lamppost.png") img = lamppostImg;
-                    else if (iconName === "statue1.png") img = statueImg1;
-                    else if (iconName === "statue2.png") img = statueImg2;
-                    else if (iconName === "statue3.png") img = statueImg3;
-                    else if (iconName === "statue4.png") img = statueImg4;
-                    else if (iconName === "statue5.png") img = statueImg5;
-                    else if (iconName === "statue6.png") img = statueImg6;
-                    else if (iconName === "gem.png") img = gemImg;
-                    else if (iconName === "crate.png") img = crateImg;
-                    else if (iconName === "barrel.png") img = barrelImg;
-                    else if (iconName === "rudder.png") img = rudderImg;
-                    else if (iconName === "mast.png") img = mastImg;
-                    else if (iconName === "steering_wheel.png") img = steeringWheelImg;
-                    else if (iconName === "sail.png") img = sailImg;
-                    else if (iconName === "antidote.png") img = antidoteImg;
-                    else if (iconName === "bed.png") img = bedImg;
-                    else if (iconName === "chair.png") img = chairImg;
-                    else img = new Image();
+        if (drawOrder !== 2) return;
+        var opacity = type.opacity !== undefined ? type.opacity : 1.0;
+        if (opacity < 1.0) context.globalAlpha = opacity;
+        var ow = obstacle.width || 1;
+        var oh = obstacle.height || 1;
+        if ((ow > 1 || oh > 1) && obstacle.icon) {
+            var anyVisible = false;
+            for (var vdy = 0; vdy < oh && !anyVisible; vdy++) {
+                for (var vdx = 0; vdx < ow && !anyVisible; vdx++) {
+                    var vtx = obstacle.position.x + vdx;
+                    var vty = obstacle.position.y + vdy;
+                    var vdX = (vtx * width + verticalCenter - horizontalOffset) - verticalCenter;
+                    var vdY = (vty * width + horizontalCenter - verticalOffset) - horizontalCenter;
+                    if (Math.sqrt(vdX * vdX + vdY * vdY) <= visionPixels && visibleTiles[vtx + "," + vty]) {
+                        anyVisible = true;
+                    }
                 }
-                if (!img.complete) img.src = "images/" + iconName;
-                
-                // Apply opacity if defined
-                var opacity = type.opacity !== undefined ? type.opacity : 1.0;
-                if (opacity < 1.0) {
-                    context.globalAlpha = opacity;
-                }
-                context.drawImage(img, (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2), (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
-                if (opacity < 1.0) {
-                    context.globalAlpha = 1.0;
-                }
-            } else {
-                var opacity = type.opacity !== undefined ? type.opacity : 1.0;
-                if (opacity < 1.0) {
-                    context.globalAlpha = opacity;
-                }
-                context.fillStyle = type.color || "#433900";
-                context.fillRect((obstacle.position.x * width) - (width/2) + verticalCenter - horizontalOffset, (obstacle.position.y * width) - (width/2) + horizontalCenter - verticalOffset, width, width);
-                if (opacity < 1.0) {
-                    context.globalAlpha = 1.0;
+            }
+            if (anyVisible) {
+                drawMultiObstacle(obstacle, type, ow, oh);
+            }
+        } else {
+            for (var dy2 = 0; dy2 < oh; dy2++) {
+                for (var dx2 = 0; dx2 < ow; dx2++) {
+                    drawObstacleTile(obstacle.position.x + dx2, obstacle.position.y + dy2, obstacle, type);
                 }
             }
         }
+        if (opacity < 1.0) context.globalAlpha = 1.0;
     });
     
     // EXITS (drawn on top of everything)
@@ -3704,6 +3798,14 @@ function mapGameLoop() {
                     var centIntro = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
                     if (centIntro) centIntro.available = true;
                 }
+            }
+        }
+        // Safety check: centipedes all cleared (fires once)
+        if (!below.centipedesHandled && below.gameData.player.currentMap === 0) {
+            if (below.centipedeCheckTick === undefined) below.centipedeCheckTick = 0;
+            below.centipedeCheckTick++;
+            if (below.centipedeCheckTick % 60 === 0) {
+                handleAllCentipedesCleared();
             }
         }
         below.gameData.mapData[curMap].npcs.forEach(function(npc) {
