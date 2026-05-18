@@ -81,42 +81,226 @@ var belowGameData = {
   "cutScenes": {
     "after_map0": {
       "cuts": [
-        { "type": "image", "src": "hermit_cut.png", "x": 15, "y": 15, "width": 280,
-          "fadeIn": 1000, "hold": 4000, "fadeOut": 1000, "driftX": 5, "driftY": -2, "start": 0 },
-        { "type": "text", "text": "In the darkness below, you found Alistair the Hermit — a reclusive old man surrounded by herbs and keys. He needed help clearing his home of pests.", "x": 55, "y": 20, "fontSize": 22,
-          "fadeIn": 1500, "hold": 3500, "fadeOut": 1000, "driftX": -3, "driftY": -1, "start": 0 },
-        { "type": "image", "src": "rats_cut.png", "x": 30, "y": 35, "width": 120,
-          "fadeIn": 400, "hold": 1200, "fadeOut": 400, "driftX": 0, "driftY": 3, "start": 6500 },
-        { "type": "image", "src": "rats_cut.png", "x": 45, "y": 38, "width": 120,
-          "fadeIn": 600, "hold": 1200, "fadeOut": 400, "driftX": 0, "driftY": 3, "start": 6500 },
-        { "type": "image", "src": "rats_cut.png", "x": 60, "y": 35, "width": 120,
-          "fadeIn": 800, "hold": 1200, "fadeOut": 400, "driftX": 0, "driftY": 3, "start": 6500 },
-        { "type": "text", "text": "...to clear out the rats from his storeroom...", "x": 30, "y": 65, "fontSize": 20,
-          "fadeIn": 1000, "hold": 2000, "fadeOut": 800, "start": 6600 },
-        { "type": "image", "src": "bats_cut.png", "x": 25, "y": 32, "width": 100,
-          "fadeIn": 300, "hold": 800, "fadeOut": 300, "driftX": 15, "driftY": -5, "start": 10500 },
-        { "type": "image", "src": "bats_cut.png", "x": 40, "y": 35, "width": 100,
-          "fadeIn": 400, "hold": 900, "fadeOut": 300, "driftX": 15, "driftY": -5, "start": 10500 },
-        { "type": "image", "src": "bats_cut.png", "x": 55, "y": 33, "width": 100,
-          "fadeIn": 500, "hold": 1000, "fadeOut": 300, "driftX": 15, "driftY": -5, "start": 10500 },
-        { "type": "image", "src": "bats_cut.png", "x": 70, "y": 36, "width": 100,
-          "fadeIn": 600, "hold": 1000, "fadeOut": 300, "driftX": 15, "driftY": -5, "start": 10500 },
-        { "type": "image", "src": "bats_cut.png", "x": 30, "y": 38, "width": 100,
-          "fadeIn": 700, "hold": 900, "fadeOut": 300, "driftX": 15, "driftY": -5, "start": 10500 },
-        { "type": "text", "text": "...then the bats from the marble passage...", "x": 30, "y": 65, "fontSize": 20,
-          "fadeIn": 800, "hold": 2000, "fadeOut": 800, "start": 10600 },
-        { "type": "image", "src": "centipedes_cut.png", "x": 40, "y": 30, "width": 160,
-          "fadeIn": 1000, "hold": 2500, "fadeOut": 1000, "driftX": 3, "driftY": 2, "start": 14500 },
-        { "type": "text", "text": "...and the centipedes await below.", "x": 40, "y": 65, "fontSize": 20,
-          "fadeIn": 1200, "hold": 2300, "fadeOut": 800, "start": 14600 },
-        { "type": "fade", "color": "#000000",
-          "fadeIn": 800, "hold": 500, "fadeOut": 200, "start": 18000 },
-        { "type": "image", "src": "jester_cut.png", "x": 30, "y": 15, "width": 260,
-          "fadeIn": 1500, "hold": 5000, "fadeOut": 1000, "driftX": 4, "driftY": -2, "start": 19000 },
-        { "type": "text", "text": "But the Jester has been watching. He finds your obedience amusing — for now.", "x": 55, "y": 22, "fontSize": 22,
-          "fadeIn": 2000, "hold": 4500, "fadeOut": 1000, "start": 19200 },
-        { "type": "text", "text": "\"Not everything is as it seems in these caves, little helper...\"", "x": 55, "y": 50, "fontSize": 20, "fontStyle": "italic",
-          "fadeIn": 2500, "hold": 4000, "fadeOut": 1500, "start": 19500 }
+        {
+          "type": "image",
+          "src": "hermit_cut.png",
+          "x": 15,
+          "y": 15,
+          "width": 280,
+          "fadeIn": 1000,
+          "hold": 4000,
+          "fadeOut": 1000,
+          "driftX": 5,
+          "driftY": -2,
+          "start": 0
+        },
+        {
+          "type": "text",
+          "text": "In the darkness below, you found Alistair the Hermit - a reclusive old man surrounded by herbs and keys. He needed help clearing his home of pests.",
+          "x": 55,
+          "y": 20,
+          "fontSize": 22,
+          "fadeIn": 1500,
+          "hold": 3500,
+          "fadeOut": 1000,
+          "driftX": -3,
+          "driftY": -1,
+          "start": 0
+        },
+        {
+          "type": "image",
+          "src": "rats_cut.png",
+          "x": 30,
+          "y": 35,
+          "width": 120,
+          "fadeIn": 400,
+          "hold": 1200,
+          "fadeOut": 400,
+          "driftX": 0,
+          "driftY": 3,
+          "start": 6500
+        },
+        {
+          "type": "image",
+          "src": "rats_cut.png",
+          "x": 45,
+          "y": 38,
+          "width": 120,
+          "fadeIn": 600,
+          "hold": 1200,
+          "fadeOut": 400,
+          "driftX": 0,
+          "driftY": 3,
+          "start": 6500
+        },
+        {
+          "type": "image",
+          "src": "rats_cut.png",
+          "x": 60,
+          "y": 35,
+          "width": 120,
+          "fadeIn": 800,
+          "hold": 1200,
+          "fadeOut": 400,
+          "driftX": 0,
+          "driftY": 3,
+          "start": 6500
+        },
+        {
+          "type": "text",
+          "text": "...to clear out the rats from his storeroom...",
+          "x": 30,
+          "y": 65,
+          "fontSize": 20,
+          "fadeIn": 1000,
+          "hold": 2000,
+          "fadeOut": 800,
+          "start": 6600
+        },
+        {
+          "type": "image",
+          "src": "bats_cut.png",
+          "x": 25,
+          "y": 32,
+          "width": 100,
+          "fadeIn": 300,
+          "hold": 800,
+          "fadeOut": 300,
+          "driftX": 15,
+          "driftY": -5,
+          "start": 10500
+        },
+        {
+          "type": "image",
+          "src": "bats_cut.png",
+          "x": 40,
+          "y": 35,
+          "width": 100,
+          "fadeIn": 400,
+          "hold": 900,
+          "fadeOut": 300,
+          "driftX": 15,
+          "driftY": -5,
+          "start": 10500
+        },
+        {
+          "type": "image",
+          "src": "bats_cut.png",
+          "x": 55,
+          "y": 33,
+          "width": 100,
+          "fadeIn": 500,
+          "hold": 1000,
+          "fadeOut": 300,
+          "driftX": 15,
+          "driftY": -5,
+          "start": 10500
+        },
+        {
+          "type": "image",
+          "src": "bats_cut.png",
+          "x": 70,
+          "y": 36,
+          "width": 100,
+          "fadeIn": 600,
+          "hold": 1000,
+          "fadeOut": 300,
+          "driftX": 15,
+          "driftY": -5,
+          "start": 10500
+        },
+        {
+          "type": "image",
+          "src": "bats_cut.png",
+          "x": 30,
+          "y": 38,
+          "width": 100,
+          "fadeIn": 700,
+          "hold": 900,
+          "fadeOut": 300,
+          "driftX": 15,
+          "driftY": -5,
+          "start": 10500
+        },
+        {
+          "type": "text",
+          "text": "...then the bats from the marble passage...",
+          "x": 30,
+          "y": 65,
+          "fontSize": 20,
+          "fadeIn": 800,
+          "hold": 2000,
+          "fadeOut": 800,
+          "start": 10600
+        },
+        {
+          "type": "image",
+          "src": "centipedes_cut.png",
+          "x": 40,
+          "y": 30,
+          "width": 160,
+          "fadeIn": 1000,
+          "hold": 2500,
+          "fadeOut": 1000,
+          "driftX": 3,
+          "driftY": 2,
+          "start": 14500
+        },
+        {
+          "type": "text",
+          "text": "...and the centipedes await below.",
+          "x": 40,
+          "y": 65,
+          "fontSize": 20,
+          "fadeIn": 1200,
+          "hold": 2300,
+          "fadeOut": 800,
+          "start": 14600
+        },
+        {
+          "type": "fade",
+          "color": "#000000",
+          "fadeIn": 800,
+          "hold": 500,
+          "fadeOut": 200,
+          "start": 18000
+        },
+        {
+          "type": "image",
+          "src": "jester_cut.png",
+          "x": 30,
+          "y": 15,
+          "width": 260,
+          "fadeIn": 1500,
+          "hold": 5000,
+          "fadeOut": 1000,
+          "driftX": 4,
+          "driftY": -2,
+          "start": 19000
+        },
+        {
+          "type": "text",
+          "text": "But the Jester has been watching. He finds your obedience amusing - for now.",
+          "x": 55,
+          "y": 22,
+          "fontSize": 22,
+          "fadeIn": 2000,
+          "hold": 4500,
+          "fadeOut": 1000,
+          "start": 19200
+        },
+        {
+          "type": "text",
+          "text": "\"Not everything is as it seems in these caves, little helper...\"",
+          "x": 55,
+          "y": 50,
+          "fontSize": 20,
+          "fontStyle": "italic",
+          "fadeIn": 2500,
+          "hold": 4000,
+          "fadeOut": 1500,
+          "start": 19500
+        }
       ]
     }
   },
@@ -442,7 +626,7 @@ var belowGameData = {
     },
     "13": {
       "name": "Rat Spray",
-      "description": "A rusty canister marked 'RAT-A-WAY — Guaranteed to clear any rodent infestation'",
+      "description": "A rusty canister marked 'RAT-A-WAY - Guaranteed to clear any rodent infestation'",
       "icon": "rat_spray.png",
       "choiceEvents": [],
       "useText": "You give the canister a quick spray. Nothing but stale air."
@@ -456,7 +640,7 @@ var belowGameData = {
     },
     "15": {
       "name": "Centipede Cleaner",
-      "description": "A bottle of thick, foul-smelling liquid. 'CRAWL-END — For all your centipede problems'",
+      "description": "A bottle of thick, foul-smelling liquid. 'CRAWL-END - For all your centipede problems'",
       "icon": "centipede_cleaner.png",
       "choiceEvents": [],
       "useText": "You sniff the bottle. Your eyes water. You put it away."
@@ -614,14 +798,21 @@ var belowGameData = {
           "y1": 1,
           "x2": -4,
           "y2": 3,
-          "description": "A dim chamber. A rickety table stands in the corner, its surface streaked with grime. Shadows shift beneath it — rats."
+          "description": "A dim chamber. A rickety table stands in the corner, its surface streaked with grime. Shadows shift beneath it - rats."
         },
         {
           "x1": -12,
           "y1": -3,
           "x2": -3,
           "y2": -1,
-          "description": "A wide marble corridor stretches west. Faint squeaking echoes from above — bats dart through the darkness, their leathery wings stirring the stale air. A draft tickles your face from somewhere further west."
+          "description": "A wide marble corridor stretches west. Faint squeaking echoes from above - bats dart through the darkness, their leathery wings stirring the stale air. A draft tickles your face from somewhere further west."
+        },
+        {
+          "x1": -1,
+          "y1": -8,
+          "x2": 2,
+          "y2": -5,
+          "description": "A damp storage room cluttered with old crates. Centipedes skitter across the floor and walls in the dim light."
         }
       ],
       "tiles": {
@@ -1784,6 +1975,168 @@ var belowGameData = {
               "y": -1
             }
           ]
+        },
+        {
+          "type": 3,
+          "position": {
+            "x": -1,
+            "y": -8
+          },
+          "speed": 0.03,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -1, "y": -8 },
+            { "x": 0, "y": -8 },
+            { "x": 1, "y": -8 },
+            { "x": 2, "y": -8 },
+            { "x": -1, "y": -7 },
+            { "x": 0, "y": -7 },
+            { "x": 1, "y": -7 },
+            { "x": 2, "y": -7 },
+            { "x": -1, "y": -6 },
+            { "x": 0, "y": -6 },
+            { "x": 1, "y": -6 },
+            { "x": 2, "y": -6 },
+            { "x": -1, "y": -5 },
+            { "x": 0, "y": -5 },
+            { "x": 1, "y": -5 },
+            { "x": 2, "y": -5 }
+          ]
+        },
+        {
+          "type": 3,
+          "position": {
+            "x": 0,
+            "y": -8
+          },
+          "speed": 0.04,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -1, "y": -8 },
+            { "x": 0, "y": -8 },
+            { "x": 1, "y": -8 },
+            { "x": 2, "y": -8 },
+            { "x": -1, "y": -7 },
+            { "x": 0, "y": -7 },
+            { "x": 1, "y": -7 },
+            { "x": 2, "y": -7 },
+            { "x": -1, "y": -6 },
+            { "x": 0, "y": -6 },
+            { "x": 1, "y": -6 },
+            { "x": 2, "y": -6 },
+            { "x": -1, "y": -5 },
+            { "x": 0, "y": -5 },
+            { "x": 1, "y": -5 },
+            { "x": 2, "y": -5 }
+          ]
+        },
+        {
+          "type": 3,
+          "position": {
+            "x": 1,
+            "y": -7
+          },
+          "speed": 0.05,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -1, "y": -8 },
+            { "x": 0, "y": -8 },
+            { "x": 1, "y": -8 },
+            { "x": 2, "y": -8 },
+            { "x": -1, "y": -7 },
+            { "x": 0, "y": -7 },
+            { "x": 1, "y": -7 },
+            { "x": 2, "y": -7 },
+            { "x": -1, "y": -6 },
+            { "x": 0, "y": -6 },
+            { "x": 1, "y": -6 },
+            { "x": 2, "y": -6 },
+            { "x": -1, "y": -5 },
+            { "x": 0, "y": -5 },
+            { "x": 1, "y": -5 },
+            { "x": 2, "y": -5 }
+          ]
+        },
+        {
+          "type": 3,
+          "position": {
+            "x": 2,
+            "y": -7
+          },
+          "speed": 0.03,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -1, "y": -8 },
+            { "x": 0, "y": -8 },
+            { "x": 1, "y": -8 },
+            { "x": 2, "y": -8 },
+            { "x": -1, "y": -7 },
+            { "x": 0, "y": -7 },
+            { "x": 1, "y": -7 },
+            { "x": 2, "y": -7 },
+            { "x": -1, "y": -6 },
+            { "x": 0, "y": -6 },
+            { "x": 1, "y": -6 },
+            { "x": 2, "y": -6 },
+            { "x": -1, "y": -5 },
+            { "x": 0, "y": -5 },
+            { "x": 1, "y": -5 },
+            { "x": 2, "y": -5 }
+          ]
+        },
+        {
+          "type": 3,
+          "position": {
+            "x": 0,
+            "y": -6
+          },
+          "speed": 0.06,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -1, "y": -8 },
+            { "x": 0, "y": -8 },
+            { "x": 1, "y": -8 },
+            { "x": 2, "y": -8 },
+            { "x": -1, "y": -7 },
+            { "x": 0, "y": -7 },
+            { "x": 1, "y": -7 },
+            { "x": 2, "y": -7 },
+            { "x": -1, "y": -6 },
+            { "x": 0, "y": -6 },
+            { "x": 1, "y": -6 },
+            { "x": 2, "y": -6 },
+            { "x": -1, "y": -5 },
+            { "x": 0, "y": -5 },
+            { "x": 1, "y": -5 },
+            { "x": 2, "y": -5 }
+          ]
+        },
+        {
+          "type": 3,
+          "position": {
+            "x": -1,
+            "y": -5
+          },
+          "speed": 0.04,
+          "status": 1,
+          "allowedTiles": [
+            { "x": -1, "y": -8 },
+            { "x": 0, "y": -8 },
+            { "x": 1, "y": -8 },
+            { "x": 2, "y": -8 },
+            { "x": -1, "y": -7 },
+            { "x": 0, "y": -7 },
+            { "x": 1, "y": -7 },
+            { "x": 2, "y": -7 },
+            { "x": -1, "y": -6 },
+            { "x": 0, "y": -6 },
+            { "x": 1, "y": -6 },
+            { "x": 2, "y": -6 },
+            { "x": -1, "y": -5 },
+            { "x": 0, "y": -5 },
+            { "x": 1, "y": -5 },
+            { "x": 2, "y": -5 }
+          ]
         }
       ],
       "obstacles": [
@@ -1928,6 +2281,15 @@ var belowGameData = {
             "x": -12,
             "y": -2
           }
+        },
+        {
+          "type": 4,
+          "position": {
+            "x": -3,
+            "y": -4
+          },
+          "closed": true,
+          "blocking": true
         }
       ],
       "npcs": [
@@ -2194,11 +2556,11 @@ var belowGameData = {
             {
               "id": "hermit_intro1",
               "available": false,
-              "text": "The old man chuckles softly. 'The way out? Heh. I've been trying to find that for... oh, must be years now. The name's Alistair. Alistair Wormwood. I was a botanist once. Before the cave-in.'",
+              "text": "'The way out? Heh. I've been trying to find it for years. The name's Alistair. Alistair Wormwood. I was a botanist once, before the cave-in sealed me down here. Since then I've explored every corner of these caves, made my peace with the dark.' He gestures vaguely at his trinkets.",
               "options": [
                 {
                   "id": "hermit_intro1a",
-                  "text": "A botanist? What happened?",
+                  "text": "What happened? Tell me more.",
                   "available": true,
                   "chains": [
                     "hermit_intro2"
@@ -2206,7 +2568,7 @@ var belowGameData = {
                 },
                 {
                   "id": "hermit_intro1l",
-                  "text": "You're not very helpful.",
+                  "text": "That's rough. I need to go.",
                   "available": true
                 }
               ]
@@ -2214,11 +2576,11 @@ var belowGameData = {
             {
               "id": "hermit_intro2",
               "available": false,
-              "text": "'I was exploring a promising fissure in the old quarry. Found some remarkable specimens - luminescent moss, crystal formations unlike any I'd seen. Then the earth moved. When I woke, the passage was sealed. I've been here ever since.' He gestures vaguely at his trinkets.",
+              "text": "'I was exploring a fissure in the old quarry — found luminescent moss, crystals that hum with energy. Then the earth moved.' He shrugs. 'This is no mere survival, child — this is a lifetime's work! Every herb holds a secret. The moss cures wounds that would fester above ground. There's a whole world down here that surface-dwellers know nothing about.' He strokes his beard. 'The secret isn't going up — it's how far down you're willing to go. Below these caves lies a maze. Below that, deeper chambers sealed by ancient doors.'",
               "options": [
                 {
                   "id": "hermit_intro2a",
-                  "text": "So you've been surviving down here all this time?",
+                  "text": "How do I find the way out?",
                   "available": true,
                   "chains": [
                     "hermit_intro3"
@@ -2226,53 +2588,15 @@ var belowGameData = {
                 },
                 {
                   "id": "hermit_intro2b",
-                  "text": "That's a sad story.",
-                  "available": true,
-                  "chains": [
-                    "hermit_intro3"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "hermit_intro3",
-              "available": false,
-              "text": "'Surviving? Ha! This is no mere survival, child - this is a lifetime's work! Every key tells a story. Every herb holds a secret. The moss in these caves can cure wounds that would fester above ground. The crystals hum with energy if you hold them just right. There's a whole world down here that surface-dwellers know nothing about.'",
-              "options": [
-                {
-                  "id": "hermit_intro3a",
-                  "text": "What about the way out?",
-                  "available": true,
-                  "chains": [
-                    "hermit_intro4"
-                  ]
-                },
-                {
-                  "id": "hermit_intro3l",
                   "text": "Fascinating, but I need to go.",
                   "available": true
                 }
               ]
             },
             {
-              "id": "hermit_intro4",
+              "id": "hermit_intro3",
               "available": false,
-              "text": "'The way out...' He strokes his beard thoughtfully. 'There are layers to this place, child. You came from the surface. Below these caves lies a maze. Below that... deeper chambers, sealed by ancient doors. The secret isn't in finding the way up - it's in how far down you're willing to go.'",
-              "options": [
-                {
-                  "id": "hermit_intro4b",
-                  "text": "I just want to escape.",
-                  "available": true,
-                  "chains": [
-                    "hermit_intro5"
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "hermit_intro5",
-              "available": false,
-              "text": "'Then you'll need to descend. Through the caves, into the maze, past the old stone doors. Seek the woman with snakes for hair - Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
+              "text": "'Seek the woman with snakes for hair — Medusa, they call her. She's been here longest. If anyone knows the way, it's her.' He turns back to his herbs. 'Now if you'll excuse me, my work awaits.'",
               "options": [
                 {
                   "id": "hermit_intro_end",
@@ -2281,9 +2605,7 @@ var belowGameData = {
                   "closes": [
                     "hermit_intro1",
                     "hermit_intro2",
-                    "hermit_intro3",
-                    "hermit_intro4",
-                    "hermit_intro5"
+                    "hermit_intro3"
                   ]
                 },
                 {
@@ -2296,9 +2618,7 @@ var belowGameData = {
                   "closes": [
                     "hermit_intro1",
                     "hermit_intro2",
-                    "hermit_intro3",
-                    "hermit_intro4",
-                    "hermit_intro5"
+                    "hermit_intro3"
                   ]
                 }
               ]
@@ -2321,7 +2641,7 @@ var belowGameData = {
             {
               "id": "hermit_rat_spray",
               "available": false,
-              "text": "'The rats have overrun the place,' he mutters, peering through the doorway. 'I used to keep a spray for them — my own recipe. Strong enough to drive 'em out for good. Fetch it for me, would you? It should be somewhere in my old chambers. Here take this key to unlock the door. I have to stay here and guard my herbs.'",
+              "text": "'The rats have overrun the place,' he mutters, peering through the doorway. 'I used to keep a spray for them - my own recipe. Strong enough to drive 'em out for good. Fetch it for me, would you? It should be somewhere in my old chambers. Here take this key to unlock the door. I have to stay here and guard my herbs.'",
               "options": [
                 {
                   "id": "hermit_rat_spray_accept",
@@ -2365,7 +2685,7 @@ var belowGameData = {
               "options": [
                 {
                   "id": "hermit_rat_spray_give_hand",
-                  "text": "Here, take it.",
+                  "text": "...",
                   "available": true,
                   "closes": [
                     "hermit_rat_spray_give",
@@ -2377,13 +2697,17 @@ var belowGameData = {
             {
               "id": "hermit_bat_swatter",
               "available": false,
-              "text": "'Ah, there you are!' He dusts off his hands. 'Now that the rats are dealt with, there's another matter. I used to keep a bat swatter around here — the bats in the western caves have been getting bold. It should be somewhere in this room. Fetch it for me, would you?'",
+              "text": "'Ah, there you are!' He dusts off his hands. 'Now that the rats are dealt with, there's another matter. I used to keep a bat swatter around here - the bats in the western caves have been getting bold. It should be somewhere in this room. Fetch it for me, would you?'",
               "options": [
                 {
                   "id": "hermit_bat_swatter_accept",
                   "text": "I'll find the swatter.",
                   "available": true,
-                  "chains": [
+                  "chains": [],
+                  "closes": [
+                    "hermit_bat_swatter"
+                  ],
+                  "opens": [
                     "hermit_bat_swatter_wait"
                   ]
                 },
@@ -2420,7 +2744,7 @@ var belowGameData = {
             {
               "id": "hermit_bat_swatter_give",
               "available": false,
-              "text": "'Ah, you found it! Let me —' He reaches for it, then winces, clutching his lower back. 'Oof. I've gotten too stiff for this. My backhand swings aren't what they used to be.' He sighs. 'You keep it. I've unlocked the old door to the west. Go clear those bats out. I'll be at my post if you need me.' He shuffles back toward the main chamber.",
+              "text": "'Ah, you found it! Let me -' He reaches for it, then winces, clutching his lower back. 'Oof. I've gotten too stiff for this. My backhand swings aren't what they used to be.' He sighs. 'You keep it. I've unlocked the old door to the west. Go clear those bats out. I'll be at my post if you need me.' He shuffles back toward the main chamber.",
               "options": [
                 {
                   "id": "hermit_bat_swatter_give_hand",
@@ -2437,6 +2761,44 @@ var belowGameData = {
               "id": "hermit_bat_intro",
               "available": false,
               "text": "'The western door is open. The bats won't clear themselves, you know. Take that swatter and show them who's boss.'",
+              "options": []
+            },
+            {
+              "id": "hermit_centipede_intro",
+              "available": false,
+              "text": "'You've cleared the bats! I can hear myself think again.' He leans on his staff. 'There's one last thing — centipedes. They've infested the old storage room through the east wall. Nasty creatures. I'd deal with them myself but my back —' he winces — 'well, you've got the swatter. There's a bottle of Crawl-End in here somewhere that should do the trick. If you're willing, say the word and I'll open the way.'",
+              "options": [
+                {
+                  "id": "hermit_centipede_accept",
+                  "text": "I'll clear the centipedes. Open the door.",
+                  "available": true,
+                  "chains": ["hermit_centipede_give"],
+                  "closes": ["hermit_centipede_intro"]
+                },
+                {
+                  "id": "hermit_centipede_decline",
+                  "text": "Not right now.",
+                  "available": true
+                }
+              ]
+            },
+            {
+              "id": "hermit_centipede_give",
+              "available": false,
+              "text": "He rummages through a sack and pulls out a grimy bottle. 'Crawl-End. One squirt and those centipedes will shrivel up like morning dew. Take it.' He tosses it to you, then shuffles to the east wall and strains against a hidden latch. With a groan, a section of the wall swings open. 'There. The old storage room. Do what you must.'",
+              "options": [
+                {
+                  "id": "hermit_centipede_give_ok",
+                  "text": "I'm on it.",
+                  "available": true,
+                  "closes": ["hermit_centipede_give"]
+                }
+              ]
+            },
+            {
+              "id": "hermit_centipede_done",
+              "available": false,
+              "text": "'The centipedes — gone? Truly?' He lets out a long breath. 'Thank you. I can finally rest easy knowing this place is clean.' He gazes into the middle distance. 'I don't have much to offer in thanks, but know this — if you ever need a place to rest or a story to lift your spirits, my door is open.'",
               "options": []
             },
             {

@@ -1214,6 +1214,23 @@ function selectChoiceOption(index) {
         }
     }
     
+    // When Hermit hands over the centipede cleaner, add item and open door
+    if (selectedOption.id === "hermit_centipede_give_ok" && below.choiceEvent && below.choiceEvent.npcPos) {
+        below.gameData.player.inventory.push(15);
+        below.gameData.mapLog.push("The Hermit hands you a grimy bottle labeled 'Crawl-End'.");
+        maintainMapLog();
+        var centDoor = below.gameData.mapData[0].obstacles.find(function(o) {
+            return o.position.x === -3 && o.position.y === -4;
+        });
+        if (centDoor) {
+            centDoor.closed = false;
+            centDoor.blocking = false;
+            below.gameData.mapLog.push("The Hermit strains against a hidden latch. A section of the east wall swings open.");
+            maintainMapLog();
+        }
+        setTimeout(function() { showInventory([15]); }, 50);
+    }
+    
     // When player first talks to the Mole, enable Medusa's mole dialog option
     if (selectedOption.id === "molea1q") {
         var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
@@ -1659,7 +1676,7 @@ function selectChoiceOption(index) {
                 below.ratsCleared = true;
                 showSplash({
                     image: "hermit_dialog.png",
-                    text: "Alistair storms through the doorway, rat spray hissing. 'THIEVING VERMIN! STEALING MY HERBS! THINK YOU CAN CHEAT ALISTAIR THE HERMIT?!' He sprays wildly — rats scatter, shrieking, fleeing through cracks and crevices. Within moments, the chamber is silent. He stands panting, canister still raised. 'And stay OUT!' he bellows at the empty room. Then, quieter: 'That was... satisfying.'",
+                    text: "Alistair storms through the doorway, rat spray hissing. 'THIEVING VERMIN! STEALING MY HERBS! THINK YOU CAN CHEAT ALISTAIR THE HERMIT?!' He sprays wildly - rats scatter, shrieking, fleeing through cracks and crevices. Within moments, the chamber is silent. He stands panting, canister still raised. 'And stay OUT!' he bellows at the empty room. Then, quieter: 'That was... satisfying.'",
                     shake: true
                 });
                 below.pendingRatClear = true;
@@ -2796,6 +2813,43 @@ function moveOnMap(e) {
                 below.gameData.mapLog.push("You swing the bat swatter. Nothing to hit here.");
                 maintainMapLog();
             }
+        } else if (below.equippedItem === 15 && below.gameData.player.currentMap === 0) {
+            var curMap = below.gameData.player.currentMap;
+            var px = Math.round(curX);
+            var py = Math.round(curY);
+            var centipede = null;
+            var centIdx = -1;
+            for (var mi = 0; mi < below.gameData.mapData[curMap].monsters.length; mi++) {
+                var m = below.gameData.mapData[curMap].monsters[mi];
+                if (m.type === 3 && Math.round(m.position.x) === px && Math.round(m.position.y) === py) {
+                    centipede = m;
+                    centIdx = mi;
+                    break;
+                }
+            }
+            if (centipede) {
+                below.gameData.mapData[curMap].monsters.splice(centIdx, 1);
+                below.gameData.mapLog.push("You squirt the centipede with Crawl-End. It shrivels and dissolves.");
+                maintainMapLog();
+                // Check if any centipedes remain
+                var remaining = below.gameData.mapData[curMap].monsters.filter(function(m) { return m.type === 3; });
+                if (remaining.length === 0) {
+                    below.gameData.mapLog.push("All centipedes have been cleared from the storage room!");
+                    maintainMapLog();
+                    var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+                    if (hermitNpc) {
+                        hermitNpc.position.x = 2;
+                        hermitNpc.position.y = -7;
+                        var doneD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_done"; });
+                        if (doneD) doneD.available = true;
+                        var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
+                        if (introD) introD.available = false;
+                    }
+                }
+            } else {
+                below.gameData.mapLog.push("You squirt the Crawl-End on the floor. Nothing happens. There are no centipedes here.");
+                maintainMapLog();
+            }
         } else {
             var itemType = below.gameData.itemTypes[below.equippedItem];
             if (itemType && itemType.useText) {
@@ -3641,6 +3695,15 @@ function mapGameLoop() {
             if (remaining.length === 0) {
                 below.gameData.mapLog.push("The last bat vanishes into the light. The passage is clear.");
                 maintainMapLog();
+                // Move Hermit to centipede quest position
+                var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+                if (hermitNpc) {
+                    hermitNpc.position.x = -4;
+                    hermitNpc.position.y = -3;
+                    hermitNpc.dialogOptions.forEach(function(d) { d.available = false; });
+                    var centIntro = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
+                    if (centIntro) centIntro.available = true;
+                }
             }
         }
         below.gameData.mapData[curMap].npcs.forEach(function(npc) {
