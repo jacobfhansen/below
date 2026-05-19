@@ -2272,7 +2272,6 @@ function cutSceneLoop(timestamp) {
             textDiv.style.cssText = "left:" + cut.x + "%;top:" + cut.y + "%;font-size:" + (cut.fontSize || 18) + "px;opacity:" + opacity + ";transform:translate(" + driftX + "px," + driftY + "px);" + (cut.fontStyle ? "font-style:" + cut.fontStyle + ";" : "");
             stage.appendChild(textDiv);
         }
-        cumTime += total;
     }
 
     if (allDone) {
