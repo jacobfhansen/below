@@ -346,164 +346,14 @@ function saveCurrentGame() {
     }
 }
 
-var boss2Img = new Image();
-boss2Img.src = "images/boss2.png";
-
-var batImg = new Image();
-batImg.src = "images/bat.png";
-
-var ratImg = new Image();
-ratImg.src = "images/rat.png";
-
-var boyImg = new Image();
-boyImg.src = "images/boy.png";
-
-var girlImg = new Image();
-girlImg.src = "images/girl.png";
-
-var centipedeImg = new Image();
-centipedeImg.src = "images/centipede.png";
-
-var hermitImg = new Image();
-hermitImg.src = "images/hermit.png";
-
-var hermitDialogImg = new Image();
-hermitDialogImg.src = "images/hermit_dialog.png";
-
-var jesterImg = new Image();
-jesterImg.src = "images/jester.png";
-
-var merchantImg = new Image();
-merchantImg.src = "images/merchant.png";
-
-var medusaImg = new Image();
-medusaImg.src = "images/medusa.png";
-
-var moleImg = new Image();
-moleImg.src = "images/mole.png";
-
-var detectiveImg = new Image();
-detectiveImg.src = "images/detective.png";
-
-var shipImg = new Image();
-shipImg.src = "images/ship.png";
-
-var charonImg = new Image();
-charonImg.src = "images/charon.png";
-
-var charonDialogImg = new Image();
-charonDialogImg.src = "images/charon_dialog.png";
-
-var sisters1Img = new Image();
-sisters1Img.src = "images/sisters1.png";
-
-var sisters2Img = new Image();
-sisters2Img.src = "images/sisters2.png";
-
-var sistersDialogImg = new Image();
-sistersDialogImg.src = "images/sisters_dialog.png";
-
-var ratsDialogImg = new Image();
-ratsDialogImg.src = "images/rats_dialog.png";
-
-var batsDialogImg = new Image();
-batsDialogImg.src = "images/bats_dialog.png";
-
-var centipedesDialogImg = new Image();
-centipedesDialogImg.src = "images/centipedes_dialog.png";
-
-var tableImg = new Image();
-tableImg.src = "images/table.png";
-
-var keyImg = new Image();
-keyImg.src = "images/key1.png";
-
-var bloodImg = new Image();
-bloodImg.src = "images/blood.png";
-
-var rockImg = new Image();
-rockImg.src = "images/rock.png";
-
-var rock2x1Img = new Image();
-rock2x1Img.src = "images/rock_2x1.png";
-
-var rock1x2Img = new Image();
-rock1x2Img.src = "images/rock_1x2.png";
-
-var rock2x2Img = new Image();
-rock2x2Img.src = "images/rock_2x2.png";
-
-var mushroomBlueImg = new Image();
-mushroomBlueImg.src = "images/mushroom_blue.png";
-
-var mushroomPurpleImg = new Image();
-mushroomPurpleImg.src = "images/mushroom_purple.png";
-
-var mushroomYellowImg = new Image();
-mushroomYellowImg.src = "images/mushroom_yellow.png";
-
-var crystalPinkImg = new Image();
-crystalPinkImg.src = "images/crystal_pink.png";
-
-var cupboardImg = new Image();
-cupboardImg.src = "images/cupboard.png";
-
-var lightbeamImg = new Image();
-lightbeamImg.src = "images/lightbeam.png";
-
-var lamppostImg = new Image();
-lamppostImg.src = "images/lamppost.png";
-
-var doorClosedImg = new Image();
-doorClosedImg.src = "images/door_closed.png";
-
-var doorOpenImg = new Image();
-doorOpenImg.src = "images/door_open.png";
-
-var exitImg = new Image();
-exitImg.src = "images/exit.png";
-
-var gemImg = new Image();
-gemImg.src = "images/gem.png";
-
-var shimmerWallClosedImg = new Image();
-shimmerWallClosedImg.src = "images/shimmer_wall_closed.png";
-var shimmerWallOpenImg = new Image();
-shimmerWallOpenImg.src = "images/shimmer_wall_open.png";
-
-var statueImg1 = new Image();
-statueImg1.src = "images/statue1.png";
-var statueImg2 = new Image();
-statueImg2.src = "images/statue2.png";
-var statueImg3 = new Image();
-statueImg3.src = "images/statue3.png";
-var statueImg4 = new Image();
-statueImg4.src = "images/statue4.png";
-var statueImg5 = new Image();
-statueImg5.src = "images/statue5.png";
-var statueImg6 = new Image();
-statueImg6.src = "images/statue6.png";
-
-var crateImg = new Image();
-crateImg.src = "images/crate.png";
-var barrelImg = new Image();
-barrelImg.src = "images/barrel.png";
-var rudderImg = new Image();
-rudderImg.src = "images/rudder.png";
-var mastImg = new Image();
-mastImg.src = "images/mast.png";
-var steeringWheelImg = new Image();
-steeringWheelImg.src = "images/steering_wheel.png";
-var sailImg = new Image();
-sailImg.src = "images/sail.png";
-
-var antidoteImg = new Image();
-antidoteImg.src = "images/antidote.png";
-
-var bedImg = new Image();
-bedImg.src = "images/bed.png";
-var chairImg = new Image();
-chairImg.src = "images/chair.png";
+var imageCache = {};
+function getImage(filename) {
+    if (!imageCache[filename]) {
+        imageCache[filename] = new Image();
+        imageCache[filename].src = "images/" + filename;
+    }
+    return imageCache[filename];
+}
 
 window.onbeforeunload = confirmExit;
 function confirmExit() {
@@ -3549,8 +3399,7 @@ function drawMapCanvas() {
     // Draw player and monster sprites
     // PLAYER
     if (below.gameData.player.icon) {
-        var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
-        if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
+        var playerImg = getImage(below.gameData.player.icon);
         context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
     } else {
         context.fillStyle = "#B8C76F";
@@ -3580,8 +3429,7 @@ function drawMapCanvas() {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type) return; // Skip if monster type is undefined
             if (type["icon"]) {
-                var img = type.icon === "bat.png" ? batImg : (type.icon === "rat.png" ? ratImg : (type.icon === "centipede.png" ? centipedeImg : new Image()));
-                if (!img.complete) img.src = "images/" + type.icon;
+                var img = getImage(type.icon);
                 context.drawImage(img, (monster.position.x * width) + verticalCenter - horizontalOffset - (width/2), (monster.position.y * width) + horizontalCenter - verticalOffset  - (width/2), width, width);
             }
             else {
@@ -3608,18 +3456,7 @@ function drawMapCanvas() {
             if (!type) return; // Skip if NPC type is undefined
                 if (type.icon) {
                 var iconName = npc.icon || type.icon;
-                var img = new Image();
-                if (iconName === "hermit.png") img = hermitImg || new Image();
-                else if (iconName === "jester.png") img = jesterImg || new Image();
-                else if (iconName === "merchant.png") img = merchantImg || new Image();
-                else if (iconName === "medusa.png") img = medusaImg || new Image();
-                else if (iconName === "mole.png") img = moleImg || new Image();
-                else if (iconName === "detective.png") img = detectiveImg || new Image();
-                else if (iconName === "ship.png") img = shipImg || new Image();
-                else if (iconName === "charon.png") img = charonImg || new Image();
-                else if (iconName === "sisters1.png") img = sisters1Img || new Image();
-                else if (iconName === "sisters2.png") img = sisters2Img || new Image();
-                if (!img.complete) img.src = "images/" + iconName;
+                var img = getImage(iconName);
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             } else {
                 context.fillStyle = type.color || "#00aa00";
@@ -3631,55 +3468,19 @@ function drawMapCanvas() {
     });
     // OBSTACLES - Draw in two passes: below player (drawOrder=1), then on top (drawOrder=2)
     // Resolve an icon name to an Image object (for non-door icons)
-    function getIconImage(iconName) {
-        if (iconName === "rock.png") return rockImg;
-        if (iconName === "rock_2x1.png") return rock2x1Img;
-        if (iconName === "rock_1x2.png") return rock1x2Img;
-        if (iconName === "rock_2x2.png") return rock2x2Img;
-        if (iconName === "blood.png") return bloodImg;
-        if (iconName === "table.png") return tableImg;
-        if (iconName === "key1.png") return keyImg;
-        if (iconName === "cupboard.png") return cupboardImg;
-        if (iconName === "lightbeam.png") return lightbeamImg;
-        if (iconName === "lamppost.png") return lamppostImg;
-        if (iconName === "statue1.png") return statueImg1;
-        if (iconName === "statue2.png") return statueImg2;
-        if (iconName === "statue3.png") return statueImg3;
-        if (iconName === "statue4.png") return statueImg4;
-        if (iconName === "statue5.png") return statueImg5;
-        if (iconName === "statue6.png") return statueImg6;
-        if (iconName === "gem.png") return gemImg;
-        if (iconName === "crate.png") return crateImg;
-        if (iconName === "barrel.png") return barrelImg;
-        if (iconName === "rudder.png") return rudderImg;
-        if (iconName === "mast.png") return mastImg;
-        if (iconName === "steering_wheel.png") return steeringWheelImg;
-        if (iconName === "sail.png") return sailImg;
-        if (iconName === "antidote.png") return antidoteImg;
-        if (iconName === "bed.png") return bedImg;
-        if (iconName === "chair.png") return chairImg;
-        if (iconName === "mushroom_blue.png") return mushroomBlueImg;
-        if (iconName === "mushroom_purple.png") return mushroomPurpleImg;
-        if (iconName === "mushroom_yellow.png") return mushroomYellowImg;
-        if (iconName === "crystal_pink.png") return crystalPinkImg;
-        return null;
-    }
-    
     // Draw a large multi-tile obstacle icon spanning all its tiles
     function drawMultiObstacle(obstacle, type, ow, oh) {
         var iconName = obstacle.icon || type.icon;
         var img = null;
         if (iconName === "door_closed.png" || iconName === "door_open.png") {
             var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-            img = isClosed ? doorClosedImg : doorOpenImg;
+            img = getImage(isClosed ? "door_closed.png" : "door_open.png");
         } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
             var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-            img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
+            img = getImage(isClosed ? "shimmer_wall_closed.png" : "shimmer_wall_open.png");
         } else {
-            img = getIconImage(iconName);
-            if (!img) { img = new Image(); if (!img.complete) img.src = "images/" + iconName; }
+            img = getImage(iconName);
         }
-        if (!img.complete) img.src = "images/" + iconName;
         var drawX = (obstacle.position.x * width) + verticalCenter - horizontalOffset - (width/2);
         var drawY = (obstacle.position.y * width) + horizontalCenter - verticalOffset - (width/2);
         context.drawImage(img, drawX, drawY, ow * width, oh * width);
@@ -3697,15 +3498,13 @@ function drawMapCanvas() {
             var img = null;
             if (iconName === "door_closed.png" || iconName === "door_open.png") {
                 var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                img = isClosed ? doorClosedImg : doorOpenImg;
+                img = getImage(isClosed ? "door_closed.png" : "door_open.png");
             } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
                 var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                img = isClosed ? shimmerWallClosedImg : shimmerWallOpenImg;
+                img = getImage(isClosed ? "shimmer_wall_closed.png" : "shimmer_wall_open.png");
             } else {
-                img = getIconImage(iconName);
-                if (!img) { img = new Image(); if (!img.complete) img.src = "images/" + iconName; }
+                img = getImage(iconName);
             }
-            if (!img.complete) img.src = "images/" + iconName;
             context.drawImage(img, (ox * width) + verticalCenter - horizontalOffset - (width/2), (oy * width) + horizontalCenter - verticalOffset - (width/2), width, width);
         } else {
             context.fillStyle = type.color || "#433900";
@@ -3746,8 +3545,7 @@ function drawMapCanvas() {
     });
     
     // PLAYER (second pass for correct draw order)
-    var playerImg = below.gameData.player.icon === "boy.png" ? boyImg : girlImg;
-    if (!playerImg.complete) playerImg.src = "images/" + below.gameData.player.icon;
+    var playerImg = getImage(below.gameData.player.icon);
     context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
     
     // Second pass: draw obstacles with drawOrder=2 (on top of player)
@@ -3800,8 +3598,8 @@ function drawMapCanvas() {
                     return o.blocking !== undefined ? o.blocking : (oType ? oType.blocking : false);
                 });
                 if (blockedByObstacle) return;
-                if (!exitImg.complete) exitImg.src = "images/exit.png";
-                context.drawImage(exitImg, (exit.position.x * width) + verticalCenter - horizontalOffset - (width/2), (exit.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
+                var exitIcon = getImage("exit.png");
+                context.drawImage(exitIcon, (exit.position.x * width) + verticalCenter - horizontalOffset - (width/2), (exit.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
             }
         });
     }
