@@ -1,0 +1,613 @@
+// === Sam Shale walk helper ===
+function walkSamTo(targetX, targetY, closeIds, openId, departureMsg, arrivalMsg) {
+    if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+    var curMap = below.gameData.player.currentMap;
+    var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+        return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+    });
+    if (samNpc && npcWalkTo(samNpc, targetX, targetY, function() {
+        closeIds.forEach(function(id) {
+            var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+            if (d) d.available = false;
+        });
+        var openD = samNpc.dialogOptions.find(function(d) { return d.id === openId; });
+        if (openD) openD.available = true;
+        below.gameData.mapLog.push(arrivalMsg);
+        maintainMapLog();
+    }, 3)) {
+        below.gameData.mapLog.push(departureMsg);
+        maintainMapLog();
+    }
+}
+
+// === Quest handler dispatch ===
+function dispatchQuestHandler(selectedOption) {
+    var handler = questHandlers[selectedOption.id];
+    var shouldClose = true;
+    if (handler) {
+        var result = handler(selectedOption);
+        if (result === false) shouldClose = false;
+    }
+
+    // Post-dispatch: Jester-met hook
+    if (below.choiceEvent && below.choiceEvent.npcType === 2 && !below.jesterMet) {
+        below.jesterMet = true;
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (hermitq0 && hermitq0.options) {
+                var askJester = hermitq0.options.find(function(o) { return o.id === "hermit_ask_jester"; });
+                if (askJester) askJester.available = true;
+            }
+        }
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        if (medusaNpc && medusaNpc.dialogOptions) {
+            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+            if (medusaq0 && medusaq0.options) {
+                var jesterOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1j"; });
+                if (jesterOpt) jesterOpt.available = true;
+            }
+        }
+    }
+
+    if (shouldClose && !below.passwordInput) {
+        closeChoiceEvent();
+    }
+}
+
+// === Sam Shale shared walk handlers ===
+var samReadyWalk = function() {
+    walkSamTo(-9, 0,
+        ["detectiveq0", "detectiveq1", "detective_help_intro", "detective_ready"],
+        "detective_arrival",
+        "Sam Slate tips his hat and melts into the shadows. You follow at a distance.",
+        "Sam Slate stops in a shadowy alcove and gestures for you to join him."
+    );
+};
+
+var samArrivalWalk = function() {
+    walkSamTo(-5, -9,
+        ["detective_arrival", "detective_arrival_doubt"],
+        "detective_precinct",
+        "Sam nods and pushes off the crate. 'Stay close.'",
+        "Sam leads you through the damp streets to the police precinct."
+    );
+};
+
+var samPrecinctWalk = function() {
+    walkSamTo(1, -9,
+        ["detective_precinct", "detective_precinct_sgt", "detective_precinct_info", "detective_precinct_thanks", "detective_precinct_sgt_final", "detective_precinct_after", "detective_precinct_reliable"],
+        "detective_abe",
+        "Sam tips his hat at the Sergeant and heads for the door.",
+        "Sam ducks into a narrow alley and emerges at Honest Abe's Pawn Shop."
+    );
+};
+
+var samAbeWalk = function() {
+    walkSamTo(15, -4,
+        ["detective_abe", "detective_abe_char", "detective_abe_medusa", "detective_abe_after", "detective_abe_explain"],
+        "detective_rooftop",
+        "Sam thanks Abe and heads for the back exit.",
+        "Sam leads you through a service alley and up a rusted ladder to a high ledge."
+    );
+};
+
+// === Quest handlers ===
+var questHandlers = {
+    // --- Hermit ---
+    "hermit_centipede_give_ok": function() {
+        below.gameData.player.inventory.push(15);
+        below.gameData.mapLog.push("The Hermit hands you a grimy bottle labeled 'Crawl-End'.");
+        maintainMapLog();
+        var centDoor = below.gameData.mapData[0].obstacles.find(function(o) {
+            return o.position.x === -3 && o.position.y === -4;
+        });
+        if (centDoor) {
+            centDoor.closed = false;
+            centDoor.blocking = false;
+            below.gameData.mapLog.push("The Hermit strains against a hidden latch. A section of the east wall swings open.");
+            maintainMapLog();
+        }
+        setTimeout(function() { showInventory([15]); }, 50);
+    },
+
+    "hermit_centipede_thanks_accept": function() {
+        below.gameData.player.inventory.push(6);
+        below.gameData.mapLog.push("The Hermit hands you a bundle of dried cave herbs.");
+        maintainMapLog();
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        if (hermitNpc) {
+            hermitNpc.dialogOptions.forEach(function(d) {
+                if (d.id === "hermit_centipede_thanks") {
+                    d.available = false;
+                } else if (d.id === "hermitq0") {
+                    d.available = true;
+                }
+            });
+            hermitNpc.position.x = 3;
+            hermitNpc.position.y = 3;
+        }
+        setTimeout(function() { showInventory([6]); }, 50);
+        drawMapCanvas();
+    },
+
+    "hermit_insist_follow": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && npcWalkTo(hermitNpc, -1, 3, function() {
+            var doorObstacle = below.gameData.mapData[0].obstacles.find(function(o) {
+                return o.position.x === -2 && o.position.y === 2;
+            });
+            if (doorObstacle) {
+                doorObstacle.closed = false;
+                doorObstacle.blocking = false;
+                doorObstacle.icon = "door_open.png";
+            }
+            showSplash({
+                image: "rats_dialog.png",
+                text: "The old stone door grinds open. Beyond it, a dark chamber stirs with movement - rats scatter in the shadows, their eyes glinting like tiny jewels.",
+                shake: false
+            });
+            var hermitNpcArr = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+            if (hermitNpcArr && hermitNpcArr.dialogOptions) {
+                var sprayD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
+                var baseD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+                if (sprayD) sprayD.available = true;
+                if (baseD) baseD.available = false;
+            }
+        }, 3)) {
+            below.gameData.mapLog.push("Alistair gathers his cloak and gestures for you to follow.");
+            maintainMapLog();
+        }
+    },
+
+    "hermit_rat_spray_accept": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var sprayD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
+            var waitD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray_wait"; });
+            if (sprayD) sprayD.available = false;
+            if (waitD) waitD.available = true;
+            below.gameData.player.inventory.push(4);
+            setTimeout(function() { showInventory([4]); }, 50);
+            below.gameData.mapLog.push("Alistair hands you a small silver key. 'Take this for the door, beyond is my room. And hurry back - the rats won't wait.'");
+            maintainMapLog();
+        }
+    },
+
+    "hermit_rat_spray_decline": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var sprayD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
+            var baseD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (sprayD) sprayD.available = false;
+            if (baseD) baseD.available = true;
+            below.gameData.mapLog.push("Alistair shrugs. 'Suit yourself. The offer stands if you change your mind.'");
+            maintainMapLog();
+        }
+    },
+
+    "hermit_rat_spray_give_hand": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var sprayIdx = below.gameData.player.inventory.indexOf(13);
+            if (sprayIdx !== -1) {
+                below.gameData.player.inventory.splice(sprayIdx, 1);
+            }
+            if (npcWalkTo(hermitNpc, -3, 2, function() {
+                below.ratsCleared = true;
+                showSplash({
+                    image: "hermit_dialog.png",
+                    text: "Alistair storms through the doorway, rat spray hissing. 'THIEVING VERMIN! STEALING MY HERBS! THINK YOU CAN CHEAT ALISTAIR THE HERMIT?!' He sprays wildly - rats scatter, shrieking, fleeing through cracks and crevices. Within moments, the chamber is silent. He stands panting, canister still raised. 'And stay OUT!' he bellows at the empty room. Then, quieter: 'That was... satisfying.'",
+                    shake: true
+                });
+                below.pendingRatClear = true;
+            }, 3)) {
+                below.gameData.mapLog.push("Alistair snatches the canister and storms off toward the storeroom, muttering about thieving rats.");
+                maintainMapLog();
+            }
+        }
+    },
+
+    "hermit_bat_swatter_give_hand": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMapB = below.gameData.player.currentMap;
+        var hermitNpcB = below.gameData.mapData[curMapB].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (hermitNpcB && hermitNpcB.dialogOptions) {
+            var obstacles = below.gameData.mapData[curMapB].obstacles;
+            for (var oi = 0; oi < obstacles.length; oi++) {
+                if (obstacles[oi].position.x === -7 && obstacles[oi].position.y === 3) {
+                    obstacles[oi].closed = false;
+                    obstacles[oi].blocking = false;
+                    break;
+                }
+            }
+            if (npcWalkTo(hermitNpcB, 3, 3, function() {
+                var introD = hermitNpcB.dialogOptions.find(function(d) { return d.id === "hermit_bat_intro"; });
+                if (introD) introD.available = true;
+                var greetD = hermitNpcB.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+                if (greetD) greetD.available = true;
+                maintainMapLog();
+            }, 3)) {
+                below.gameData.mapLog.push("Alistair shuffles back toward the main chamber, rubbing his lower back.");
+                maintainMapLog();
+            }
+        }
+    },
+
+    "hermit_antidote_give_a1": function() {
+        below.gameData.player.inventory.push(12);
+        setTimeout(function() { showInventory([12]); }, 50);
+    },
+
+    // --- Mole ---
+    "molea1q": function() {
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        if (medusaNpc && medusaNpc.dialogOptions) {
+            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+            if (medusaq0 && medusaq0.options) {
+                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
+                if (moleOpt) moleOpt.available = true;
+            }
+        }
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (hermitq0 && hermitq0.options) {
+                var hermitMoleOpt = hermitq0.options.find(function(o) { return o.id === "hermit_ask_mole"; });
+                if (hermitMoleOpt) hermitMoleOpt.available = true;
+            }
+        }
+    },
+
+    "mole_post_a3_give": function() {
+        var herbIdx = -1;
+        for (var hi = 0; hi < below.gameData.player.inventory.length; hi++) {
+            if (below.gameData.player.inventory[hi] === 6) {
+                herbIdx = hi;
+                break;
+            }
+        }
+        if (herbIdx !== -1) {
+            below.gameData.player.inventory.splice(herbIdx, 1);
+            below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
+            maintainMapLog();
+            var map2Obstacles = below.gameData.mapData[2].obstacles;
+            map2Obstacles.forEach(function(o) {
+                if (o.type === 12) {
+                    o.closed = false;
+                    o.blocking = false;
+                    o.icon = "shimmer_wall_open.png";
+                }
+            });
+            below.gameData.mapLog.push("A distant shimmering echoes through the tunnels.");
+            maintainMapLog();
+        }
+    },
+
+    "mole_trap_leave": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var mole = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (mole) {
+            var trapD = mole.dialogOptions.find(function(d) { return d.id === "mole_trap"; });
+            var normalD = mole.dialogOptions.find(function(d) { return d.id === "moleq1"; });
+            if (trapD) trapD.available = false;
+            if (normalD) normalD.available = true;
+        }
+    },
+
+    "molea4": function() {
+        var stonePositions = [
+            {x:6,y:10},{x:7,y:10},{x:6,y:11},{x:7,y:11},
+            {x:39,y:10},{x:40,y:10},{x:39,y:11},{x:40,y:11},
+            {x:6,y:32},{x:7,y:32},{x:6,y:33},{x:7,y:33}
+        ];
+        var map2Obstacles = below.gameData.mapData[2].obstacles;
+        below.gameData.mapData[2].obstacles = map2Obstacles.filter(function(o) {
+            return !(o.type === 1 && stonePositions.some(function(p) {
+                return o.position.x === p.x && o.position.y === p.y;
+            }));
+        });
+        below.gameData.mapLog.push("Them mole smashes at the rocks and they roll away into the darkness.");
+        maintainMapLog();
+    },
+
+    "mole_sick_help": function() {
+        var hermitNpc = below.gameData.mapData[0].npcs ? below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; }) : null;
+        if (hermitNpc && hermitNpc.dialogOptions) {
+            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (hermitq0 && hermitq0.options) {
+                var antidoteOpt = hermitq0.options.find(function(o) { return o.id === "hermit_ask_antidote"; });
+                if (antidoteOpt) antidoteOpt.available = true;
+            }
+        }
+    },
+
+    // --- Medusa ---
+    "medusama4p": function() {
+        below.gameData.player.inventory.push(7);
+        setTimeout(function() { showInventory([7]); }, 50);
+    },
+
+    "mole_post5_a": function() {
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        if (medusaNpc && medusaNpc.dialogOptions) {
+            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+            if (medusaq0 && medusaq0.options) {
+                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
+                if (moleOpt) moleOpt.available = true;
+            }
+        }
+    },
+
+    // --- Sam Shale ---
+    "detective_ready_go": samReadyWalk,
+    "detective_help_intro_ready": samReadyWalk,
+
+    "detective_arrival_in": samArrivalWalk,
+    "detective_arrival_doubt_in": samArrivalWalk,
+
+    "detective_precinct_go": samPrecinctWalk,
+    "detective_precinct_go2": samPrecinctWalk,
+
+    "detective_abe_go": samAbeWalk,
+    "detective_abe_go2": samAbeWalk,
+
+    "detective_rooftop_go": function() {
+        walkSamTo(7, -9,
+            ["detective_rooftop", "detective_rooftop_mouse", "detective_rooftop_after"],
+            "detective_diner",
+            "Sam climbs down from the ledge without a word.",
+            "The neon sign of The Last Stop buzzes ahead. Sam picks up the pace."
+        );
+    },
+
+    "detective_diner_go": function() {
+        walkSamTo(12, -9,
+            ["detective_diner", "detective_diner_flo", "detective_diner_after"],
+            "detective_jazz",
+            "Sam pockets the photograph and heads back out into the street.",
+            "Sam stops outside a doorway draped in red curtains. Muffled piano drifts through."
+        );
+    },
+
+    "detective_jazz_go": function() {
+        walkSamTo(18, 9,
+            ["detective_jazz", "detective_jazz_piano", "detective_jazz_after"],
+            "detective_dockmaster",
+            "Sam steps away from the jazz club, his jaw tight.",
+            "The Dock Master's office emerges from the mist - a cratewood shack over black water."
+        );
+    },
+
+    "detective_dockmaster_go": function() {
+        walkSamTo(12, 12,
+            ["detective_dockmaster", "detective_dockmaster_char", "detective_dockmaster_letter", "detective_dockmaster_after", "detective_dockmaster_catch"],
+            "detective_pier",
+            "Sam folds the letter and steps out onto the pier.",
+            "Sam walks to the end of Pier C3. Black water laps against the pilings."
+        );
+    },
+
+    "detective_dockmaster_leave": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc) {
+            var closeDialogs = ["detective_dockmaster", "detective_dockmaster_char", "detective_dockmaster_letter", "detective_dockmaster_after"];
+            closeDialogs.forEach(function(id) {
+                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
+                if (d) d.available = false;
+            });
+            var pierD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_pier"; });
+            if (pierD) pierD.available = true;
+        }
+    },
+
+    "detective_pier_a1": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (samNpc) {
+            samNpc.position = { x: 0, y: -2 };
+            samNpc.destPos = {};
+            var officeD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_office"; });
+            if (officeD) officeD.available = true;
+            below.gameData.player.samQuestComplete = true;
+            for (var si = below.gameData.mapData[1].npcs.length - 1; si >= 0; si--) {
+                if (below.gameData.mapData[1].npcs[si].type === 2) {
+                    below.gameData.mapData[1].npcs.splice(si, 1);
+                    break;
+                }
+            }
+            below.gameData.mapData[3].npcs.push({
+                type: 2,
+                position: { x: 18, y: 9 },
+                movement: 0,
+                dialogOptions: [{
+                    id: "jester_dockmaster_ship",
+                    available: true,
+                    text: "The Dock Master - who looks suspiciously like the Jester in an oversized coat and a glued-on mustache - leans on the counter with a grin. 'Well, well, well! Fancy seein' YOU here! Heard you been collectin' boat parts! A ship! At Pier A1! Who woulda thunk it! Fix it up and you can sail right outta here! Course, I wouldn't know anythin' about that. I'm just the Dock Master. Totally legitimate. Ahem.' He winks broadly.",
+                    options: [{
+                        id: "jester_dockmaster_ship_a1",
+                        text: "...",
+                        available: true,
+                        closes: ["jester_dockmaster_ship"]
+                    }]
+                }]
+            });
+        }
+    },
+
+    "detective_walk_a1": function() {
+        below.gameData.mapLog.push("Sam Shale glances at you sidelong. 'Once. Came out with a bullet hole in my coat and a story I can't tell in polite company. Not that there's any polite company down here.'");
+        maintainMapLog();
+    },
+
+    "detective_walk_a2": function() {
+        below.gameData.mapLog.push("Sam Shale nods slowly. 'Yeah. That's the right response to this place.'");
+        maintainMapLog();
+    },
+
+    // --- Ship ---
+    "ship_beach_leave": function() {
+        setTimeout(function() {
+            changeMap(3, -1, 13, "You sail back across the dark lake. The familiar shape of Pier A1 emerges from the gloom as the ship docks once more.");
+        }, 10);
+    },
+
+    "ship_departure_go": function() {
+        var moleNpc = below.gameData.mapData[2].npcs ? below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; }) : null;
+        if (moleNpc && moleNpc.dialogOptions) {
+            var sickD = moleNpc.dialogOptions.find(function(d) { return d.id === "mole_sick"; });
+            if (sickD) sickD.available = true;
+        }
+        setTimeout(function() {
+            changeMap(4, 2, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
+        }, 10);
+    },
+
+    // --- Sisters ---
+    "sisters_hideandseek_count": function() {
+        startHideAndSeek();
+        return false;
+    },
+
+    "sisters_tag_count": function() {
+        startTagGame();
+        return false;
+    },
+
+    "sisters_hideandseek_complete_close": function() {
+        below.gameData.mapData[5].npcs.forEach(function(n) {
+            var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_intro"; });
+            if (introD) introD.available = true;
+            var tagIntroD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_intro"; });
+            if (tagIntroD) tagIntroD.available = true;
+        });
+    },
+
+    "sisters_hideandseek_found_close": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (npc) {
+            npc._found = true;
+            var foundD = npc.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_found"; });
+            if (foundD) foundD.available = false;
+            var allFound = below.gameData.mapData[5].npcs.every(function(n) { return n._found; });
+            if (allFound) {
+                below.gameData.mapData[5].npcs.forEach(function(n) {
+                    var completeD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_complete"; });
+                    if (completeD) completeD.available = true;
+                    var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_intro"; });
+                    if (introD) introD.available = false;
+                    var startD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_start"; });
+                    if (startD) startD.available = false;
+                });
+                below.sistersReturnContext = "hideandseek";
+                startSistersReturn();
+            }
+        }
+    },
+
+    "sisters_tag_found_close": function() {
+        if (!below.choiceEvent || !below.choiceEvent.npcPos) return;
+        var curMap = below.gameData.player.currentMap;
+        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
+            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
+        });
+        if (npc) {
+            npc._tagFound = true;
+            var foundD = npc.dialogOptions.find(function(d) { return d.id === "sisters_tag_found"; });
+            if (foundD) foundD.available = false;
+            var allTagged = below.gameData.mapData[5].npcs.every(function(n) { return n._tagFound; });
+            if (allTagged) {
+                below.tagActive = false;
+                below.gameData.mapData[5].npcs.forEach(function(n) {
+                    var completeD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_complete"; });
+                    if (completeD) completeD.available = true;
+                    var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_intro"; });
+                    if (introD) introD.available = false;
+                    var startD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_start"; });
+                    if (startD) startD.available = false;
+                    n._tagFleeing = false;
+                });
+                below.sistersReturnContext = "tag";
+                startSistersReturn();
+                below.gameData.mapLog.push("You tagged them both! The sisters shuffle back, looking winded.");
+                maintainMapLog();
+            } else {
+                below.gameData.mapLog.push("One down! Keep chasing the other one!");
+                maintainMapLog();
+            }
+        }
+    },
+
+    "sisters_tag_complete_close": function() {
+        below.gameData.mapData[5].npcs.forEach(function(n) {
+            var congratsD = n.dialogOptions.find(function(d) { return d.id === "sisters_congratulations"; });
+            if (congratsD) congratsD.available = true;
+        });
+    },
+
+    "sisters_exit_reveal_close": function() {
+        var map5 = below.gameData.mapData[5];
+        map5.obstacles = map5.obstacles.filter(function(o) {
+            return !(o.position.x === 10 && o.position.y === 11);
+        });
+        below.gameData.mapLog.push("A deep rumble echoes through the fissure. The mushrooms near the crack shudder and collapse.");
+        maintainMapLog();
+
+        var sisters = map5.npcs;
+        var exitTargets = [{ x: 9, y: 11 }, { x: 11, y: 11 }];
+        sisters.forEach(function(n, i) {
+            n.dialogOptions.forEach(function(d) { d.available = false; });
+            var exhD = n.dialogOptions.find(function(d) { return d.id === "sisters_exhausted"; });
+            if (exhD) exhD.available = true;
+            var target = exitTargets[i % exitTargets.length];
+            npcWalkTo(n, target.x, target.y, function() {
+                n.dialogOptions.forEach(function(d) { d.available = false; });
+                var congratsD = n.dialogOptions.find(function(d) { return d.id === "sisters_congratulations"; });
+                if (congratsD) congratsD.available = true;
+                var allArrived = sisters.every(function(s) {
+                    return !s.walkPath || s.walkPath.length === 0;
+                });
+                if (allArrived) {
+                    below.gameData.mapLog.push("The sisters gesture lazily toward the crack. 'There. Now please leave. We need a nap.'");
+                    maintainMapLog();
+                    setTimeout(function() {
+                        below.sistersReturnContext = "tag";
+                        startSistersReturn();
+                    }, 2000);
+                }
+            }, 20);
+        });
+    }
+};

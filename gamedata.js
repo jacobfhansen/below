@@ -567,7 +567,6 @@ var belowGameData = {
       "icon": "door_closed.png",
       "blocking": true,
       "closed": true,
-      "keyId": 4,
       "choiceEvents": [
         7,
         3
@@ -798,14 +797,14 @@ var belowGameData = {
   },
   "itemTypes": {
     "4": {
-      "name": "Key",
+      "name": "Silver Key",
       "description": "A silver key",
       "icon": "key1.png",
       "choiceEvents": [],
       "useText": "You fumble with the silver key, but there's nothing here to unlock."
     },
     "5": {
-      "name": "Key",
+      "name": "Bronze Key",
       "description": "A bronze key",
       "icon": "key2.png",
       "choiceEvents": [],

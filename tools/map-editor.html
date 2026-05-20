@@ -927,6 +927,21 @@ function updateSelectionSection() {
         html += '<label><input type="checkbox" ' + (entity.blocking !== false ? "checked" : "") + ' onchange="entitySet(\'blocking\', this.checked)"> Blocking</label>';
         html += '<label><input type="checkbox" ' + (entity.closed ? "checked" : "") + ' onchange="entitySet(\'closed\', this.checked)"> Closed</label>';
         html += '</div>';
+        var ot = gameData.obstacleTypes[entity.type];
+        var defaultKeyId = ot ? ot.keyId : undefined;
+        var defaultLabel = defaultKeyId !== undefined
+            ? 'Default (' + defaultKeyId + ': ' + (gameData.itemTypes[defaultKeyId] ? gameData.itemTypes[defaultKeyId].name : '?') + ')'
+            : 'Default (no key)';
+        var hasOverride = entity.keyId !== undefined;
+        html += '<label>KeyId:</label><select onchange="entitySetKeyId(this)">';
+        html += '<option value="">' + defaultLabel + '</option>';
+        for (var ik in gameData.itemTypes) {
+            if (typeof gameData.itemTypes[ik] !== 'function') {
+                var sel = (hasOverride && entity.keyId === parseInt(ik)) ? 'selected' : '';
+                html += '<option value="' + ik + '" ' + sel + '>' + ik + ': ' + gameData.itemTypes[ik].name + '</option>';
+            }
+        }
+        html += '</select>';
         html += '<div class="form-row">';
         html += '<label>W:<input type="number" min="1" value="' + (entity.width || 1) + '" onchange="entitySet(\'width\', parseInt(this.value) || 1)" style="width:50px"></label>';
         html += '<label>H:<input type="number" min="1" value="' + (entity.height || 1) + '" onchange="entitySet(\'height\', parseInt(this.value) || 1)" style="width:50px"></label>';
@@ -955,6 +970,17 @@ function updateSelectionSection() {
 function entitySet(key, value) { var e = getSelectedEntity(); if (e) { e[key] = value; drawCanvas(); } }
 function entitySetNum(key, value) { entitySet(key, parseFloat(value)); }
 function entitySetStr(key, value) { entitySet(key, value || undefined); }
+function entitySetKeyId(sel) {
+    var e = getSelectedEntity();
+    if (!e) return;
+    if (sel.value === '') {
+        delete e.keyId;
+    } else {
+        e.keyId = Number(sel.value);
+    }
+    drawCanvas();
+    updateSelectionSection();
+}
 function tileSet(key, value) { var t = getSelectedTile(); if (t) { t[key] = value; drawCanvas(); } }
 function tileTypePick(el, value) { lastTileType = value; tileSet('type', value); }
 function entitySetNested(path, value) {

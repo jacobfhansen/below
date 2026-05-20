@@ -971,8 +971,19 @@ function selectChoiceOption(index) {
             // Process "opens" - set available to true (do this first so chained dialog is available)
             if (selectedOption.opens) {
                 selectedOption.opens.forEach(function(id) {
-                    var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
-                    if (dialog) dialog.available = true;
+                    var match = npc.dialogOptions.find(function(d) { return d.id === id; });
+                    if (match) {
+                        match.available = true;
+                    } else {
+                        // Fall back: search option-level IDs in all dialogs
+                        npc.dialogOptions.forEach(function(d) {
+                            if (d.options) {
+                                d.options.forEach(function(o) {
+                                    if (o.id === id) o.available = true;
+                                });
+                            }
+                        });
+                    }
                 });
             }
              
@@ -993,8 +1004,18 @@ function selectChoiceOption(index) {
                     // Process "closes" first (close dialogs that should be closed)
                     if (selectedOption.closes) {
                         selectedOption.closes.forEach(function(id) {
-                            var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
-                            if (dialog) dialog.available = false;
+                            var match = npc.dialogOptions.find(function(d) { return d.id === id; });
+                            if (match) {
+                                match.available = false;
+                            } else {
+                                npc.dialogOptions.forEach(function(d) {
+                                    if (d.options) {
+                                        d.options.forEach(function(o) {
+                                            if (o.id === id) o.available = false;
+                                        });
+                                    }
+                                });
+                            }
                         });
                     }
                     
@@ -1028,52 +1049,9 @@ function selectChoiceOption(index) {
                     };
                     renderChoiceEvent();
                     
-                    // When player first talks to the Mole, enable related dialog options
-                    if (selectedOption.id === "molea1q") {
-                        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
-                        if (medusaNpc && medusaNpc.dialogOptions) {
-                            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
-                            if (medusaq0 && medusaq0.options) {
-                                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
-                                if (moleOpt) moleOpt.available = true;
-                            }
-                        }
-                        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
-                        if (hermitNpc && hermitNpc.dialogOptions) {
-                            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
-                            if (hermitq0 && hermitq0.options) {
-                                var hermitMoleOpt = hermitq0.options.find(function(o) { return o.id === "hermit_ask_mole"; });
-                                if (hermitMoleOpt) hermitMoleOpt.available = true;
-                            }
-                        }
-                    }
-                    
-                    // When player gives herbs to the Mole, consume herbs and open shimmering walls
-                    if (selectedOption.id === "mole_post_a3_give") {
-                        var herbIdx = -1;
-                        for (var hi = 0; hi < below.gameData.player.inventory.length; hi++) {
-                            if (below.gameData.player.inventory[hi] === 6) {
-                                herbIdx = hi;
-                                break;
-                            }
-                        }
-                        if (herbIdx !== -1) {
-                            below.gameData.player.inventory.splice(herbIdx, 1);
-                            below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
-                            maintainMapLog();
-                            // Open shimmering walls on map 2
-                            var map2Obstacles = below.gameData.mapData[2].obstacles;
-                            map2Obstacles.forEach(function(o) {
-                                if (o.type === 12) {
-                                    o.closed = false;
-                                    o.blocking = false;
-                                    o.icon = "shimmer_wall_open.png";
-                                }
-                            });
-                            below.gameData.mapLog.push("A distant shimmering echoes through the tunnels.");
-                            maintainMapLog();
-                        }
-                    }
+                    // Fire quest handler for chain-triggered handlers
+                    var chainHandler = questHandlers[selectedOption.id];
+                    if (chainHandler) chainHandler(selectedOption);
                     
                     return; // Don't close the dialog
                 }
@@ -1082,8 +1060,18 @@ function selectChoiceOption(index) {
             // Process "closes" - set available to false (if no chain happened)
             if (selectedOption.closes) {
                 selectedOption.closes.forEach(function(id) {
-                    var dialog = npc.dialogOptions.find(function(d) { return d.id === id; });
-                    if (dialog) dialog.available = false;
+                    var match = npc.dialogOptions.find(function(d) { return d.id === id; });
+                    if (match) {
+                        match.available = false;
+                    } else {
+                        npc.dialogOptions.forEach(function(d) {
+                            if (d.options) {
+                                d.options.forEach(function(o) {
+                                    if (o.id === id) o.available = false;
+                                });
+                            }
+                        });
+                    }
                 });
             }
         }
@@ -1094,685 +1082,8 @@ function selectChoiceOption(index) {
         }
     }
     
-    // Handle trade dialog option
-    if (below.choiceEvent && below.choiceEvent.isDialog && selectedOption.id === "hermit_trade_accept") {
-        var keyIdx = -1;
-        for (var i = 0; i < below.gameData.player.inventory.length; i++) {
-            if (below.gameData.player.inventory[i] === 4 || below.gameData.player.inventory[i] === 5) {
-                keyIdx = i;
-                break;
-            }
-        }
-        if (keyIdx !== -1) {
-            below.gameData.player.inventory.splice(keyIdx, 1);
-            below.gameData.player.inventory.push(6);
-            setTimeout(function() { showInventory([6]); }, 50);
-        }
-    }
-    
-    // When Hermit hands over the centipede cleaner, add item and open door
-    if (selectedOption.id === "hermit_centipede_give_ok" && below.choiceEvent && below.choiceEvent.npcPos) {
-        below.gameData.player.inventory.push(15);
-        below.gameData.mapLog.push("The Hermit hands you a grimy bottle labeled 'Crawl-End'.");
-        maintainMapLog();
-        var centDoor = below.gameData.mapData[0].obstacles.find(function(o) {
-            return o.position.x === -3 && o.position.y === -4;
-        });
-        if (centDoor) {
-            centDoor.closed = false;
-            centDoor.blocking = false;
-            below.gameData.mapLog.push("The Hermit strains against a hidden latch. A section of the east wall swings open.");
-            maintainMapLog();
-        }
-        setTimeout(function() { showInventory([15]); }, 50);
-    }
-    
-    // When player accepts herbs from Hermit after centipede quest
-    if (selectedOption.id === "hermit_centipede_thanks_accept" && below.choiceEvent && below.choiceEvent.npcPos) {
-        below.gameData.player.inventory.push(6);
-        below.gameData.mapLog.push("The Hermit hands you a bundle of dried cave herbs.");
-        maintainMapLog();
-        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
-        if (hermitNpc) {
-            // Disable all quest/trade/greeting dialogs, keep only thanks stub
-            hermitNpc.dialogOptions.forEach(function(d) {
-                if (d.id !== "hermit_centipede_thanks") {
-                    d.available = false;
-                }
-            });
-            // Move Hermit back to his original spot
-            hermitNpc.position.x = 3;
-            hermitNpc.position.y = 3;
-        }
-        // Re-enable the thanks dialog as the permanent stub
-        var thanksD = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; }).dialogOptions.find(function(d) { return d.id === "hermit_centipede_thanks"; });
-        if (thanksD) thanksD.available = true;
-        setTimeout(function() { showInventory([6]); }, 50);
-        drawMapCanvas();
-    }
-
-    // When player first talks to the Mole, enable Medusa's mole dialog option
-    if (selectedOption.id === "molea1q") {
-        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
-        if (medusaNpc && medusaNpc.dialogOptions) {
-            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
-            if (medusaq0 && medusaq0.options) {
-                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
-                if (moleOpt) moleOpt.available = true;
-            }
-        }
-    }
-    
-    // When player accepts Medusa's key, grant Stone Key
-    if (selectedOption.id === "medusama4p") {
-        below.gameData.player.inventory.push(7);
-        setTimeout(function() { showInventory([7]); }, 50);
-    }
-    
-    // When Mole reveals the secret passage, unlock Medusa's mole dialog option
-    if (selectedOption.id === "mole_post5_a") {
-        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
-        if (medusaNpc && medusaNpc.dialogOptions) {
-            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
-            if (medusaq0 && medusaq0.options) {
-                var moleOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1m"; });
-                if (moleOpt) moleOpt.available = true;
-            }
-        }
-    }
-    
-    // When player first interacts with the Jester, unlock Hermit's opinion dialog
-    if (below.choiceEvent && below.choiceEvent.npcType === 2 && !below.jesterMet) {
-        below.jesterMet = true;
-        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
-        if (hermitNpc && hermitNpc.dialogOptions) {
-            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
-            if (hermitq0 && hermitq0.options) {
-                var askJester = hermitq0.options.find(function(o) { return o.id === "hermit_ask_jester"; });
-                if (askJester) askJester.available = true;
-            }
-        }
-        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
-        if (medusaNpc && medusaNpc.dialogOptions) {
-            var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
-            if (medusaq0 && medusaq0.options) {
-                var jesterOpt = medusaq0.options.find(function(o) { return o.id === "medusaa1j"; });
-                if (jesterOpt) jesterOpt.available = true;
-            }
-        }
-    }
-    
-    // When player finishes Mole trap dialog, restore normal dialog
-    if (selectedOption.id === "mole_trap_leave" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var mole = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (mole) {
-            var trapD = mole.dialogOptions.find(function(d) { return d.id === "mole_trap"; });
-            var normalD = mole.dialogOptions.find(function(d) { return d.id === "moleq1"; });
-            if (trapD) trapD.available = false;
-            if (normalD) normalD.available = true;
-        }
-    }
-    
-    // When player chooses "Let's go" for Sam Slate's walk
-    if ((selectedOption.id === "detective_ready_go" || selectedOption.id === "detective_help_intro_ready") && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, -9, 0, function() {
-            var arrivalDialogs = ["detectiveq0", "detectiveq1", "detective_help_intro", "detective_ready"];
-            arrivalDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var arrivalD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_arrival"; });
-            if (arrivalD) arrivalD.available = true;
-            below.gameData.mapLog.push("Sam Slate stops in a shadowy alcove and gestures for you to join him.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam Slate tips his hat and melts into the shadows. You follow at a distance.");
-            maintainMapLog();
-        }
-    }
-    
-    // Walk from office to police precinct
-    if ((selectedOption.id === "detective_arrival_in" || selectedOption.id === "detective_arrival_doubt_in") && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, -5, -9, function() {
-            var closeDialogs = ["detective_arrival", "detective_arrival_doubt"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_precinct"; });
-            if (openD) openD.available = true;
-            below.gameData.mapLog.push("Sam leads you through the damp streets to the police precinct.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam nods and pushes off the crate. 'Stay close.'");
-            maintainMapLog();
-        }
-    }
-    
-    // Walk from precinct to Honest Abe's
-    if ((selectedOption.id === "detective_precinct_go" || selectedOption.id === "detective_precinct_go2") && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, 1, -9, function() {
-            var closeDialogs = ["detective_precinct", "detective_precinct_sgt", "detective_precinct_info", "detective_precinct_thanks", "detective_precinct_sgt_final", "detective_precinct_after", "detective_precinct_reliable"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_abe"; });
-            if (openD) openD.available = true;
-            below.gameData.mapLog.push("Sam ducks into a narrow alley and emerges at Honest Abe's Pawn Shop.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam tips his hat at the Sergeant and heads for the door.");
-            maintainMapLog();
-        }
-    }
-    
-    // Walk from Abe's to Rooftop
-    if ((selectedOption.id === "detective_abe_go" || selectedOption.id === "detective_abe_go2") && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, 15, -4, function() {
-            var closeDialogs = ["detective_abe", "detective_abe_char", "detective_abe_medusa", "detective_abe_after", "detective_abe_explain"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_rooftop"; });
-            if (openD) openD.available = true;
-            below.gameData.mapLog.push("Sam leads you through a service alley and up a rusted ladder to a high ledge.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam thanks Abe and heads for the back exit.");
-            maintainMapLog();
-        }
-    }
-    
-    // Walk from Rooftop to The Last Stop Diner
-    if (selectedOption.id === "detective_rooftop_go" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, 7, -9, function() {
-            var closeDialogs = ["detective_rooftop", "detective_rooftop_mouse", "detective_rooftop_after"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_diner"; });
-            if (openD) openD.available = true;
-            below.gameData.mapLog.push("The neon sign of The Last Stop buzzes ahead. Sam picks up the pace.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam climbs down from the ledge without a word.");
-            maintainMapLog();
-        }
-    }
-    
-    // Walk from Diner to Jazz Club
-    if (selectedOption.id === "detective_diner_go" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, 12, -9, function() {
-            var closeDialogs = ["detective_diner", "detective_diner_flo", "detective_diner_after"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_jazz"; });
-            if (openD) openD.available = true;
-            below.gameData.mapLog.push("Sam stops outside a doorway draped in red curtains. Muffled piano drifts through.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam pockets the photograph and heads back out into the street.");
-            maintainMapLog();
-        }
-    }
-    
-    // Walk from Jazz Club to Dock Master
-    if (selectedOption.id === "detective_jazz_go" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, 18, 9, function() {
-            var closeDialogs = ["detective_jazz", "detective_jazz_piano", "detective_jazz_after"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_dockmaster"; });
-            if (openD) openD.available = true;
-            below.gameData.mapLog.push("The Dock Master's office emerges from the mist - a cratewood shack over black water.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam steps away from the jazz club, his jaw tight.");
-            maintainMapLog();
-        }
-    }
-    
-    // Walk from Dock Master to Pier C3
-    if (selectedOption.id === "detective_dockmaster_go" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc && npcWalkTo(samNpc, 12, 12, function() {
-            var closeDialogs = ["detective_dockmaster", "detective_dockmaster_char", "detective_dockmaster_letter", "detective_dockmaster_after", "detective_dockmaster_catch"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var openD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_pier"; });
-            if (openD) openD.available = true;
-            below.gameData.mapLog.push("Sam walks to the end of Pier C3. Black water laps against the pilings.");
-            maintainMapLog();
-        }, 3)) {
-            below.gameData.mapLog.push("Sam folds the letter and steps out onto the pier.");
-            maintainMapLog();
-        }
-    }
-    
-    // Handle "Let her go" and "We can still catch her" on dockmaster_after
-    if (selectedOption.id === "detective_dockmaster_leave" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc) {
-            var closeDialogs = ["detective_dockmaster", "detective_dockmaster_char", "detective_dockmaster_letter", "detective_dockmaster_after"];
-            closeDialogs.forEach(function(id) {
-                var d = samNpc.dialogOptions.find(function(d) { return d.id === id; });
-                if (d) d.available = false;
-            });
-            var pierD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_pier"; });
-            if (pierD) pierD.available = true;
-        }
-    }
-    
-    // Teleport Sam to his office after the pier scene
-    if (selectedOption.id === "detective_pier_a1" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var samNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (samNpc) {
-            samNpc.position = { x: 0, y: -2 };
-            samNpc.destPos = {};
-            var officeD = samNpc.dialogOptions.find(function(d) { return d.id === "detective_office"; });
-            if (officeD) officeD.available = true;
-            below.gameData.player.samQuestComplete = true;
-            // Remove Jester from map 1
-            for (var si = below.gameData.mapData[1].npcs.length - 1; si >= 0; si--) {
-                if (below.gameData.mapData[1].npcs[si].type === 2) {
-                    below.gameData.mapData[1].npcs.splice(si, 1);
-                    break;
-                }
-            }
-            // Place Jester at Dock Master office
-            below.gameData.mapData[3].npcs.push({
-                type: 2,
-                position: { x: 18, y: 9 },
-                movement: 0,
-                dialogOptions: [{
-                    id: "jester_dockmaster_ship",
-                    available: true,
-                    text: "The Dock Master - who looks suspiciously like the Jester in an oversized coat and a glued-on mustache - leans on the counter with a grin. 'Well, well, well! Fancy seein' YOU here! Heard you been collectin' boat parts! A ship! At Pier A1! Who woulda thunk it! Fix it up and you can sail right outta here! Course, I wouldn't know anythin' about that. I'm just the Dock Master. Totally legitimate. Ahem.' He winks broadly.",
-                    options: [{
-                        id: "jester_dockmaster_ship_a1",
-                        text: "...",
-                        available: true,
-                        closes: ["jester_dockmaster_ship"]
-                    }]
-                }]
-            });
-        }
-    }
-    
-    // Return from The Beach to the docks on map 3
-    if (selectedOption.id === "ship_beach_leave") {
-        setTimeout(function() {
-            changeMap(3, -1, 13, "You sail back across the dark lake. The familiar shape of Pier A1 emerges from the gloom as the ship docks once more.");
-        }, 10);
-    }
-
-    // Enable Mole's sick dialog when player departs to The Beach
-    if (selectedOption.id === "ship_departure_go") {
-        var moleNpc = below.gameData.mapData[2].npcs ? below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; }) : null;
-        if (moleNpc && moleNpc.dialogOptions) {
-            var sickD = moleNpc.dialogOptions.find(function(d) { return d.id === "mole_sick"; });
-            if (sickD) sickD.available = true;
-        }
-        setTimeout(function() {
-            changeMap(4, 2, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
-        }, 10);
-    }
-
-    // When player offers to find help for the Mole, enable Hermit's antidote dialog
-    if (selectedOption.id === "mole_sick_help") {
-        var hermitNpc = below.gameData.mapData[0].npcs ? below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; }) : null;
-        if (hermitNpc && hermitNpc.dialogOptions) {
-            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
-            if (hermitq0 && hermitq0.options) {
-                var antidoteOpt = hermitq0.options.find(function(o) { return o.id === "hermit_ask_antidote"; });
-                if (antidoteOpt) antidoteOpt.available = true;
-            }
-        }
-    }
-
-    // Hermit grants the antidote
-    if (selectedOption.id === "hermit_antidote_give_a1") {
-        below.gameData.player.inventory.push(12);
-        setTimeout(function() { showInventory([12]); }, 50);
-    }
-    
-    // When player responds to Sam Shale mid-walk dialog
-    if (selectedOption.id === "detective_walk_a1") {
-        below.gameData.mapLog.push("Sam Shale glances at you sidelong. 'Once. Came out with a bullet hole in my coat and a story I can't tell in polite company. Not that there's any polite company down here.'");
-        maintainMapLog();
-    }
-    if (selectedOption.id === "detective_walk_a2") {
-        below.gameData.mapLog.push("Sam Shale nods slowly. 'Yeah. That's the right response to this place.'");
-        maintainMapLog();
-    }
-    
-    // When player leaves Mole's intro dialog (molea4), remove blocking stones on map 2
-    if (selectedOption.id === "molea4") {
-        var stonePositions = [
-            {x:6,y:10},{x:7,y:10},{x:6,y:11},{x:7,y:11},
-            {x:39,y:10},{x:40,y:10},{x:39,y:11},{x:40,y:11},
-            {x:6,y:32},{x:7,y:32},{x:6,y:33},{x:7,y:33}
-        ];
-        var map2Obstacles = below.gameData.mapData[2].obstacles;
-        below.gameData.mapData[2].obstacles = map2Obstacles.filter(function(o) {
-            return !(o.type === 1 && stonePositions.some(function(p) {
-                return o.position.x === p.x && o.position.y === p.y;
-            }));
-        });
-        below.gameData.mapLog.push("Them mole smashes at the rocks and they roll away into the darkness.");
-        maintainMapLog();
-    }
-
-    // When player insists on help and follows the Hermit, walk to door and unlock it
-    if (selectedOption.id === "hermit_insist_follow" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (hermitNpc && npcWalkTo(hermitNpc, -1, 3, function() {
-            var doorObstacle = below.gameData.mapData[0].obstacles.find(function(o) {
-                return o.position.x === -2 && o.position.y === 2;
-            });
-            if (doorObstacle) {
-                doorObstacle.closed = false;
-                doorObstacle.blocking = false;
-                doorObstacle.icon = "door_open.png";
-            }
-            showSplash({
-                image: "rats_dialog.png",
-                text: "The old stone door grinds open. Beyond it, a dark chamber stirs with movement - rats scatter in the shadows, their eyes glinting like tiny jewels.",
-                shake: false
-            });
-            // Make Hermit's rat-spray dialog available for next conversation
-            var hermitNpcArr = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
-            if (hermitNpcArr && hermitNpcArr.dialogOptions) {
-                var sprayD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
-                var baseD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
-                if (sprayD) sprayD.available = true;
-                if (baseD) baseD.available = false;
-            }
-        }, 3)) {
-            below.gameData.mapLog.push("Alistair gathers his cloak and gestures for you to follow.");
-            maintainMapLog();
-        }
-    }
-
-    // When player accepts the rat-spray quest, give them the silver key
-    if (selectedOption.id === "hermit_rat_spray_accept" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (hermitNpc && hermitNpc.dialogOptions) {
-            var sprayD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
-            var waitD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray_wait"; });
-            if (sprayD) sprayD.available = false;
-            if (waitD) waitD.available = true;
-            below.gameData.player.inventory.push(4);
-            setTimeout(function() { showInventory([4]); }, 50);
-            below.gameData.mapLog.push("Alistair hands you a small silver key. 'Take this for the door, beyond is my room. And hurry back - the rats won't wait.'");
-            maintainMapLog();
-        }
-    }
-    
-    // If player declines the rat-spray quest, return to normal dialog
-    if (selectedOption.id === "hermit_rat_spray_decline" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (hermitNpc && hermitNpc.dialogOptions) {
-            var sprayD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
-            var baseD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
-            if (sprayD) sprayD.available = false;
-            if (baseD) baseD.available = true;
-            below.gameData.mapLog.push("Alistair shrugs. 'Suit yourself. The offer stands if you change your mind.'");
-            maintainMapLog();
-        }
-    }
-
-    // When player hands over the rat spray, Hermit walks into rat chamber and clears it
-    if (selectedOption.id === "hermit_rat_spray_give_hand" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (hermitNpc && hermitNpc.dialogOptions) {
-            // Remove rat spray from inventory
-            var sprayIdx = below.gameData.player.inventory.indexOf(13);
-            if (sprayIdx !== -1) {
-                below.gameData.player.inventory.splice(sprayIdx, 1);
-            }
-            if (npcWalkTo(hermitNpc, -3, 2, function() {
-                below.ratsCleared = true;
-                showSplash({
-                    image: "hermit_dialog.png",
-                    text: "Alistair storms through the doorway, rat spray hissing. 'THIEVING VERMIN! STEALING MY HERBS! THINK YOU CAN CHEAT ALISTAIR THE HERMIT?!' He sprays wildly - rats scatter, shrieking, fleeing through cracks and crevices. Within moments, the chamber is silent. He stands panting, canister still raised. 'And stay OUT!' he bellows at the empty room. Then, quieter: 'That was... satisfying.'",
-                    shake: true
-                });
-                below.pendingRatClear = true;
-            }, 3)) {
-                below.gameData.mapLog.push("Alistair snatches the canister and storms off toward the storeroom, muttering about thieving rats.");
-                maintainMapLog();
-            }
-        }
-    }
-
-    // When player hands over the bat swatter, Hermit unlocks the west door and returns to his post
-    if (selectedOption.id === "hermit_bat_swatter_give_hand" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMapB = below.gameData.player.currentMap;
-        var hermitNpcB = below.gameData.mapData[curMapB].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (hermitNpcB && hermitNpcB.dialogOptions) {
-            // Unlock the door at (-7,3) — it becomes non-blocking
-            var obstacles = below.gameData.mapData[curMapB].obstacles;
-            for (var oi = 0; oi < obstacles.length; oi++) {
-                if (obstacles[oi].position.x === -7 && obstacles[oi].position.y === 3) {
-                    obstacles[oi].closed = false;
-                    obstacles[oi].blocking = false;
-                    break;
-                }
-            }
-            // Walk Hermit back to (3,3)
-            if (npcWalkTo(hermitNpcB, 3, 3, function() {
-                var introD = hermitNpcB.dialogOptions.find(function(d) { return d.id === "hermit_bat_intro"; });
-                if (introD) introD.available = true;
-                var greetD = hermitNpcB.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
-                if (greetD) greetD.available = true;
-                maintainMapLog();
-            }, 3)) {
-                below.gameData.mapLog.push("Alistair shuffles back toward the main chamber, rubbing his lower back.");
-                maintainMapLog();
-            }
-        }
-    }
-
-    // Handle hide-and-seek countdown start
-    if (selectedOption.id === "sisters_hideandseek_count" && below.choiceEvent && below.choiceEvent.npcPos) {
-        startHideAndSeek();
-        return;
-    }
-
-    // Handle tag countdown start
-    if (selectedOption.id === "sisters_tag_count" && below.choiceEvent && below.choiceEvent.npcPos) {
-        startTagGame();
-        return;
-    }
-
-    // Handle hide-and-seek completion — restore normal conversation, enable tag
-    if (selectedOption.id === "sisters_hideandseek_complete_close" && below.choiceEvent && below.choiceEvent.npcPos) {
-        below.gameData.mapData[5].npcs.forEach(function(n) {
-            var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_intro"; });
-            if (introD) introD.available = true;
-            var tagIntroD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_intro"; });
-            if (tagIntroD) tagIntroD.available = true;
-        });
-    }
-
-    // Handle finding a sister during hide-and-seek
-    if (selectedOption.id === "sisters_hideandseek_found_close" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (npc) {
-            npc._found = true;
-            var foundD = npc.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_found"; });
-            if (foundD) foundD.available = false;
-            var allFound = below.gameData.mapData[5].npcs.every(function(n) { return n._found; });
-            if (allFound) {
-                below.gameData.mapData[5].npcs.forEach(function(n) {
-                    var completeD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_complete"; });
-                    if (completeD) completeD.available = true;
-                    var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_intro"; });
-                    if (introD) introD.available = false;
-                    var startD = n.dialogOptions.find(function(d) { return d.id === "sisters_hideandseek_start"; });
-                    if (startD) startD.available = false;
-                });
-                below.sistersReturnContext = "hideandseek";
-                startSistersReturn();
-            }
-        }
-        if (!below.passwordInput) {
-            closeChoiceEvent();
-        }
-        return;
-    }
-
-    // Handle tagging a sister during tag game
-    if (selectedOption.id === "sisters_tag_found_close" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var curMap = below.gameData.player.currentMap;
-        var npc = below.gameData.mapData[curMap].npcs.find(function(n) {
-            return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
-        });
-        if (npc) {
-            npc._tagFound = true;
-            var foundD = npc.dialogOptions.find(function(d) { return d.id === "sisters_tag_found"; });
-            if (foundD) foundD.available = false;
-            var allTagged = below.gameData.mapData[5].npcs.every(function(n) { return n._tagFound; });
-            if (allTagged) {
-                below.tagActive = false;
-                below.gameData.mapData[5].npcs.forEach(function(n) {
-                    var completeD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_complete"; });
-                    if (completeD) completeD.available = true;
-                    var introD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_intro"; });
-                    if (introD) introD.available = false;
-                    var startD = n.dialogOptions.find(function(d) { return d.id === "sisters_tag_start"; });
-                    if (startD) startD.available = false;
-                    n._tagFleeing = false;
-                });
-                below.sistersReturnContext = "tag";
-                startSistersReturn();
-                below.gameData.mapLog.push("You tagged them both! The sisters shuffle back, looking winded.");
-                maintainMapLog();
-            } else {
-                below.gameData.mapLog.push("One down! Keep chasing the other one!");
-                maintainMapLog();
-            }
-        }
-        if (!below.passwordInput) {
-            closeChoiceEvent();
-        }
-        return;
-    }
-
-    // Handle tag completion — restore congratulations dialog
-    if (selectedOption.id === "sisters_tag_complete_close" && below.choiceEvent && below.choiceEvent.npcPos) {
-        below.gameData.mapData[5].npcs.forEach(function(n) {
-            var congratsD = n.dialogOptions.find(function(d) { return d.id === "sisters_congratulations"; });
-            if (congratsD) congratsD.available = true;
-        });
-    }
-
-    // Handle exit reveal — remove mushroom and walk sisters to show the exit
-    if (selectedOption.id === "sisters_exit_reveal_close" && below.choiceEvent && below.choiceEvent.npcPos) {
-        var map5 = below.gameData.mapData[5];
-        map5.obstacles = map5.obstacles.filter(function(o) {
-            return !(o.position.x === 10 && o.position.y === 11);
-        });
-        below.gameData.mapLog.push("A deep rumble echoes through the fissure. The mushrooms near the crack shudder and collapse.");
-        maintainMapLog();
-
-        // Sisters walk to the exit to show the player (comic effect)
-        var sisters = map5.npcs;
-        var exitTargets = [{ x: 9, y: 11 }, { x: 11, y: 11 }];
-        sisters.forEach(function(n, i) {
-            n.dialogOptions.forEach(function(d) { d.available = false; });
-            var exhD = n.dialogOptions.find(function(d) { return d.id === "sisters_exhausted"; });
-            if (exhD) exhD.available = true;
-            var target = exitTargets[i % exitTargets.length];
-            npcWalkTo(n, target.x, target.y, function() {
-                n.dialogOptions.forEach(function(d) { d.available = false; });
-                var congratsD = n.dialogOptions.find(function(d) { return d.id === "sisters_congratulations"; });
-                if (congratsD) congratsD.available = true;
-                var allArrived = sisters.every(function(s) {
-                    return !s.walkPath || s.walkPath.length === 0;
-                });
-                if (allArrived) {
-                    below.gameData.mapLog.push("The sisters gesture lazily toward the crack. 'There. Now please leave. We need a nap.'");
-                    maintainMapLog();
-                    setTimeout(function() {
-                        below.sistersReturnContext = "tag";
-                        startSistersReturn();
-                    }, 2000);
-                }
-            }, 20);
-        });
-    }
-
-    if (!below.passwordInput) {
-        closeChoiceEvent();
-    }
+    // Dispatch quest handler
+    dispatchQuestHandler(selectedOption);
 }
 
 function closeChoiceEvent() {
@@ -2086,7 +1397,7 @@ function cutSceneLoop(timestamp) {
         var cutEnd = cutStart + total;
         var cutElapsed = elapsed - cutStart;
 
-        if (cutElapsed < 0) continue;
+        if (cutElapsed < 0) { allDone = false; continue; }
         maxEndTime = Math.max(maxEndTime, cutEnd);
 
         if (cutElapsed >= total) continue;
