@@ -3274,7 +3274,7 @@ var map5Data = {
             {
               "id": "sisters_exit_reveal",
               "available": false,
-              "text": "SISTER TWO: 'Past the crystal formations. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
+              "text": "SISTER TWO: 'Under the purple mushroom to the west. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
               "options": [
                 {
                   "id": "sisters_exit_reveal_close",
@@ -3355,7 +3355,7 @@ var map5Data = {
             {
               "id": "sisters_tag_complete",
               "available": false,
-              "text": "Both sisters have shuffled back, looking utterly exhausted by the exertion.\n\nSISTER ONE: 'You caught us. Both of us. Impressive. I think.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Now please. No more games. We need to nap.'\nSISTER TWO: 'For a century or two.'",
+              "text": "Both sisters have shuffled back, looking utterly exhausted by the exertion.\n\nSISTER ONE: 'You caught us. Both of us. Impressive. I think.'\nSISTER TWO: 'The way deeper down - Under the purple mushroom to the west, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Now please. No more games. We need to nap.'\nSISTER TWO: 'For a century or two.'",
               "options": [
                 {
                   "id": "sisters_tag_complete_close",
@@ -3561,7 +3561,7 @@ var map5Data = {
             {
               "id": "sisters_exit_reveal",
               "available": false,
-              "text": "SISTER TWO: 'Past the crystal formations. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
+              "text": "SISTER TWO: 'Under the purple mushroom to the west. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
               "options": [
                 {
                   "id": "sisters_exit_reveal_close",
@@ -3642,7 +3642,7 @@ var map5Data = {
             {
               "id": "sisters_tag_complete",
               "available": false,
-              "text": "Both sisters have shuffled back, looking utterly exhausted by the exertion.\n\nSISTER ONE: 'You caught us. Both of us. Impressive. I think.'\nSISTER TWO: 'The way deeper down - past the crystal formations, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Now please. No more games. We need to nap.'\nSISTER TWO: 'For a century or two.'",
+              "text": "Both sisters have shuffled back, looking utterly exhausted by the exertion.\n\nSISTER ONE: 'You caught us. Both of us. Impressive. I think.'\nSISTER TWO: 'The way deeper down - Under the purple mushroom to the west, there's a crack in the floor. Leads to the old tunnels. That's where you want to go.'\nSISTER ONE: 'Now please. No more games. We need to nap.'\nSISTER TWO: 'For a century or two.'",
               "options": [
                 {
                   "id": "sisters_tag_complete_close",
