@@ -106,6 +106,7 @@ var belowGameData = {
     "destinationLocation": {},
     "icon": null,
     "vision": 2,
+    "cutScenePlayed": {},
     "inventory": []
   },
   "cutScenes": {

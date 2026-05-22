@@ -631,15 +631,15 @@ function mapGameLoop() {
                         }
                     }
                     // Trigger "after_map0" cut-scene when leaving map 0 for map 1 the first time
-                    if (curMap === 0 && exit.targetMap === 1 && !below.cutScenePlayed.after_map0) {
-                        below.cutScenePlayed.after_map0 = true;
+                    if (curMap === 0 && exit.targetMap === 1 && !below.gameData.player.cutScenePlayed.after_map0) {
+                        below.gameData.player.cutScenePlayed.after_map0 = true;
                         playCutScene("after_map0", function() {
                             changeMap(exit.targetMap, targetX, targetY, exit.text);
                         });
                     }
                     // Trigger "after_map5" cut-scene when leaving map 5 for map 6 the first time
-                    else if (curMap === 5 && exit.targetMap === 6 && !below.cutScenePlayed.after_map5) {
-                        below.cutScenePlayed.after_map5 = true;
+                    else if (curMap === 5 && exit.targetMap === 6 && !below.gameData.player.cutScenePlayed.after_map5) {
+                        below.gameData.player.cutScenePlayed.after_map5 = true;
                         playCutScene("after_map5", function() {
                             changeMap(exit.targetMap, targetX, targetY, exit.text);
                         });

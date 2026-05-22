@@ -405,6 +405,12 @@ function drawMapCanvas() {
         }
     });
     
+    // Map 6 shadow realm — dim brightness by 50%
+    if (curMap === 6) {
+        context.fillStyle = "rgba(0, 0, 0, 0.5)";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    
     // Fog overlay (drawn on top of everything, only on map 3 and map 5)
     if ((curMap === 3 || curMap === 5) && below.fogParticles) {
         var fogColor = curMap === 5 ? 'rgba(100, 180, 170' : 'rgba(180, 180, 180';

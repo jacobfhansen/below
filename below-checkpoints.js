@@ -78,7 +78,7 @@ below._checkpoints.hermit_done = {
         below.centipedesHandled = true;
         below.pendingRatClear = false;
         below.centipedeCheckTick = 0;
-        below.cutScenePlayed.after_map0 = true;
+        below.gameData.player.cutScenePlayed.after_map0 = true;
         below.gameData.player.inventory = [4, 5, 6, 7, 14];
 
         // Open story doors on map 0
@@ -98,7 +98,7 @@ below._checkpoints.medusa_met = {
     title: "After Password Door",
     apply: function() {
         below.jesterMet = true;
-        below.cutScenePlayed.after_map0 = true;
+        below.gameData.player.cutScenePlayed.after_map0 = true;
         below.gameData.player.inventory = [4, 5, 6, 7, 14];
 
         // Open password door on map 1
@@ -118,7 +118,7 @@ below._checkpoints.maze_exit = {
         below.jesterMet = true;
         below.ratsCleared = true;
         below.centipedesHandled = true;
-        below.cutScenePlayed.after_map0 = true;
+        below.gameData.player.cutScenePlayed.after_map0 = true;
         below.gameData.player.inventory = [4, 5, 7, 14];
         below.gameData.player.mazeCycle = 0;
 
@@ -153,7 +153,7 @@ below._checkpoints.depths_entry = {
         below.jesterMet = true;
         below.ratsCleared = true;
         below.centipedesHandled = true;
-        below.cutScenePlayed.after_map0 = true;
+        below.gameData.player.cutScenePlayed.after_map0 = true;
         below.gameData.player.inventory = [4, 5, 7, 14, 8, 9, 10, 11];
         below.gameData.player.mazeCycle = 0;
 
@@ -279,7 +279,7 @@ below._checkpoints.fissure_entry = {
     title: "The Fissure (Sisters)",
     apply: function() {
         below._checkpoints.beach_cleared.apply();
-        below.cutScenePlayed.after_map5 = false;
+        below.gameData.player.cutScenePlayed.after_map5 = false;
     }
 };
 
@@ -316,7 +316,7 @@ below._checkpoints.deeper_dark = {
     title: "The Deeper Dark",
     apply: function() {
         below._checkpoints.fissure_games_done.apply();
-        below.cutScenePlayed.after_map5 = true;
+        below.gameData.player.cutScenePlayed.after_map5 = true;
     }
 };
 
@@ -343,7 +343,7 @@ below.fastForward = function(id) {
     below.map5TilesMoved = 0;
     below.centipedeCheckTick = 0;
     below.splashCount = 0;
-    below.cutScenePlayed = {};
+    below.gameData.player.cutScenePlayed = {};
     below.gameData.player.inventory = [];
     below.gameData.player.samQuestComplete = false;
     below.gameData.player.mazeCycle = 0;

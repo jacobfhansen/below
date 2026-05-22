@@ -14,7 +14,6 @@ const below = {
     cutSceneIndex: 0,
     cutSceneStart: null,
     cutSceneCallback: null,
-    cutScenePlayed: {},
     gameData: null // Loaded from gamedata.js
 };
 
