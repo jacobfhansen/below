@@ -6,8 +6,8 @@ function showChoiceEvent() {
         selectedIndex: 0,
         message: msg,
         options: [
-            { text: "Search", action: function() { below.gameData.mapLog.push(msg); maintainMapLog(); } },
-            { text: "Move on", action: function() { below.gameData.mapLog.push("You move on..."); maintainMapLog(); } }
+            { text: "Search", action: function() { addMapMessage(msg); maintainMapLog(); } },
+            { text: "Move on", action: function() { addMapMessage("You move on..."); maintainMapLog(); } }
         ]
     };
     renderChoiceEvent();
@@ -471,7 +471,7 @@ function getChoiceEventOptions(choiceEventIds) {
     return choiceEventIds.map(function(id) {
         var option = { text: texts[id] };
         if (id === 1) {
-            option.action = function() { below.gameData.mapLog.push("It's a rock"); maintainMapLog(); };
+            option.action = function() { addMapMessage("It's a rock"); maintainMapLog(); };
         } else if (id === 2) {
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.obstaclePos) {
@@ -484,7 +484,7 @@ function getChoiceEventOptions(choiceEventIds) {
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.monsterType) {
                     var desc = below.gameData.monsterTypes[below.choiceEvent.monsterType].beholdDesc || "A creature";
-                    below.gameData.mapLog.push(desc);
+                    addMapMessage(desc);
                     maintainMapLog();
                 }
             };
@@ -499,7 +499,7 @@ function getChoiceEventOptions(choiceEventIds) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
                         if (obstacle.type === 8 && obstacle.statueDesc && !obstacle.searched) {
                             obstacle.searched = true;
-                            below.gameData.mapLog.push(obstacle.statueDesc);
+                            addMapMessage(obstacle.statueDesc);
                             maintainMapLog();
                             if (obstacle.dialogUnlock) {
                                 var medusa = below.gameData.mapData[curMap].npcs.find(function(n) {
@@ -514,7 +514,7 @@ function getChoiceEventOptions(choiceEventIds) {
                                 }
                             }
                         } else if (obstacle.type === 8 && obstacle.searched) {
-                            below.gameData.mapLog.push("The marble figure stares blankly into the dark. You've already learned what you can from it.");
+                            addMapMessage("The marble figure stares blankly into the dark. You've already learned what you can from it.");
                             maintainMapLog();
                         } else {
                             var searchItemType = obstacle.itemType !== undefined ? obstacle.itemType : (obstacleType ? obstacleType.itemType : undefined);
@@ -543,9 +543,9 @@ function getChoiceEventOptions(choiceEventIds) {
                                 var tileIndex = 'x' + (obstacle.position.x < 0 ? 'm' : '') + Math.abs(obstacle.position.x) + 'y' + (obstacle.position.y < 0 ? 'm' : '') + Math.abs(obstacle.position.y);
                                 var tile = below.gameData.mapData[curMap].tiles[tileIndex];
                                 if (tile && tile.text) {
-                                    below.gameData.mapLog.push(tile.text);
+                                    addMapMessage(tile.text);
                                 } else {
-                                    below.gameData.mapLog.push("It is empty.");
+                                    addMapMessage("It is empty.");
                                 }
                                 maintainMapLog();
                             }
@@ -573,16 +573,16 @@ function getChoiceEventOptions(choiceEventIds) {
                                 obstacle.icon = "door_open.png";
                                 obstacle.blocking = false;
                                 obstacle.choiceEvents = obstacle.openChoiceEvents || obstacleType.openChoiceEvents;
-                                below.gameData.mapLog.push("You unlocked the door!");
+                                addMapMessage("You unlocked the door!");
                                 maintainMapLog();
                             } else if (!isClosed) {
-                                below.gameData.mapLog.push("The door is already open.");
+                                addMapMessage("The door is already open.");
                                 maintainMapLog();
                             } else if (below.gameData.player.inventory.length > 0) {
-                                below.gameData.mapLog.push("None of your keys seems to fit");
+                                addMapMessage("None of your keys seems to fit");
                                 maintainMapLog();
                             } else {
-                                below.gameData.mapLog.push("You need a key to unlock this door.");
+                                addMapMessage("You need a key to unlock this door.");
                                 maintainMapLog();
                             }
                         }
@@ -602,10 +602,10 @@ function getChoiceEventOptions(choiceEventIds) {
                         if (!isClosed) {
                             below.gameData.player.currentLocation.x = obstacle.position.x;
                             below.gameData.player.currentLocation.y = obstacle.position.y;
-                            below.gameData.mapLog.push("You pass through the door.");
+                            addMapMessage("You pass through the door.");
                             maintainMapLog();
                         } else {
-                            below.gameData.mapLog.push("The door is locked.");
+                            addMapMessage("The door is locked.");
                             maintainMapLog();
                         }
                     }
@@ -616,7 +616,7 @@ function getChoiceEventOptions(choiceEventIds) {
                 if (below.choiceEvent && below.choiceEvent.npcType) {
                     var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
                     var msg = (below.choiceEvent.npcAgitated ? npcType.dialog.agitated : npcType.dialog.greeting) || "The character remains silent.";
-                    below.gameData.mapLog.push(msg);
+                    addMapMessage(msg);
                     maintainMapLog();
                 }
             };
@@ -624,7 +624,7 @@ function getChoiceEventOptions(choiceEventIds) {
             option.action = function() {
                 if (below.choiceEvent && below.choiceEvent.npcType) {
                     var npcType = below.gameData.npcTypes[below.choiceEvent.npcType];
-                    below.gameData.mapLog.push(npcType.agenda || "The merchant sizes you up...");
+                    addMapMessage(npcType.agenda || "The merchant sizes you up...");
                     maintainMapLog();
                 }
             };
@@ -642,7 +642,7 @@ function getChoiceEventOptions(choiceEventIds) {
                         }
                     }
                     var msg = npcType.dialog.agitated || "The character looks intimidated!";
-                    below.gameData.mapLog.push(msg);
+                    addMapMessage(msg);
                     maintainMapLog();
                 }
             };
@@ -661,7 +661,7 @@ function getChoiceEventOptions(choiceEventIds) {
                             };
                             renderPasswordInput();
                         } else {
-                            below.gameData.mapLog.push("The door is already open.");
+                            addMapMessage("The door is already open.");
                             maintainMapLog();
                         }
                     }
@@ -805,7 +805,7 @@ function handleBlockedInteraction(x, y) {
     } else {
         var msg = getBlockedMessage(x, y);
         if (msg) {
-            below.gameData.mapLog.push(msg);
+            addMapMessage(msg);
             maintainMapLog();
         }
     }
@@ -866,7 +866,7 @@ function submitPassword() {
         obstacle.icon = "door_open.png";
         var obsType = below.gameData.obstacleTypes[obstacle.type];
         obstacle.choiceEvents = (obsType ? obsType.openChoiceEvents : null) || [8, 3];
-        below.gameData.mapLog.push("The door swings open!");
+        addMapMessage("The door swings open!");
         
         // Move jester to map 1 at (3,-8) and unlock mole hint dialog
         var jesterIdx = -1;
@@ -904,7 +904,7 @@ function submitPassword() {
         below.passwordInput = null;
         drawMapCanvas();
     } else {
-        below.gameData.mapLog.push("Wrong password.");
+        addMapMessage("Wrong password.");
         below.passwordInput = null;
     }
     closeChoiceEvent();

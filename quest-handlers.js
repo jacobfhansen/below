@@ -12,10 +12,10 @@ function walkSamTo(targetX, targetY, closeIds, openId, departureMsg, arrivalMsg)
         });
         var openD = samNpc.dialogOptions.find(function(d) { return d.id === openId; });
         if (openD) openD.available = true;
-        below.gameData.mapLog.push(arrivalMsg);
+        addMapMessage(arrivalMsg);
         maintainMapLog();
     }, 3)) {
-        below.gameData.mapLog.push(departureMsg);
+        addMapMessage(departureMsg);
         maintainMapLog();
     }
 }
@@ -97,7 +97,7 @@ var questHandlers = {
     // --- Hermit ---
     "hermit_centipede_give_ok": function() {
         below.gameData.player.inventory.push(15);
-        below.gameData.mapLog.push("The Hermit hands you a grimy bottle labeled 'Crawl-End'.");
+        addMapMessage("The Hermit hands you a grimy bottle labeled 'Crawl-End'.");
         maintainMapLog();
         var centDoor = below.gameData.mapData[0].obstacles.find(function(o) {
             return o.position.x === -3 && o.position.y === -4;
@@ -105,7 +105,7 @@ var questHandlers = {
         if (centDoor) {
             centDoor.closed = false;
             centDoor.blocking = false;
-            below.gameData.mapLog.push("The Hermit strains against a hidden latch. A section of the east wall swings open.");
+            addMapMessage("The Hermit strains against a hidden latch. A section of the east wall swings open.");
             maintainMapLog();
         }
         setTimeout(function() { showInventory([15]); }, 50);
@@ -113,7 +113,7 @@ var questHandlers = {
 
     "hermit_centipede_thanks_accept": function() {
         below.gameData.player.inventory.push(6);
-        below.gameData.mapLog.push("The Hermit hands you a bundle of dried cave herbs.");
+        addMapMessage("The Hermit hands you a bundle of dried cave herbs.");
         maintainMapLog();
         var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
         if (hermitNpc) {
@@ -159,7 +159,7 @@ var questHandlers = {
                 if (baseD) baseD.available = false;
             }
         }, 3)) {
-            below.gameData.mapLog.push("Alistair gathers his cloak and gestures for you to follow.");
+            addMapMessage("Alistair gathers his cloak and gestures for you to follow.");
             maintainMapLog();
         }
     },
@@ -177,7 +177,7 @@ var questHandlers = {
             if (waitD) waitD.available = true;
             below.gameData.player.inventory.push(4);
             setTimeout(function() { showInventory([4]); }, 50);
-            below.gameData.mapLog.push("Alistair hands you a small silver key. 'Take this for the door, beyond is my room. And hurry back - the rats won't wait.'");
+            addMapMessage("Alistair hands you a small silver key. 'Take this for the door, beyond is my room. And hurry back - the rats won't wait.'");
             maintainMapLog();
         }
     },
@@ -193,7 +193,7 @@ var questHandlers = {
             var baseD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
             if (sprayD) sprayD.available = false;
             if (baseD) baseD.available = true;
-            below.gameData.mapLog.push("Alistair shrugs. 'Suit yourself. The offer stands if you change your mind.'");
+            addMapMessage("Alistair shrugs. 'Suit yourself. The offer stands if you change your mind.'");
             maintainMapLog();
         }
     },
@@ -218,7 +218,7 @@ var questHandlers = {
                 });
                 below.pendingRatClear = true;
             }, 3)) {
-                below.gameData.mapLog.push("Alistair snatches the canister and storms off toward the storeroom, muttering about thieving rats.");
+                addMapMessage("Alistair snatches the canister and storms off toward the storeroom, muttering about thieving rats.");
                 maintainMapLog();
             }
         }
@@ -246,7 +246,7 @@ var questHandlers = {
                 if (greetD) greetD.available = true;
                 maintainMapLog();
             }, 3)) {
-                below.gameData.mapLog.push("Alistair shuffles back toward the main chamber, rubbing his lower back.");
+                addMapMessage("Alistair shuffles back toward the main chamber, rubbing his lower back.");
                 maintainMapLog();
             }
         }
@@ -287,7 +287,7 @@ var questHandlers = {
         }
         if (herbIdx !== -1) {
             below.gameData.player.inventory.splice(herbIdx, 1);
-            below.gameData.mapLog.push("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
+            addMapMessage("You hand over the bundle of cave herbs. The Mole accepts them reverently.");
             maintainMapLog();
             var map2Obstacles = below.gameData.mapData[2].obstacles;
             map2Obstacles.forEach(function(o) {
@@ -297,7 +297,7 @@ var questHandlers = {
                     o.icon = "shimmer_wall_open.png";
                 }
             });
-            below.gameData.mapLog.push("A distant shimmering echoes through the tunnels.");
+            addMapMessage("A distant shimmering echoes through the tunnels.");
             maintainMapLog();
         }
     },
@@ -328,7 +328,7 @@ var questHandlers = {
                 return o.position.x === p.x && o.position.y === p.y;
             }));
         });
-        below.gameData.mapLog.push("Them mole smashes at the rocks and they roll away into the darkness.");
+        addMapMessage("Them mole smashes at the rocks and they roll away into the darkness.");
         maintainMapLog();
     },
 
@@ -341,6 +341,104 @@ var questHandlers = {
                 if (antidoteOpt) antidoteOpt.available = true;
             }
         }
+    },
+
+    // --- Mole beach rocks quest ---
+    "mole_beach_accept_go": function() {
+        var map2 = below.gameData.mapData[2];
+        var moleIdx = -1;
+        for (var mi = 0; mi < map2.npcs.length; mi++) {
+            if (map2.npcs[mi].type === 4) {
+                moleIdx = mi;
+                break;
+            }
+        }
+        if (moleIdx === -1) return;
+        var mole = map2.npcs[moleIdx];
+        below.gameData.moleQuestData = {
+            position: { x: mole.position.x, y: mole.position.y },
+            dialogOptions: JSON.parse(JSON.stringify(mole.dialogOptions))
+        };
+        map2.npcs.splice(moleIdx, 1);
+        var beachMole = JSON.parse(JSON.stringify(mole));
+        beachMole.position = { x: -6, y: 1 };
+        beachMole.dialogOptions = [
+            {
+                id: "mole_beach_greeting",
+                available: true,
+                text: "The Mole emerges from a crack in the cave wall, covered in dust.\n'I made it. Charon did not see me.\nNow, where are these rocks thou speakest of?\nPoint me at them, and I shall clear them posthaste!'",
+                options: [
+                    {
+                        id: "mole_beach_clear",
+                        text: "Right here, along this wall.",
+                        available: true,
+                        chains: ["mole_beach_done"]
+                    }
+                ]
+            },
+            {
+                id: "mole_beach_done",
+                available: false,
+                text: "The Mole sets to work with surprising speed. His claws tear through the rock as if it were wet clay. In moments, the path is clear.\nHe wipes his brow and gives you a mock salute.\n'There! Thy passage is cleared. Now, I must return\nTo my tunnels before Charon wakes from his stupor.'\nHe tips an imaginary hat and scurries back into the crack.",
+                options: [
+                    {
+                        id: "mole_beach_done_leave",
+                        text: "Thank you, friend.",
+                        available: true
+                    }
+                ]
+            }
+        ];
+        below.gameData.mapData[4].npcs.push(beachMole);
+        addMapMessage("The Mole disappears into the darkness, heading for the beach.");
+        maintainMapLog();
+    },
+
+    "mole_beach_clear": function() {
+        var map4Obstacles = below.gameData.mapData[4].obstacles;
+        var rockPositions = [
+            {x:-7,y:1},{x:-8,y:1},{x:-9,y:1},{x:-10,y:1}
+        ];
+        below.gameData.mapData[4].obstacles = map4Obstacles.filter(function(o) {
+            return !rockPositions.some(function(p) {
+                return o.position.x === p.x && o.position.y === p.y;
+            });
+        });
+        addMapMessage("The Mole's claws tear through the rock as if it were wet clay. The path is clear!");
+        maintainMapLog();
+    },
+
+    "mole_beach_done_leave": function() {
+        var map4 = below.gameData.mapData[4];
+        var beachMoleIdx = -1;
+        for (var mi = 0; mi < map4.npcs.length; mi++) {
+            if (map4.npcs[mi].type === 4) {
+                beachMoleIdx = mi;
+                break;
+            }
+        }
+        if (beachMoleIdx === -1) return;
+        map4.npcs.splice(beachMoleIdx, 1);
+        if (below.gameData.moleQuestData) {
+            var restoredMole = {
+                type: 4,
+                position: { x: below.gameData.moleQuestData.position.x, y: below.gameData.moleQuestData.position.y },
+                destPos: {},
+                dialogOptions: JSON.parse(JSON.stringify(below.gameData.moleQuestData.dialogOptions))
+            };
+            var curedD = restoredMole.dialogOptions.find(function(d) { return d.id === "mole_cured"; });
+            if (curedD) {
+                curedD.available = false;
+                var helpOpt = curedD.options.find(function(o) { return o.id === "mole_cureda2"; });
+                if (helpOpt) helpOpt.available = false;
+            }
+            var defaultD = restoredMole.dialogOptions.find(function(d) { return d.id === "moleq1"; });
+            if (defaultD) defaultD.available = true;
+            below.gameData.mapData[2].npcs.push(restoredMole);
+            delete below.gameData.moleQuestData;
+        }
+        addMapMessage("The Mole scurries back into the shadows, returning to his tunnels.");
+        maintainMapLog();
     },
 
     // --- Medusa ---
@@ -464,12 +562,12 @@ var questHandlers = {
     },
 
     "detective_walk_a1": function() {
-        below.gameData.mapLog.push("Sam Shale glances at you sidelong. 'Once. Came out with a bullet hole in my coat and a story I can't tell in polite company. Not that there's any polite company down here.'");
+        addMapMessage("Sam Shale glances at you sidelong. 'Once. Came out with a bullet hole in my coat and a story I can't tell in polite company. Not that there's any polite company down here.'");
         maintainMapLog();
     },
 
     "detective_walk_a2": function() {
-        below.gameData.mapLog.push("Sam Shale nods slowly. 'Yeah. That's the right response to this place.'");
+        addMapMessage("Sam Shale nods slowly. 'Yeah. That's the right response to this place.'");
         maintainMapLog();
     },
 
@@ -561,10 +659,10 @@ var questHandlers = {
                 });
                 below.sistersReturnContext = "tag";
                 startSistersReturn();
-                below.gameData.mapLog.push("You tagged them both! The sisters shuffle back, looking winded.");
+                addMapMessage("You tagged them both! The sisters shuffle back, looking winded.");
                 maintainMapLog();
             } else {
-                below.gameData.mapLog.push("One down! Keep chasing the other one!");
+                addMapMessage("One down! Keep chasing the other one!");
                 maintainMapLog();
             }
         }
@@ -582,7 +680,7 @@ var questHandlers = {
         map5.obstacles = map5.obstacles.filter(function(o) {
             return !(o.position.x === 10 && o.position.y === 11);
         });
-        below.gameData.mapLog.push("A deep rumble echoes through the fissure. The mushrooms near the crack shudder and collapse.");
+        addMapMessage("A deep rumble echoes through the fissure. The mushrooms near the crack shudder and collapse.");
         maintainMapLog();
 
         var sisters = map5.npcs;
@@ -600,7 +698,7 @@ var questHandlers = {
                     return !s.walkPath || s.walkPath.length === 0;
                 });
                 if (allArrived) {
-                    below.gameData.mapLog.push("The sisters gesture lazily toward the crack. 'There. Now please leave. We need a nap.'");
+                    addMapMessage("The sisters gesture lazily toward the crack. 'There. Now please leave. We need a nap.'");
                     maintainMapLog();
                     setTimeout(function() {
                         below.sistersReturnContext = "tag";

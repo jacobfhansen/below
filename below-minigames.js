@@ -57,7 +57,7 @@ function startHideAndSeek() {
                         countDiv.remove();
                         gameDivCenter.style.opacity = "1";
                         gameDivCenter.style.pointerEvents = "auto";
-                        below.gameData.mapLog.push("The sisters have vanished into the cavern. Time to find them.");
+                        addMapMessage("The sisters have vanished into the cavern. Time to find them.");
                         maintainMapLog();
                         drawMapCanvas();
                     }, 500);
@@ -124,7 +124,7 @@ function startTagGame() {
                         countDiv.remove();
                         gameDivCenter.style.opacity = "1";
                         gameDivCenter.style.pointerEvents = "auto";
-                        below.gameData.mapLog.push("The sisters shamble away from you at an almost insulting pace. Tag them!");
+                        addMapMessage("The sisters shamble away from you at an almost insulting pace. Tag them!");
                         maintainMapLog();
                         drawMapCanvas();
                     }, 500);
@@ -183,7 +183,7 @@ function startSistersReturn() {
                         if (tagIntroD) tagIntroD.available = true;
                     }
                 });
-                below.gameData.mapLog.push("The sisters shuffle back to their spot, looking exhausted by the effort.");
+                addMapMessage("The sisters shuffle back to their spot, looking exhausted by the effort.");
                 maintainMapLog();
             }
         };

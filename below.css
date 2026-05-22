@@ -430,6 +430,13 @@ html, body {
     outline: none;
     border-color: var(--cyan);
 }
+.teleport-input select,
+select.teleport-input {
+    appearance: auto;
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+    cursor: pointer;
+}
 .teleport-actions {
     display: flex;
     gap: 10px;

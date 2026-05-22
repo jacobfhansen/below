@@ -90,6 +90,11 @@ function toggleHelp() {
     }
 }
 
+function addMapMessage(msg) {
+    if (below.gameData.mapLog.length > 0 && below.gameData.mapLog[below.gameData.mapLog.length - 1] === msg) return;
+    below.gameData.mapLog.push(msg);
+}
+
 function scrollLogToBottom() {
     var el = document.getElementById("gameLogDiv");
     if (el) el.scrollTop = el.scrollHeight;

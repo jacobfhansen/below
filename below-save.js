@@ -247,7 +247,7 @@ function syncGameData() {
     // 3. Update area description and redraw
     updateAreaDescription();
     drawMapCanvas();
-    below.gameData.mapLog.push("Game data synced from gamedata.js.");
+    addMapMessage("Game data synced from gamedata.js.");
     maintainMapLog();
 }
 

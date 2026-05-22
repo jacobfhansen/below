@@ -36,7 +36,12 @@ function checkKey(e) {
     var teleportOverlay = document.getElementById("teleportOverlay");
     if (teleportOverlay.style.display !== "none" && teleportOverlay.style.display !== "") {
         if (e.keyCode === 13) {
-            doTeleport();
+            var cpSelect = document.getElementById("checkpointSelect");
+            if (cpSelect && cpSelect.value) {
+                doCheckpointJump();
+            } else {
+                doTeleport();
+            }
         } else if (e.keyCode === 27) {
             hideTeleport();
         }
@@ -202,7 +207,7 @@ function changeMap(mapId, entryX, entryY, text) {
   below.gameData.player.destinationLocation = {};
   below.gameData.mapLog = [];
   if (text) {
-    below.gameData.mapLog.push(text);
+    addMapMessage(text);
   }
   // One-time removal of Jester and Medusa from map 1 on first visit to The Depths
   if (mapId === 3 && !below.gameData.player.depthsVisited) {
@@ -236,15 +241,15 @@ function moveOnMap(e) {
     if (e.keyCode === 69) {
         e.preventDefault();
         if (below.equippedItem === null) {
-            below.gameData.mapLog.push("You have nothing equipped. Press Q to open inventory and equip an item.");
+            addMapMessage("You have nothing equipped. Press Q to open inventory and equip an item.");
             maintainMapLog();
         } else if (below.equippedItem === 14 && below.gameData.player.currentMap === 0) {
             var bats = below.gameData.mapData[0].monsters.filter(function(m) { return m.type === 2; });
             if (bats.length > 0) {
-                below.gameData.mapLog.push("You swing the bat swatter but the bats weave through the air too fast in this darkness.");
+                addMapMessage("You swing the bat swatter but the bats weave through the air too fast in this darkness.");
                 maintainMapLog();
             } else {
-                below.gameData.mapLog.push("You swing the bat swatter. Nothing to hit here.");
+                addMapMessage("You swing the bat swatter. Nothing to hit here.");
                 maintainMapLog();
             }
         } else if (below.equippedItem === 15 && below.gameData.player.currentMap === 0) {
@@ -264,20 +269,20 @@ function moveOnMap(e) {
             }
             if (centipede) {
                 below.gameData.mapData[curMap].monsters.splice(centIdx, 1);
-                below.gameData.mapLog.push("You squirt the centipede with Crawl-End. It shrivels and dissolves.");
+                addMapMessage("You squirt the centipede with Crawl-End. It shrivels and dissolves.");
                 maintainMapLog();
                 handleAllCentipedesCleared();
             } else {
-                below.gameData.mapLog.push("You squirt the Crawl-End on the floor. Nothing happens. There are no centipedes here.");
+                addMapMessage("You squirt the Crawl-End on the floor. Nothing happens. There are no centipedes here.");
                 maintainMapLog();
             }
         } else {
             var itemType = below.gameData.itemTypes[below.equippedItem];
             if (itemType && itemType.useText) {
-                below.gameData.mapLog.push(itemType.useText);
+                addMapMessage(itemType.useText);
                 maintainMapLog();
             } else {
-                below.gameData.mapLog.push("You use the " + (itemType ? itemType.name : "item") + " but nothing happens.");
+                addMapMessage("You use the " + (itemType ? itemType.name : "item") + " but nothing happens.");
                 maintainMapLog();
             }
         }
@@ -368,7 +373,7 @@ function moveOnMap(e) {
                         }
                     });
                 });
-                below.gameData.mapLog.push("The sisters seem more animated than before, as if expecting something.");
+                addMapMessage("The sisters seem more animated than before, as if expecting something.");
                 maintainMapLog();
             }
         }
@@ -383,7 +388,7 @@ function handleAllCentipedesCleared() {
     if (remaining.length > 0) return;
     below.centipedesHandled = true;
     console.log("[below] All centipedes cleared — moving Hermit to (2,-7)");
-    below.gameData.mapLog.push("All centipedes have been cleared from the storage room!");
+    addMapMessage("All centipedes have been cleared from the storage room!");
     maintainMapLog();
     console.log("[below] centipede: log pushed, now looking for Hermit NPC on map 0");
     var hermitNpc = map0.npcs.find(function(n) { return n.type === 1; });
@@ -584,7 +589,7 @@ function mapGameLoop() {
                 below.gameData.player.destinationLocation.xVelocity = null;
                 var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
                 if (tile && tile['text']) {
-                    below.gameData.mapLog.push(tile['text']);
+                    addMapMessage(tile['text']);
                     maintainMapLog();
                 }
                 updateAreaDescription();
@@ -604,7 +609,7 @@ function mapGameLoop() {
                 below.gameData.player.destinationLocation.yVelocity = null;
                 var tile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
                 if (tile && tile['text']) {
-                    below.gameData.mapLog.push(tile['text']);
+                    addMapMessage(tile['text']);
                     maintainMapLog();
                 }
                 updateAreaDescription();
@@ -735,7 +740,7 @@ function mapGameLoop() {
         if (removedCount > 0) {
             var remaining = (below.gameData.mapData[curMap].monsters || []).filter(function(m) { return m.type === 2; });
             if (remaining.length === 0) {
-                below.gameData.mapLog.push("The last bat vanishes into the light. The passage is clear.");
+                addMapMessage("The last bat vanishes into the light. The passage is clear.");
                 maintainMapLog();
                 // Move Hermit to centipede quest position
                 var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });

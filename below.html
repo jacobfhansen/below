@@ -22,6 +22,7 @@
     <script type="text/javascript" src="below-cutscene.js" defer></script>
     <script type="text/javascript" src="below-gameloop.js" defer></script>
     <script type="text/javascript" src="quest-handlers.js" defer></script>
+    <script type="text/javascript" src="below-checkpoints.js" defer></script>
 </head>
 <body>
     <div class="title-container" id="titleScreen">
@@ -93,8 +94,27 @@
           <label class="teleport-label">Y:</label>
           <input type="number" id="teleportY" class="teleport-input" value="0">
         </div>
+        <hr style="border-color: #555; margin: 16px 0 12px;">
+        <div class="teleport-row">
+          <label class="teleport-label" style="min-width:70px;">Checkpoint:</label>
+          <select id="checkpointSelect" class="teleport-input">
+            <option value="">-- Select --</option>
+            <option value="start">Fresh Start</option>
+            <option value="hermit_done">After Hermit's Quests</option>
+            <option value="medusa_met">After Password Door</option>
+            <option value="maze_exit">Maze Exit</option>
+            <option value="depths_entry">The Depths</option>
+            <option value="sam_done">Sam Quest Complete</option>
+            <option value="beach_arrival">Beach Arrival</option>
+            <option value="beach_cleared">Beach Rocks Cleared</option>
+            <option value="fissure_entry">The Fissure</option>
+            <option value="fissure_games_done">Sisters' Games Done</option>
+            <option value="deeper_dark">The Deeper Dark</option>
+          </select>
+        </div>
         <div class="teleport-actions">
           <button class="teleport-btn" onclick="doTeleport()">Teleport</button>
+          <button class="teleport-btn" onclick="doCheckpointJump()">Jump</button>
           <button class="teleport-btn teleport-cancel" onclick="hideTeleport()">Cancel</button>
         </div>
       </div>
@@ -136,7 +156,7 @@
           </div>
           <div class="help-section help-section-dev">
             <h4>Developer</h4>
-            <div class="help-row"><span class="help-key">Ctrl+Alt+P</span><span class="help-desc">Open dev teleport</span></div>
+            <div class="help-row"><span class="help-key">Ctrl+Alt+P</span><span class="help-desc">Dev panel (teleport + checkpoint jump)</span></div>
             <div class="help-row"><span class="help-key">F12 / Ctrl+Shift+I</span><span class="help-desc">Browser dev tools</span></div>
           </div>
         </div>

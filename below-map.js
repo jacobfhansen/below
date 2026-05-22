@@ -162,13 +162,13 @@ function pushObstacle(obstaclePos) {
     var newY = obstaclePos.y + dirY;
     // Check if new position is valid
     if (!foundTile(newX, newY)) {
-        below.gameData.mapLog.push("Cannot push the rock that way.");
+        addMapMessage("Cannot push the rock that way.");
         maintainMapLog();
         return false;
     }
     // Check if new position is blocked by another blocking object
     if (isBlocked(newX, newY)) {
-        below.gameData.mapLog.push("Something is blocking the way.");
+        addMapMessage("Something is blocking the way.");
         maintainMapLog();
         return false;
     }
@@ -181,13 +181,13 @@ function pushObstacle(obstaclePos) {
         var ow = obstacle.width || 1;
         var oh = obstacle.height || 1;
         if (ow > 1 || oh > 1) {
-            below.gameData.mapLog.push("The obstacle is too large to push.");
+            addMapMessage("The obstacle is too large to push.");
             maintainMapLog();
             return false;
         }
         obstacle.position.x = newX;
         obstacle.position.y = newY;
-        below.gameData.mapLog.push("You push the rock.");
+        addMapMessage("You push the rock.");
         maintainMapLog();
         drawMapCanvas();
         return true;
