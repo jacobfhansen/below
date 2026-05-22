@@ -370,4 +370,9 @@ function switchPage(page) {
             pageEl.style.display = "none";
         }
     });
+    // Toggle the wrapper created by endCutScene so it doesn't cover the menu
+    var wrapper = document.getElementById("gameDivWrapper");
+    if (wrapper) {
+        wrapper.style.display = page === "gameDiv" ? "block" : "none";
+    }
 }

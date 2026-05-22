@@ -1,5 +1,18 @@
 // ── Cut-scene system ─────────────────────────────────
 
+function ensureCutsceneOverlay() {
+    var overlay = document.getElementById("cutsceneOverlay");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "cutsceneOverlay";
+        overlay.className = "cutscene-overlay";
+        overlay.style.display = "none";
+        overlay.innerHTML = '<div class="cutscene-stage" id="cutsceneStage"></div><div class="cutscene-skip-hint">Press Esc to skip</div>';
+        document.body.appendChild(overlay);
+    }
+    return overlay;
+}
+
 function playCutScene(sceneId, callback) {
     var scene = below.gameData.cutScenes && below.gameData.cutScenes[sceneId];
     if (!scene || !scene.cuts || scene.cuts.length === 0) {
@@ -11,7 +24,12 @@ function playCutScene(sceneId, callback) {
     below.cutSceneIndex = 0;
     below.cutSceneStart = null;
     below.cutSceneCallback = callback || null;
-    document.getElementById("cutsceneOverlay").style.display = "flex";
+    ensureCutsceneOverlay();
+    var ce = document.getElementById("cutsceneOverlay");
+    ce.style.display = "flex";
+    ce.style.opacity = "1";
+    ce.style.zIndex = "5000";
+    ce.style.pointerEvents = "auto";
     cutSceneLoop();
 }
 
@@ -84,11 +102,19 @@ function endCutScene() {
     below.cutSceneCuts = null;
     below.cutSceneIndex = 0;
     below.cutSceneStart = null;
-    // Remove any fade divs
     var fades = document.querySelectorAll("div[style*='z-index:4999']");
     fades.forEach(function(f) { f.remove(); });
-    document.getElementById("cutsceneOverlay").style.display = "none";
+    var stage = document.getElementById("cutsceneStage");
+    if (stage) stage.innerHTML = "";
+    var overlay = document.getElementById("cutsceneOverlay");
     var cb = below.cutSceneCallback;
     below.cutSceneCallback = null;
-    if (cb) cb();
+    if (cb) { cb(); }
+    if (overlay) overlay.remove();
+    var gd = document.getElementById("gameDiv");
+    if (gd) {
+        var clone = gd.cloneNode(true);
+        clone.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;display:flex;";
+        gd.parentNode.replaceChild(clone, gd);
+    }
 }

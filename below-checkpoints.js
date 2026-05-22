@@ -331,6 +331,7 @@ below.fastForward = function(id) {
 
     // Deep clone fresh game data
     below.gameData = JSON.parse(JSON.stringify(belowGameData));
+    below.gameData.player.icon = "boy.png";
 
     // Reset runtime flags
     below.jesterMet = false;
@@ -357,11 +358,3 @@ below.fastForward = function(id) {
     changeMap(cp.map, cp.pos.x, cp.pos.y, "\u26A1 Fast-forward to: " + cp.title);
 };
 
-function doCheckpointJump() {
-    var select = document.getElementById("checkpointSelect");
-    if (!select || !select.value) return;
-    var id = select.value;
-    select.value = "";
-    hideTeleport();
-    below.fastForward(id);
-}

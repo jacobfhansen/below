@@ -315,8 +315,10 @@ function drawMapCanvas() {
     });
     
     // PLAYER (second pass for correct draw order)
-    var playerImg = getImage(below.gameData.player.icon);
-    context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
+    if (below.gameData.player.icon) {
+        var playerImg = getImage(below.gameData.player.icon);
+        context.drawImage(playerImg, verticalCenter - (width/2), horizontalCenter - (width/2), width, width);
+    }
     
     // Second pass: draw obstacles with drawOrder=2 (on top of player)
     (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {

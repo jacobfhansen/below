@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Below</title>
-    <link rel="stylesheet" type="text/css" href="below.css" />
+    <link rel="stylesheet" type="text/css" href="below.css?v=4" />
     <script type="text/javascript" src="maps/map0.js" defer></script>
     <script type="text/javascript" src="maps/map1.js" defer></script>
     <script type="text/javascript" src="maps/map2.js" defer></script>
@@ -15,7 +15,7 @@
     <script type="text/javascript" src="below-core.js" defer></script>
     <script type="text/javascript" src="below-save.js" defer></script>
     <script type="text/javascript" src="below-map.js" defer></script>
-    <script type="text/javascript" src="below-render.js" defer></script>
+    <script type="text/javascript" src="below-render.js?v=2" defer></script>
     <script type="text/javascript" src="below-dialog.js" defer></script>
     <script type="text/javascript" src="below-minigames.js" defer></script>
     <script type="text/javascript" src="below-inventory.js" defer></script>
@@ -72,6 +72,7 @@
             <div class="inventory-hint">Click [Equip] on an item, then press E to use it | Press Q or Esc to close</div>
         </div>
     </div>
+</div>
     <div class="splash-overlay" id="splashOverlay" style="display:none;">
       <div class="splash-content" id="splashContent">
         <img id="splashImage" class="splash-image" src="">
@@ -95,26 +96,24 @@
           <input type="number" id="teleportY" class="teleport-input" value="0">
         </div>
         <hr style="border-color: #555; margin: 16px 0 12px;">
-        <div class="teleport-row">
-          <label class="teleport-label" style="min-width:70px;">Checkpoint:</label>
-          <select id="checkpointSelect" class="teleport-input">
-            <option value="">-- Select --</option>
-            <option value="start">Fresh Start</option>
-            <option value="hermit_done">After Hermit's Quests</option>
-            <option value="medusa_met">After Password Door</option>
-            <option value="maze_exit">Maze Exit</option>
-            <option value="depths_entry">The Depths</option>
-            <option value="sam_done">Sam Quest Complete</option>
-            <option value="beach_arrival">Beach Arrival</option>
-            <option value="beach_cleared">Beach Rocks Cleared</option>
-            <option value="fissure_entry">The Fissure</option>
-            <option value="fissure_games_done">Sisters' Games Done</option>
-            <option value="deeper_dark">The Deeper Dark</option>
-          </select>
+        <div style="margin-bottom: 10px;">
+          <div style="color: var(--cyan); font-size: 1em; margin-bottom: 6px;">Checkpoints:</div>
+          <div style="max-height: 160px; overflow-y: auto; background: var(--black); border: 1px solid var(--grey); border-radius: 3px;">
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('start')">Fresh Start</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('hermit_done')">After Hermit's Quests</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('medusa_met')">After Password Door</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('maze_exit')">Maze Exit</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('depths_entry')">The Depths</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('sam_done')">Sam Quest Complete</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('beach_arrival')">Beach Arrival</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('beach_cleared')">Beach Rocks Cleared</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('fissure_entry')">The Fissure</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('fissure_games_done')">Sisters' Games Done</div>
+            <div class="checkpoint-item" onclick="hideTeleport(); below.fastForward('deeper_dark')">The Deeper Dark</div>
+          </div>
         </div>
         <div class="teleport-actions">
           <button class="teleport-btn" onclick="doTeleport()">Teleport</button>
-          <button class="teleport-btn" onclick="doCheckpointJump()">Jump</button>
           <button class="teleport-btn teleport-cancel" onclick="hideTeleport()">Cancel</button>
         </div>
       </div>

@@ -430,12 +430,18 @@ html, body {
     outline: none;
     border-color: var(--cyan);
 }
-.teleport-input select,
-select.teleport-input {
-    appearance: auto;
-    -webkit-appearance: auto;
-    -moz-appearance: auto;
+.checkpoint-item {
+    padding: 5px 10px;
     cursor: pointer;
+    color: var(--white);
+    font-size: 0.9em;
+    border-bottom: 1px solid #333;
+}
+.checkpoint-item:hover {
+    background: var(--dark-grey);
+}
+.checkpoint-item:last-child {
+    border-bottom: none;
 }
 .teleport-actions {
     display: flex;

@@ -105,7 +105,7 @@ var belowGameData = {
     },
     "destinationLocation": {},
     "icon": null,
-    "vision": 3,
+    "vision": 2,
     "inventory": []
   },
   "cutScenes": {
@@ -346,7 +346,7 @@ var belowGameData = {
         {
           "type": "image",
           "src": "sisters_cut.png",
-          "x": 50,
+          "x": 25,
           "y": 25,
           "width": 300,
           "fadeIn": 2000,

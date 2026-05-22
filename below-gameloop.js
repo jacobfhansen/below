@@ -36,12 +36,7 @@ function checkKey(e) {
     var teleportOverlay = document.getElementById("teleportOverlay");
     if (teleportOverlay.style.display !== "none" && teleportOverlay.style.display !== "") {
         if (e.keyCode === 13) {
-            var cpSelect = document.getElementById("checkpointSelect");
-            if (cpSelect && cpSelect.value) {
-                doCheckpointJump();
-            } else {
-                doTeleport();
-            }
+            doTeleport();
         } else if (e.keyCode === 27) {
             hideTeleport();
         }
@@ -86,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // Initialize gameData from gamedata.js
     if (typeof belowGameData !== 'undefined') {
         below.gameData = JSON.parse(JSON.stringify(belowGameData));
-        console.log('Game data loaded from gamedata.js');
     } else {
         console.error('gamedata.js not loaded!');
     }
@@ -253,7 +247,6 @@ function moveOnMap(e) {
                 maintainMapLog();
             }
         } else if (below.equippedItem === 15 && below.gameData.player.currentMap === 0) {
-            console.log("[below] centipede cleaner used on map 0, player at", curX, curY);
             var curMap = below.gameData.player.currentMap;
             var px = Math.round(curX);
             var py = Math.round(curY);
@@ -381,33 +374,23 @@ function moveOnMap(e) {
 }
 
 function handleAllCentipedesCleared() {
-    if (below.centipedesHandled) { console.log("[below] centipede: already handled, skipping"); return; }
+    if (below.centipedesHandled) return;
     var map0 = below.gameData.mapData[0];
     var remaining = map0.monsters.filter(function(m) { return m.type === 3; });
-    console.log("[below] centipede: remaining =", remaining.length);
     if (remaining.length > 0) return;
     below.centipedesHandled = true;
-    console.log("[below] All centipedes cleared — moving Hermit to (2,-7)");
     addMapMessage("All centipedes have been cleared from the storage room!");
     maintainMapLog();
-    console.log("[below] centipede: log pushed, now looking for Hermit NPC on map 0");
     var hermitNpc = map0.npcs.find(function(n) { return n.type === 1; });
-    console.log("[below] centipede: hermitNpc =", hermitNpc);
     if (hermitNpc) {
         hermitNpc.position.x = 2;
         hermitNpc.position.y = -7;
-        console.log("[below] centipede: Hermit moved to 2,-7");
         var doneD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_done"; });
-        console.log("[below] centipede: doneD =", doneD);
         if (doneD) doneD.available = true;
         var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
         if (introD) introD.available = false;
-        console.log("[below] centipede: dialogs updated");
-    } else {
-        console.log("[below] centipede: HERMIT NPC NOT FOUND ON MAP 0!");
     }
     drawMapCanvas();
-    console.log("[below] centipede: drawMapCanvas called");
 }
 
 function mapGameLoop() {
@@ -629,7 +612,7 @@ function mapGameLoop() {
                 var exit = exits.find(function(e) {
                     return e.position.x === below.gameData.player.currentLocation.x && e.position.y === below.gameData.player.currentLocation.y;
                 });
-                if (exit) {
+                if (exit && !below.cutScene) {
                     var targetX = exit.targetPosition.x;
                     var targetY = exit.targetPosition.y;
                     if (exit.targetMap === 2) {
