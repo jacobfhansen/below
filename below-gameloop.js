@@ -708,11 +708,19 @@ function mapGameLoop() {
                 var tileDist = Math.abs(monsterTX - playerTX) + Math.abs(monsterTY - playerTY);
                 if (!monster.chaseState || monster.chaseState === "idle") {
                     if (tileDist <= type.chaseDistance) {
-                        monster.chaseState = "chasing";
+                        monster.chaseState = "detected";
+                        monster._detectTimer = 60;
                         monster._chaseTilesMoved = 0;
                         monster._playerTileX = playerTX;
                         monster._playerTileY = playerTY;
                     }
+                }
+                if (monster.chaseState === "detected") {
+                    monster._detectTimer--;
+                    if (monster._detectTimer <= 0) {
+                        monster.chaseState = "chasing";
+                    }
+                    return;
                 }
                 if (monster.chaseState === "chasing") {
                     if (monster._playerTileX !== playerTX || monster._playerTileY !== playerTY) {

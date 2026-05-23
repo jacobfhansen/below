@@ -17,11 +17,11 @@ function showChoiceEvent() {
             options: [
                 { text: "Take " + itemName, action: function() {
                     below.gameData.player.inventory.push(floorItem.itemType);
-                    addMapMessage("You picked up " + itemName + ".");
-                    maintainMapLog();
+                    closeChoiceEvent();
                     var idx = below.gameData.mapData[curMap].obstacles.indexOf(floorItem);
                     if (idx !== -1) below.gameData.mapData[curMap].obstacles.splice(idx, 1);
                     drawMapCanvas();
+                    setTimeout(function() { showInventory([floorItem.itemType]); }, 50);
                 }},
                 { text: "Leave it", action: function() { addMapMessage("You leave it on the ground."); maintainMapLog(); } }
             ]

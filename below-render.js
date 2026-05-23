@@ -198,16 +198,25 @@ function drawMapCanvas() {
         if (distanceM <= visionPixels && visibleTiles[Math.round(monster.position.x) + "," + Math.round(monster.position.y)]) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type) return; // Skip if monster type is undefined
-            var iconFile = (monster.chaseState === "chasing" && type.chaseIcon) ? type.chaseIcon : type.icon;
+            var iconFile = (monster.chaseState && monster.chaseState !== "idle" && type.chaseIcon) ? type.chaseIcon : type.icon;
             if (iconFile) {
                 var img = getImage(iconFile);
                 context.drawImage(img, (monster.position.x * width) + verticalCenter - horizontalOffset - (width/2), (monster.position.y * width) + horizontalCenter - verticalOffset  - (width/2), width, width);
-            }
-            else {
+            } else if (type.color) {
                 context.fillStyle = type.color;
                 context.beginPath();
                 context.arc( (monster.position.x * width) + verticalCenter - horizontalOffset, (monster.position.y * width) + horizontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
                 context.fill();
+            }
+            // Shaking "!" alert above shadow during detection
+            if (monster.chaseState === "detected") {
+                var alertX = (monster.position.x * width) + verticalCenter - horizontalOffset + (Math.random() - 0.5) * 6;
+                var alertY = (monster.position.y * width) + horizontalCenter - verticalOffset - width * 0.8 + (Math.random() - 0.5) * 6;
+                context.font = "bold 20px Courier New";
+                context.textAlign = "center";
+                context.textBaseline = "middle";
+                context.fillStyle = "#ffffff";
+                context.fillText("!", alertX, alertY);
             }
         }
     });
