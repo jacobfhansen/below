@@ -14,7 +14,8 @@ below._checkpointsOrder = [
     "beach_cleared",
     "fissure_entry",
     "fissure_games_done",
-    "deeper_dark"
+    "deeper_dark",
+    "deeper_depths"
 ];
 
 // --- Helper functions for checkpoint mutations ---
@@ -317,6 +318,29 @@ below._checkpoints.deeper_dark = {
     apply: function() {
         below._checkpoints.fissure_games_done.apply();
         below.gameData.player.cutScenePlayed.after_map5 = true;
+    }
+};
+
+below._checkpoints.deeper_depths = {
+    map: 7, pos: { x: 5, y: 5 },
+    title: "The Deeper Depths",
+    apply: function() {
+        below._checkpoints.deeper_dark.apply();
+        below.gameData.player.inventory = [4, 5, 7, 14, 17];
+        var map6Obs = below.gameData.mapData[6].obstacles;
+        for (var oi = map6Obs.length - 1; oi >= 0; oi--) {
+            if (map6Obs[oi].type === 23 && map6Obs[oi].position.x === 5 && map6Obs[oi].position.y === -12) {
+                map6Obs.splice(oi, 1);
+            }
+        }
+        var sam = below.gameData.mapData[3].npcs.find(function(n) { return n.type === 5; });
+        if (sam && sam.dialogOptions) {
+            var officeD = sam.dialogOptions.find(function(d) { return d.id === "detective_office"; });
+            if (officeD && officeD.options) {
+                var hairOpt = officeD.options.find(function(o) { return o.id === "detective_hair_take"; });
+                if (hairOpt) hairOpt.available = false;
+            }
+        }
     }
 };
 
