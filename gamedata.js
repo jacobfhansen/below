@@ -803,6 +803,13 @@ var belowGameData = {
       "visionBlocking": false,
       "lightRadius": 1,
       "lightColor": "rgba(154, 103, 89, 0.30)"
+    },
+    "22": {
+      "name": "Floor Item",
+      "description": "An item lying on the ground.",
+      "icon": "medusa_hair.png",
+      "blocking": false,
+      "visionBlocking": false
     }
   },
   "itemTypes": {
@@ -889,6 +896,13 @@ var belowGameData = {
       "icon": "centipede_cleaner.png",
       "choiceEvents": [],
       "useText": "You sniff the bottle. Your eyes water. You put it away."
+    },
+    "16": {
+      "name": "Medusa Hair",
+      "description": "A lock of Medusa's hair. The snakes are still writhing...",
+      "icon": "medusa_hair.png",
+      "choiceEvents": [],
+      "useText": "The snakes writhe in your hand. You quickly put them away."
     }
   },
   "npcTypes": {

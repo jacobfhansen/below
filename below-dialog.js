@@ -1,6 +1,35 @@
 function showChoiceEvent() {
     var x = below.gameData.player.currentLocation.x;
     var y = below.gameData.player.currentLocation.y;
+    var curMap = below.gameData.player.currentMap;
+    
+    // Check for floor item at player's position
+    var floorItem = below.gameData.mapData[curMap].obstacles.find(function(o) {
+        return o.position && o.position.x === x && o.position.y === y && o.itemType !== undefined;
+    });
+    if (floorItem) {
+        var itemType = below.gameData.itemTypes[floorItem.itemType];
+        var itemName = itemType ? itemType.name : "item";
+        var msg = "A " + itemName + " lies on the ground.";
+        below.choiceEvent = {
+            selectedIndex: 0,
+            message: msg,
+            options: [
+                { text: "Take " + itemName, action: function() {
+                    below.gameData.player.inventory.push(floorItem.itemType);
+                    addMapMessage("You picked up " + itemName + ".");
+                    maintainMapLog();
+                    var idx = below.gameData.mapData[curMap].obstacles.indexOf(floorItem);
+                    if (idx !== -1) below.gameData.mapData[curMap].obstacles.splice(idx, 1);
+                    drawMapCanvas();
+                }},
+                { text: "Leave it", action: function() { addMapMessage("You leave it on the ground."); maintainMapLog(); } }
+            ]
+        };
+        renderChoiceEvent();
+        return;
+    }
+    
     var msg = getBlockedMessage(x, y) || "You search the area...";
     below.choiceEvent = {
         selectedIndex: 0,
