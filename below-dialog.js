@@ -348,6 +348,20 @@ function selectChoiceOption(index) {
             }
         }
         
+        // Handle Sam Shale giving the flashlight after Medusa Hair
+        if (npc && npc.type === 5 && selectedOption.id === "detective_hair_take") {
+            below.gameData.player.inventory.push(17);
+            setTimeout(function() { showInventory([17]); }, 50);
+            var hairIdx = below.gameData.player.inventory.indexOf(16);
+            if (hairIdx !== -1) below.gameData.player.inventory.splice(hairIdx, 1);
+            addMapMessage("Sam Shale takes the Medusa Hair and hands you a flashlight.");
+            var officeD = npc.dialogOptions.find(function(d) { return d.id === "detective_office"; });
+            if (officeD) {
+                var takeOpt = officeD.options.find(function(o) { return o.id === "detective_hair_take"; });
+                if (takeOpt) takeOpt.available = false;
+            }
+        }
+        
         if (npc && npc.dialogOptions) {
             // Process "opens" - set available to true (do this first so chained dialog is available)
             if (selectedOption.opens) {

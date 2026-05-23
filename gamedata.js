@@ -107,6 +107,7 @@ var belowGameData = {
     "icon": null,
     "vision": 3,
     "cutScenePlayed": {},
+    "direction": "down",
     "inventory": []
   },
   "cutScenes": {
@@ -810,6 +811,12 @@ var belowGameData = {
       "icon": "medusa_hair.png",
       "blocking": false,
       "visionBlocking": false
+    },
+    "23": {
+      "name": "Shadow Wall",
+      "description": "A wall of living shadow",
+      "blocking": true,
+      "visionBlocking": true
     }
   },
   "itemTypes": {
@@ -903,6 +910,13 @@ var belowGameData = {
       "icon": "medusa_hair.png",
       "choiceEvents": [],
       "useText": "The snakes writhe in your hand. You quickly put them away."
+    },
+    "17": {
+      "name": "Flashlight",
+      "description": "Casts a focused beam of light when equipped.",
+      "icon": "flashlight.png",
+      "choiceEvents": [],
+      "useText": "You shine the flashlight around. Equip it to light your way."
     }
   },
   "npcTypes": {
@@ -1035,5 +1049,5 @@ var belowGameData = {
       "personality": "bored and apathetic"
     }
   },
-  "mapData": [map0Data, map1Data, map2Data, map3Data, map4Data, map5Data, map6Data]
+  "mapData": [map0Data, map1Data, map2Data, map3Data, map4Data, map5Data, map6Data, map7Data]
 };

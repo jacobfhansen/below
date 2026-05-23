@@ -2607,6 +2607,19 @@ var map3Data = {
           "movement": 0.15,
           "dialogOptions": [
             {
+              "id": "detective_hair_goodbye",
+              "available": false,
+              "text": "Sam takes the lock of hair from you, his hands trembling slightly. He stares at it for a long moment, the snakes still writhing faintly. 'I... I'd know this anywhere. This is hers. Medusa's. I never thought I'd see it again.' He sits down heavily, collecting himself. 'You know, kid, there was a time I ventured deeper than I had any right to. Darker tunnels than even these. I had this old flashlight with me, and I noticed something strange — the shadows, they didn't like the light. They'd shrink back, scatter like roaches.' He pats the flashlight before handing it to you. 'Here. You need this more than I do. It's saved my hide more than once.'",
+              "options": [
+                {
+                  "id": "detective_hair_end",
+                  "text": "Goodbye Sam",
+                  "available": true,
+                  "closes": ["detective_hair_goodbye"]
+                }
+              ]
+            },
+            {
               "id": "detectiveq0",
               "available": true,
               "text": "A shadowy figure in a trenchcoat leans against the damp wall, his fedora casting his face in shadow. He takes a long drag from a cigarette that isn't lit. 'The name's Sam Shale. I'm looking for a dame. Long legs, scales, hair full of snakes. Goes by Medusa. You seen her?'",
@@ -3171,6 +3184,13 @@ var map3Data = {
                   "text": "...",
                   "available": true,
                   "closes": []
+                },
+                {
+                  "id": "detective_hair_take",
+                  "text": "I found this... snake hair... thing. Medusa's hair, I think.",
+                  "available": true,
+                  "requiresItems": [16],
+                  "chains": "detective_hair_goodbye"
                 }
               ]
             }

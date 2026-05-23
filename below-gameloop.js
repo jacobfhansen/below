@@ -81,6 +81,15 @@ document.addEventListener("DOMContentLoaded", function() {
     // Initialize gameData from gamedata.js
     if (typeof belowGameData !== 'undefined') {
         below.gameData = JSON.parse(JSON.stringify(belowGameData));
+        Object.keys(below.gameData.mapData).forEach(function(mapKey) {
+            var monsters = below.gameData.mapData[mapKey].monsters;
+            if (monsters) {
+                monsters.forEach(function(m) {
+                    m._initX = m.position.x;
+                    m._initY = m.position.y;
+                });
+            }
+        });
     } else {
         console.error('gamedata.js not loaded!');
     }
@@ -195,6 +204,18 @@ function changeMap(mapId, entryX, entryY, text) {
       n._tagFound = false;
     });
   }
+  // Reset Living Shadows on map 6 when leaving
+  if (below.gameData.player.currentMap === 6) {
+      below.gameData.mapData[6].monsters.forEach(function(m) {
+          if (m.type === 4 && m._initX !== undefined) {
+              m.position.x = m._initX;
+              m.position.y = m._initY;
+              m.chaseState = "idle";
+              m._detectTimer = 60;
+              m._chaseTilesMoved = 0;
+          }
+      });
+  }
   below.gameData.player.currentMap = mapId;
   below.gameData.player.currentLocation.x = entryX;
   below.gameData.player.currentLocation.y = entryY;
@@ -289,6 +310,7 @@ function moveOnMap(e) {
         return;
     }
     if ((e.keyCode === 38 || e.keyCode === 87) && foundTile(curX, curY -1)) {
+        below.gameData.player.direction = "up";
         var destY = curY - 1;
         if (isRatBlocked(curX, destY)) {
             showSplash(ratSplashData);
@@ -305,6 +327,7 @@ function moveOnMap(e) {
         }
     }
     else if ((e.keyCode === 40 || e.keyCode === 83) && foundTile(curX, curY +1)) {
+        below.gameData.player.direction = "down";
         var destY = curY + 1;
         if (isRatBlocked(curX, destY)) {
             showSplash(ratSplashData);
@@ -321,6 +344,7 @@ function moveOnMap(e) {
         }
     }
     else if ((e.keyCode === 37 || e.keyCode === 65) && foundTile(curX -1, curY)) {
+        below.gameData.player.direction = "left";
         var destX = curX - 1;
         if (isRatBlocked(destX, curY)) {
             showSplash(ratSplashData);
@@ -337,6 +361,7 @@ function moveOnMap(e) {
         }
     }
     else if ((e.keyCode === 39 || e.keyCode === 68) && foundTile(curX +1, curY)) {
+        below.gameData.player.direction = "right";
         var destX = curX + 1;
         if (isRatBlocked(destX, curY)) {
             showSplash(ratSplashData);
@@ -663,6 +688,30 @@ function mapGameLoop() {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type || !type.movement) return;
 
+            // Flashlight destroys Living Shadows
+            if (monster.type === 4) {
+                if (monster._fadingTimer > 0) {
+                    monster._fadingTimer--;
+                    if (monster._fadingTimer <= 0) monster.removeMe = true;
+                    return;
+                }
+                if (below.equippedItem === 17) {
+                    var fPx = Math.round(below.gameData.player.currentLocation.x);
+                    var fPy = Math.round(below.gameData.player.currentLocation.y);
+                    var fDir = below.gameData.player.direction || "down";
+                    var fOffsets = getConeOffsets(fDir);
+                    var mtx = Math.round(monster.position.x);
+                    var mty = Math.round(monster.position.y);
+                    for (var fi = 0; fi < fOffsets.length; fi++) {
+                        if (fPx + fOffsets[fi][0] === mtx && fPy + fOffsets[fi][1] === mty) {
+                            monster._fadingTimer = 180;
+                            monster.chaseState = "idle";
+                            return;
+                        }
+                    }
+                }
+            }
+
             // Seeking bats — direct movement toward light, no collision checks
             if (batDoorOpen && monster.type === 2) {
                 var dx = -12 - monster.position.x;
@@ -776,6 +825,33 @@ function mapGameLoop() {
                 monster.moveAngle = Math.random() * Math.PI * 2;
             }
         });
+        // Flashlight melts Shadow Walls
+        (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {
+            if (obstacle.type !== 23) return;
+            if (obstacle._fadingTimer > 0) {
+                obstacle._fadingTimer--;
+                if (obstacle._fadingTimer <= 0) {
+                    var idx = below.gameData.mapData[curMap].obstacles.indexOf(obstacle);
+                    if (idx !== -1) below.gameData.mapData[curMap].obstacles.splice(idx, 1);
+                }
+                return;
+            }
+            if (below.equippedItem === 17) {
+                var fPx = Math.round(below.gameData.player.currentLocation.x);
+                var fPy = Math.round(below.gameData.player.currentLocation.y);
+                var fDir = below.gameData.player.direction || "down";
+                var fOffsets = getConeOffsets(fDir);
+                var stx = obstacle.position.x;
+                var sty = obstacle.position.y;
+                for (var fi = 0; fi < fOffsets.length; fi++) {
+                    if (fPx + fOffsets[fi][0] === stx && fPy + fOffsets[fi][1] === sty) {
+                        obstacle._fadingTimer = 180;
+                        break;
+                    }
+                }
+            }
+        });
+
         // Remove bats that reached the light
         var removedCount = 0;
         if (below.gameData.mapData[curMap].monsters) {

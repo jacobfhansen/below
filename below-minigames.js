@@ -257,20 +257,13 @@ function hideSplash() {
     if (below._shadowCatchHandled) {
         below._shadowCatchHandled = false;
         // Reset all Living Shadows on map 6 to initial positions
-        var map6Monsters = below.gameData.mapData[6].monsters;
-        var shadowStarts = [
-            { x: 0, y: -2 }, { x: 1, y: 0 }, { x: 0, y: 3 },
-            { x: 1, y: 6 }, { x: 0, y: 7 }, { x: 1, y: 10 }
-        ];
-        var si = 0;
-        map6Monsters.forEach(function(m) {
-            if (m.type === 4 && si < shadowStarts.length) {
-                m.position.x = shadowStarts[si].x;
-                m.position.y = shadowStarts[si].y;
+        below.gameData.mapData[6].monsters.forEach(function(m) {
+            if (m.type === 4 && m._initX !== undefined) {
+                m.position.x = m._initX;
+                m.position.y = m._initY;
                 m.chaseState = "idle";
                 m._detectTimer = 60;
                 m._chaseTilesMoved = 0;
-                si++;
             }
         });
         changeMap(5, 11, 11, "The shadow kicked you out of their realm.");

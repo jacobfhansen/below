@@ -103,6 +103,41 @@ function computeVisibleTiles() {
     return visible;
 }
 
+function getConeOffsets(dir) {
+    var base = [
+        [-1, -1], [0, -1], [1, -1],
+        [-1, -2], [0, -2], [1, -2],
+        [-2, -3], [-1, -3], [0, -3], [1, -3], [2, -3],
+        [-1, -4], [0, -4], [1, -4],
+        [0, -5]
+    ];
+    function rot(o) {
+        switch (dir) {
+            case "down": return [-o[0], -o[1]];
+            case "left": return [o[1], -o[0]];
+            case "right": return [-o[1], o[0]];
+            default: return [o[0], o[1]];
+        }
+    }
+    return base.map(rot);
+}
+
+function getConeOutline(dir) {
+    var rot = function(o) {
+        switch (dir) {
+            case "down": return [-o[0], -o[1]];
+            case "left": return [o[1], -o[0]];
+            case "right": return [-o[1], o[0]];
+            default: return [o[0], o[1]];
+        }
+    };
+    return [
+        rot([0, 0]),
+        rot([-1, -1]), rot([-1, -2]), rot([-2, -3]), rot([-1, -4]), rot([0, -5]),
+        rot([1, -4]), rot([2, -3]), rot([1, -2]), rot([1, -1]), rot([0, 0])
+    ];
+}
+
 function drawMapCanvas() {
     var gameDivCenter = document.getElementById("gameDivCenter");
     var canvas = document.getElementById("mapCanvas");
@@ -144,6 +179,21 @@ function drawMapCanvas() {
     
     // Compute visible tiles using BFS for line-of-sight
     var visibleTiles = computeVisibleTiles();
+    
+    // Flashlight cone — reveal tiles in cone direction
+    if (below.equippedItem === 17) {
+        var coneDir = below.gameData.player.direction || "down";
+        var coneTiles = getConeOffsets(coneDir);
+        var conePx = Math.round(below.gameData.player.currentLocation.x);
+        var conePy = Math.round(below.gameData.player.currentLocation.y);
+        coneTiles.forEach(function(ct) {
+            var ctx = conePx + ct[0];
+            var cty = conePy + ct[1];
+            if (foundTile(ctx, cty) && !isVisionBlocked(ctx, cty)) {
+                visibleTiles[ctx + "," + cty] = true;
+            }
+        });
+    }
     
     // Draw visible tiles only
     var tileCount = 0;
@@ -201,12 +251,16 @@ function drawMapCanvas() {
             var iconFile = (monster.chaseState && monster.chaseState !== "idle" && type.chaseIcon) ? type.chaseIcon : type.icon;
             if (iconFile) {
                 var img = getImage(iconFile);
+                if (monster._fadingTimer) context.globalAlpha = monster._fadingTimer / 180;
                 context.drawImage(img, (monster.position.x * width) + verticalCenter - horizontalOffset - (width/2), (monster.position.y * width) + horizontalCenter - verticalOffset  - (width/2), width, width);
+                if (monster._fadingTimer) context.globalAlpha = 1.0;
             } else if (type.color) {
+                if (monster._fadingTimer) context.globalAlpha = monster._fadingTimer / 180;
                 context.fillStyle = type.color;
                 context.beginPath();
                 context.arc( (monster.position.x * width) + verticalCenter - horizontalOffset, (monster.position.y * width) + horizontalCenter - verticalOffset, (width-2)/2, 0, 2 * Math.PI);
                 context.fill();
+                if (monster._fadingTimer) context.globalAlpha = 1.0;
             }
             // Shaking "!" alert above shadow during detection
             if (monster.chaseState === "detected") {
@@ -287,8 +341,10 @@ function drawMapCanvas() {
             }
             context.drawImage(img, (ox * width) + verticalCenter - horizontalOffset - (width/2), (oy * width) + horizontalCenter - verticalOffset - (width/2), width, width);
         } else {
+            if (obstacle._fadingTimer) context.globalAlpha = obstacle._fadingTimer / 180;
             context.fillStyle = type.color || "#433900";
             context.fillRect((ox * width) - (width/2) + verticalCenter - horizontalOffset, (oy * width) - (width/2) + horizontalCenter - verticalOffset, width, width);
+            if (obstacle._fadingTimer) context.globalAlpha = 1.0;
         }
     }
     
@@ -419,6 +475,34 @@ function drawMapCanvas() {
     if (curMap === 6) {
         context.fillStyle = "rgba(0, 0, 0, 0.5)";
         context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    
+    // Flashlight cone overlay (gradient beam)
+    if (below.equippedItem === 17) {
+        var coneDir = below.gameData.player.direction || "down";
+        var outline = getConeOutline(coneDir);
+        var conePx = Math.round(below.gameData.player.currentLocation.x);
+        var conePy = Math.round(below.gameData.player.currentLocation.y);
+        var tip = outline[Math.floor(outline.length / 2)];
+        context.save();
+        context.beginPath();
+        outline.forEach(function(pt, i) {
+            var cx = (conePx + pt[0]) * width + verticalCenter - horizontalOffset;
+            var cy = (conePy + pt[1]) * width + horizontalCenter - verticalOffset;
+            if (i === 0) context.moveTo(cx, cy);
+            else context.lineTo(cx, cy);
+        });
+        context.closePath();
+        var tipCx = (conePx + tip[0]) * width + verticalCenter - horizontalOffset;
+        var tipCy = (conePy + tip[1]) * width + horizontalCenter - verticalOffset;
+        var grad = context.createRadialGradient(tipCx, tipCy, 0, tipCx, tipCy, width * 4);
+        grad.addColorStop(0, "rgba(255, 255, 220, 0.25)");
+        grad.addColorStop(0.3, "rgba(255, 255, 220, 0.12)");
+        grad.addColorStop(0.7, "rgba(255, 255, 200, 0.03)");
+        grad.addColorStop(1, "rgba(255, 255, 200, 0)");
+        context.fillStyle = grad;
+        context.fill();
+        context.restore();
     }
     
     // Fog overlay (drawn on top of everything, only on map 3 and map 5)

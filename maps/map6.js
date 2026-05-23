@@ -1013,6 +1013,16 @@ var map6Data = {
       "x": 10,
       "y": -8,
       "type": 4
+    },
+    "x5ym12": {
+      "x": 5,
+      "y": -12,
+      "type": 4
+    },
+    "x5ym13": {
+      "x": 5,
+      "y": -13,
+      "type": 4
     }
   },
   "obstacles": [
@@ -1023,6 +1033,13 @@ var map6Data = {
         "y": -4
       },
       "itemType": 16
+    },
+    {
+      "type": 23,
+      "position": {
+        "x": 5,
+        "y": -12
+      }
     }
   ],
   "npcs": [],
@@ -1088,6 +1105,18 @@ var map6Data = {
         "y": 12
       },
       "text": "You climb back up through the crack. The familiar glow of the Fissure greets you."
+    },
+    {
+      "position": {
+        "x": 5,
+        "y": -13
+      },
+      "targetMap": 7,
+      "targetPosition": {
+        "x": 5,
+        "y": 5
+      },
+      "text": "You descend the stairs into the darkness below..."
     }
   ]
 };
