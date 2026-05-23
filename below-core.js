@@ -8,6 +8,7 @@ const below = {
     currentSlot: undefined,
     choiceEvent: null,
     splashActive: false,
+    _shadowCatchHandled: false,
     equippedItem: null,
     cutScene: null,
     cutSceneCuts: null,

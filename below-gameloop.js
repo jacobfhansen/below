@@ -748,6 +748,19 @@ function mapGameLoop() {
                             }
                         }
                     }
+                    // Check if shadow caught the player
+                    var catchTx = Math.round(monster.position.x);
+                    var catchTy = Math.round(monster.position.y);
+                    if (catchTx === playerTX && catchTy === playerTY && !below._shadowCatchHandled) {
+                        below._shadowCatchHandled = true;
+                        below.gameData.player.destinationLocation = {};
+                        showSplash({
+                            image: "shadow_dialog.png",
+                            text: "You are not supposed to be here, child. Let me save you from the lurking horror deeper down.",
+                            shake: true
+                        });
+                        return;
+                    }
                     return;
                 }
             }
