@@ -198,8 +198,9 @@ function drawMapCanvas() {
         if (distanceM <= visionPixels && visibleTiles[Math.round(monster.position.x) + "," + Math.round(monster.position.y)]) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type) return; // Skip if monster type is undefined
-            if (type["icon"]) {
-                var img = getImage(type.icon);
+            var iconFile = (monster.chaseState === "chasing" && type.chaseIcon) ? type.chaseIcon : type.icon;
+            if (iconFile) {
+                var img = getImage(iconFile);
                 context.drawImage(img, (monster.position.x * width) + verticalCenter - horizontalOffset - (width/2), (monster.position.y * width) + horizontalCenter - verticalOffset  - (width/2), width, width);
             }
             else {

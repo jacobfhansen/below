@@ -697,6 +697,52 @@ function mapGameLoop() {
                 }
                 monster.directionTimer--;
             }
+            // Living Shadow chase behavior
+            if (type.chaseDistance && type.chaseDistance > 0) {
+                var px = below.gameData.player.currentLocation.x;
+                var py = below.gameData.player.currentLocation.y;
+                var monsterTX = Math.round(monster.position.x);
+                var monsterTY = Math.round(monster.position.y);
+                var playerTX = Math.round(px);
+                var playerTY = Math.round(py);
+                var tileDist = Math.abs(monsterTX - playerTX) + Math.abs(monsterTY - playerTY);
+                if (!monster.chaseState || monster.chaseState === "idle") {
+                    if (tileDist <= type.chaseDistance) {
+                        monster.chaseState = "chasing";
+                        monster._chaseTilesMoved = 0;
+                        monster._playerTileX = playerTX;
+                        monster._playerTileY = playerTY;
+                    }
+                }
+                if (monster.chaseState === "chasing") {
+                    if (monster._playerTileX !== playerTX || monster._playerTileY !== playerTY) {
+                        monster._chaseTilesMoved++;
+                        monster._playerTileX = playerTX;
+                        monster._playerTileY = playerTY;
+                    }
+                    if (monster._chaseTilesMoved >= type.chaseDistance * 2) {
+                        monster.chaseState = "idle";
+                    } else {
+                        var chaseSpeed = 0.015 * type.movement * 3 * 2.5;
+                        var dx = px - monster.position.x;
+                        var dy = py - monster.position.y;
+                        var dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist > 0.5) {
+                            var newX = monster.position.x + (dx / dist) * chaseSpeed;
+                            var newY = monster.position.y + (dy / dist) * chaseSpeed;
+                            var tileCX = Math.round(newX);
+                            var tileCY = Math.round(newY);
+                            if (foundTile(tileCX, tileCY) && !isBlocked(tileCX, tileCY) && isTileAllowed(monster, tileCX, tileCY)) {
+                                monster.position.x = newX;
+                                monster.position.y = newY;
+                            } else {
+                                monster.moveAngle = Math.atan2(dy, dx);
+                            }
+                        }
+                    }
+                    return;
+                }
+            }
             var speed = monster.speed !== undefined ? monster.speed : 0.015 * type.movement * 3;
             var newX = monster.position.x + Math.cos(monster.moveAngle) * speed;
             var newY = monster.position.y + Math.sin(monster.moveAngle) * speed;

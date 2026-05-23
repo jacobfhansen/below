@@ -105,7 +105,7 @@ var belowGameData = {
     },
     "destinationLocation": {},
     "icon": null,
-    "vision": 2,
+    "vision": 3,
     "cutScenePlayed": {},
     "inventory": []
   },
@@ -524,6 +524,15 @@ var belowGameData = {
       "fraction": 1,
       "movement": 0.1,
       "icon": "centipede.png",
+      "blocking": false,
+      "restChance": 0.2
+    },
+    "4": {
+      "name": "Living Shadow",
+      "movement": 0.4,
+      "icon": "shadow.png",
+      "chaseIcon": "shadow_chase.png",
+      "chaseDistance": 3,
       "blocking": false,
       "restChance": 0.2
     }
