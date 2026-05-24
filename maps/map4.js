@@ -1343,16 +1343,8 @@ var map4Data = {
         {
           "id": "charon_intro",
           "available": true,
-          "text": "An ancient figure sits upon the sand, wrapped in a tattered cloak and gripping a long wooden pole. His eyes are milky, fixed on the black water. He does not turn as you approach, but his voice rumbles like distant thunder:\n'Stranger who walks on this desolate strand,\nSpeak now your name or your purpose,\nFor Charon am I - or so I have been told -\nThe ferryman of these dark and forgotten waters.\nI have carried the lost from one shadow to another\nFor longer than memory serves me.\nI know faces - the Jester, the Hermit, the Mole,\nMedusa with her serpentine crown,\nAnd Shale, that hound of the lost.\nAll have crossed my boat at some time or another.\nBut when? And why? Ah, that I cannot say.\nThe past is a fog that thickens by the moment.\nWhat is it you seek, wanderer, on this lonely shore?'",
+          "text": "An ancient figure sits upon the sand, wrapped in a tattered cloak and gripping a long wooden pole. His eyes are milky, fixed on the black water. He does not turn as you approach, but his voice rumbles like distant thunder:\n'Stranger who walks on this desolate strand,\nSpeak now your name or your purpose,\nFor Charon am I - or so I have been told -\nThe ferryman of these dark and forgotten waters.\nI have carried the lost from one shadow to another\nFor longer than memory serves me.\nAll will cross the river on my boat at some time or another.\nBut when? And why? Ah, that I cannot say.\nThe past is a fog that thickens by the moment.\nWhat is it you seek, wanderer, on this lonely shore?'",
           "options": [
-            {
-              "id": "charon_intro_ask",
-              "text": "Ask about someone you know.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
             {
               "id": "charon_intro_self",
               "text": "Tell me about yourself.",
@@ -1374,7 +1366,6 @@ var map4Data = {
               "text": "Goodbye.",
               "available": true,
               "closes": [
-                "charon_intro"
               ]
             }
           ]
@@ -1393,284 +1384,10 @@ var map4Data = {
               ]
             },
             {
-              "id": "charon_self_ask",
-              "text": "Ask about someone you know.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
-            {
               "id": "charon_self_leave",
               "text": "I'll leave you to your thoughts.",
               "available": true,
               "closes": [
-                "charon_self",
-                "charon_intro"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "charon_ask",
-          "available": false,
-          "text": "He taps his pole on the sand, stirring faint ripples.\n'Which of them would you know about?\nI will tell you what I remember - or what I think I remember.\nChoose, and I shall speak.'",
-          "options": [
-            {
-              "id": "charon_ask_hermit",
-              "text": "Tell me about the Hermit.",
-              "available": true,
-              "chains": [
-                "charon_hermit"
-              ]
-            },
-            {
-              "id": "charon_ask_jester",
-              "text": "Tell me about the Jester.",
-              "available": true,
-              "chains": [
-                "charon_jester"
-              ]
-            },
-            {
-              "id": "charon_ask_medusa",
-              "text": "Tell me about Medusa.",
-              "available": true,
-              "chains": [
-                "charon_medusa"
-              ]
-            },
-            {
-              "id": "charon_ask_mole",
-              "text": "Tell me about the Mole.",
-              "available": true,
-              "chains": [
-                "charon_mole"
-              ]
-            },
-            {
-              "id": "charon_ask_sam",
-              "text": "Tell me about Sam Shale.",
-              "available": true,
-              "chains": [
-                "charon_sam"
-              ]
-            },
-            {
-              "id": "charon_ask_leave",
-              "text": "Never mind.",
-              "available": true,
-              "closes": [
-                "charon_ask"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "charon_hermit",
-          "available": false,
-          "text": "The old boatman leans on his pole, staring into the darkness.\n'The Hermit - ah, the hoarder of green.\nHe has sat in his cave so long\nThat the stones have learned his breathing.\nHe trades what he should keep\nAnd keeps what he should trade.\nA fool and a scholar in one skin.\nHe crossed my boat once, clutching a bundle of herbs\nAs if they were made of gold itself.\nI asked him where he was going.\nHe said: \"Deeper.\"\nThat is all he ever says. Deeper.'",
-          "options": [
-            {
-              "id": "charon_hermit_back",
-              "text": "Ask about someone else.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
-            {
-              "id": "charon_hermit_self",
-              "text": "Tell me about yourself.",
-              "available": true,
-              "chains": [
-                "charon_self"
-              ]
-            },
-            {
-              "id": "charon_hermit_exit",
-              "text": "How do I leave this place?",
-              "available": true,
-              "chains": [
-                "charon_exit"
-              ]
-            },
-            {
-              "id": "charon_hermit_leave",
-              "text": "Goodbye.",
-              "available": true,
-              "closes": [
-                "charon_hermit",
-                "charon_ask",
-                "charon_intro",
-                "charon_self"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "charon_jester",
-          "available": false,
-          "text": "Charon chuckles - a dry, rasping sound.\n'The Jester - a creature of noise and mischief.\nHe crossed with me once, singing a song\nThat had no beginning and certainly no end.\nHe spoke of the Hermit with cruel affection,\nAnd of Medusa as if she were a riddle to solve.\nHe fears nothing and forgets less than I - a rare gift.\nWhen he stepped ashore, he tipped his hat\nAnd said: \"Same time tomorrow, old man!\"\nThen he vanished into the dark, laughing.\nI have not seen him since.\nOr perhaps I have. I cannot recall.'",
-          "options": [
-            {
-              "id": "charon_jester_back",
-              "text": "Ask about someone else.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
-            {
-              "id": "charon_jester_self",
-              "text": "Tell me about yourself.",
-              "available": true,
-              "chains": [
-                "charon_self"
-              ]
-            },
-            {
-              "id": "charon_jester_exit",
-              "text": "How do I leave this place?",
-              "available": true,
-              "chains": [
-                "charon_exit"
-              ]
-            },
-            {
-              "id": "charon_jester_leave",
-              "text": "Goodbye.",
-              "available": true,
-              "closes": [
-                "charon_jester",
-                "charon_ask",
-                "charon_intro",
-                "charon_self"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "charon_medusa",
-          "available": false,
-          "text": "Charon's grip tightens on his pole. His voice drops.\n'Medusa - ah, the serpent-crowned one.\nI ferried her across this very lake\nNot long ago - or was it long ago?\nTime slips from me like water from this oar.\nShe spoke of peace. Of finding an end.\nBut there was a shadow in her eyes when she said it -\nAs if she was running from something.\nSomething older than these tunnels.\nA presence that dwells below all other depths.\nShe asked me once if I had ever carried\nA passenger who left no ripple in the water.\nI said the water always remembers.\nShe said: \"No. Some things pass through\nWithout leaving a trace. I have met one.\"\nThen she fell silent and would not speak\nAgain until I reached the shore.\nI do not know what she meant.\nBut I have felt it too - a coldness in the deep.\nA name I cannot grasp.'\nHe stares at the black water, shivering.",
-          "options": [
-            {
-              "id": "charon_medusa_back",
-              "text": "Ask about someone else.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
-            {
-              "id": "charon_medusa_self",
-              "text": "Tell me about yourself.",
-              "available": true,
-              "chains": [
-                "charon_self"
-              ]
-            },
-            {
-              "id": "charon_medusa_exit",
-              "text": "How do I leave this place?",
-              "available": true,
-              "chains": [
-                "charon_exit"
-              ]
-            },
-            {
-              "id": "charon_medusa_leave",
-              "text": "Goodbye.",
-              "available": true,
-              "closes": [
-                "charon_medusa",
-                "charon_ask",
-                "charon_intro",
-                "charon_self"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "charon_mole",
-          "available": false,
-          "text": "Charon wrinkles his nose as if catching a bad smell.\n'The Mole - a creature of darkness deep.\nHe digs not for treasure but for purpose,\nCarving his maze in the earth's belly.\nHis words are old and twisted as roots.\nI do not trust him, but I respect his patience.\nWhen I carried him across, he sat in silence\nAnd stared at the water the whole way.\nAs he stepped off, he said:\n\"The earth remembers every tunnel.\nIt remembers the things that crawl in them too.\"\nThen he was gone, into the dark.'",
-          "options": [
-            {
-              "id": "charon_mole_back",
-              "text": "Ask about someone else.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
-            {
-              "id": "charon_mole_self",
-              "text": "Tell me about yourself.",
-              "available": true,
-              "chains": [
-                "charon_self"
-              ]
-            },
-            {
-              "id": "charon_mole_exit",
-              "text": "How do I leave this place?",
-              "available": true,
-              "chains": [
-                "charon_exit"
-              ]
-            },
-            {
-              "id": "charon_mole_leave",
-              "text": "Goodbye.",
-              "available": true,
-              "closes": [
-                "charon_mole",
-                "charon_ask",
-                "charon_intro",
-                "charon_self"
-              ]
-            }
-          ]
-        },
-        {
-          "id": "charon_sam",
-          "available": false,
-          "text": "Charon squints as if trying to see through fog.\n'Sam Shale - the restless one.\nHe has never crossed my lake, but he has asked\nA thousand questions about the far shore.\nHe is looking for something he will not name.\nThat is the most dangerous kind of search.\nHe came to the water's edge once, alone,\nAnd stood there for an hour, staring across.\nI asked if he wanted to cross.\nHe said: \"Not yet. I'm not done looking.\"\nThen he walked away.\nI have not seen him since.\nHe is still looking. That much I know.'",
-          "options": [
-            {
-              "id": "charon_sam_back",
-              "text": "Ask about someone else.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
-            {
-              "id": "charon_sam_self",
-              "text": "Tell me about yourself.",
-              "available": true,
-              "chains": [
-                "charon_self"
-              ]
-            },
-            {
-              "id": "charon_sam_exit",
-              "text": "How do I leave this place?",
-              "available": true,
-              "chains": [
-                "charon_exit"
-              ]
-            },
-            {
-              "id": "charon_sam_leave",
-              "text": "Goodbye.",
-              "available": true,
-              "closes": [
-                "charon_sam",
-                "charon_ask",
-                "charon_intro",
                 "charon_self"
               ]
             }
@@ -1683,29 +1400,12 @@ var map4Data = {
           "options": [
             {
               "id": "charon_exit_self",
-              "text": "Tell me about yourself.",
-              "available": true,
-              "chains": [
-                "charon_self"
-              ]
-            },
-            {
-              "id": "charon_exit_ask",
-              "text": "Ask about someone you know.",
-              "available": true,
-              "chains": [
-                "charon_ask"
-              ]
-            },
-            {
               "id": "charon_exit_leave",
               "text": "I'll be going.",
               "available": true,
               "closes": [
                 "charon_exit",
-                "charon_intro",
-                "charon_self",
-                "charon_ask"
+                "charon_self"
               ]
             }
           ]
