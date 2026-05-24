@@ -3250,6 +3250,12 @@ var map5Data = {
                   "id": "sisters_exhausted_close",
                   "text": "Fine, I'll wait.",
                   "available": true
+                },
+                {
+                  "id": "sisters_exhausted_jester",
+                  "text": "What can you tell me about the Jester?",
+                  "available": true,
+                  "chains": ["sisters_jester"]
                 }
               ]
             },
@@ -3515,6 +3521,19 @@ var map5Data = {
                   "closes": [
                     "sisters_beach"
                   ]
+                }
+              ]
+            },
+            {
+              "id": "sisters_jester",
+              "available": false,
+              "text": "The sisters exchange a glance — the first genuine expression they've shown.\n\nSISTER ONE: 'The Jester? That chattering fool?'\nSISTER TWO: 'Don't let the noise fool you. He's sharper than he looks.'\nSISTER ONE: 'And he talks about you, you know. In between the jokes.'\nSISTER TWO: 'He wouldn't waste breath on someone he didn't... care about. In his own twisted way.'\nSISTER ONE: 'He came here once, asking about this very tunnel. For someone else, he said.'\nSISTER TWO: 'The Jester. Doing something useful. Imagine that.'\nSISTER ONE: 'Maybe he's not as heartless as he pretends.'\nSISTER TWO: 'Maybe.'\n\nThey fall silent, studying you with renewed interest.",
+              "options": [
+                {
+                  "id": "sisters_jester_close",
+                  "text": "Interesting.",
+                  "available": true,
+                  "closes": ["sisters_jester"]
                 }
               ]
             }
@@ -3537,6 +3556,12 @@ var map5Data = {
                   "id": "sisters_exhausted_close",
                   "text": "Fine, I'll wait.",
                   "available": true
+                },
+                {
+                  "id": "sisters_exhausted_jester",
+                  "text": "What can you tell me about the Jester?",
+                  "available": true,
+                  "chains": ["sisters_jester"]
                 }
               ]
             },
@@ -3802,6 +3827,19 @@ var map5Data = {
                   "closes": [
                     "sisters_beach"
                   ]
+                }
+              ]
+            },
+            {
+              "id": "sisters_jester",
+              "available": false,
+              "text": "The sisters exchange a glance — the first genuine expression they've shown.\n\nSISTER ONE: 'The Jester? That chattering fool?'\nSISTER TWO: 'Don't let the noise fool you. He's sharper than he looks.'\nSISTER ONE: 'And he talks about you, you know. In between the jokes.'\nSISTER TWO: 'He wouldn't waste breath on someone he didn't... care about. In his own twisted way.'\nSISTER ONE: 'He came here once, asking about this very tunnel. For someone else, he said.'\nSISTER TWO: 'The Jester. Doing something useful. Imagine that.'\nSISTER ONE: 'Maybe he's not as heartless as he pretends.'\nSISTER TWO: 'Maybe.'\n\nThey fall silent, studying you with renewed interest.",
+              "options": [
+                {
+                  "id": "sisters_jester_close",
+                  "text": "Interesting.",
+                  "available": true,
+                  "closes": ["sisters_jester"]
                 }
               ]
             }

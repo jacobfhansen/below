@@ -318,6 +318,39 @@ below._checkpoints.deeper_dark = {
     apply: function() {
         below._checkpoints.fissure_games_done.apply();
         below.gameData.player.cutScenePlayed.after_map5 = true;
+        below.gameData.player.jesterMovedToMap4 = true;
+        for (var ji = 0; ji < below.gameData.mapData.length; ji++) {
+            var jnpcs = below.gameData.mapData[ji].npcs;
+            for (var jni = jnpcs.length - 1; jni >= 0; jni--) {
+                if (jnpcs[jni].type === 2) {
+                    jnpcs.splice(jni, 1);
+                }
+            }
+        }
+        below.gameData.mapData[5].npcs.push({
+            type: 2,
+            position: { x: 12, y: 10 },
+            movement: 0,
+            dialogOptions: [{
+                id: "jester_map4_sam",
+                available: true,
+                text: "The Jester is leaning against a rock, trying to look casual but definitely waiting for you.\n\nJESTER: 'Well, well, well! Look who's still breathing! I was starting to take bets on how long you'd last. Don't worry - I bet ON you. Mostly because the odds were terrible and I like a long shot.'\n\nHe grins, but there's something almost sincere underneath.\n\nJESTER: 'Anyway. I overheard Sam Shale knows something about what's below. Yeah, THAT Sam. The broody trenchcoat with the flashlight. Guy's all cryptic and tragic but he's got info about the deep places. Maybe go squeeze it out of him? Before you get yourself killed in a way that would make me lose my investment.'\n\nHe winks and starts juggling rocks, apparently done being helpful.",
+                options: [{
+                    id: "jester_map4_sam_end",
+                    text: "Thanks... I think.",
+                    available: true
+                }]
+            }]
+        });
+        below.gameData.mapData[5].npcs.forEach(function(n) {
+            if (n.type === 8 && n.dialogOptions) {
+                for (var di = 0; di < n.dialogOptions.length; di++) {
+                    if (n.dialogOptions[di].id === "sisters_jester") {
+                        n.dialogOptions[di].available = true;
+                    }
+                }
+            }
+        });
     }
 };
 
@@ -372,6 +405,7 @@ below.fastForward = function(id) {
     below.gameData.player.samQuestComplete = false;
     below.gameData.player.mazeCycle = 0;
     below.gameData.player.depthsVisited = false;
+    below.gameData.player.jesterMovedToMap4 = false;
 
     // Apply all checkpoints up to target
     for (var i = 0; i <= idx; i++) {
