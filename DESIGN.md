@@ -52,6 +52,7 @@ Speaks in dactylic hexameter. Is rather annoyed about being reminded that he for
 They are dead. They could not care less. Have been so long in The Fissure that they have forgotten why they have
 not passed on but who cares? They are bored to death (pun intended) having only demented Charon as company. Charon
 being the most b.o.r.i.n.g person in existence.
+They think the Jester boring and tedious but also secretly like his attention. Dead girls do not get much attention in the first place
 
 ### The Devil
 Evil incarnate. All fear him. All do not dare speak about him. Only demented Charon forgets how dangerous it is
