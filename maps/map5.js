@@ -3284,7 +3284,7 @@ var map5Data = {
         {
           "id": "sisters_exit_reveal",
           "available": false,
-          "text": "SISTER TWO: 'Under the purple mushroom to the west. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
+          "text": "SISTER TWO: 'Under the purple mushroom to the west. There's a crack in the floor - leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
           "options": [
             {
               "id": "sisters_exit_reveal_close",
@@ -3547,7 +3547,7 @@ var map5Data = {
         {
           "id": "sisters_jester",
           "available": false,
-          "text": "The sisters exchange a glance — the first genuine expression they've shown.\n\nSISTER ONE: 'The Jester? That chattering fool?'\nSISTER TWO: 'Don't let the noise fool you. He's sharper than he looks.'\nSISTER ONE: 'And he talks about you, you know. In between the jokes.'\nSISTER TWO: 'He wouldn't waste breath on someone he didn't... care about. In his own twisted way.'\nSISTER ONE: 'He came here once, asking about this very tunnel. For someone else, he said.'\nSISTER TWO: 'The Jester. Doing something useful. Imagine that.'\nSISTER ONE: 'Maybe he's not as heartless as he pretends.'\nSISTER TWO: 'Maybe.'\n\nThey fall silent, studying you with renewed interest.",
+          "text": "The sisters exchange a glance - the first genuine expression they've shown.\n\nSISTER ONE: 'The Jester? That chattering fool?'\nSISTER TWO: 'Don't let the noise fool you. He's sharper than he looks.'\nSISTER ONE: 'And he talks about you, you know. In between the jokes.'\nSISTER TWO: 'He wouldn't waste breath on someone he didn't... care about. In his own twisted way.'\nSISTER ONE: 'He came here once, asking about this very tunnel. For someone else, he said.'\nSISTER TWO: 'The Jester. Doing something useful. Imagine that.'\nSISTER ONE: 'Maybe he's not as heartless as he pretends.'\nSISTER TWO: 'Maybe.'\n\nThey fall silent, studying you with renewed interest.",
           "options": [
             {
               "id": "sisters_jester_close",
@@ -3612,7 +3612,7 @@ var map5Data = {
         {
           "id": "sisters_exit_reveal",
           "available": false,
-          "text": "SISTER TWO: 'Under the purple mushroom to the west. There's a crack in the floor — leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
+          "text": "SISTER TWO: 'Under the purple mushroom to the west. There's a crack in the floor - leads to old tunnels.'\nSISTER ONE: 'That's where you want to go. If you insist on leaving.'\nSISTER TWO: 'Watch out for what lives down there. It doesn't play games.'\nSISTER ONE: 'Unlike us. We're hilarious.'",
           "options": [
             {
               "id": "sisters_exit_reveal_close",
@@ -3875,7 +3875,7 @@ var map5Data = {
         {
           "id": "sisters_jester",
           "available": false,
-          "text": "The sisters exchange a glance — the first genuine expression they've shown.\n\nSISTER ONE: 'The Jester? That chattering fool?'\nSISTER TWO: 'Don't let the noise fool you. He's sharper than he looks.'\nSISTER ONE: 'And he talks about you, you know. In between the jokes.'\nSISTER TWO: 'He wouldn't waste breath on someone he didn't... care about. In his own twisted way.'\nSISTER ONE: 'He came here once, asking about this very tunnel. For someone else, he said.'\nSISTER TWO: 'The Jester. Doing something useful. Imagine that.'\nSISTER ONE: 'Maybe he's not as heartless as he pretends.'\nSISTER TWO: 'Maybe.'\n\nThey fall silent, studying you with renewed interest.",
+          "text": "The sisters exchange a glance - the first genuine expression they've shown.\n\nSISTER ONE: 'The Jester? That chattering fool?'\nSISTER TWO: 'Don't let the noise fool you. He's sharper than he looks.'\nSISTER ONE: 'And he talks about you, you know. In between the jokes.'\nSISTER TWO: 'He wouldn't waste breath on someone he didn't... care about. In his own twisted way.'\nSISTER ONE: 'He came here once, asking about this very tunnel. For someone else, he said.'\nSISTER TWO: 'The Jester. Doing something useful. Imagine that.'\nSISTER ONE: 'Maybe he's not as heartless as he pretends.'\nSISTER TWO: 'Maybe.'\n\nThey fall silent, studying you with renewed interest.",
           "options": [
             {
               "id": "sisters_jester_close",

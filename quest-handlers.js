@@ -676,12 +676,7 @@ var questHandlers = {
     },
 
     "sisters_exit_reveal_close": function() {
-        var map5 = below.gameData.mapData[5];
-        map5.obstacles = map5.obstacles.filter(function(o) {
-            return !(o.position.x === 10 && o.position.y === 11);
-        });
-        addMapMessage("A deep rumble echoes through the fissure. The mushrooms near the crack shudder and collapse.");
-        maintainMapLog();
+        var map5 = below.gameData.mapData[5];        
 
         var sisters = map5.npcs;
         var exitTargets = [{ x: 9, y: 11 }, { x: 11, y: 11 }];
@@ -704,8 +699,14 @@ var questHandlers = {
                         below.sistersReturnContext = "tag";
                         startSistersReturn();
                     }, 2000);
+                    map5.obstacles = map5.obstacles.filter(function(o) {
+                        return !(o.position.x === 10 && o.position.y === 11);
+                    });
+                    addMapMessage("A deep rumble echoes through the fissure. The mushrooms near the crack shudder and collapse.");
+                    maintainMapLog();
                 }
             }, 20);
         });
+        
     }
 };
