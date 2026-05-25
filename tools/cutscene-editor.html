@@ -213,6 +213,7 @@ header button:hover, .btn:hover { background: #45475a; }
 <script src="../maps/map5.js"></script>
 <script src="../maps/map6.js"></script>
 <script src="../maps/map7.js"></script>
+<script src="../cutscenes.js"></script>
 <script src="../gamedata.js"></script>
 <script>
 var data = null;
@@ -641,16 +642,18 @@ document.addEventListener("keydown", function(e) {
 
 // Export
 function exportData() {
-    var json = JSON.stringify(data, null, 2);
-    var js = 'var belowGameData = ' + json + ';\n';
+    var json = JSON.stringify(data.cutScenes, null, 2);
+    var js = 'var belowCutSceneData = {\n';
+    js += '  "cutScenes": ' + json + '\n';
+    js += '};\n';
     var blob = new Blob([js], { type: "application/javascript" });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "gamedata.js";
+    a.download = "cutscenes.js";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    showToast("Exported gamedata.js");
+    showToast("Exported cutscenes.js");
 }
 
 function showToast(msg) {
