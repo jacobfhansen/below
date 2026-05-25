@@ -816,21 +816,36 @@ function mapGameLoop() {
                     if (monster._chaseTilesMoved >= type.chaseDistance * 2) {
                         monster.chaseState = "idle";
                     } else {
-                        var chaseSpeed = 0.015 * type.movement * 3 * 2.5;
-                        var dx = px - monster.position.x;
-                        var dy = py - monster.position.y;
-                        var dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist > 0.5) {
-                            var newX = monster.position.x + (dx / dist) * chaseSpeed;
-                            var newY = monster.position.y + (dy / dist) * chaseSpeed;
-                            var tileCX = Math.round(newX);
-                            var tileCY = Math.round(newY);
-                            if (foundTile(tileCX, tileCY) && !isBlocked(tileCX, tileCY) && isTileAllowed(monster, tileCX, tileCY)) {
-                                monster.position.x = newX;
-                                monster.position.y = newY;
-                            } else {
-                                monster.moveAngle = Math.atan2(dy, dx);
+                        var bestDx = 0, bestDy = 0, bestScore = Infinity;
+                        var dirs = [[-1,0],[1,0],[0,-1],[0,1]];
+                        for (var di = 0; di < 4; di++) {
+                            var nx = monsterTX + dirs[di][0];
+                            var ny = monsterTY + dirs[di][1];
+                            if (foundTile(nx, ny) && !isBlocked(nx, ny) && isTileAllowed(monster, nx, ny)) {
+                                var score = Math.abs(nx - playerTX) + Math.abs(ny - playerTY);
+                                if (score < bestScore) {
+                                    bestScore = score;
+                                    bestDx = dirs[di][0];
+                                    bestDy = dirs[di][1];
+                                }
                             }
+                        }
+                        if (bestDx !== 0 || bestDy !== 0) {
+                            var chaseSpeed = 0.045;
+                            var targetX = monsterTX + bestDx;
+                            var targetY = monsterTY + bestDy;
+                            var dx2 = targetX - monster.position.x;
+                            var dy2 = targetY - monster.position.y;
+                            var d2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+                            if (d2 > 0.05) {
+                                monster.position.x += (dx2 / d2) * chaseSpeed;
+                                monster.position.y += (dy2 / d2) * chaseSpeed;
+                            } else {
+                                monster.position.x = targetX;
+                                monster.position.y = targetY;
+                            }
+                        } else {
+                            monster.moveAngle = Math.atan2(py - monster.position.y, px - monster.position.x);
                         }
                     }
                     // Check if shadow caught the player
