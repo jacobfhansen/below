@@ -63,8 +63,8 @@ function showInventory(newItems) {
                     iconCell.classList.add("inventory-equipped");
                     infoCell.classList.add("inventory-equipped");
                     var eqBadge = document.createElement('span');
-                    eqBadge.textContent = '✓ Equipped';
-                    eqBadge.style.color = '#4CAF50';
+                    eqBadge.innerHTML = '&#10003; Equipped';
+                    eqBadge.style.color = '#000';
                     eqBadge.style.fontSize = '0.75em';
                     eqBadge.style.fontWeight = 'bold';
                     eqBadge.style.display = 'inline-block';

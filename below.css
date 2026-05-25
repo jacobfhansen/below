@@ -243,7 +243,7 @@ html, body {
     animation: inventory-glow 1.5s ease-in-out infinite;
 }
 .inventory-equipped {
-    background: rgba(76, 175, 80, 0.15) !important;
+    border: 2px solid #000 !important;
     border-radius: 4px;
 }
 @keyframes inventory-glow {
