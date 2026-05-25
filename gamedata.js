@@ -674,18 +674,12 @@ var belowGameData = {
       "name": "Stone Door",
       "description": "A heavy stone door carved with ancient symbols",
       "color": "#666666",
-      "icon": "door_closed.png",
+      "icon": "stone_door_closed.png",
       "blocking": true,
       "closed": true,
       "keyId": 7,
-      "choiceEvents": [
-        7,
-        3
-      ],
-      "openChoiceEvents": [
-        8,
-        3
-      ]
+      "choiceEvents": [7, 3],
+      "openChoiceEvents": [8, 3]
     },
     "12": {
       "name": "Shimmering Wall",

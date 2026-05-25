@@ -2260,14 +2260,6 @@ var map0Data = {
               "closes": [
                 "hermit_centipede_done"
               ]
-            },
-            {
-              "id": "hermit_centipede_no_herbs",
-              "text": "No thanks, just glad to help.",
-              "available": true,
-              "closes": [
-                "hermit_centipede_done"
-              ]
             }
           ]
         },
@@ -2611,11 +2603,11 @@ var map0Data = {
         {
           "id": "jesterq4",
           "available": false,
-          "text": "Lonely! HA! That's one word for it. I'd say criminally boring is more accurate. The man talks about KEYS and HERBS all day. KEYS and HERBS! As if they're the most fascinating things in the universe!",
+          "text": "Lonely! HA! That's one word for it. I'd say criminally boring is more accurate. The man talks about HERBS all day. HERBS! As if they're the most fascinating things in the universe!",
           "options": [
             {
               "id": "jestera4p",
-              "text": "What about keys and herbs?",
+              "text": "What about herbs?",
               "available": true,
               "opens": [
                 "jesterq5"
@@ -2649,7 +2641,7 @@ var map0Data = {
         {
           "id": "jesterq5",
           "available": false,
-          "text": "Oh, you want to know? REALLY want to know? Well, I'm not supposed to tell you - it would RUIN the hermit's fun - but he trades. Herbs for keys. Straight swap. The old fool thinks he's getting treasure, but the herbs are worth way more!",
+          "text": "Oh, you want to know? REALLY want to know? Well, I'm not supposed to tell you - it would RUIN the hermit's fun",
           "options": [
             {
               "id": "jestera5p",
@@ -2691,7 +2683,7 @@ var map0Data = {
           "options": [
             {
               "id": "jestera6p",
-              "text": "So the herbs are more valuable than keys?",
+              "text": "So the herbs are valuable?",
               "available": true,
               "opens": [
                 "jesterq7"
@@ -2725,7 +2717,7 @@ var map0Data = {
         {
           "id": "jesterq7",
           "available": false,
-          "text": "Valuable? They're PRICELESS! But don't tell the hermit I said that. He thinks he's ripping people off with his little exchange. It's hilarious! The man sits on a fortune and trades it for shiny door-openers!",
+          "text": "Valuable? They're PRICELESS! But don't tell the hermit I said that. It's hilarious! The man sits on a fortune!",
           "options": [
             {
               "id": "jestera7p",

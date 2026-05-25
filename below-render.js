@@ -370,12 +370,10 @@ function drawMapCanvas() {
     function drawMultiObstacle(obstacle, type, ow, oh) {
         var iconName = obstacle.icon || type.icon;
         var img = null;
-        if (iconName === "door_closed.png" || iconName === "door_open.png") {
+        if (iconName.endsWith('_closed.png') || iconName.endsWith('_open.png')) {
             var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-            img = getImage(isClosed ? "door_closed.png" : "door_open.png");
-        } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
-            var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-            img = getImage(isClosed ? "shimmer_wall_closed.png" : "shimmer_wall_open.png");
+            var base = iconName.replace('_closed.png', '').replace('_open.png', '');
+            img = getImage(base + (isClosed ? '_closed.png' : '_open.png'));
         } else {
             img = getImage(iconName);
         }
@@ -391,15 +389,13 @@ function drawMapCanvas() {
         var distanceOT = Math.sqrt(distXOT * distXOT + distYOT * distYOT);
         if (distanceOT > visionPixels) return;
         if (!visibleTiles[ox + "," + oy]) return;
-        if (type.icon) {
+            if (type.icon) {
             var iconName = obstacle.icon || type.icon;
             var img = null;
-            if (iconName === "door_closed.png" || iconName === "door_open.png") {
+            if (iconName.endsWith('_closed.png') || iconName.endsWith('_open.png')) {
                 var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                img = getImage(isClosed ? "door_closed.png" : "door_open.png");
-            } else if (iconName === "shimmer_wall_closed.png" || iconName === "shimmer_wall_open.png") {
-                var isClosed = obstacle.closed !== undefined ? obstacle.closed : type.closed;
-                img = getImage(isClosed ? "shimmer_wall_closed.png" : "shimmer_wall_open.png");
+                var base = iconName.replace('_closed.png', '').replace('_open.png', '');
+                img = getImage(base + (isClosed ? '_closed.png' : '_open.png'));
             } else {
                 img = getImage(iconName);
             }
