@@ -216,6 +216,70 @@ function drawMapCanvas() {
         }
     }
     
+    // Draw rugged cave border around tiles adjacent to void
+    function darkenColor(hex, ratio) {
+        var r = parseInt(hex.slice(1,3), 16);
+        var g = parseInt(hex.slice(3,5), 16);
+        var b = parseInt(hex.slice(5,7), 16);
+        return "rgb(" + Math.round(r * ratio) + "," + Math.round(g * ratio) + "," + Math.round(b * ratio) + ")";
+    }
+    var dirs = [[-1,0,1],[1,0,1],[0,-1,0],[0,1,0]]; // [dx, dy, isVertical]
+    for (var ck in below.gameData.mapData[curMap].tiles) {
+        if (typeof below.gameData.mapData[curMap].tiles[ck] !== 'function') {
+            var ctile = below.gameData.mapData[curMap].tiles[ck];
+            var ctKey = ctile.x + "," + ctile.y;
+            if (visibleTiles[ctKey]) {
+                var ctx2 = (ctile.x * width) - (width/2) + verticalCenter - horizontalOffset;
+                var cty2 = (ctile.y * width) - (width/2) + horizontalCenter - verticalOffset;
+                var ctType = ctile.type !== undefined && below.gameData.tileTypes ? below.gameData.tileTypes[ctile.type] : null;
+                var cBorder = ctType ? ctType.border : "#959595";
+                for (var cdi = 0; cdi < 4; cdi++) {
+                    var nx2 = ctile.x + dirs[cdi][0];
+                    var ny2 = ctile.y + dirs[cdi][1];
+                    if (!foundTile(nx2, ny2)) {
+                        var blockedByObstacle = below.gameData.mapData[curMap].obstacles.some(function(o) {
+                            return o.position && o.position.x === nx2 && o.position.y === ny2;
+                        });
+                        if (blockedByObstacle) continue;
+                        var isVert = dirs[cdi][2];
+                        context.fillStyle = darkenColor(cBorder, 0.5);
+                        context.beginPath();
+                        var segs = 6;
+                        for (var si = 0; si <= segs; si++) {
+                            var t = si / segs;
+                            var h = Math.abs(ctile.x * 374761393 + ctile.y * 668265263 + cdi * 1274126177 + si * 1013904223);
+                            h = ((h >> 16) ^ h) & 0x7FFFFFFF;
+                            var hashVal = (h % 1000) / 1000;
+                            var offset = (hashVal - 0.5) * 0.44 * width;
+                            var px3, py3;
+                            if (isVert) { // left or right edge
+                                py3 = cty2 + t * width;
+                                if (cdi === 0) px3 = ctx2 - Math.abs(offset); // left edge: outward is left
+                                else px3 = ctx2 + width + Math.abs(offset); // right edge: outward is right
+                            } else { // top or bottom edge
+                                px3 = ctx2 + t * width;
+                                if (cdi === 2) py3 = cty2 - Math.abs(offset); // top edge: outward is up
+                                else py3 = cty2 + width + Math.abs(offset); // bottom edge: outward is down
+                            }
+                            if (si === 0) context.moveTo(px3, py3);
+                            else context.lineTo(px3, py3);
+                        }
+                        // Close back along the tile edge
+                        if (isVert) {
+                            if (cdi === 0) { context.lineTo(ctx2, cty2 + width); context.lineTo(ctx2, cty2); }
+                            else { context.lineTo(ctx2 + width, cty2 + width); context.lineTo(ctx2 + width, cty2); }
+                        } else {
+                            if (cdi === 2) { context.lineTo(ctx2 + width, cty2); context.lineTo(ctx2, cty2); }
+                            else { context.lineTo(ctx2 + width, cty2 + width); context.lineTo(ctx2, cty2 + width); }
+                        }
+                        context.closePath();
+                        context.fill();
+                    }
+                }
+            }
+        }
+    }
+    
     // Draw player and monster sprites
     // PLAYER
     if (below.gameData.player.icon) {
