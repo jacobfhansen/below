@@ -528,7 +528,7 @@ function onPropChange() {
     cut.start = parseInt(document.getElementById("propStart").value);
     cut.driftX = parseFloat(document.getElementById("propDriftX").value);
     cut.driftY = parseFloat(document.getElementById("propDriftY").value);
-    if (!cut.start) delete cut.start;
+    if (isNaN(cut.start)) delete cut.start;
     if (!cut.driftX) delete cut.driftX;
     if (!cut.driftY) delete cut.driftY;
     // Update displayed values

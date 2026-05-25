@@ -1,0 +1,393 @@
+var belowCutSceneData = {
+  "cutScenes": {
+  "after_map0": {
+    "cuts": [
+      {
+        "type": "image",
+        "src": "hermit_cut.png",
+        "x": 10,
+        "y": 15,
+        "width": 280,
+        "fadeIn": 1000,
+        "hold": 4000,
+        "fadeOut": 1000,
+        "driftX": 5,
+        "driftY": -2,
+        "start": 0
+      },
+      {
+        "type": "text",
+        "text": "In the darkness below, you found Alistair the Hermit - a reclusive old man surrounded by herbs and strange concoctions. He needed help clearing his home of pests.",
+        "x": 45,
+        "y": 20,
+        "fontSize": 22,
+        "fadeIn": 1500,
+        "hold": 3500,
+        "fadeOut": 1000,
+        "driftX": -3,
+        "driftY": -1,
+        "start": 0
+      },
+      {
+        "type": "image",
+        "src": "rats_cut.png",
+        "x": 30,
+        "y": 35,
+        "width": 120,
+        "fadeIn": 400,
+        "hold": 1200,
+        "fadeOut": 400,
+        "driftX": 0,
+        "driftY": 3,
+        "start": 6500
+      },
+      {
+        "type": "image",
+        "src": "rats_cut.png",
+        "x": 45,
+        "y": 38,
+        "width": 120,
+        "fadeIn": 600,
+        "hold": 1200,
+        "fadeOut": 400,
+        "driftX": 0,
+        "driftY": 3,
+        "start": 6500
+      },
+      {
+        "type": "image",
+        "src": "rats_cut.png",
+        "x": 60,
+        "y": 35,
+        "width": 120,
+        "fadeIn": 800,
+        "hold": 1200,
+        "fadeOut": 400,
+        "driftX": 0,
+        "driftY": 3,
+        "start": 6500
+      },
+      {
+        "type": "text",
+        "text": "...to clear out the rats from his storeroom...",
+        "x": 30,
+        "y": 65,
+        "fontSize": 20,
+        "fadeIn": 1000,
+        "hold": 2000,
+        "fadeOut": 800,
+        "start": 6600
+      },
+      {
+        "type": "image",
+        "src": "bats_cut.png",
+        "x": 25,
+        "y": 32,
+        "width": 100,
+        "fadeIn": 300,
+        "hold": 800,
+        "fadeOut": 300,
+        "driftX": 15,
+        "driftY": -5,
+        "start": 10500
+      },
+      {
+        "type": "image",
+        "src": "bats_cut.png",
+        "x": 40,
+        "y": 35,
+        "width": 100,
+        "fadeIn": 400,
+        "hold": 900,
+        "fadeOut": 300,
+        "driftX": 15,
+        "driftY": -5,
+        "start": 10500
+      },
+      {
+        "type": "image",
+        "src": "bats_cut.png",
+        "x": 55,
+        "y": 33,
+        "width": 100,
+        "fadeIn": 500,
+        "hold": 1000,
+        "fadeOut": 300,
+        "driftX": 15,
+        "driftY": -5,
+        "start": 10500
+      },
+      {
+        "type": "image",
+        "src": "bats_cut.png",
+        "x": 70,
+        "y": 36,
+        "width": 100,
+        "fadeIn": 600,
+        "hold": 1000,
+        "fadeOut": 300,
+        "driftX": 15,
+        "driftY": -5,
+        "start": 10500
+      },
+      {
+        "type": "image",
+        "src": "bats_cut.png",
+        "x": 30,
+        "y": 38,
+        "width": 100,
+        "fadeIn": 700,
+        "hold": 900,
+        "fadeOut": 300,
+        "driftX": 15,
+        "driftY": -5,
+        "start": 10500
+      },
+      {
+        "type": "text",
+        "text": "...then the bats from the marble passage...",
+        "x": 30,
+        "y": 65,
+        "fontSize": 20,
+        "fadeIn": 800,
+        "hold": 2000,
+        "fadeOut": 800,
+        "start": 10600
+      },
+      {
+        "type": "image",
+        "src": "centipedes_cut.png",
+        "x": 40,
+        "y": 30,
+        "width": 160,
+        "fadeIn": 1000,
+        "hold": 2500,
+        "fadeOut": 1000,
+        "driftX": 3,
+        "driftY": 2,
+        "start": 14500
+      },
+      {
+        "type": "text",
+        "text": "...and Alistair provided everything needed to face the centipedes below.",
+        "x": 40,
+        "y": 65,
+        "fontSize": 20,
+        "fadeIn": 1200,
+        "hold": 2300,
+        "fadeOut": 800,
+        "start": 14600
+      },
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 800,
+        "hold": 500,
+        "fadeOut": 200,
+        "start": 18000
+      },
+      {
+        "type": "image",
+        "src": "jester_cut.png",
+        "x": 30,
+        "y": 15,
+        "width": 260,
+        "fadeIn": 1500,
+        "hold": 5000,
+        "fadeOut": 1000,
+        "driftX": 4,
+        "driftY": -2,
+        "start": 19000
+      },
+      {
+        "type": "text",
+        "text": "But the Jester has been watching all along, finding your every move amusing.",
+        "x": 55,
+        "y": 22,
+        "fontSize": 22,
+        "fadeIn": 2000,
+        "hold": 4500,
+        "fadeOut": 1000,
+        "start": 19200
+      },
+      {
+        "type": "text",
+        "text": "\"Herbs that open the mind, they say... wouldn't it be fun to find out?\"",
+        "x": 55,
+        "y": 50,
+        "fontSize": 20,
+        "fontStyle": "italic",
+        "fadeIn": 2500,
+        "hold": 4000,
+        "fadeOut": 1500,
+        "start": 19500
+      }
+    ]
+  },
+  "after_map5": {
+    "cuts": [
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 800,
+        "hold": 500,
+        "fadeOut": 200,
+        "start": 0
+      },
+      {
+        "type": "image",
+        "src": "sisters_cut.png",
+        "x": 25,
+        "y": 25,
+        "width": 300,
+        "fadeIn": 2000,
+        "hold": 22000,
+        "fadeOut": 1500,
+        "driftX": 2,
+        "driftY": -1,
+        "start": 800
+      },
+      {
+        "type": "image",
+        "src": "mushroom_blue.png",
+        "x": 15,
+        "y": 60,
+        "width": 60,
+        "fadeIn": 1500,
+        "hold": 3000,
+        "fadeOut": 1000,
+        "driftX": 3,
+        "driftY": -2,
+        "start": 1500
+      },
+      {
+        "type": "image",
+        "src": "crystal_pink.png",
+        "x": 80,
+        "y": 55,
+        "width": 50,
+        "fadeIn": 1800,
+        "hold": 2500,
+        "fadeOut": 1000,
+        "driftX": -2,
+        "driftY": -3,
+        "start": 2500
+      },
+      {
+        "type": "image",
+        "src": "mushroom_yellow.png",
+        "x": 70,
+        "y": 70,
+        "width": 50,
+        "fadeIn": 1200,
+        "hold": 2000,
+        "fadeOut": 800,
+        "driftX": -3,
+        "driftY": 1,
+        "start": 4000
+      },
+      {
+        "type": "text",
+        "text": "\"1, 2, 3... is this one on?\"",
+        "x": 50,
+        "y": 15,
+        "fontSize": 24,
+        "fontStyle": "italic",
+        "fadeIn": 1500,
+        "hold": 2500,
+        "fadeOut": 1000,
+        "start": 1000
+      },
+      {
+        "type": "text",
+        "text": "\"It's on, you fool. Just speak into it.\"",
+        "x": 50,
+        "y": 15,
+        "fontSize": 22,
+        "fontStyle": "italic",
+        "fadeIn": 1000,
+        "hold": 2000,
+        "fadeOut": 1000,
+        "start": 5000
+      },
+      {
+        "type": "text",
+        "text": "\"Right. You found us in the Fissure. Two dead girls with nothing better to do.\"",
+        "x": 50,
+        "y": 15,
+        "fontSize": 22,
+        "fadeIn": 1500,
+        "hold": 3000,
+        "fadeOut": 1000,
+        "start": 8000
+      },
+      {
+        "type": "text",
+        "text": "\"We played hide and seek. Then tag. You caught us both.\"",
+        "x": 50,
+        "y": 15,
+        "fontSize": 22,
+        "fadeIn": 1500,
+        "hold": 2500,
+        "fadeOut": 1000,
+        "start": 12500
+      },
+      {
+        "type": "text",
+        "text": "\"No one's done that in centuries. We were... almost impressed.\"",
+        "x": 50,
+        "y": 15,
+        "fontSize": 22,
+        "fontStyle": "italic",
+        "fadeIn": 1500,
+        "hold": 2500,
+        "fadeOut": 1000,
+        "start": 16000
+      },
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 1000,
+        "hold": 500,
+        "fadeOut": 500,
+        "start": 19500
+      },
+      {
+        "type": "text",
+        "text": "\"So we showed you the way. Deeper. Down into the dark where even we don't go.\"",
+        "x": 50,
+        "y": 35,
+        "fontSize": 22,
+        "fadeIn": 2000,
+        "hold": 3000,
+        "fadeOut": 1500,
+        "start": 21000
+      },
+      {
+        "type": "text",
+        "text": "\"Good luck down there.\"",
+        "x": 50,
+        "y": 55,
+        "fontSize": 20,
+        "fontStyle": "italic",
+        "fadeIn": 1500,
+        "hold": 2000,
+        "fadeOut": 1500,
+        "start": 25000
+      },
+      {
+        "type": "text",
+        "text": "\"You'll need it.\"",
+        "x": 50,
+        "y": 65,
+        "fontSize": 20,
+        "fontStyle": "italic",
+        "fadeIn": 1500,
+        "hold": 2000,
+        "fadeOut": 2000,
+        "start": 27000
+      }
+    ]
+  }
+}
+};
