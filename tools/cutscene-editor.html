@@ -28,7 +28,10 @@ header button:hover, .btn:hover { background: #45475a; }
 .btn-danger:hover { background: #f38ba8; color: #1e1e2e; }
 .btn-success { background: #a6e3a1; color: #1e1e2e; border-color: #a6e3a1; font-weight: 600; }
 .btn-success:hover { background: #94e2d5; }
-#main { display: flex; flex: 1; overflow: hidden; }
+#main { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+.top-row { display: flex; flex: 1; overflow: hidden; }
+.gantt-panel { flex: 1; display: flex; flex-direction: column; border-top: 1px solid #313244; min-height: 100px; }
+.gantt-container { flex: 1; overflow: auto; padding: 4px 8px; }
 .panel { display: flex; flex-direction: column; border-right: 1px solid #313244; overflow: hidden; min-width: 200px; }
 .panel:last-child { border-right: none; flex: 1; }
 .panel h2 {
@@ -110,9 +113,7 @@ header button:hover, .btn:hover { background: #45475a; }
 #previewClose:hover { background: #45475a; }
 
 /* ── Gantt chart ───────────────────────────────────── */
-.gantt-wrap {
-    margin-top: 12px; border-top: 1px solid #313244; padding-top: 8px;
-}
+.gantt-wrap { position: relative; height: 100%; }
 .gantt-header {
     display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
 }
@@ -175,23 +176,29 @@ header button:hover, .btn:hover { background: #45475a; }
     <button onclick="exportData()" class="btn-success">Export</button>
 </header>
 <div id="main">
-    <div class="panel" style="width:250px;">
-        <h2>Scenes</h2>
-        <div class="panel-body">
-            <ul class="scene-list" id="sceneList"></ul>
+    <div class="top-row">
+        <div class="panel" style="width:250px;">
+            <h2>Scenes</h2>
+            <div class="panel-body">
+                <ul class="scene-list" id="sceneList"></ul>
+            </div>
+        </div>
+        <div class="panel" style="width:500px;">
+            <h2>Cuts <span id="cutCount" style="font-weight:normal;font-size:11px;color:#a6adc8;"></span></h2>
+            <div class="panel-body" id="cutsPanel">
+                <p style="color:#585b70;text-align:center;margin-top:40px;">Select a scene to edit its cuts</p>
+            </div>
+        </div>
+        <div class="panel" style="flex:1;">
+            <h2>Cut Properties</h2>
+            <div class="panel-body" id="propsPanel">
+                <p style="color:#585b70;text-align:center;margin-top:40px;">Select a cut to edit properties</p>
+            </div>
         </div>
     </div>
-    <div class="panel" style="width:500px;">
-        <h2>Cuts <span id="cutCount" style="font-weight:normal;font-size:11px;color:#a6adc8;"></span></h2>
-        <div class="panel-body" id="cutsPanel">
-            <p style="color:#585b70;text-align:center;margin-top:40px;">Select a scene to edit its cuts</p>
-        </div>
-    </div>
-    <div class="panel" style="flex:1;">
-        <h2>Cut Properties</h2>
-        <div class="panel-body" id="propsPanel">
-            <p style="color:#585b70;text-align:center;margin-top:40px;">Select a cut to edit properties</p>
-        </div>
+    <div class="gantt-panel">
+        <h2 style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding:6px 12px;background:#181825;color:#a6adc8;border-bottom:1px solid #313244;flex-shrink:0;margin:0;">Timeline</h2>
+        <div class="gantt-container" id="ganttContainer"></div>
     </div>
 </div>
 <div id="previewOverlay">
@@ -205,6 +212,7 @@ header button:hover, .btn:hover { background: #45475a; }
 <script src="../maps/map4.js"></script>
 <script src="../maps/map5.js"></script>
 <script src="../maps/map6.js"></script>
+<script src="../maps/map7.js"></script>
 <script src="../gamedata.js"></script>
 <script>
 var data = null;
@@ -303,10 +311,11 @@ function renderCuts() {
     addBtn.innerHTML = '<button onclick="addCut()" class="btn" style="width:100%;">+ Add Cut</button>';
     panel.appendChild(addBtn);
     // ── Gantt chart ──
-    renderGantt(panel);
+    renderGantt(document.getElementById("ganttContainer"));
 }
 
 function renderGantt(container) {
+    container.innerHTML = '';
     var cuts = data.cutScenes[currentScene].cuts;
     if (!cuts.length) return;
 
@@ -325,7 +334,6 @@ function renderGantt(container) {
     var wrap = document.createElement("div");
     wrap.className = "gantt-wrap";
     wrap.innerHTML = '<div class="gantt-header">' +
-        '<h3>Timeline</h3>' +
         '<div class="gantt-legend">' +
             '<span><span class="swatch" style="background:#cba6f7;"></span> image</span>' +
             '<span><span class="swatch" style="background:#89b4fa;"></span> text</span>' +
