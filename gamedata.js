@@ -128,7 +128,7 @@ var belowGameData = {
         },
         {
           "type": "text",
-          "text": "In the darkness below, you found Alistair the Hermit - a reclusive old man surrounded by herbs and keys. He needed help clearing his home of pests.",
+          "text": "In the darkness below, you found Alistair the Hermit - a reclusive old man surrounded by herbs and strange concoctions. He needed help clearing his home of pests.",
           "x": 55,
           "y": 20,
           "fontSize": 22,
@@ -280,7 +280,7 @@ var belowGameData = {
         },
         {
           "type": "text",
-          "text": "...and the centipedes await below.",
+          "text": "...and Alistair provided everything needed to face the centipedes below.",
           "x": 40,
           "y": 65,
           "fontSize": 20,
@@ -312,7 +312,7 @@ var belowGameData = {
         },
         {
           "type": "text",
-          "text": "But the Jester has been watching. He finds your obedience amusing - for now.",
+          "text": "But the Jester has been watching all along, finding your every move amusing.",
           "x": 55,
           "y": 22,
           "fontSize": 22,
@@ -323,7 +323,7 @@ var belowGameData = {
         },
         {
           "type": "text",
-          "text": "\"Not everything is as it seems in these caves, little helper...\"",
+          "text": "\"Herbs that open the mind, they say... wouldn't it be fun to find out?\"",
           "x": 55,
           "y": 50,
           "fontSize": 20,
