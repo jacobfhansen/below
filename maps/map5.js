@@ -3250,14 +3250,6 @@ var map5Data = {
               "id": "sisters_exhausted_close",
               "text": "Fine, I'll wait.",
               "available": true
-            },
-            {
-              "id": "sisters_exhausted_jester",
-              "text": "What can you tell me about the Jester?",
-              "available": true,
-              "chains": [
-                "sisters_jester"
-              ]
             }
           ]
         },
@@ -3278,6 +3270,14 @@ var map5Data = {
               "id": "sisters_congratulations_leave",
               "text": "Thanks. See you around.",
               "available": true
+            },
+            {
+              "id": "sisters_exhausted_jester",
+              "text": "What can you tell me about the Jester?",
+              "available": true,
+              "chains": [
+                "sisters_jester"
+              ]
             }
           ]
         },
@@ -3578,14 +3578,6 @@ var map5Data = {
               "id": "sisters_exhausted_close",
               "text": "Fine, I'll wait.",
               "available": true
-            },
-            {
-              "id": "sisters_exhausted_jester",
-              "text": "What can you tell me about the Jester?",
-              "available": true,
-              "chains": [
-                "sisters_jester"
-              ]
             }
           ]
         },
@@ -3606,6 +3598,14 @@ var map5Data = {
               "id": "sisters_congratulations_leave",
               "text": "Thanks. See you around.",
               "available": true
+            },
+            {
+              "id": "sisters_exhausted_jester",
+              "text": "What can you tell me about the Jester?",
+              "available": true,
+              "chains": [
+                "sisters_jester"
+              ]
             }
           ]
         },

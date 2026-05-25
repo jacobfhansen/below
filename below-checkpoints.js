@@ -305,7 +305,6 @@ below._checkpoints.fissure_games_done = {
             for (var di = 0; di < sOpts.length; di++) {
                 sOpts[di].available = false;
             }
-            _cpSetDialog(5, 8, "sisters_exhausted", true);
             _cpSetDialog(5, 8, "sisters_congratulations", true);
             _cpSetDialog(5, 8, "sisters_exit_reveal", true);
         }
