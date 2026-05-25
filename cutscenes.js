@@ -69,8 +69,8 @@ var belowCutSceneData = {
       },
       {
         "type": "text",
-        "text": "...to clear out the rats from his storeroom...",
-        "x": 30,
+        "text": "...First to clear out the rats from his storeroom...",
+        "x": 25,
         "y": 65,
         "fontSize": 20,
         "fadeIn": 1000,
@@ -157,7 +157,7 @@ var belowCutSceneData = {
       {
         "type": "image",
         "src": "centipedes_cut.png",
-        "x": 40,
+        "x": 35,
         "y": 30,
         "width": 160,
         "fadeIn": 1000,
@@ -169,8 +169,8 @@ var belowCutSceneData = {
       },
       {
         "type": "text",
-        "text": "...and Alistair provided everything needed to face the centipedes below.",
-        "x": 40,
+        "text": "...and finally the centipedes.",
+        "x": 25,
         "y": 65,
         "fontSize": 20,
         "fadeIn": 1200,
@@ -189,7 +189,7 @@ var belowCutSceneData = {
       {
         "type": "image",
         "src": "jester_cut.png",
-        "x": 30,
+        "x": 20,
         "y": 15,
         "width": 260,
         "fadeIn": 1500,
@@ -202,7 +202,7 @@ var belowCutSceneData = {
       {
         "type": "text",
         "text": "But the Jester has been watching all along, finding your every move amusing.",
-        "x": 55,
+        "x": 45,
         "y": 22,
         "fontSize": 22,
         "fadeIn": 2000,
@@ -213,14 +213,14 @@ var belowCutSceneData = {
       {
         "type": "text",
         "text": "\"Herbs that open the mind, they say... wouldn't it be fun to find out?\"",
-        "x": 55,
-        "y": 50,
+        "x": 15,
+        "y": 35,
         "fontSize": 20,
         "fontStyle": "italic",
         "fadeIn": 2500,
         "hold": 4000,
         "fadeOut": 1500,
-        "start": 19500
+        "start": 25700
       }
     ]
   },
