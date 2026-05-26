@@ -2409,7 +2409,7 @@ var map0Data = {
         {
           "id": "hermit_centipede_thanks",
           "available": false,
-          "text": "'Of course, of course!' He rummages through his satchel and pulls out a bundle of dried herbs. 'My finest cave-grown batch. Good for tea, poultices... and quite valuable if you find the right buyer.' He presses them into your hands. 'I'll be at my usual spot if you ever need me again.' He shuffles off toward the main chamber, leaning on his staff.",
+          "text": "'Of course, of course!' He rummages through his satchel and pulls out a bundle of dried herbs. 'My finest cave-grown batch. Good for tea, poultices... and quite valuable if you find the right buyer.' He presses them into your hands. 'I'll be in my room if you ever need me again.' He shuffles off leaning on his staff.",
           "options": [
             {
               "id": "hermit_centipede_thanks_accept",
