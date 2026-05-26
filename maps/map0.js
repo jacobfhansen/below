@@ -800,6 +800,147 @@ var map0Data = {
       ]
     },
     {
+      "type": "giant_rat",
+      "position": {
+        "x": -5,
+        "y": 1
+      },
+      "speed": 0.035,
+      "status": 1,
+      "allowedTiles": [
+        {
+          "x": -6,
+          "y": 1
+        },
+        {
+          "x": -5,
+          "y": 1
+        },
+        {
+          "x": -4,
+          "y": 1
+        },
+        {
+          "x": -6,
+          "y": 2
+        },
+        {
+          "x": -5,
+          "y": 2
+        },
+        {
+          "x": -4,
+          "y": 2
+        },
+        {
+          "x": -6,
+          "y": 3
+        },
+        {
+          "x": -5,
+          "y": 3
+        },
+        {
+          "x": -4,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "type": "giant_rat",
+      "position": {
+        "x": -6,
+        "y": 2
+      },
+      "speed": 0.05,
+      "status": 1,
+      "allowedTiles": [
+        {
+          "x": -6,
+          "y": 1
+        },
+        {
+          "x": -5,
+          "y": 1
+        },
+        {
+          "x": -4,
+          "y": 1
+        },
+        {
+          "x": -6,
+          "y": 2
+        },
+        {
+          "x": -5,
+          "y": 2
+        },
+        {
+          "x": -4,
+          "y": 2
+        },
+        {
+          "x": -6,
+          "y": 3
+        },
+        {
+          "x": -5,
+          "y": 3
+        },
+        {
+          "x": -4,
+          "y": 3
+        }
+      ]
+    },
+    {
+      "type": "giant_rat",
+      "position": {
+        "x": -5,
+        "y": 3
+      },
+      "speed": 0.055,
+      "status": 1,
+      "allowedTiles": [
+        {
+          "x": -6,
+          "y": 1
+        },
+        {
+          "x": -5,
+          "y": 1
+        },
+        {
+          "x": -4,
+          "y": 1
+        },
+        {
+          "x": -6,
+          "y": 2
+        },
+        {
+          "x": -5,
+          "y": 2
+        },
+        {
+          "x": -4,
+          "y": 2
+        },
+        {
+          "x": -6,
+          "y": 3
+        },
+        {
+          "x": -5,
+          "y": 3
+        },
+        {
+          "x": -4,
+          "y": 3
+        }
+      ]
+    },
+    {
       "type": "bat",
       "position": {
         "x": -5,
@@ -1761,7 +1902,8 @@ var map0Data = {
         "x": -2,
         "y": 2
       },
-      "closed": true
+      "closed": true,
+      "keyId": "silver_key"
     },
     {
       "type": "door",
@@ -1792,7 +1934,8 @@ var map0Data = {
       "position": {
         "x": 7,
         "y": -2
-      }
+      },
+      "blocking": false
     },
     {
       "type": "door",
@@ -1879,7 +2022,7 @@ var map0Data = {
             },
             {
               "id": "hermit_insist_help",
-              "text": "Please, I need your help. Show me the way.",
+              "text": "All exits are locked or sealed. Please help me",
               "available": false,
               "chains": [
                 "hermit_insist_response"

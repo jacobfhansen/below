@@ -522,11 +522,11 @@ function getSelectedTile() {
 // ────── Placement mode ──────────────────────────────
 function startPlacement(mode) {
     if (mode === "monster") {
-        placementSubtype = parseInt(monsterSelect.getValue());
+        placementSubtype = monsterSelect.getValue();
     } else if (mode === "npc") {
-        placementSubtype = parseInt(npcSelect.getValue());
+        placementSubtype = npcSelect.getValue();
     } else if (mode === "obstacle") {
-        placementSubtype = parseInt(obstacleSelect.getValue());
+        placementSubtype = obstacleSelect.getValue();
     } else {
         placementSubtype = null;
     }
@@ -894,7 +894,7 @@ function updateSelectionSection() {
         html += '<label>Type:</label><select onchange="updateMonsterType(this)">';
         for (var k in gameData.monsterTypes) {
             if (typeof gameData.monsterTypes[k] !== 'function') {
-                var selected = (parseInt(k) === entity.type) ? "selected" : "";
+                var selected = (k === entity.type) ? "selected" : "";
                 html += '<option value="' + k + '" ' + selected + '>' + k + ': ' + gameData.monsterTypes[k].name + '</option>';
             }
         }
@@ -907,7 +907,7 @@ function updateSelectionSection() {
         html += '<label>Type:</label><select onchange="updateNPCType(this)">';
         for (var k in gameData.npcTypes) {
             if (typeof gameData.npcTypes[k] !== 'function') {
-                var selected = (parseInt(k) === entity.type) ? "selected" : "";
+                var selected = (k === entity.type) ? "selected" : "";
                 html += '<option value="' + k + '" ' + selected + '>' + k + ': ' + gameData.npcTypes[k].name + '</option>';
             }
         }
@@ -918,7 +918,7 @@ function updateSelectionSection() {
         html += '<label>Type:</label><select onchange="updateObstacleType(this)">';
         for (var k in gameData.obstacleTypes) {
             if (typeof gameData.obstacleTypes[k] !== 'function') {
-                var selected = (parseInt(k) === entity.type) ? "selected" : "";
+                var selected = (k === entity.type) ? "selected" : "";
                 html += '<option value="' + k + '" ' + selected + '>' + k + ': ' + gameData.obstacleTypes[k].name + '</option>';
             }
         }
@@ -939,7 +939,7 @@ function updateSelectionSection() {
         html += '<option value="">' + defaultLabel + '</option>';
         for (var ik in gameData.itemTypes) {
             if (typeof gameData.itemTypes[ik] !== 'function') {
-                var sel = (hasOverride && entity.keyId === parseInt(ik)) ? 'selected' : '';
+                var sel = (hasOverride && entity.keyId === ik) ? 'selected' : '';
                 html += '<option value="' + ik + '" ' + sel + '>' + ik + ': ' + gameData.itemTypes[ik].name + '</option>';
             }
         }
@@ -952,7 +952,7 @@ function updateSelectionSection() {
         html += '<label>StatueDesc:</label><textarea onchange="entitySetStr(\'statueDesc\', this.value)">' + (entity.statueDesc || "") + '</textarea>';
         html += '<label>DialogUnlock:</label><input type="text" value="' + (entity.dialogUnlock || "") + '" onchange="entitySetStr(\'dialogUnlock\', this.value)">';
         html += '<label>ChoiceEvents:</label><input type="text" value="' + (entity.choiceEvents ? entity.choiceEvents.join(",") : "") + '" onchange="editChoiceEvents(this)">';
-        html += '<label>ItemType:</label><input type="number" value="' + (entity.itemType || "") + '" onchange="entitySet(\'itemType\', this.value ? Number(this.value) : undefined)">';
+        html += '<label>ItemType:</label><input type="text" value="' + (entity.itemType || "") + '" onchange="entitySet(\'itemType\', this.value || undefined)">';
     }
     if (etype === "exit") {
         html += '<label>Target Map:</label><input type="number" value="' + entity.targetMap + '" onchange="entitySet(\'targetMap\', parseInt(this.value) || 0)">';
@@ -978,7 +978,7 @@ function entitySetKeyId(sel) {
     if (sel.value === '') {
         delete e.keyId;
     } else {
-        e.keyId = Number(sel.value);
+        e.keyId = sel.value;
     }
     drawCanvas();
     updateSelectionSection();
@@ -1005,20 +1005,20 @@ function updateEntityPos(input, axis) {
 function updateMonsterType(sel) {
     var entity = getSelectedEntity();
     if (!entity) return;
-    entity.type = parseInt(sel.value);
+    entity.type = sel.value;
     drawCanvas();
     updateSelectionSection();
 }
 function updateNPCType(sel) {
     var entity = getSelectedEntity();
     if (!entity) return;
-    entity.type = parseInt(sel.value);
+    entity.type = sel.value;
     drawCanvas();
 }
 function updateObstacleType(sel) {
     var entity = getSelectedEntity();
     if (!entity) return;
-    entity.type = parseInt(sel.value);
+    entity.type = sel.value;
     drawCanvas();
     updateSelectionSection();
 }

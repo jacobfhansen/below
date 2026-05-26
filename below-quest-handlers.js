@@ -117,15 +117,21 @@ var questHandlers = {
         maintainMapLog();
         var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
         if (hermitNpc) {
-            hermitNpc.dialogOptions.forEach(function(d) {
-                if (d.id === "hermit_centipede_thanks") {
-                    d.available = false;
-                } else if (d.id === "hermitq0") {
-                    d.available = true;
-                }
-            });
-            hermitNpc.position.x = 3;
-            hermitNpc.position.y = 3;
+            var walked = npcWalkTo(hermitNpc, 7, -2, function() {
+                hermitNpc.dialogOptions.forEach(function(d) {
+                    if (d.id === "hermit_centipede_thanks") d.available = false;
+                    else if (d.id === "hermitq0") d.available = true;
+                });
+                drawMapCanvas();
+            }, 3);
+            if (!walked) {
+                hermitNpc.position.x = 7;
+                hermitNpc.position.y = -2;
+                hermitNpc.dialogOptions.forEach(function(d) {
+                    if (d.id === "hermit_centipede_thanks") d.available = false;
+                    else if (d.id === "hermitq0") d.available = true;
+                });
+            }
         }
         setTimeout(function() { showInventory([6]); }, 50);
         drawMapCanvas();

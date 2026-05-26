@@ -247,9 +247,9 @@ function hideSplash() {
             var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
             if (introD) introD.available = false;
         }
-        // Remove rat monsters (type 1) from map
+        // Remove rat monsters from map
         below.gameData.mapData[curMap].monsters = below.gameData.mapData[curMap].monsters.filter(function(m) {
-            return m.type !== 1;
+            return m.type !== "giant_rat";
         });
         maintainMapLog();
     }
