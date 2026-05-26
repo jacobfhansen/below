@@ -30,9 +30,9 @@ function dispatchQuestHandler(selectedOption) {
     }
 
     // Post-dispatch: Jester-met hook
-    if (below.choiceEvent && below.choiceEvent.npcType === 2 && !below.jesterMet) {
+    if (below.choiceEvent && below.choiceEvent.npcType === "jester" && !below.jesterMet) {
         below.jesterMet = true;
-        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
         if (hermitNpc && hermitNpc.dialogOptions) {
             var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
             if (hermitq0 && hermitq0.options) {
@@ -40,7 +40,7 @@ function dispatchQuestHandler(selectedOption) {
                 if (askJester) askJester.available = true;
             }
         }
-        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === "medusa"; });
         if (medusaNpc && medusaNpc.dialogOptions) {
             var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
             if (medusaq0 && medusaq0.options) {
@@ -96,7 +96,7 @@ var samAbeWalk = function() {
 var questHandlers = {
     // --- Hermit ---
     "hermit_centipede_give_ok": function() {
-        below.gameData.player.inventory.push(15);
+        below.gameData.player.inventory.push("centipede_cleaner");
         addMapMessage("The Hermit hands you a grimy bottle labeled 'Crawl-End'.");
         maintainMapLog();
         var centDoor = below.gameData.mapData[0].obstacles.find(function(o) {
@@ -112,10 +112,10 @@ var questHandlers = {
     },
 
     "hermit_centipede_thanks_accept": function() {
-        below.gameData.player.inventory.push(6);
+        below.gameData.player.inventory.push("herbs");
         addMapMessage("The Hermit hands you a bundle of dried cave herbs.");
         maintainMapLog();
-        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
         if (hermitNpc) {
             hermitNpc.dialogOptions.forEach(function(d) {
                 if (d.id === "hermit_centipede_thanks") {
@@ -151,7 +151,7 @@ var questHandlers = {
                 text: "The old stone door grinds open. Beyond it, a dark chamber stirs with movement - rats scatter in the shadows, their eyes glinting like tiny jewels.",
                 shake: false
             });
-            var hermitNpcArr = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+            var hermitNpcArr = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
             if (hermitNpcArr && hermitNpcArr.dialogOptions) {
                 var sprayD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray"; });
                 var baseD = hermitNpcArr.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
@@ -175,7 +175,7 @@ var questHandlers = {
             var waitD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_rat_spray_wait"; });
             if (sprayD) sprayD.available = false;
             if (waitD) waitD.available = true;
-            below.gameData.player.inventory.push(4);
+            below.gameData.player.inventory.push("silver_key");
             setTimeout(function() { showInventory([4]); }, 50);
             addMapMessage("Alistair hands you a small silver key. 'Take this for the door, beyond is my room. And hurry back - the rats won't wait.'");
             maintainMapLog();
@@ -205,7 +205,7 @@ var questHandlers = {
             return n.position && n.position.x === below.choiceEvent.npcPos.x && n.position.y === below.choiceEvent.npcPos.y;
         });
         if (hermitNpc && hermitNpc.dialogOptions) {
-            var sprayIdx = below.gameData.player.inventory.indexOf(13);
+            var sprayIdx = below.gameData.player.inventory.indexOf("rat_spray");
             if (sprayIdx !== -1) {
                 below.gameData.player.inventory.splice(sprayIdx, 1);
             }
@@ -253,13 +253,13 @@ var questHandlers = {
     },
 
     "hermit_antidote_give_a1": function() {
-        below.gameData.player.inventory.push(12);
+        below.gameData.player.inventory.push("antidote");
         setTimeout(function() { showInventory([12]); }, 50);
     },
 
     // --- Mole ---
     "molea1q": function() {
-        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === "medusa"; });
         if (medusaNpc && medusaNpc.dialogOptions) {
             var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
             if (medusaq0 && medusaq0.options) {
@@ -267,7 +267,7 @@ var questHandlers = {
                 if (moleOpt) moleOpt.available = true;
             }
         }
-        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
         if (hermitNpc && hermitNpc.dialogOptions) {
             var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
             if (hermitq0 && hermitq0.options) {
@@ -291,7 +291,7 @@ var questHandlers = {
             maintainMapLog();
             var map2Obstacles = below.gameData.mapData[2].obstacles;
             map2Obstacles.forEach(function(o) {
-                if (o.type === 12) {
+                if (o.type === "shimmering_wall") {
                     o.closed = false;
                     o.blocking = false;
                     o.icon = "shimmer_wall_open.png";
@@ -324,7 +324,7 @@ var questHandlers = {
         ];
         var map2Obstacles = below.gameData.mapData[2].obstacles;
         below.gameData.mapData[2].obstacles = map2Obstacles.filter(function(o) {
-            return !(o.type === 1 && stonePositions.some(function(p) {
+            return !(o.type === "rock" && stonePositions.some(function(p) {
                 return o.position.x === p.x && o.position.y === p.y;
             }));
         });
@@ -333,7 +333,7 @@ var questHandlers = {
     },
 
     "mole_sick_help": function() {
-        var hermitNpc = below.gameData.mapData[0].npcs ? below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; }) : null;
+        var hermitNpc = below.gameData.mapData[0].npcs ? below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; }) : null;
         if (hermitNpc && hermitNpc.dialogOptions) {
             var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
             if (hermitq0 && hermitq0.options) {
@@ -348,7 +348,7 @@ var questHandlers = {
         var map2 = below.gameData.mapData[2];
         var moleIdx = -1;
         for (var mi = 0; mi < map2.npcs.length; mi++) {
-            if (map2.npcs[mi].type === 4) {
+            if (map2.npcs[mi].type === "mole") {
                 moleIdx = mi;
                 break;
             }
@@ -412,7 +412,7 @@ var questHandlers = {
         var map4 = below.gameData.mapData[4];
         var beachMoleIdx = -1;
         for (var mi = 0; mi < map4.npcs.length; mi++) {
-            if (map4.npcs[mi].type === 4) {
+            if (map4.npcs[mi].type === "mole") {
                 beachMoleIdx = mi;
                 break;
             }
@@ -421,7 +421,7 @@ var questHandlers = {
         map4.npcs.splice(beachMoleIdx, 1);
         if (below.gameData.moleQuestData) {
             var restoredMole = {
-                type: 4,
+                type: "mole",
                 position: { x: below.gameData.moleQuestData.position.x, y: below.gameData.moleQuestData.position.y },
                 destPos: {},
                 dialogOptions: JSON.parse(JSON.stringify(below.gameData.moleQuestData.dialogOptions))
@@ -443,12 +443,12 @@ var questHandlers = {
 
     // --- Medusa ---
     "medusama4p": function() {
-        below.gameData.player.inventory.push(7);
+        below.gameData.player.inventory.push("stone_key");
         setTimeout(function() { showInventory([7]); }, 50);
     },
 
     "mole_post5_a": function() {
-        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === "medusa"; });
         if (medusaNpc && medusaNpc.dialogOptions) {
             var medusaq0 = medusaNpc.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
             if (medusaq0 && medusaq0.options) {
@@ -537,7 +537,7 @@ var questHandlers = {
             if (officeD) officeD.available = true;
             below.gameData.player.samQuestComplete = true;
             for (var si = below.gameData.mapData[1].npcs.length - 1; si >= 0; si--) {
-                if (below.gameData.mapData[1].npcs[si].type === 2) {
+                if (below.gameData.mapData[1].npcs[si].type === "jester") {
                     below.gameData.mapData[1].npcs.splice(si, 1);
                     break;
                 }
@@ -579,7 +579,7 @@ var questHandlers = {
     },
 
     "ship_departure_go": function() {
-        var moleNpc = below.gameData.mapData[2].npcs ? below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; }) : null;
+        var moleNpc = below.gameData.mapData[2].npcs ? below.gameData.mapData[2].npcs.find(function(n) { return n.type === "mole"; }) : null;
         if (moleNpc && moleNpc.dialogOptions) {
             var sickD = moleNpc.dialogOptions.find(function(d) { return d.id === "mole_sick"; });
             if (sickD) sickD.available = true;

@@ -37,11 +37,13 @@ python3 -m http.server 8000
 # Architecture
 
 ## File roles
-- `gamedata.js` — Pure data. Defines global `belowGameData` with all initial state (maps, NPCs, dialogs, monsters, obstacles, items, player defaults). No logic.
+- `below-gamedata.js` — Pure data. Defines global `belowGameData` with all initial state (maps, NPCs, dialogs, monsters, obstacles, items, player defaults). No logic. Entity IDs are string keys (e.g. `"hermit"`, `"silver_key"`) not numeric.
+- `below-cutscenedata.js` — Pure data. Defines `belowCutSceneData` with cutscene definitions.
+- `below-quest-handlers.js` — Quest/dialog handler logic.
 - `below.js` — All game logic, rendering, input, save/load. Reads `belowGameData` at DOMContentLoaded via `JSON.parse(JSON.stringify(belowGameData))` into `below.gameData`.
 - `below.html` — Minimal HTML shell with menu screens, game div (canvas + log panel), inventory modal.
-- `tools/dialog-editor.html` — Standalone dev tool for editing dialog trees, reads `gamedata.js` directly.
-- `tools/map-editor.html` — Standalone dev tool for editing maps, reads `gamedata.js` directly.
+- `tools/dialog-editor.html` — Standalone dev tool for editing dialog trees, reads `below-gamedata.js` directly.
+- `tools/map-editor.html` — Standalone dev tool for editing maps, reads `below-gamedata.js` directly.
 
 ## State management
 - `below.gameData` is the single mutable source of truth — a deep clone of `belowGameData`, modified in place.
@@ -82,7 +84,7 @@ python3 -m http.server 8000
 - Each slot is full `below.gameData` deep clone plus `saveDate`.
 - `mergeDialogOptions()` called on continue — merges new dialogs from source into saved data, preserving `available` flags and adding missing properties.
 - Auto-save every ~60 seconds in game loop.
-- `syncGameData()` re-reads `gamedata.js` and merges changes into the running game without restarting:
+- `syncGameData()` re-reads `below-gamedata.js` and merges changes into the running game without restarting:
   - Updates type definitions (monsterTypes, obstacleTypes, npcTypes, itemTypes)
   - Adds new tiles, obstacles, monsters, NPCs from fresh data (keeps existing instance state)
   - Merges dialog options on existing NPCs (preserves `available` flags, adds missing properties)

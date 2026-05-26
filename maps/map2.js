@@ -1997,259 +1997,259 @@ var map2Data = {
   "monsters": [],
   "obstacles": [
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 8,
         "y": 4
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 9,
         "y": 5
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 20,
         "y": 5
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 7,
         "y": 6
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 19,
         "y": 6
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 13,
         "y": 16
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 11,
         "y": 17
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 13,
         "y": 17
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 14,
         "y": 17
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 10,
         "y": 18
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 27,
         "y": 4
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 40,
         "y": 4
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 29,
         "y": 6
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 35,
         "y": 17
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 34,
         "y": 18
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 33,
         "y": 19
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 33,
         "y": 20
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 7,
         "y": 28
       }
     },
     {
-      "type": 10,
+      "type": "gem",
       "position": {
         "x": 19,
         "y": 28
       }
     },
     {
-      "type": 11,
+      "type": "stone_door",
       "position": {
         "x": 21,
         "y": 10
       }
     },
     {
-      "type": 11,
+      "type": "stone_door",
       "position": {
         "x": 25,
         "y": 10
       }
     },
     {
-      "type": 11,
+      "type": "stone_door",
       "position": {
         "x": 22,
         "y": 32
       }
     },
     {
-      "type": 12,
+      "type": "shimmering_wall",
       "position": {
         "x": 20,
         "y": 10
       }
     },
     {
-      "type": 12,
+      "type": "shimmering_wall",
       "position": {
         "x": 26,
         "y": 10
       }
     },
     {
-      "type": 12,
+      "type": "shimmering_wall",
       "position": {
         "x": 21,
         "y": 32
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 6,
         "y": 10
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 7,
         "y": 10
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 6,
         "y": 11
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 7,
         "y": 11
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 40,
         "y": 10
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 39,
         "y": 10
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 39,
         "y": 11
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 40,
         "y": 11
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 6,
         "y": 32
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 7,
         "y": 32
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 6,
         "y": 33
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 7,
         "y": 33
@@ -2258,7 +2258,7 @@ var map2Data = {
   ],
   "npcs": [
     {
-      "type": 4,
+      "type": "mole",
       "position": {
         "x": 0,
         "y": 0
@@ -2280,7 +2280,7 @@ var map2Data = {
               "text": "I have the antidote here.",
               "available": true,
               "requiresItems": [
-                12
+                "antidote"
               ],
               "chains": [
                 "mole_cured"
@@ -2500,7 +2500,7 @@ var map2Data = {
               "text": "I have the Hermit's herbs. Here, take them.",
               "available": true,
               "requiresItems": [
-                6
+                "herbs"
               ],
               "chains": [
                 "mole_post4_give"

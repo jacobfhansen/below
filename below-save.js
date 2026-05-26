@@ -143,7 +143,7 @@ function mergeDialogOptions(savedData) {
 
 function syncGameData() {
     if (typeof belowGameData === 'undefined') {
-        alert('gamedata.js not loaded!');
+        alert('below-gamedata.js not loaded!');
         return;
     }
     var fresh = JSON.parse(JSON.stringify(belowGameData));
@@ -247,7 +247,7 @@ function syncGameData() {
     // 3. Update area description and redraw
     updateAreaDescription();
     drawMapCanvas();
-    addMapMessage("Game data synced from gamedata.js.");
+    addMapMessage("Game data synced from below-gamedata.js.");
     maintainMapLog();
 }
 
@@ -266,6 +266,118 @@ function setDialogAvailable(dialogIds, available) {
     });
 }
 
+// Numeric→string ID migration for old saves
+var LEGACY_ID_MAP = {
+  itemTypes: { "4": "silver_key", "5": "bronze_key", "6": "herbs", "7": "stone_key", "8": "rudder", "9": "mast", "10": "steering_wheel", "11": "sail", "12": "antidote", "13": "rat_spray", "14": "bat_swatter", "15": "centipede_cleaner", "16": "medusa_hair", "17": "flashlight" },
+  npcTypes: { "1": "hermit", "2": "jester", "3": "medusa", "4": "mole", "5": "sam_shale", "6": "derelict_ship", "7": "charon", "8": "rotten_sisters" },
+  monsterTypes: { "1": "giant_rat", "2": "bat", "3": "centipede", "4": "living_shadow" },
+  obstacleTypes: { "1": "rock", "2": "blood", "3": "table", "4": "door", "5": "cupboard", "6": "lightbeam", "7": "password_door", "8": "statue", "9": "pushable_rock", "10": "gem", "11": "stone_door", "12": "shimmering_wall", "13": "lamppost", "14": "crate", "15": "barrel", "16": "bed", "17": "chair", "18": "blue_mushroom", "19": "purple_mushroom", "20": "yellow_mushroom", "21": "pink_crystal", "22": "floor_item", "23": "shadow_wall" }
+};
+
+function migrateSaveData(data) {
+  if (!data || data._migrated) return;
+  // Detect if migration needed — check itemTypes for numeric keys
+  var needsMigrate = false;
+  for (var typeKey in LEGACY_ID_MAP) {
+    var map = LEGACY_ID_MAP[typeKey];
+    for (var numKey in map) {
+      if (data[typeKey] && data[typeKey][numKey]) {
+        needsMigrate = true;
+        break;
+      }
+    }
+    if (needsMigrate) break;
+  }
+  if (!needsMigrate) { data._migrated = true; return; }
+
+  // Remap type definition keys
+  for (var typeKey in LEGACY_ID_MAP) {
+    var map = LEGACY_ID_MAP[typeKey];
+    var oldObj = data[typeKey];
+    if (!oldObj) continue;
+    var newObj = {};
+    for (var numKey in map) {
+      if (oldObj[numKey]) {
+        newObj[map[numKey]] = oldObj[numKey];
+      }
+    }
+    data[typeKey] = newObj;
+  }
+
+  // Walk all maps to migrate instance type/itemType/keyId fields
+  for (var mi = 0; mi < data.mapData.length; mi++) {
+    var map = data.mapData[mi];
+    if (!map) continue;
+
+    // Monsters
+    if (map.monsters) {
+      for (var i = 0; i < map.monsters.length; i++) {
+        var m = map.monsters[i];
+        if (m.type && LEGACY_ID_MAP.monsterTypes[m.type]) {
+          m.type = LEGACY_ID_MAP.monsterTypes[m.type];
+        }
+      }
+    }
+    // NPCs
+    if (map.npcs) {
+      for (var i = 0; i < map.npcs.length; i++) {
+        var n = map.npcs[i];
+        if (n.type && LEGACY_ID_MAP.npcTypes[n.type]) {
+          n.type = LEGACY_ID_MAP.npcTypes[n.type];
+        }
+        // Dialog requiresItems
+        if (n.dialogOptions) {
+          migrateDialogRequiresItems(n.dialogOptions);
+        }
+      }
+    }
+    // Obstacles
+    if (map.obstacles) {
+      for (var i = 0; i < map.obstacles.length; i++) {
+        var o = map.obstacles[i];
+        if (o.type && LEGACY_ID_MAP.obstacleTypes[o.type]) {
+          o.type = LEGACY_ID_MAP.obstacleTypes[o.type];
+        }
+        if (o.itemType && LEGACY_ID_MAP.itemTypes[o.itemType]) {
+          o.itemType = LEGACY_ID_MAP.itemTypes[o.itemType];
+        }
+        if (o.keyId && LEGACY_ID_MAP.itemTypes[o.keyId]) {
+          o.keyId = LEGACY_ID_MAP.itemTypes[o.keyId];
+        }
+      }
+    }
+  }
+
+  // Migrate player inventory
+  if (data.player && data.player.inventory) {
+    for (var i = 0; i < data.player.inventory.length; i++) {
+      var item = data.player.inventory[i];
+      if (typeof item === 'number' || /^\d+$/.test(item)) {
+        var strId = LEGACY_ID_MAP.itemTypes[item];
+        if (strId) data.player.inventory[i] = strId;
+      }
+    }
+  }
+
+  data._migrated = true;
+}
+
+function migrateDialogRequiresItems(dialogOptions) {
+  for (var di = 0; di < dialogOptions.length; di++) {
+    var d = dialogOptions[di];
+    if (d.requiresItems) {
+      for (var ri = 0; ri < d.requiresItems.length; ri++) {
+        var item = d.requiresItems[ri];
+        if (typeof item === 'number' || /^\d+$/.test(item)) {
+          var strId = LEGACY_ID_MAP.itemTypes[item];
+          if (strId) d.requiresItems[ri] = strId;
+        }
+      }
+    }
+    if (d.options) migrateDialogRequiresItems(d.options);
+  }
+}
+
 function continueGame(slotIndex) {
     var saved = loadFromSlot(slotIndex);
     if (!saved) {
@@ -273,6 +385,7 @@ function continueGame(slotIndex) {
         return;
     }
     below.gameData = JSON.parse(JSON.stringify(saved));
+    migrateSaveData(below.gameData);
     mergeDialogOptions(below.gameData);
     below.currentSlot = slotIndex;
     switchPage('gameDiv');

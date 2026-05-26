@@ -1232,7 +1232,7 @@ var map4Data = {
   "monsters": [],
   "obstacles": [
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": -2,
         "y": -9
@@ -1243,7 +1243,7 @@ var map4Data = {
       "icon": "rock_2x2.png"
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 0,
         "y": -9
@@ -1253,14 +1253,14 @@ var map4Data = {
       "icon": "rock_2x2.png"
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 2,
         "y": -9
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": -4,
         "y": -9
@@ -1270,28 +1270,28 @@ var map4Data = {
       "icon": "rock_2x2.png"
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": -7,
         "y": 1
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": -8,
         "y": 1
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": -9,
         "y": 1
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": -10,
         "y": 1
@@ -1300,7 +1300,7 @@ var map4Data = {
   ],
   "npcs": [
     {
-      "type": 6,
+      "type": "derelict_ship",
       "position": {
         "x": 3,
         "y": 0
@@ -1333,7 +1333,7 @@ var map4Data = {
       ]
     },
     {
-      "type": 7,
+      "type": "charon",
       "position": {
         "x": 2,
         "y": 2

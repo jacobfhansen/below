@@ -78,7 +78,7 @@ function checkKey(e) {
 
 // Add event listeners for menu buttons (called once on DOMContentLoaded)
 document.addEventListener("DOMContentLoaded", function() {
-    // Initialize gameData from gamedata.js
+    // Initialize gameData from below-gamedata.js
     if (typeof belowGameData !== 'undefined') {
         below.gameData = JSON.parse(JSON.stringify(belowGameData));
         Object.keys(below.gameData.mapData).forEach(function(mapKey) {
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     m._initY = m.position.y;
     });
     below.gameData.mapData[5].npcs.forEach(function(n) {
-        if (n.type === 8 && n.dialogOptions) {
+        if (n.type === "rotten_sisters" && n.dialogOptions) {
             for (var di = 0; di < n.dialogOptions.length; di++) {
                 if (n.dialogOptions[di].id === "sisters_jester") {
                     n.dialogOptions[di].available = true;
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
         });
     } else {
-        console.error('gamedata.js not loaded!');
+        console.error('below-gamedata.js not loaded!');
     }
     
     // Show title screen immediately
@@ -216,7 +216,7 @@ function changeMap(mapId, entryX, entryY, text) {
   // Reset Living Shadows on map 6 when leaving
   if (below.gameData.player.currentMap === 6) {
       below.gameData.mapData[6].monsters.forEach(function(m) {
-          if (m.type === 4 && m._initX !== undefined) {
+          if (m.type === "living_shadow" && m._initX !== undefined) {
               m.position.x = m._initX;
               m.position.y = m._initY;
               m.chaseState = "idle";
@@ -238,7 +238,7 @@ function changeMap(mapId, entryX, entryY, text) {
     below.gameData.player.depthsVisited = true;
     for (var ci = below.gameData.mapData[1].npcs.length - 1; ci >= 0; ci--) {
       var npcType = below.gameData.mapData[1].npcs[ci].type;
-      if (npcType === 2 || npcType === 3) {
+      if (npcType === "jester" || npcType === "medusa") {
         below.gameData.mapData[1].npcs.splice(ci, 1);
       }
     }
@@ -249,7 +249,7 @@ function changeMap(mapId, entryX, entryY, text) {
     for (var ji = 0; ji < below.gameData.mapData.length; ji++) {
       var jnpcs = below.gameData.mapData[ji].npcs;
       for (var jni = jnpcs.length - 1; jni >= 0; jni--) {
-        if (jnpcs[jni].type === 2) {
+        if (jnpcs[jni].type === "jester") {
           jnpcs.splice(jni, 1);
         }
       }
@@ -294,8 +294,8 @@ function moveOnMap(e) {
         if (below.equippedItem === null) {
             addMapMessage("You have nothing equipped. Press Q to open inventory and equip an item.");
             maintainMapLog();
-        } else if (below.equippedItem === 14 && below.gameData.player.currentMap === 0) {
-            var bats = below.gameData.mapData[0].monsters.filter(function(m) { return m.type === 2; });
+        } else if (below.equippedItem === "bat_swatter" && below.gameData.player.currentMap === 0) {
+            var bats = below.gameData.mapData[0].monsters.filter(function(m) { return m.type === "bat"; });
             if (bats.length > 0) {
                 addMapMessage("You swing the bat swatter but the bats weave through the air too fast in this darkness.");
                 maintainMapLog();
@@ -303,7 +303,7 @@ function moveOnMap(e) {
                 addMapMessage("You swing the bat swatter. Nothing to hit here.");
                 maintainMapLog();
             }
-        } else if (below.equippedItem === 15 && below.gameData.player.currentMap === 0) {
+        } else if (below.equippedItem === "centipede_cleaner" && below.gameData.player.currentMap === 0) {
             var curMap = below.gameData.player.currentMap;
             var px = Math.round(curX);
             var py = Math.round(curY);
@@ -311,7 +311,7 @@ function moveOnMap(e) {
             var centIdx = -1;
             for (var mi = 0; mi < below.gameData.mapData[curMap].monsters.length; mi++) {
                 var m = below.gameData.mapData[curMap].monsters[mi];
-                if (m.type === 3 && Math.round(m.position.x) === px && Math.round(m.position.y) === py) {
+                if (m.type === "centipede" && Math.round(m.position.x) === px && Math.round(m.position.y) === py) {
                     centipede = m;
                     centIdx = mi;
                     break;
@@ -437,12 +437,12 @@ function moveOnMap(e) {
 function handleAllCentipedesCleared() {
     if (below.centipedesHandled) return;
     var map0 = below.gameData.mapData[0];
-    var remaining = map0.monsters.filter(function(m) { return m.type === 3; });
+    var remaining = map0.monsters.filter(function(m) { return m.type === "centipede"; });
     if (remaining.length > 0) return;
     below.centipedesHandled = true;
     addMapMessage("All centipedes have been cleared from the storage room!");
     maintainMapLog();
-    var hermitNpc = map0.npcs.find(function(n) { return n.type === 1; });
+    var hermitNpc = map0.npcs.find(function(n) { return n.type === "hermit"; });
     if (hermitNpc) {
         hermitNpc.position.x = 2;
         hermitNpc.position.y = -7;
@@ -685,7 +685,7 @@ function mapGameLoop() {
                         below.gameData.player.mazeCycle = (cycle + 1) % 3;
                         // Reposition the Mole to the current maze area
                         var molePositions = [[5, 10], [41, 10], [5, 32]];
-                        var mole = below.gameData.mapData[2].npcs.find(function(n) { return n.type === 4; });
+                        var mole = below.gameData.mapData[2].npcs.find(function(n) { return n.type === "mole"; });
                         if (mole) {
                             mole.position = { x: molePositions[cycle][0], y: molePositions[cycle][1] };
                             mole.destPos = {};
@@ -725,13 +725,13 @@ function mapGameLoop() {
             if (!type || !type.movement) return;
 
             // Flashlight destroys Living Shadows
-            if (monster.type === 4) {
+            if (monster.type === "living_shadow") {
                 if (monster._fadingTimer > 0) {
                     monster._fadingTimer--;
                     if (monster._fadingTimer <= 0) monster.removeMe = true;
                     return;
                 }
-                if (below.equippedItem === 17) {
+                if (below.equippedItem === "flashlight") {
                     var fPx = Math.round(below.gameData.player.currentLocation.x);
                     var fPy = Math.round(below.gameData.player.currentLocation.y);
                     var fDir = below.gameData.player.direction || "down";
@@ -749,7 +749,7 @@ function mapGameLoop() {
             }
 
             // Seeking bats — direct movement toward light, no collision checks
-            if (batDoorOpen && monster.type === 2) {
+            if (batDoorOpen && monster.type === "bat") {
                 var dx = -12 - monster.position.x;
                 var dy = -2 - monster.position.y;
                 var dist = Math.sqrt(dx * dx + dy * dy);
@@ -887,7 +887,7 @@ function mapGameLoop() {
                 }
                 return;
             }
-            if (below.equippedItem === 17) {
+            if (below.equippedItem === "flashlight") {
                 var fPx = Math.round(below.gameData.player.currentLocation.x);
                 var fPy = Math.round(below.gameData.player.currentLocation.y);
                 var fDir = below.gameData.player.direction || "down";
@@ -915,12 +915,12 @@ function mapGameLoop() {
             });
         }
         if (removedCount > 0) {
-            var remaining = (below.gameData.mapData[curMap].monsters || []).filter(function(m) { return m.type === 2; });
+            var remaining = (below.gameData.mapData[curMap].monsters || []).filter(function(m) { return m.type === "bat"; });
             if (remaining.length === 0) {
                 addMapMessage("The last bat vanishes into the light. The passage is clear.");
                 maintainMapLog();
                 // Move Hermit to centipede quest position
-                var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === 1; });
+                var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
                 if (hermitNpc) {
                     hermitNpc.position.x = -4;
                     hermitNpc.position.y = -3;

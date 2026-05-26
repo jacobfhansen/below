@@ -15,7 +15,7 @@ const below = {
     cutSceneIndex: 0,
     cutSceneStart: null,
     cutSceneCallback: null,
-    gameData: null // Loaded from gamedata.js
+    gameData: null // Loaded from below-gamedata.js
 };
 
 // Dev teleport — callable from console: below.teleport(mapId, x, y)

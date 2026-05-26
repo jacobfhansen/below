@@ -3007,224 +3007,224 @@ var map5Data = {
   },
   "obstacles": [
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 3,
         "y": 3
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 7,
         "y": 5
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 12,
         "y": 4
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 18,
         "y": 6
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 25,
         "y": 3
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 5,
         "y": 12
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 10,
         "y": 15
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 20,
         "y": 14
       }
     },
     {
-      "type": 18,
+      "type": "blue_mushroom",
       "position": {
         "x": 26,
         "y": 10
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 8,
         "y": 8
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 15,
         "y": 6
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 22,
         "y": 4
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 27,
         "y": 7
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 4,
         "y": 15
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 14,
         "y": 14
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 24,
         "y": 16
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 6,
         "y": 2
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 16,
         "y": 3
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 21,
         "y": 5
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 28,
         "y": 2
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 2,
         "y": 10
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 9,
         "y": 14
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 19,
         "y": 12
       }
     },
     {
-      "type": 20,
+      "type": "yellow_mushroom",
       "position": {
         "x": 27,
         "y": 15
       }
     },
     {
-      "type": 21,
+      "type": "pink_crystal",
       "position": {
         "x": 1,
         "y": 5
       }
     },
     {
-      "type": 21,
+      "type": "pink_crystal",
       "position": {
         "x": 11,
         "y": 7
       }
     },
     {
-      "type": 21,
+      "type": "pink_crystal",
       "position": {
         "x": 17,
         "y": 4
       }
     },
     {
-      "type": 21,
+      "type": "pink_crystal",
       "position": {
         "x": 23,
         "y": 2
       }
     },
     {
-      "type": 21,
+      "type": "pink_crystal",
       "position": {
         "x": 6,
         "y": 14
       }
     },
     {
-      "type": 21,
+      "type": "pink_crystal",
       "position": {
         "x": 16,
         "y": 16
       }
     },
     {
-      "type": 21,
+      "type": "pink_crystal",
       "position": {
         "x": 25,
         "y": 13
       }
     },
     {
-      "type": 19,
+      "type": "purple_mushroom",
       "position": {
         "x": 10,
         "y": 11
@@ -3234,7 +3234,7 @@ var map5Data = {
   ],
   "npcs": [
     {
-      "type": 8,
+      "type": "rotten_sisters",
       "position": {
         "x": 15,
         "y": 10
@@ -3562,7 +3562,7 @@ var map5Data = {
       ]
     },
     {
-      "type": 8,
+      "type": "rotten_sisters",
       "position": {
         "x": 15,
         "y": 10

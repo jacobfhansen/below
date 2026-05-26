@@ -1027,15 +1027,15 @@ var map6Data = {
   },
   "obstacles": [
     {
-      "type": 22,
+      "type": "floor_item",
       "position": {
         "x": 16,
         "y": -4
       },
-      "itemType": 16
+      "itemType": "medusa_hair"
     },
     {
-      "type": 23,
+      "type": "shadow_wall",
       "position": {
         "x": 5,
         "y": -12
@@ -1045,7 +1045,7 @@ var map6Data = {
   "npcs": [],
   "monsters": [
     {
-      "type": 4,
+      "type": "living_shadow",
       "position": {
         "x": 3,
         "y": -11
@@ -1053,7 +1053,7 @@ var map6Data = {
       "destPos": {}
     },
     {
-      "type": 4,
+      "type": "living_shadow",
       "position": {
         "x": 4,
         "y": -7
@@ -1061,7 +1061,7 @@ var map6Data = {
       "destPos": {}
     },
     {
-      "type": 4,
+      "type": "living_shadow",
       "position": {
         "x": -10,
         "y": -4
@@ -1069,7 +1069,7 @@ var map6Data = {
       "destPos": {}
     },
     {
-      "type": 4,
+      "type": "living_shadow",
       "position": {
         "x": 14,
         "y": 1
@@ -1077,7 +1077,7 @@ var map6Data = {
       "destPos": {}
     },
     {
-      "type": 4,
+      "type": "living_shadow",
       "position": {
         "x": -10,
         "y": 1
@@ -1085,7 +1085,7 @@ var map6Data = {
       "destPos": {}
     },
     {
-      "type": 4,
+      "type": "living_shadow",
       "position": {
         "x": 9,
         "y": 5

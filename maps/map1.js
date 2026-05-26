@@ -331,14 +331,14 @@ var map1Data = {
   "monsters": [],
   "obstacles": [
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 5,
         "y": 0
       }
     },
     {
-      "type": 7,
+      "type": "password_door",
       "position": {
         "x": 6,
         "y": 2
@@ -347,7 +347,7 @@ var map1Data = {
       "closed": true
     },
     {
-      "type": 8,
+      "type": "statue",
       "position": {
         "x": 0,
         "y": -2
@@ -363,7 +363,7 @@ var map1Data = {
       "letterHint": "S"
     },
     {
-      "type": 8,
+      "type": "statue",
       "position": {
         "x": 2,
         "y": -2
@@ -379,7 +379,7 @@ var map1Data = {
       "letterHint": "T"
     },
     {
-      "type": 8,
+      "type": "statue",
       "position": {
         "x": 4,
         "y": -2
@@ -395,7 +395,7 @@ var map1Data = {
       "letterHint": "O"
     },
     {
-      "type": 8,
+      "type": "statue",
       "position": {
         "x": 0,
         "y": 6
@@ -411,7 +411,7 @@ var map1Data = {
       "letterHint": "N"
     },
     {
-      "type": 8,
+      "type": "statue",
       "position": {
         "x": 2,
         "y": 6
@@ -427,7 +427,7 @@ var map1Data = {
       "letterHint": "E"
     },
     {
-      "type": 8,
+      "type": "statue",
       "position": {
         "x": 4,
         "y": 6
@@ -445,7 +445,7 @@ var map1Data = {
   ],
   "npcs": [
     {
-      "type": 3,
+      "type": "medusa",
       "position": {
         "x": -1,
         "y": 4

@@ -287,12 +287,12 @@ function selectChoiceOption(index) {
         });
         
         // Handle ship part attachment — remove item and re-render dialog
-        if (npc && npc.type === 6) {
+        if (npc && npc.type === "derelict_ship") {
             var removeItem = null;
-            if (selectedOption.id === "ship_attach_rudder") removeItem = 8;
-            else if (selectedOption.id === "ship_attach_mast") removeItem = 9;
-            else if (selectedOption.id === "ship_attach_wheel") removeItem = 10;
-            else if (selectedOption.id === "ship_attach_sail") removeItem = 11;
+            if (selectedOption.id === "ship_attach_rudder") removeItem = "rudder";
+            else if (selectedOption.id === "ship_attach_mast") removeItem = "mast";
+            else if (selectedOption.id === "ship_attach_wheel") removeItem = "steering_wheel";
+            else if (selectedOption.id === "ship_attach_sail") removeItem = "sail";
             if (removeItem !== null) {
                 var idx = below.gameData.player.inventory.indexOf(removeItem);
                 if (idx !== -1) {
@@ -349,10 +349,10 @@ function selectChoiceOption(index) {
         }
         
         // Handle Sam Shale giving the flashlight after Medusa Hair
-        if (npc && npc.type === 5 && selectedOption.id === "detective_hair_take") {
-            below.gameData.player.inventory.push(17);
+        if (npc && npc.type === "sam_shale" && selectedOption.id === "detective_hair_take") {
+            below.gameData.player.inventory.push("flashlight");
             setTimeout(function() { showInventory([17]); }, 50);
-            var hairIdx = below.gameData.player.inventory.indexOf(16);
+            var hairIdx = below.gameData.player.inventory.indexOf("medusa_hair");
             if (hairIdx !== -1) below.gameData.player.inventory.splice(hairIdx, 1);
             addMapMessage("Sam Shale takes the Medusa Hair and hands you a flashlight.");
             var officeD = npc.dialogOptions.find(function(d) { return d.id === "detective_office"; });
@@ -540,13 +540,13 @@ function getChoiceEventOptions(choiceEventIds) {
                     });
                     if (obstacle) {
                         var obstacleType = below.gameData.obstacleTypes[obstacle.type];
-                        if (obstacle.type === 8 && obstacle.statueDesc && !obstacle.searched) {
+                        if (obstacle.type === "statue" && obstacle.statueDesc && !obstacle.searched) {
                             obstacle.searched = true;
                             addMapMessage(obstacle.statueDesc);
                             maintainMapLog();
                             if (obstacle.dialogUnlock) {
                                 var medusa = below.gameData.mapData[curMap].npcs.find(function(n) {
-                                    return n.type === 3;
+return n.type === "medusa";
                                 });
                                 if (medusa && medusa.dialogOptions) {
                                     var q1 = medusa.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
@@ -556,7 +556,7 @@ function getChoiceEventOptions(choiceEventIds) {
                                     }
                                 }
                             }
-                        } else if (obstacle.type === 8 && obstacle.searched) {
+                        } else if (obstacle.type === "statue" && obstacle.searched) {
                             addMapMessage("The marble figure stares blankly into the dark. You've already learned what you can from it.");
                             maintainMapLog();
                         } else {
@@ -755,7 +755,7 @@ function handleBlockedInteraction(x, y) {
     // Handle NPC dialog system
     if (npc && npc.dialogOptions) {
         // Special case: Sam Shale mid-walk dialog
-        if (npc.type === 5 && npc.walkPath && npc.walkPath.length > 0) {
+        if (npc.type === "sam_shale" && npc.walkPath && npc.walkPath.length > 0) {
             below.choiceEvent = {
                 selectedIndex: 0,
                 message: "This alley's seen things. Bodies. Deals. Dirty deals about bodies. Stay close and don't touch anything. Actually, don't even look at anything. Just... look at my back. That's safe.",
@@ -914,7 +914,7 @@ function submitPassword() {
         // Move jester to map 1 at (3,-8) and unlock mole hint dialog
         var jesterIdx = -1;
         for (var i = 0; i < below.gameData.mapData[0].npcs.length; i++) {
-            if (below.gameData.mapData[0].npcs[i].type === 2) {
+            if (below.gameData.mapData[0].npcs[i].type === "jester") {
                 jesterIdx = i;
                 break;
             }
@@ -931,7 +931,7 @@ function submitPassword() {
         }
         
         // Disable statue dialog options after door opens
-        var medusaNpcMap1 = below.gameData.mapData[1].npcs.find(function(n) { return n.type === 3; });
+        var medusaNpcMap1 = below.gameData.mapData[1].npcs.find(function(n) { return n.type === "medusa"; });
         if (medusaNpcMap1 && medusaNpcMap1.dialogOptions) {
             var medusaq0 = medusaNpcMap1.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
             if (medusaq0 && medusaq0.options) {

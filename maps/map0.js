@@ -671,7 +671,7 @@ var map0Data = {
   },
   "monsters": [
     {
-      "type": 1,
+      "type": "giant_rat",
       "position": {
         "x": -6,
         "y": 3
@@ -714,7 +714,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 1,
+      "type": "giant_rat",
       "position": {
         "x": -4,
         "y": 2
@@ -757,7 +757,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 1,
+      "type": "giant_rat",
       "position": {
         "x": -4,
         "y": 1
@@ -800,7 +800,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 2,
+      "type": "bat",
       "position": {
         "x": -5,
         "y": -2
@@ -883,7 +883,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 2,
+      "type": "bat",
       "position": {
         "x": -7,
         "y": -3
@@ -966,7 +966,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 2,
+      "type": "bat",
       "position": {
         "x": -4,
         "y": -1
@@ -1049,7 +1049,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 2,
+      "type": "bat",
       "position": {
         "x": -8,
         "y": -1
@@ -1132,7 +1132,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 2,
+      "type": "bat",
       "position": {
         "x": -3,
         "y": -3
@@ -1215,7 +1215,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 3,
+      "type": "centipede",
       "position": {
         "x": 1,
         "y": -8
@@ -1290,7 +1290,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 3,
+      "type": "centipede",
       "position": {
         "x": 0,
         "y": -8
@@ -1365,7 +1365,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 3,
+      "type": "centipede",
       "position": {
         "x": 1,
         "y": -7
@@ -1440,7 +1440,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 3,
+      "type": "centipede",
       "position": {
         "x": 2,
         "y": -7
@@ -1515,7 +1515,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 3,
+      "type": "centipede",
       "position": {
         "x": 0,
         "y": -6
@@ -1590,7 +1590,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 3,
+      "type": "centipede",
       "position": {
         "x": -1,
         "y": -5
@@ -1667,7 +1667,7 @@ var map0Data = {
   ],
   "obstacles": [
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 6,
         "y": 2
@@ -1679,68 +1679,68 @@ var map0Data = {
       ]
     },
     {
-      "type": 2,
+      "type": "blood",
       "position": {
         "x": 1,
         "y": 0
       }
     },
     {
-      "type": 3,
+      "type": "table",
       "position": {
         "x": -6,
         "y": 2
       },
-      "itemType": 14
+      "itemType": "bat_swatter"
     },
     {
-      "type": 4,
+      "type": "door",
       "position": {
         "x": 1,
         "y": -1
       },
-      "keyId": 4
+      "keyId": "silver_key"
     },
     {
-      "type": 4,
+      "type": "door",
       "position": {
         "x": 3,
         "y": -8
       },
-      "keyId": 5,
+      "keyId": "bronze_key",
       "closed": true
     },
     {
-      "type": 5,
+      "type": "cupboard",
       "position": {
         "x": -1,
         "y": -8
       },
-      "itemType": 5
+      "itemType": "bronze_key"
     },
     {
-      "type": 6,
+      "type": "lightbeam",
       "position": {
         "x": 1,
         "y": 4
       }
     },
     {
-      "type": 3,
+      "type": "table",
       "position": {
         "x": 8,
         "y": -2
       }
     },
     {
-      "type": 1,
+      "type": "rock",
       "position": {
         "x": 8,
         "y": 2
       }
     },
     {
-      "type": 4,
+      "type": "door",
       "position": {
         "x": -7,
         "y": 3
@@ -1749,14 +1749,14 @@ var map0Data = {
       "blocking": true
     },
     {
-      "type": 6,
+      "type": "lightbeam",
       "position": {
         "x": -1,
         "y": 1
       }
     },
     {
-      "type": 4,
+      "type": "door",
       "position": {
         "x": -2,
         "y": 2
@@ -1764,55 +1764,55 @@ var map0Data = {
       "closed": true
     },
     {
-      "type": 4,
+      "type": "door",
       "position": {
         "x": 11,
         "y": 1
       },
       "closed": true,
-      "keyId": 5
+      "keyId": "bronze_key"
     },
     {
-      "type": 16,
+      "type": "bed",
       "position": {
         "x": 7,
         "y": -4
       }
     },
     {
-      "type": 5,
+      "type": "cupboard",
       "position": {
         "x": 7,
         "y": 0
       },
-      "itemType": 13
+      "itemType": "rat_spray"
     },
     {
-      "type": 17,
+      "type": "chair",
       "position": {
         "x": 7,
         "y": -2
       }
     },
     {
-      "type": 4,
+      "type": "door",
       "position": {
         "x": -9,
         "y": -2
       },
       "closed": true,
       "blocking": true,
-      "keyId": 4
+      "keyId": "silver_key"
     },
     {
-      "type": 6,
+      "type": "lightbeam",
       "position": {
         "x": -12,
         "y": -2
       }
     },
     {
-      "type": 4,
+      "type": "door",
       "position": {
         "x": -3,
         "y": -4
@@ -1823,7 +1823,7 @@ var map0Data = {
   ],
   "npcs": [
     {
-      "type": 1,
+      "type": "hermit",
       "position": {
         "x": 3,
         "y": 3
@@ -1847,7 +1847,7 @@ var map0Data = {
               "text": "I found this heavy stone key...",
               "available": true,
               "requiresItems": [
-                7
+                "stone_key"
               ],
               "chains": [
                 "hermit_stonekey1"
@@ -2109,7 +2109,7 @@ var map0Data = {
               "text": "I have the spray right here.",
               "available": true,
               "requiresItems": [
-                13
+                "rat_spray"
               ],
               "chains": [
                 "hermit_rat_spray_give"
@@ -2172,7 +2172,7 @@ var map0Data = {
               "text": "I have the swatter right here.",
               "available": true,
               "requiresItems": [
-                14
+                "bat_swatter"
               ],
               "chains": [
                 "hermit_bat_swatter_give"
@@ -2480,7 +2480,7 @@ var map0Data = {
       ]
     },
     {
-      "type": 2,
+      "type": "jester",
       "position": {
         "x": 10,
         "y": 3

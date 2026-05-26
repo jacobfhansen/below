@@ -181,7 +181,7 @@ function drawMapCanvas() {
     var visibleTiles = computeVisibleTiles();
     
     // Flashlight cone — reveal tiles in cone direction
-    if (below.equippedItem === 17) {
+    if (below.equippedItem === "flashlight") {
         var coneDir = below.gameData.player.direction || "down";
         var coneTiles = getConeOffsets(coneDir);
         var conePx = Math.round(below.gameData.player.currentLocation.x);
@@ -538,7 +538,7 @@ function drawMapCanvas() {
     }
     
     // Flashlight cone overlay (gradient beam)
-    if (below.equippedItem === 17) {
+    if (below.equippedItem === "flashlight") {
         var coneDir = below.gameData.player.direction || "down";
         var outline = getConeOutline(coneDir);
         var conePx = Math.round(below.gameData.player.currentLocation.x);

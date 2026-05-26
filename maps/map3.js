@@ -2254,84 +2254,84 @@ var map3Data = {
       "monsters": [],
       "obstacles": [
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 6,
             "y": -5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -5,
             "y": 0
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -8,
             "y": 3
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 2,
             "y": -5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -5,
             "y": 5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -9,
             "y": 8
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 14,
             "y": 10
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -6,
             "y": 8
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 2,
             "y": 1
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -2,
             "y": 1
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -5,
             "y": -3
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 2,
             "y": 3
@@ -2339,91 +2339,91 @@ var map3Data = {
           "lightRadius": 2
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 2,
             "y": 5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -2,
             "y": 5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -3,
             "y": -5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 2,
             "y": 8
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 11,
             "y": 0
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 13,
             "y": 2
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 9,
             "y": 3
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 11,
             "y": 5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 14,
             "y": 8
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 16,
             "y": 3
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -10,
             "y": 0
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -6,
             "y": -6
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 16,
             "y": 0
@@ -2431,56 +2431,56 @@ var map3Data = {
           "lightRadius": 2
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 0,
             "y": 3
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 2,
             "y": 10
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 5,
             "y": 3
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 6,
             "y": 10
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 10,
             "y": -5
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -2,
             "y": 8
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 6,
             "y": 8
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 10,
             "y": 8
@@ -2488,118 +2488,118 @@ var map3Data = {
           "lightRadius": 2
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 12,
             "y": -3
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": -2,
             "y": 10
           }
         },
         {
-          "type": 13,
+          "type": "lamppost",
           "position": {
             "x": 10,
             "y": 10
           }
         },
         {
-          "type": 14,
+          "type": "crate",
           "position": {
             "x": -10,
             "y": -1
           }
         },
         {
-          "type": 14,
+          "type": "crate",
           "position": {
             "x": 15,
             "y": -1
           },
-          "itemType": 8
+          "itemType": "rudder"
         },
         {
-          "type": 14,
+          "type": "crate",
           "position": {
             "x": 6,
             "y": 12
           }
         },
         {
-          "type": 14,
+          "type": "crate",
           "position": {
             "x": 4,
             "y": 7
           }
         },
         {
-          "type": 14,
+          "type": "crate",
           "position": {
             "x": -10,
             "y": 7
           }
         },
         {
-          "type": 14,
+          "type": "crate",
           "position": {
             "x": -8,
             "y": -7
           },
-          "itemType": 10
+          "itemType": "steering_wheel"
         },
         {
-          "type": 15,
+          "type": "barrel",
           "position": {
             "x": -6,
             "y": -8
           }
         },
         {
-          "type": 15,
+          "type": "barrel",
           "position": {
             "x": -4,
             "y": 11
           }
         },
         {
-          "type": 15,
+          "type": "barrel",
           "position": {
             "x": 14,
             "y": -3
           },
-          "itemType": 9
+          "itemType": "mast"
         },
         {
-          "type": 15,
+          "type": "barrel",
           "position": {
             "x": 6,
             "y": -10
           }
         },
         {
-          "type": 15,
+          "type": "barrel",
           "position": {
             "x": 15,
             "y": 7
           }
         },
         {
-          "type": 15,
+          "type": "barrel",
           "position": {
             "x": -3,
             "y": 0
           },
-          "itemType": 11
+          "itemType": "sail"
         }
       ],
       "npcs": [
         {
-          "type": 5,
+          "type": "sam_shale",
           "position": {
             "x": 2,
             "y": 2
@@ -3189,7 +3189,7 @@ var map3Data = {
                   "id": "detective_hair_take",
                   "text": "I found this... snake hair... thing. Medusa's hair, I think.",
                   "available": true,
-                  "requiresItems": [16],
+                  "requiresItems": ["medusa_hair"],
                   "chains": "detective_hair_goodbye"
                 }
               ]
@@ -3197,7 +3197,7 @@ var map3Data = {
           ]
         },
         {
-          "type": 6,
+          "type": "derelict_ship",
           "position": {
             "x": 0,
             "y": 13
@@ -3214,7 +3214,7 @@ var map3Data = {
                   "text": "Attach the rudder",
                   "available": true,
                   "requiresItems": [
-                    8
+                    "rudder"
                   ]
                 },
                 {
@@ -3222,7 +3222,7 @@ var map3Data = {
                   "text": "Attach the mast",
                   "available": true,
                   "requiresItems": [
-                    9
+                    "mast"
                   ]
                 },
                 {
@@ -3230,7 +3230,7 @@ var map3Data = {
                   "text": "Attach the steering wheel",
                   "available": true,
                   "requiresItems": [
-                    10
+                    "steering_wheel"
                   ]
                 },
                 {
@@ -3238,7 +3238,7 @@ var map3Data = {
                   "text": "Attach the sail",
                   "available": true,
                   "requiresItems": [
-                    11
+                    "sail"
                   ]
                 },
                 {

@@ -112,7 +112,7 @@ var belowGameData = {
   },
   "cutScenes": belowCutSceneData.cutScenes,
   "monsterTypes": {
-    "1": {
+    "giant_rat": {
       "name": "Giant rat",
       "fraction": 2,
       "movement": 0.3,
@@ -121,7 +121,7 @@ var belowGameData = {
       "blocking": false,
       "restChance": 0.3
     },
-    "2": {
+    "bat": {
       "name": "Bat",
       "fraction": 1,
       "movement": 0.6,
@@ -130,7 +130,7 @@ var belowGameData = {
       "blocking": false,
       "restChance": 0
     },
-    "3": {
+    "centipede": {
       "name": "Centipede",
       "fraction": 1,
       "movement": 0.1,
@@ -138,7 +138,7 @@ var belowGameData = {
       "blocking": false,
       "restChance": 0.2
     },
-    "4": {
+    "living_shadow": {
       "name": "Living Shadow",
       "movement": 0.4,
       "icon": "shadow.png",
@@ -149,7 +149,7 @@ var belowGameData = {
     }
   },
   "obstacleTypes": {
-    "1": {
+    "rock": {
       "name": "Rock",
       "description": "A rock blocking your way",
       "color": "#433900",
@@ -161,7 +161,7 @@ var belowGameData = {
         3
       ]
     },
-    "2": {
+    "blood": {
       "name": "Blood",
       "description": "Blood",
       "color": "#433900",
@@ -169,7 +169,7 @@ var belowGameData = {
       "blocking": false,
       "choiceEvents": []
     },
-    "3": {
+    "table": {
       "name": "Table",
       "description": "A sturdy wooden table",
       "color": "#433900",
@@ -181,7 +181,7 @@ var belowGameData = {
         3
       ]
     },
-    "4": {
+    "door": {
       "name": "Door",
       "description": "A locked door",
       "color": "#8B4513",
@@ -201,7 +201,7 @@ var belowGameData = {
         3
       ]
     },
-    "5": {
+    "cupboard": {
       "name": "Cupboard",
       "description": "A large wooden cupboard",
       "color": "#433900",
@@ -215,7 +215,7 @@ var belowGameData = {
         3
       ]
     },
-    "6": {
+    "lightbeam": {
       "name": "Lightbeam",
       "description": "A beam of light from above",
       "color": "#FFFF00",
@@ -229,7 +229,7 @@ var belowGameData = {
         3
       ]
     },
-    "7": {
+    "password_door": {
       "name": "Password Door",
       "description": "A door with a strange lock - it seems to require a word",
       "color": "#8B4513",
@@ -248,7 +248,7 @@ var belowGameData = {
         3
       ]
     },
-    "8": {
+    "statue": {
       "name": "Statue",
       "description": "A twisted marble statue of a human figure",
       "color": "#DDDDDD",
@@ -260,7 +260,7 @@ var belowGameData = {
         3
       ]
     },
-    "9": {
+    "pushable_rock": {
       "name": "Pushable Rock",
       "description": "A heavy rock that can be pushed",
       "color": "#433900",
@@ -272,7 +272,7 @@ var belowGameData = {
         3
       ]
     },
-    "10": {
+    "gem": {
       "name": "Gem",
       "description": "A sparkling gem",
       "color": "#70A4B2",
@@ -280,18 +280,18 @@ var belowGameData = {
       "blocking": false,
       "choiceEvents": []
     },
-    "11": {
+    "stone_door": {
       "name": "Stone Door",
       "description": "A heavy stone door carved with ancient symbols",
       "color": "#666666",
       "icon": "stone_door_closed.png",
       "blocking": true,
       "closed": true,
-      "keyId": 7,
+      "keyId": "stone_key",
       "choiceEvents": [7, 3],
       "openChoiceEvents": [8, 3]
     },
-    "12": {
+    "shimmering_wall": {
       "name": "Shimmering Wall",
       "description": "A wall of shimmering energy pulses with a faint blue light",
       "color": "#70A4B2",
@@ -307,7 +307,7 @@ var belowGameData = {
         3
       ]
     },
-    "13": {
+    "lamppost": {
       "name": "Lamppost",
       "description": "A dim street lamp",
       "color": "#FFFF00",
@@ -321,7 +321,7 @@ var belowGameData = {
         3
       ]
     },
-    "14": {
+    "crate": {
       "name": "Crate",
       "description": "A sturdy wooden crate",
       "color": "#8B5E3C",
@@ -333,7 +333,7 @@ var belowGameData = {
         3
       ]
     },
-    "15": {
+    "barrel": {
       "name": "Barrel",
       "description": "A weathered wooden barrel",
       "color": "#6B4226",
@@ -345,7 +345,7 @@ var belowGameData = {
         3
       ]
     },
-    "16": {
+    "bed": {
       "name": "Bed",
       "description": "A rickety old bed",
       "color": "#8B5E3C",
@@ -357,7 +357,7 @@ var belowGameData = {
         3
       ]
     },
-    "17": {
+    "chair": {
       "name": "Chair",
       "description": "A wooden chair",
       "color": "#6B4226",
@@ -369,7 +369,7 @@ var belowGameData = {
         3
       ]
     },
-    "18": {
+    "blue_mushroom": {
       "name": "Blue Mushroom",
       "description": "A cluster of phosphorescent blue mushrooms",
       "color": "#70A4B2",
@@ -379,7 +379,7 @@ var belowGameData = {
       "lightRadius": 2,
       "lightColor": "rgba(112, 164, 178, 0.30)"
     },
-    "19": {
+    "purple_mushroom": {
       "name": "Purple Mushroom",
       "description": "A cluster of glowing purple mushrooms",
       "color": "#6F3D86",
@@ -389,7 +389,7 @@ var belowGameData = {
       "lightRadius": 2,
       "lightColor": "rgba(111, 61, 134, 0.30)"
     },
-    "20": {
+    "yellow_mushroom": {
       "name": "Yellow Mushroom",
       "description": "A cluster of luminous yellow mushrooms",
       "color": "#B8C76F",
@@ -399,7 +399,7 @@ var belowGameData = {
       "lightRadius": 2,
       "lightColor": "rgba(184, 199, 111, 0.30)"
     },
-    "21": {
+    "pink_crystal": {
       "name": "Pink Crystal",
       "description": "A jagged pink crystal formation",
       "color": "#9A6759",
@@ -409,14 +409,14 @@ var belowGameData = {
       "lightRadius": 1,
       "lightColor": "rgba(154, 103, 89, 0.30)"
     },
-    "22": {
+    "floor_item": {
       "name": "Floor Item",
       "description": "An item lying on the ground.",
       "icon": "medusa_hair.png",
       "blocking": false,
       "visionBlocking": false
     },
-    "23": {
+    "shadow_wall": {
       "name": "Shadow Wall",
       "description": "A wall of living shadow",
       "blocking": true,
@@ -424,98 +424,98 @@ var belowGameData = {
     }
   },
   "itemTypes": {
-    "4": {
+    "silver_key": {
       "name": "Silver Key",
       "description": "A silver key",
       "icon": "key1.png",
       "choiceEvents": [],
       "useText": "You fumble with the silver key, but there's nothing here to unlock."
     },
-    "5": {
+    "bronze_key": {
       "name": "Bronze Key",
       "description": "A bronze key",
       "icon": "key2.png",
       "choiceEvents": [],
       "useText": "You turn the bronze key over in your hand, looking for a lock."
     },
-    "6": {
+    "herbs": {
       "name": "Herbs",
       "description": "A bundle of dried cave herbs. Smells awful, dont look very tasty",
       "icon": "herbs.png",
       "choiceEvents": [],
       "useText": "You sniff the herbs. They smell awful. You put them away."
     },
-    "7": {
+    "stone_key": {
       "name": "Stone Key",
       "description": "A heavy key carved from solid rock",
       "icon": "stone_key.png",
       "choiceEvents": [],
       "useText": "The stone key is too heavy to swing effectively."
     },
-    "8": {
+    "rudder": {
       "name": "Rudder",
       "description": "A wooden rudder from a small boat",
       "icon": "rudder.png",
       "choiceEvents": [],
       "useText": "You brandish the rudder like a club, but there's nothing to strike."
     },
-    "9": {
+    "mast": {
       "name": "Mast",
       "description": "A short mast with frayed rope",
       "icon": "mast.png",
       "choiceEvents": [],
       "useText": "The mast is too long and awkward to use as a weapon."
     },
-    "10": {
+    "steering_wheel": {
       "name": "Steering Wheel",
       "description": "A small brass steering wheel",
       "icon": "steering_wheel.png",
       "choiceEvents": [],
       "useText": "You spin the steering wheel. Nothing happens."
     },
-    "11": {
+    "sail": {
       "name": "Sail",
       "description": "A patched canvas sail",
       "icon": "sail.png",
       "choiceEvents": [],
       "useText": "You wave the sail like a flag. No effect."
     },
-    "12": {
+    "antidote": {
       "name": "Antidote",
       "description": "A small vial of bitter-smelling liquid. The Hermit's handwriting on the label reads: 'For internal poisoning. One dose only.'",
       "icon": "antidote.png",
       "choiceEvents": [],
       "useText": "You're not poisoned. Drinking this would be a waste."
     },
-    "13": {
+    "rat_spray": {
       "name": "Rat Spray",
       "description": "A rusty canister marked 'RAT-A-WAY - Guaranteed to clear any rodent infestation'",
       "icon": "rat_spray.png",
       "choiceEvents": [],
       "useText": "You give the canister a quick spray. Nothing but stale air."
     },
-    "14": {
+    "bat_swatter": {
       "name": "Bat Swatter",
       "description": "A sturdy swatter with a reinforced mesh head and a long handle",
       "icon": "bat_swatter.png",
       "choiceEvents": [],
       "useText": "You swing the bat swatter. Nothing to hit here."
     },
-    "15": {
+    "centipede_cleaner": {
       "name": "Centipede Cleaner",
       "description": "A bottle of thick, foul-smelling liquid. 'CRAWL-END - For all your centipede problems'",
       "icon": "centipede_cleaner.png",
       "choiceEvents": [],
       "useText": "You sniff the bottle. Your eyes water. You put it away."
     },
-    "16": {
+    "medusa_hair": {
       "name": "Medusa Hair",
       "description": "A lock of Medusa's hair. The snakes are still writhing...",
       "icon": "medusa_hair.png",
       "choiceEvents": [],
       "useText": "The snakes writhe in your hand. You quickly put them away."
     },
-    "17": {
+    "flashlight": {
       "name": "Flashlight",
       "description": "Casts a focused beam of light when equipped.",
       "icon": "flashlight.png",
@@ -524,7 +524,7 @@ var belowGameData = {
     }
   },
   "npcTypes": {
-    "1": {
+    "hermit": {
       "name": "Hermit",
       "description": "An old man living in solitude",
       "icon": "hermit.png",
@@ -541,7 +541,7 @@ var belowGameData = {
       "agenda": "A lost soul consumed in his own delusions. Trades keys for herbs. The real keys are the herbs.",
       "personality": "grumpy"
     },
-    "2": {
+    "jester": {
       "name": "Jester",
       "description": "A jester",
       "icon": "jester.png",
@@ -558,7 +558,7 @@ var belowGameData = {
       "agenda": "Annoying and rude. Gives misleading clues and conveys half-thruths and outright lies.",
       "personality": "devious"
     },
-    "3": {
+    "medusa": {
       "name": "Medusa",
       "description": "A once-feared gorgon who has renounced petrification",
       "icon": "medusa.png",
@@ -575,7 +575,7 @@ var belowGameData = {
       "personality": "friendly",
       "movement": 0.2
     },
-    "4": {
+    "mole": {
       "name": "Mole",
       "description": "A creature of the tunnels",
       "icon": "mole.png",
@@ -590,7 +590,7 @@ var belowGameData = {
       "agenda": "Lives in the maze. Digs tunnels to find the herbs the hermit hides. The hermit despises him.",
       "personality": "antisocial"
     },
-    "5": {
+    "sam_shale": {
       "name": "Sam Shale",
       "description": "A hard-boiled detective in trenchcoat and fedora",
       "icon": "detective.png",
@@ -605,7 +605,7 @@ var belowGameData = {
       "agenda": "A noir detective in the Depths. Speaks like Philip Marlowe.",
       "personality": "mysterious"
     },
-    "6": {
+    "derelict_ship": {
       "name": "Derelict Ship",
       "description": "A weathered ship anchored at the dock",
       "icon": "ship.png",
@@ -620,7 +620,7 @@ var belowGameData = {
       "agenda": "A derelict ship waiting to be repaired.",
       "personality": "derelict"
     },
-    "7": {
+    "charon": {
       "name": "Charon",
       "description": "An ancient boatman sitting on the dark shore of an underground lake",
       "icon": "charon.png",
@@ -635,7 +635,7 @@ var belowGameData = {
       "agenda": "A very old and forgetful boatman who has no short term memory. Speaks in dactylic hexameter.",
       "personality": "forgetful"
     },
-    "8": {
+    "rotten_sisters": {
       "name": "The Rotten Sisters",
       "description": "Two decaying figures lounging in the fissure",
       "icon": "sisters1.png",

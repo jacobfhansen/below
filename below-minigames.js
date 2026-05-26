@@ -221,7 +221,7 @@ function hideSplash() {
         // On 6th trap, return mole to starting position and unlock post-trap dialog
         if (below.splashCount >= 6) {
             var curMap = below.gameData.player.currentMap;
-            var mole = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === 4; });
+            var mole = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === "mole"; });
             if (mole) {
                 var cycle = below.gameData.player.mazeCycle || 0;
                 var molePositions = [[11, 10], [33, 10], [11, 32]];
@@ -238,7 +238,7 @@ function hideSplash() {
     if (below.pendingRatClear) {
         below.pendingRatClear = false;
         var curMap = below.gameData.player.currentMap;
-        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === 1; });
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === "hermit"; });
         if (hermitNpc) {
             hermitNpc.position.x = -6;
             hermitNpc.position.y = 3;
@@ -258,7 +258,7 @@ function hideSplash() {
         below._shadowCatchHandled = false;
         // Reset all Living Shadows on map 6 to initial positions
         below.gameData.mapData[6].monsters.forEach(function(m) {
-            if (m.type === 4 && m._initX !== undefined) {
+            if (m.type === "living_shadow" && m._initX !== undefined) {
                 m.position.x = m._initX;
                 m.position.y = m._initY;
                 m.chaseState = "idle";
@@ -287,7 +287,7 @@ function dropTrapRocks(rockDrop, playerX, playerY, moleTeleport) {
         }
     });
     if (moleTeleport) {
-        var mole = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === 4; });
+        var mole = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === "mole"; });
         if (mole && foundTile(moleTeleport.x, moleTeleport.y)) {
             mole.position = { x: moleTeleport.x, y: moleTeleport.y };
             mole.destPos = {};

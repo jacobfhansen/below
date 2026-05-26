@@ -126,7 +126,7 @@ below._checkpoints.maze_exit = {
         // Open shimmer walls (herbs given to Mole)
         var map2Obs = below.gameData.mapData[2].obstacles;
         for (var oi = 0; oi < map2Obs.length; oi++) {
-            if (map2Obs[oi].type === 12) {
+            if (map2Obs[oi].type === "shimmering_wall") {
                 map2Obs[oi].closed = false;
                 map2Obs[oi].blocking = false;
                 map2Obs[oi].icon = "shimmer_wall_open.png";
@@ -161,7 +161,7 @@ below._checkpoints.depths_entry = {
         // Open shimmer walls (herbs given to Mole)
         var map2Obs = below.gameData.mapData[2].obstacles;
         for (var oi = 0; oi < map2Obs.length; oi++) {
-            if (map2Obs[oi].type === 12) {
+            if (map2Obs[oi].type === "shimmering_wall") {
                 map2Obs[oi].closed = false;
                 map2Obs[oi].blocking = false;
                 map2Obs[oi].icon = "shimmer_wall_open.png";
@@ -176,7 +176,7 @@ below._checkpoints.depths_entry = {
         // Remove Jester and Medusa from map 1 (happened on first visit to The Depths)
         var map1Npcs = below.gameData.mapData[1].npcs;
         for (var di = map1Npcs.length - 1; di >= 0; di--) {
-            if (map1Npcs[di].type === 2 || map1Npcs[di].type === 3) {
+            if (map1Npcs[di].type === "jester" || map1Npcs[di].type === "medusa") {
                 map1Npcs.splice(di, 1);
             }
         }
@@ -195,7 +195,7 @@ below._checkpoints.sam_done = {
         // Remove Sam from map 3 and move him to office
         var map3Npcs = below.gameData.mapData[3].npcs;
         for (var si = 0; si < map3Npcs.length; si++) {
-            if (map3Npcs[si].type === 5) {
+            if (map3Npcs[si].type === "sam_shale") {
                 map3Npcs[si].position = { x: 0, y: -2 };
                 map3Npcs[si].destPos = {};
                 _cpSetDialog(3, 5, "detective_office", true);
@@ -229,7 +229,7 @@ below._checkpoints.sam_done = {
         });
 
         // Ship ready with all parts attached
-        var shipNpc = map3Npcs.find(function(n) { return n.type === 6; });
+        var shipNpc = map3Npcs.find(function(n) { return n.type === "derelict_ship"; });
         if (shipNpc) {
             shipNpc.shipParts = 4;
             _cpSetDialog(3, 6, "ship_intro", false);
@@ -321,7 +321,7 @@ below._checkpoints.deeper_dark = {
         for (var ji = 0; ji < below.gameData.mapData.length; ji++) {
             var jnpcs = below.gameData.mapData[ji].npcs;
             for (var jni = jnpcs.length - 1; jni >= 0; jni--) {
-                if (jnpcs[jni].type === 2) {
+                if (jnpcs[jni].type === "jester") {
                     jnpcs.splice(jni, 1);
                 }
             }
@@ -342,7 +342,7 @@ below._checkpoints.deeper_dark = {
             }]
         });
         below.gameData.mapData[5].npcs.forEach(function(n) {
-            if (n.type === 8 && n.dialogOptions) {
+            if (n.type === "rotten_sisters" && n.dialogOptions) {
                 for (var di = 0; di < n.dialogOptions.length; di++) {
                     if (n.dialogOptions[di].id === "sisters_jester") {
                         n.dialogOptions[di].available = true;
@@ -361,11 +361,11 @@ below._checkpoints.deeper_depths = {
         below.gameData.player.inventory = [4, 5, 7, 14, 17];
         var map6Obs = below.gameData.mapData[6].obstacles;
         for (var oi = map6Obs.length - 1; oi >= 0; oi--) {
-            if (map6Obs[oi].type === 23 && map6Obs[oi].position.x === 5 && map6Obs[oi].position.y === -12) {
+            if (map6Obs[oi].type === "shadow_wall" && map6Obs[oi].position.x === 5 && map6Obs[oi].position.y === -12) {
                 map6Obs.splice(oi, 1);
             }
         }
-        var sam = below.gameData.mapData[3].npcs.find(function(n) { return n.type === 5; });
+        var sam = below.gameData.mapData[3].npcs.find(function(n) { return n.type === "sam_shale"; });
         if (sam && sam.dialogOptions) {
             var officeD = sam.dialogOptions.find(function(d) { return d.id === "detective_office"; });
             if (officeD && officeD.options) {

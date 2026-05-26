@@ -213,8 +213,8 @@ header button:hover, .btn:hover { background: #45475a; }
 <script src="../maps/map5.js"></script>
 <script src="../maps/map6.js"></script>
 <script src="../maps/map7.js"></script>
-<script src="../cutscenes.js"></script>
-<script src="../gamedata.js"></script>
+<script src="../below-cutscenedata.js"></script>
+<script src="../below-gamedata.js"></script>
 <script>
 var data = null;
 var currentScene = null;
@@ -649,11 +649,11 @@ function exportData() {
     var blob = new Blob([js], { type: "application/javascript" });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "cutscenes.js";
+    a.download = "below-cutscenedata.js";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    showToast("Exported cutscenes.js");
+    showToast("Exported below-cutscenedata.js");
 }
 
 function showToast(msg) {

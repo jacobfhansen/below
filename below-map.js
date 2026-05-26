@@ -198,7 +198,7 @@ function pushObstacle(obstaclePos) {
 function tryAutoPush(x, y, fromX, fromY) {
     var curMap = below.gameData.player.currentMap;
     var rock = (below.gameData.mapData[curMap].obstacles || []).find(function(o) {
-        return o.position && o.position.x === x && o.position.y === y && o.type === 9;
+        return o.position && o.position.x === x && o.position.y === y && o.type === "pushable_rock";
     });
     if (!rock) return false;
     var dirX = x - fromX;
