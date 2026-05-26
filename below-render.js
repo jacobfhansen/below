@@ -65,6 +65,7 @@ function computeVisibleTiles() {
     var px = Math.round(below.gameData.player.currentLocation.x);
     var py = Math.round(below.gameData.player.currentLocation.y);
     var vision = below.gameData.player.vision || 2;
+    var noVisionLimit = below.gameData.mapData[curMap] && below.gameData.mapData[curMap].noVisionLimit;
     var playerVisible = {};
     var lightVisible = {};
     var allVisible = {};
@@ -92,6 +93,8 @@ function computeVisibleTiles() {
             }
         }
     }
+
+    if (noVisionLimit) vision = 999;
 
     bfsFrom(px, py, vision, playerVisible);
 
@@ -192,8 +195,10 @@ function drawMapCanvas() {
     var verticalOffset = below.gameData.player.currentLocation.y * width;
     var horizontalOffset = below.gameData.player.currentLocation.x * width;
     
+    var noVisionLimit = below.gameData.mapData[curMap] && below.gameData.mapData[curMap].noVisionLimit;
     var vision = below.gameData.player.vision || 2;
     var visionPixels = vision * width;
+    if (noVisionLimit) visionPixels = 99999;
     
     // Compute visible tiles using BFS for line-of-sight
     var vis = computeVisibleTiles();
@@ -306,6 +311,31 @@ function drawMapCanvas() {
         var textWidth = context.measureText(coordText).width;
         context.fillText(coordText, canvas.width - textWidth - 10, canvas.height - 10);
     }
+    
+    // MOVING PLATFORMS
+    (below.gameData.mapData[curMap].movingPlatforms || []).forEach(function(platform) {
+        var pw = platform.width || 1;
+        var ph = platform.height || 1;
+        // Check visibility: any tile the platform occupies must be player-visible
+        var visible = false;
+        for (var vpy = 0; vpy < ph && !visible; vpy++) {
+            for (var vpx = 0; vpx < pw && !visible; vpx++) {
+                var vtx = Math.round(platform.position.x) + vpx;
+                var vty = Math.round(platform.position.y) + vpy;
+                var vdX = (vtx * width + verticalCenter - horizontalOffset) - verticalCenter;
+                var vdY = (vty * width + horizontalCenter - verticalOffset) - horizontalCenter;
+                if (Math.sqrt(vdX * vdX + vdY * vdY) <= visionPixels && playerVisible[vtx + "," + vty]) {
+                    visible = true;
+                }
+            }
+        }
+        if (!visible) return;
+        var img = getImage(platform.icon || "stone_raft.png");
+        // Draw at fractional position for smooth movement
+        var drawX = (platform.position.x * width) + verticalCenter - horizontalOffset - (width/2);
+        var drawY = (platform.position.y * width) + horizontalCenter - verticalOffset - (width/2);
+        context.drawImage(img, drawX, drawY, pw * width, ph * width);
+    });
     
     // MONSTERS
     (below.gameData.mapData[curMap].monsters || []).forEach(function(monster) {
@@ -512,11 +542,13 @@ function drawMapCanvas() {
     }
     
     // Radial gradient overlay for vision (fades everything at edge of player's vision)
-    var gradient = context.createRadialGradient(verticalCenter, horizontalCenter, visionPixels * 0.6, verticalCenter, horizontalCenter, visionPixels);
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    if (!noVisionLimit) {
+        var gradient = context.createRadialGradient(verticalCenter, horizontalCenter, visionPixels * 0.6, verticalCenter, horizontalCenter, visionPixels);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 1)');
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+    }
     
     // Lamp glow (drawn on top of darkness so pools of light are visible through the vignette)
     // Only draw glow if the obstacle's tile is visible to the player

@@ -15,7 +15,8 @@ below._checkpointsOrder = [
     "fissure_entry",
     "fissure_games_done",
     "deeper_dark",
-    "deeper_depths"
+    "deeper_depths",
+    "river_of_fire"
 ];
 
 // --- Helper functions for checkpoint mutations ---
@@ -373,6 +374,14 @@ below._checkpoints.deeper_depths = {
                 if (hairOpt) hairOpt.available = false;
             }
         }
+    }
+};
+
+below._checkpoints.river_of_fire = {
+    map: 8, pos: { x: 10, y: 9 },
+    title: "The River of Fire",
+    apply: function() {
+        below.gameData.player.inventory = ["flashlight"];
     }
 };
 

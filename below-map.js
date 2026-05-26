@@ -35,8 +35,20 @@ function isBlocked(x, y) {
         return obstacleOccupies(o, x, y) && isBlocking;
     });
     if (blockedByObstacle) return true;
-    // Check blocking tiles (e.g. water)
-    if (isTileBlocking(x, y)) return true;
+    // Check blocking tiles (e.g. water, lava)
+    if (isTileBlocking(x, y)) {
+        // Override if a moving platform occupies this tile (AABB overlap)
+        var platforms = below.gameData.mapData[curMap].movingPlatforms || [];
+        var onPlatform = platforms.some(function(p) {
+            var pw = p.width || 1;
+            var ph = p.height || 1;
+            var tileCx = x + 0.5;
+            var tileCy = y + 0.5;
+            return tileCx >= p.position.x && tileCx < p.position.x + pw &&
+                   tileCy >= p.position.y && tileCy < p.position.y + ph;
+        });
+        if (!onPlatform) return true;
+    }
     return false;
 }
 
@@ -78,6 +90,12 @@ function getBlockedMessage(x, y) {
     var tile = below.gameData.mapData[curMap].tiles[tileIndex];
     if (tile && tile.searchMsg) {
         return tile.searchMsg;
+    }
+    if (tile && tile.type !== undefined) {
+        var tileTypeDef = below.gameData.tileTypes[tile.type];
+        if (tileTypeDef && tileTypeDef.description) {
+            return tileTypeDef.description;
+        }
     }
     var emptyTileMessages = [
         "You search the ground - nothing but dirt.",

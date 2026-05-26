@@ -285,8 +285,10 @@ function moveOnMap(e) {
     // Don't process movement if choice event is active
     if (below.choiceEvent) return;
     
-    var curY = below.gameData.player.currentLocation.y,
-        curX = below.gameData.player.currentLocation.x,
+    var rawY = below.gameData.player.currentLocation.y,
+        rawX = below.gameData.player.currentLocation.x,
+        curY = Math.round(rawY),
+        curX = Math.round(rawX),
         playerMoved = false;
     
     if (e.keyCode === 69) {
@@ -388,9 +390,26 @@ function moveOnMap(e) {
         }
         if (tryAutoPush(destX, curY, curX, curY) || !isBlocked(destX, curY)) {
             if (!playerMoved) {
-                below.gameData.player.destinationLocation.xVelocity = -1;
-                below.gameData.player.destinationLocation.x = destX;
-                playerMoved = true;
+                var curMap = below.gameData.player.currentMap;
+                var platforms = below.gameData.mapData[curMap].movingPlatforms || [];
+                var plat = platforms.find(function(p) {
+                    var pw = p.width || 1;
+                    var ph = p.height || 1;
+                    return rawX + 0.5 >= p.position.x && rawX + 0.5 < p.position.x + pw &&
+                           rawY + 0.5 >= p.position.y && rawY + 0.5 < p.position.y + ph;
+                });
+                if (plat) {
+                    var newX = destX;
+                    newX = Math.max(newX, plat.position.x);
+                    newX = Math.min(newX, plat.position.x + (plat.width || 1) - 0.001);
+                    below.gameData.player.currentLocation.x = newX;
+                    below.gameData.player.destinationLocation.x = newX;
+                    playerMoved = true;
+                } else {
+                    below.gameData.player.destinationLocation.xVelocity = -1;
+                    below.gameData.player.destinationLocation.x = destX;
+                    playerMoved = true;
+                }
             }
         } else {
             handleBlockedInteraction(destX, curY);
@@ -405,9 +424,26 @@ function moveOnMap(e) {
         }
         if (tryAutoPush(destX, curY, curX, curY) || !isBlocked(destX, curY)) {
             if (!playerMoved) {
-                below.gameData.player.destinationLocation.xVelocity = 1;
-                below.gameData.player.destinationLocation.x = destX;
-                playerMoved = true;
+                var curMap = below.gameData.player.currentMap;
+                var platforms = below.gameData.mapData[curMap].movingPlatforms || [];
+                var plat = platforms.find(function(p) {
+                    var pw = p.width || 1;
+                    var ph = p.height || 1;
+                    return rawX + 0.5 >= p.position.x && rawX + 0.5 < p.position.x + pw &&
+                           rawY + 0.5 >= p.position.y && rawY + 0.5 < p.position.y + ph;
+                });
+                if (plat) {
+                    var newX = destX;
+                    newX = Math.max(newX, plat.position.x);
+                    newX = Math.min(newX, plat.position.x + (plat.width || 1) - 0.001);
+                    below.gameData.player.currentLocation.x = newX;
+                    below.gameData.player.destinationLocation.x = newX;
+                    playerMoved = true;
+                } else {
+                    below.gameData.player.destinationLocation.xVelocity = 1;
+                    below.gameData.player.destinationLocation.x = destX;
+                    playerMoved = true;
+                }
             }
         } else {
             handleBlockedInteraction(destX, curY);
@@ -671,9 +707,17 @@ function mapGameLoop() {
             var exits = below.gameData.mapData[curMap].exits;
             if (exits) {
                 var exit = exits.find(function(e) {
-                    return e.position.x === below.gameData.player.currentLocation.x && e.position.y === below.gameData.player.currentLocation.y;
+                    return e.position.x === Math.round(below.gameData.player.currentLocation.x) && e.position.y === Math.round(below.gameData.player.currentLocation.y);
                 });
                 if (exit && !below.cutScene) {
+                    // Exit with no target map — just show the message
+                    if (exit.targetMap === undefined) {
+                        if (exit.text) {
+                            addMapMessage(exit.text);
+                            maintainMapLog();
+                        }
+                        return;
+                    }
                     var targetX = exit.targetPosition.x;
                     var targetY = exit.targetPosition.y;
                     if (exit.targetMap === 2) {
@@ -957,6 +1001,63 @@ function mapGameLoop() {
             }
         });
     }
+    
+    // Moving platforms — update position every frame regardless of player/monster movement
+    (below.gameData.mapData[curMap].movingPlatforms || []).forEach(function(platform) {
+        if (platform._segmentIndex === undefined) platform._segmentIndex = 0;
+        if (platform._progress === undefined) platform._progress = 0;
+        var path = platform.path;
+        if (!path || path.length < 2) return;
+        var segA = path[platform._segmentIndex];
+        var segB = path[platform._segmentIndex + 1];
+        if (!segA || !segB) return;
+        var segDx = segB.x - segA.x;
+        var segDy = segB.y - segA.y;
+        var segDist = Math.sqrt(segDx * segDx + segDy * segDy);
+        if (segDist === 0) return;
+        var oldX = segA.x + segDx * platform._progress;
+        var oldY = segA.y + segDy * platform._progress;
+        platform._progress += platform.speed / segDist;
+        if (platform._progress >= 1) {
+            platform._progress = 0;
+            if (platform._segmentIndex + 1 >= path.length - 1) {
+                if (platform.loop) {
+                    platform._segmentIndex = 0;
+                } else {
+                    platform._segmentIndex = path.length - 2;
+                    platform._progress = 1;
+                }
+            } else {
+                platform._segmentIndex++;
+            }
+        }
+        segA = path[platform._segmentIndex];
+        segB = path[platform._segmentIndex + 1];
+        if (!segA || !segB) return;
+        var newX = segA.x + (segB.x - segA.x) * platform._progress;
+        var newY = segA.y + (segB.y - segA.y) * platform._progress;
+        var deltaX = newX - oldX;
+        var deltaY = newY - oldY;
+        platform.position.x = newX;
+        platform.position.y = newY;
+        // Check if player rides this platform
+        var ppx = below.gameData.player.currentLocation.x + 0.5;
+        var ppy = below.gameData.player.currentLocation.y + 0.5;
+        var pw = platform.width || 1;
+        var ph = platform.height || 1;
+        if (ppx >= oldX && ppx < oldX + pw && ppy >= oldY && ppy < oldY + ph) {
+            below.gameData.player.currentLocation.x += deltaX;
+            below.gameData.player.currentLocation.y += deltaY;
+            if (!below.gameData.player.destinationLocation.xVelocity &&
+                below.gameData.player.destinationLocation.x !== null && below.gameData.player.destinationLocation.x !== undefined) {
+                below.gameData.player.destinationLocation.x += deltaX;
+            }
+            if (!below.gameData.player.destinationLocation.yVelocity &&
+                below.gameData.player.destinationLocation.y !== null && below.gameData.player.destinationLocation.y !== undefined) {
+                below.gameData.player.destinationLocation.y += deltaY;
+            }
+        }
+    });
     
     // Draw current map every frame for smooth fog/lamp glow animation
     drawMapCanvas();

@@ -95,6 +95,13 @@ var belowGameData = {
       "name": "dark soil",
       "fill": "#6F4F25",
       "border": "#433900"
+    },
+    "18": {
+      "name": "lava",
+      "fill": "#CC3300",
+      "border": "#FF6600",
+      "blocking": true,
+      "description": "The lava is scorching hot. You cannot cross it."
     }
   },
   "player": {
@@ -653,5 +660,5 @@ var belowGameData = {
       "personality": "bored and apathetic"
     }
   },
-  "mapData": [map0Data, map1Data, map2Data, map3Data, map4Data, map5Data, map6Data, map7Data]
+  "mapData": [map0Data, map1Data, map2Data, map3Data, map4Data, map5Data, map6Data, map7Data, map8Data]
 };
