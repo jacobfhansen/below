@@ -878,7 +878,7 @@ function mapGameLoop() {
         });
         // Flashlight melts Shadow Walls
         (below.gameData.mapData[curMap].obstacles || []).forEach(function(obstacle) {
-            if (obstacle.type !== 23) return;
+            if (obstacle.type !== "shadow_wall") return;
             if (obstacle._fadingTimer > 0) {
                 obstacle._fadingTimer--;
                 if (obstacle._fadingTimer <= 0) {

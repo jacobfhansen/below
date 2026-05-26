@@ -103,14 +103,19 @@ python3 -m http.server 8000
 - Arrow keys/WASD for movement, Enter/E for confirm, Escape for close/cancel.
 - Q toggles inventory.
 
-### FOV / Shadow system
+### FOV / Shadow / Lighting system
 - `isVisionBlocked(x, y)` checks only obstacles with `blocking: true` (not NPCs/monsters — creatures don't cast vision shadows)
-- `computeVisibleTiles()` runs BFS from player position (4-direction), max distance = `player.vision` tiles
+- `computeVisibleTiles()` returns `{ playerVisible, lightVisible, allVisible }`:
+  - `playerVisible` — tiles reachable via BFS from player position (4-direction), max distance = `player.vision` tiles. Also includes flashlight cone tiles if `below.equippedItem === "flashlight"`.
+  - `lightVisible` — tiles reachable via BFS from each obstacle with `lightRadius > 0` (from obstacle type or instance override).
+  - `allVisible` — union of `playerVisible` and `lightVisible`.
 - BFS expands through tiles that `foundTile()` exists for; blocking obstacles stop further expansion (player sees the obstacle but not through it)
-- `drawMapCanvas()` pre-fills canvas black, computes visible tiles once, draws only visible tiles + entities
+- `drawMapCanvas()` pre-fills canvas black, computes visibility once, draws only tiles in `playerVisible`
+- **Dimmed lighting**: tiles in `playerVisible` but NOT in `lightVisible` are drawn at 25% brightness via `darkenColor()`. Entities (monsters, NPCs, obstacles, exits) on those tiles get `globalAlpha = 0.35`.
 - Tiles/entities behind blocking obstacles (doors, walls, statues, cupboards) are hidden — shown as solid black
 - Blank areas (no tile data) are solid black via the pre-fill
 - Radial gradient overlay (transparent → black) still provides soft edge at vision radius boundary
+- Lamp glow overlay draws only for light sources whose tile is in `playerVisible`
 - Vision recomputed every frame — opening a door or pushing a rock updates LOS on the next frame
 
 ## Gotchas

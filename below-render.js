@@ -65,15 +65,18 @@ function computeVisibleTiles() {
     var px = Math.round(below.gameData.player.currentLocation.x);
     var py = Math.round(below.gameData.player.currentLocation.y);
     var vision = below.gameData.player.vision || 2;
-    var visible = {};
+    var playerVisible = {};
+    var lightVisible = {};
+    var allVisible = {};
 
-    function bfsFrom(srcX, srcY, srcVision) {
+    function bfsFrom(srcX, srcY, srcVision, resultSet) {
         var queue = [{x: srcX, y: srcY}];
         var visited = {};
         visited[srcX + "," + srcY] = true;
         while (queue.length > 0) {
             var cur = queue.shift();
-            visible[cur.x + "," + cur.y] = true;
+            resultSet[cur.x + "," + cur.y] = true;
+            allVisible[cur.x + "," + cur.y] = true;
             if (isVisionBlocked(cur.x, cur.y)) continue;
             var dist = Math.abs(cur.x - srcX) + Math.abs(cur.y - srcY);
             if (dist >= srcVision) continue;
@@ -90,17 +93,32 @@ function computeVisibleTiles() {
         }
     }
 
-    bfsFrom(px, py, vision);
+    bfsFrom(px, py, vision, playerVisible);
+
+    if (below.equippedItem === "flashlight") {
+        var coneDir = below.gameData.player.direction || "down";
+        var coneTiles = getConeOffsets(coneDir);
+        var conePx = Math.round(below.gameData.player.currentLocation.x);
+        var conePy = Math.round(below.gameData.player.currentLocation.y);
+        coneTiles.forEach(function(ct) {
+            var ctx = conePx + ct[0];
+            var cty = conePy + ct[1];
+            if (foundTile(ctx, cty) && !isVisionBlocked(ctx, cty)) {
+                playerVisible[ctx + "," + cty] = true;
+                allVisible[ctx + "," + cty] = true;
+            }
+        });
+    }
 
     (below.gameData.mapData[curMap].obstacles || []).forEach(function(o) {
         var obsType = below.gameData.obstacleTypes[o.type];
         var lr = o.lightRadius !== undefined ? o.lightRadius : (obsType ? obsType.lightRadius : 0);
         if (lr > 0) {
-            bfsFrom(o.position.x, o.position.y, lr);
+            bfsFrom(o.position.x, o.position.y, lr, lightVisible);
         }
     });
 
-    return visible;
+    return { playerVisible: playerVisible, lightVisible: lightVisible, allVisible: allVisible };
 }
 
 function getConeOffsets(dir) {
@@ -178,22 +196,10 @@ function drawMapCanvas() {
     var visionPixels = vision * width;
     
     // Compute visible tiles using BFS for line-of-sight
-    var visibleTiles = computeVisibleTiles();
-    
-    // Flashlight cone — reveal tiles in cone direction
-    if (below.equippedItem === "flashlight") {
-        var coneDir = below.gameData.player.direction || "down";
-        var coneTiles = getConeOffsets(coneDir);
-        var conePx = Math.round(below.gameData.player.currentLocation.x);
-        var conePy = Math.round(below.gameData.player.currentLocation.y);
-        coneTiles.forEach(function(ct) {
-            var ctx = conePx + ct[0];
-            var cty = conePy + ct[1];
-            if (foundTile(ctx, cty) && !isVisionBlocked(ctx, cty)) {
-                visibleTiles[ctx + "," + cty] = true;
-            }
-        });
-    }
+    var vis = computeVisibleTiles();
+    var playerVisible = vis.playerVisible;
+    var lightVisible = vis.lightVisible;
+    var visibleTiles = vis.allVisible;
     
     // Draw visible tiles only
     var tileCount = 0;
@@ -201,7 +207,7 @@ function drawMapCanvas() {
         if (typeof below.gameData.mapData[curMap].tiles[k] !== 'function') {
             var tile = below.gameData.mapData[curMap].tiles[k];
             var tileKey = tile.x + "," + tile.y;
-            if (visibleTiles[tileKey]) {
+            if (playerVisible[tileKey]) {
                 tileCount++;
                 var x = (tile.x * width) - (width/2) + verticalCenter - horizontalOffset;
                 var y = (tile.y * width) - (width/2) + horizontalCenter - verticalOffset;
@@ -228,7 +234,7 @@ function drawMapCanvas() {
         if (typeof below.gameData.mapData[curMap].tiles[ck] !== 'function') {
             var ctile = below.gameData.mapData[curMap].tiles[ck];
             var ctKey = ctile.x + "," + ctile.y;
-            if (visibleTiles[ctKey]) {
+            if (playerVisible[ctKey]) {
                 var ctx2 = (ctile.x * width) - (width/2) + verticalCenter - horizontalOffset;
                 var cty2 = (ctile.y * width) - (width/2) + horizontalCenter - verticalOffset;
                 var ctType = ctile.type !== undefined && below.gameData.tileTypes ? below.gameData.tileTypes[ctile.type] : null;
@@ -309,7 +315,8 @@ function drawMapCanvas() {
         var distanceM = Math.sqrt(distXM * distXM + distYM * distYM);
         
         // Check vision and line-of-sight
-        if (distanceM <= visionPixels && visibleTiles[Math.round(monster.position.x) + "," + Math.round(monster.position.y)]) {
+        var monsterKey = Math.round(monster.position.x) + "," + Math.round(monster.position.y);
+        if (distanceM <= visionPixels && playerVisible[monsterKey]) {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type) return; // Skip if monster type is undefined
             var iconFile = (monster.chaseState && monster.chaseState !== "idle" && type.chaseIcon) ? type.chaseIcon : type.icon;
@@ -349,10 +356,11 @@ function drawMapCanvas() {
         var distanceN = Math.sqrt(distXN * distXN + distYN * distYN);
         
         // Check vision and line-of-sight
-        if (distanceN <= visionPixels && visibleTiles[Math.round(npc.position.x) + "," + Math.round(npc.position.y)]) {
+        var npcKey = Math.round(npc.position.x) + "," + Math.round(npc.position.y);
+        if (distanceN <= visionPixels && playerVisible[npcKey]) {
             var type = below.gameData.npcTypes[npc.type];
             if (!type) return; // Skip if NPC type is undefined
-                if (type.icon) {
+            if (type.icon) {
                 var iconName = npc.icon || type.icon;
                 var img = getImage(iconName);
                 context.drawImage(img, (npc.position.x * width) + verticalCenter - horizontalOffset - (width/2), (npc.position.y * width) + horizontalCenter - verticalOffset - (width/2), width, width);
@@ -388,8 +396,9 @@ function drawMapCanvas() {
         var distYOT = (oy * width + horizontalCenter - verticalOffset) - horizontalCenter;
         var distanceOT = Math.sqrt(distXOT * distXOT + distYOT * distYOT);
         if (distanceOT > visionPixels) return;
-        if (!visibleTiles[ox + "," + oy]) return;
-            if (type.icon) {
+        var otKey = ox + "," + oy;
+        if (!playerVisible[otKey]) return;
+        if (type.icon) {
             var iconName = obstacle.icon || type.icon;
             var img = null;
             if (iconName.endsWith('_closed.png') || iconName.endsWith('_open.png')) {
@@ -423,7 +432,7 @@ function drawMapCanvas() {
                     var vty = obstacle.position.y + vdy;
                     var vdX = (vtx * width + verticalCenter - horizontalOffset) - verticalCenter;
                     var vdY = (vty * width + horizontalCenter - verticalOffset) - horizontalCenter;
-                    if (Math.sqrt(vdX * vdX + vdY * vdY) <= visionPixels && visibleTiles[vtx + "," + vty]) {
+                    if (Math.sqrt(vdX * vdX + vdY * vdY) <= visionPixels && playerVisible[vtx + "," + vty]) {
                         anyVisible = true;
                     }
                 }
@@ -463,7 +472,7 @@ function drawMapCanvas() {
                     var vty = obstacle.position.y + vdy;
                     var vdX = (vtx * width + verticalCenter - horizontalOffset) - verticalCenter;
                     var vdY = (vty * width + horizontalCenter - verticalOffset) - horizontalCenter;
-                    if (Math.sqrt(vdX * vdX + vdY * vdY) <= visionPixels && visibleTiles[vtx + "," + vty]) {
+                    if (Math.sqrt(vdX * vdX + vdY * vdY) <= visionPixels && playerVisible[vtx + "," + vty]) {
                         anyVisible = true;
                     }
                 }
@@ -488,7 +497,7 @@ function drawMapCanvas() {
             var distXE = (exit.position.x * width + verticalCenter - horizontalOffset) - verticalCenter;
             var distYE = (exit.position.y * width + horizontalCenter - verticalOffset) - horizontalCenter;
             var distanceE = Math.sqrt(distXE * distXE + distYE * distYE);
-            if (distanceE <= visionPixels && visibleTiles[exit.position.x + "," + exit.position.y]) {
+            if (distanceE <= visionPixels && playerVisible[exit.position.x + "," + exit.position.y]) {
                 // Don't draw exit marker if a blocking obstacle is at the same position
                 var blockedByObstacle = (below.gameData.mapData[curMap].obstacles || []).some(function(o) {
                     if (!o.position || o.position.x !== exit.position.x || o.position.y !== exit.position.y) return false;
@@ -510,10 +519,11 @@ function drawMapCanvas() {
     context.fillRect(0, 0, canvas.width, canvas.height);
     
     // Lamp glow (drawn on top of darkness so pools of light are visible through the vignette)
+    // Only draw glow if the obstacle's tile is visible to the player
     (below.gameData.mapData[curMap].obstacles || []).forEach(function(o) {
         var obsType = below.gameData.obstacleTypes[o.type];
         var lr = o.lightRadius !== undefined ? o.lightRadius : (obsType ? obsType.lightRadius : 0);
-        if (lr > 0) {
+        if (lr > 0 && playerVisible[o.position.x + "," + o.position.y]) {
             var lampX = (o.position.x * width) + verticalCenter - horizontalOffset;
             var lampY = (o.position.y * width) + horizontalCenter - verticalOffset;
             if (lampX > -100 && lampX < canvas.width + 100 && lampY > -100 && lampY < canvas.height + 100) {
