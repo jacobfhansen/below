@@ -65,8 +65,8 @@ below._checkpoints.start = {
     title: "Fresh Start",
     apply: function() {
         // Move Hermit to default position
-        _cpSetNpcPos(0, 1, 3, 3);
-        _cpSetDialog(0, 1, "hermitq0", true);
+        _cpSetNpcPos(0, "hermit", 3, 3);
+        _cpSetDialog(0, "hermit", "hermitq0", true);
     }
 };
 
@@ -80,7 +80,7 @@ below._checkpoints.hermit_done = {
         below.pendingRatClear = false;
         below.centipedeCheckTick = 0;
         below.gameData.player.cutScenePlayed.after_map0 = true;
-        below.gameData.player.inventory = [4, 5, 6, 7, 14];
+        below.gameData.player.inventory = ["silver_key", "bronze_key", "herbs", "stone_key", "bat_swatter"];
 
         // Open story doors on map 0
         _cpSetObstacle(0, -2, 2, { closed: false, blocking: false });
@@ -89,8 +89,8 @@ below._checkpoints.hermit_done = {
         _cpSetObstacle(0, -9, -2, { closed: false, blocking: false });
 
         _cpClearMonsters(0);
-        _cpSetNpcPos(0, 1, 3, 3);
-        _cpSetDialog(0, 1, "hermitq0", true);
+        _cpSetNpcPos(0, "hermit", 7, -2);
+        _cpSetDialog(0, "hermit", "hermitq0", true);
     }
 };
 
@@ -100,15 +100,15 @@ below._checkpoints.medusa_met = {
     apply: function() {
         below.jesterMet = true;
         below.gameData.player.cutScenePlayed.after_map0 = true;
-        below.gameData.player.inventory = [4, 5, 6, 7, 14];
+        below.gameData.player.inventory = ["silver_key", "bronze_key", "herbs", "stone_key", "bat_swatter"];
 
         // Open password door on map 1
         _cpSetObstacle(1, 6, 2, { closed: false, blocking: false });
 
         // Move Jester from map 0 to map 1
-        _cpMoveNpc(0, 2, 1, 8, 2);
-        _cpSetDialog(1, 2, "jesterq1", false);
-        _cpSetDialog(1, 2, "jesterq9", true);
+        _cpMoveNpc(0, "jester", 1, 8, 2);
+        _cpSetDialog(1, "jester", "jesterq1", false);
+        _cpSetDialog(1, "jester", "jesterq9", true);
     }
 };
 
@@ -120,7 +120,7 @@ below._checkpoints.maze_exit = {
         below.ratsCleared = true;
         below.centipedesHandled = true;
         below.gameData.player.cutScenePlayed.after_map0 = true;
-        below.gameData.player.inventory = [4, 5, 7, 14];
+        below.gameData.player.inventory = ["silver_key", "bronze_key", "stone_key", "bat_swatter"];
         below.gameData.player.mazeCycle = 0;
 
         // Open shimmer walls (herbs given to Mole)
@@ -134,16 +134,16 @@ below._checkpoints.maze_exit = {
         }
 
         // Mole at default position with healed dialog
-        _cpSetNpcPos(2, 4, 0, 0);
-        _cpSetDialog(2, 4, "mole_sick", false);
-        _cpSetDialog(2, 4, "mole_cured", true);
-        _cpSetDialog(2, 4, "moleq1", false);
+        _cpSetNpcPos(2, "mole", 0, 0);
+        _cpSetDialog(2, "mole", "mole_sick", false);
+        _cpSetDialog(2, "mole", "mole_cured", true);
+        _cpSetDialog(2, "mole", "moleq1", false);
 
         // Map 1: password door open, Jester moved
         _cpSetObstacle(1, 6, 2, { closed: false, blocking: false });
-        _cpMoveNpc(0, 2, 1, 8, 2);
-        _cpSetDialog(1, 2, "jesterq1", false);
-        _cpSetDialog(1, 2, "jesterq9", true);
+        _cpMoveNpc(0, "jester", 1, 8, 2);
+        _cpSetDialog(1, "jester", "jesterq1", false);
+        _cpSetDialog(1, "jester", "jesterq9", true);
     }
 };
 
@@ -155,7 +155,7 @@ below._checkpoints.depths_entry = {
         below.ratsCleared = true;
         below.centipedesHandled = true;
         below.gameData.player.cutScenePlayed.after_map0 = true;
-        below.gameData.player.inventory = [4, 5, 7, 14, 8, 9, 10, 11];
+        below.gameData.player.inventory = ["silver_key", "bronze_key", "stone_key", "bat_swatter", "rudder", "mast", "steering_wheel", "sail"];
         below.gameData.player.mazeCycle = 0;
 
         // Open shimmer walls (herbs given to Mole)
@@ -168,10 +168,10 @@ below._checkpoints.depths_entry = {
             }
         }
         // Mole healed, help option open
-        _cpSetNpcPos(2, 4, 0, 0);
-        _cpSetDialog(2, 4, "mole_sick", false);
-        _cpSetDialog(2, 4, "mole_cured", true);
-        _cpSetDialog(2, 4, "moleq1", false);
+        _cpSetNpcPos(2, "mole", 0, 0);
+        _cpSetDialog(2, "mole", "mole_sick", false);
+        _cpSetDialog(2, "mole", "mole_cured", true);
+        _cpSetDialog(2, "mole", "moleq1", false);
 
         // Remove Jester and Medusa from map 1 (happened on first visit to The Depths)
         var map1Npcs = below.gameData.mapData[1].npcs;
@@ -190,7 +190,7 @@ below._checkpoints.sam_done = {
     apply: function() {
         below._checkpoints.depths_entry.apply();
         below.gameData.player.samQuestComplete = true;
-        below.gameData.player.inventory = [4, 5, 7, 14];
+        below.gameData.player.inventory = ["silver_key", "bronze_key", "stone_key", "bat_swatter"];
 
         // Remove Sam from map 3 and move him to office
         var map3Npcs = below.gameData.mapData[3].npcs;
@@ -198,7 +198,7 @@ below._checkpoints.sam_done = {
             if (map3Npcs[si].type === "sam_shale") {
                 map3Npcs[si].position = { x: 0, y: -2 };
                 map3Npcs[si].destPos = {};
-                _cpSetDialog(3, 5, "detective_office", true);
+                _cpSetDialog(3, "sam_shale", "detective_office", true);
                 // Close all Sam walk dialogs
                 var samDialogs = map3Npcs[si].dialogOptions;
                 for (var di = 0; di < samDialogs.length; di++) {
@@ -212,7 +212,7 @@ below._checkpoints.sam_done = {
 
         // Add Jester-as-Dockmaster to map 3
         map3Npcs.push({
-            type: 2,
+            type: "jester",
             position: { x: 18, y: 9 },
             movement: 0,
             dialogOptions: [{
@@ -232,8 +232,8 @@ below._checkpoints.sam_done = {
         var shipNpc = map3Npcs.find(function(n) { return n.type === "derelict_ship"; });
         if (shipNpc) {
             shipNpc.shipParts = 4;
-            _cpSetDialog(3, 6, "ship_intro", false);
-            _cpSetDialog(3, 6, "ship_ready", true);
+            _cpSetDialog(3, "derelict_ship", "ship_intro", false);
+            _cpSetDialog(3, "derelict_ship", "ship_ready", true);
             var departOpt = shipNpc.dialogOptions.find(function(d) { return d.id === "ship_ready"; });
             if (departOpt && departOpt.options) {
                 var dOpt = departOpt.options.find(function(o) { return o.id === "ship_depart"; });
@@ -250,10 +250,10 @@ below._checkpoints.beach_arrival = {
         below._checkpoints.sam_done.apply();
 
         // Mole healed with help option available
-        _cpSetNpcPos(2, 4, 0, 0);
-        _cpSetDialog(2, 4, "mole_sick", false);
-        _cpSetDialog(2, 4, "mole_cured", true);
-        _cpSetDialog(2, 4, "moleq1", false);
+        _cpSetNpcPos(2, "mole", 0, 0);
+        _cpSetDialog(2, "mole", "mole_sick", false);
+        _cpSetDialog(2, "mole", "mole_cured", true);
+        _cpSetDialog(2, "mole", "moleq1", false);
     }
 };
 
@@ -305,8 +305,8 @@ below._checkpoints.fissure_games_done = {
             for (var di = 0; di < sOpts.length; di++) {
                 sOpts[di].available = false;
             }
-            _cpSetDialog(5, 8, "sisters_congratulations", true);
-            _cpSetDialog(5, 8, "sisters_exit_reveal", true);
+            _cpSetDialog(5, "rotten_sisters", "sisters_congratulations", true);
+            _cpSetDialog(5, "rotten_sisters", "sisters_exit_reveal", true);
         }
     }
 };
@@ -327,7 +327,7 @@ below._checkpoints.deeper_dark = {
             }
         }
         below.gameData.mapData[5].npcs.push({
-            type: 2,
+            type: "jester",
             position: { x: 12, y: 10 },
             movement: 0,
             dialogOptions: [{
@@ -358,7 +358,7 @@ below._checkpoints.deeper_depths = {
     title: "The Deeper Depths",
     apply: function() {
         below._checkpoints.deeper_dark.apply();
-        below.gameData.player.inventory = [4, 5, 7, 14, 17];
+        below.gameData.player.inventory = ["silver_key", "bronze_key", "stone_key", "bat_swatter", "flashlight"];
         var map6Obs = below.gameData.mapData[6].obstacles;
         for (var oi = map6Obs.length - 1; oi >= 0; oi--) {
             if (map6Obs[oi].type === "shadow_wall" && map6Obs[oi].position.x === 5 && map6Obs[oi].position.y === -12) {
