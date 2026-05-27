@@ -603,7 +603,7 @@ function mapGameLoop() {
                         break;
                     }
                 }
-            } else if (type.movement && Math.random() < type.movement) {
+            } else if ((npc.movement !== undefined ? npc.movement : type.movement) && Math.random() < (npc.movement !== undefined ? npc.movement : type.movement)) {
                 var dir = (Math.floor(Math.random() * 4)) + 1;
                 if (dir === 1 && foundTile(npc.position.x, npc.position.y - 1)) {
                     if (npc.position.x === below.gameData.player.currentLocation.x && npc.position.y - 1 === below.gameData.player.currentLocation.y) {

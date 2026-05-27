@@ -55,7 +55,8 @@ var map8Data = {
               "id": "medusa_river_send_0",
               "text": "Show me.",
               "available": true,
-              "chains": ["medusa_river_1"]
+              "opens": ["medusa_river_1"],
+              "closes": ["medusa_river_0"]
             }
           ]
         },
@@ -67,8 +68,9 @@ var map8Data = {
             {
               "id": "medusa_river_send_1",
               "text": "Keep going.",
-              "available": true,
-              "chains": ["medusa_river_2"]
+              "available": true,              
+              "opens": ["medusa_river_2"],
+              "closes": ["medusa_river_1"]
             }
           ]
         },
@@ -81,7 +83,9 @@ var map8Data = {
               "id": "medusa_river_send_2",
               "text": "Continue.",
               "available": true,
-              "chains": ["medusa_river_3"]
+              
+              "opens": ["medusa_river_3"],
+              "closes": ["medusa_river_2"]
             }
           ]
         },
@@ -94,7 +98,9 @@ var map8Data = {
               "id": "medusa_river_send_3",
               "text": "Northward.",
               "available": true,
-              "chains": ["medusa_river_4"]
+              
+              "opens": ["medusa_river_4"],
+              "closes": ["medusa_river_3"]
             }
           ]
         },

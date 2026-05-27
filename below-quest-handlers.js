@@ -687,8 +687,11 @@ var questHandlers = {
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 19 };
-            addMapMessage("Medusa crouches, then launches herself in a magnificent arc over the river of fire. She lands gracefully on the far side, her snakes hissing with excitement.");
-            maintainMapLog();
+            showSplash({
+                image: "medusa_dialog.png",
+                text: "Medusa crouches, her serpent hair writhing. Then she launches herself in a magnificent arc over the river of fire. She lands gracefully on the far side with a shockwave that rattles the stone beneath your feet.\n\nShe turns and grins. 'Still with me?'",
+                shake: true
+            });
         }
     },
 
@@ -697,8 +700,11 @@ var questHandlers = {
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 12 };
-            addMapMessage("Another mighty leap. Medusa soars over the flames and lands with practiced ease.");
-            maintainMapLog();
+            showSplash({
+                image: "medusa_dialog.png",
+                text: "Another mighty leap. Medusa soars over the flames and lands with practiced ease, a spray of embers erupting where she touches down.\n\nShe straightens her dress and looks back at the burning river behind her.",
+                shake: true
+            });
         }
     },
 
@@ -707,8 +713,11 @@ var questHandlers = {
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 6 };
-            addMapMessage("Medusa leaps again, her form silhouetted against the glow of the lava below. She touches down softly.");
-            maintainMapLog();
+            showSplash({
+                image: "medusa_dialog.png",
+                text: "Medusa leaps again, her form silhouetted against the glow of the lava below. She touches down softly, snake-hair writhing with excitement.\n\n'Used to be I'd turn anyone who stared into stone. Now I just enjoy the view.'",
+                shake: true
+            });
         }
     },
 
@@ -717,8 +726,11 @@ var questHandlers = {
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 1 };
-            addMapMessage("One final, breathtaking leap. Medusa clears the last river and lands on the northern shore.");
-            maintainMapLog();
+            showSplash({
+                image: "medusa_dialog.png",
+                text: "One final, breathtaking leap. Medusa clears the last river and lands on the northern shore, a gust of hot air sweeping past her.\n\nShe turns to face you, the glow of the river reflecting in her eyes. 'That never gets old.'",
+                shake: true
+            });
         }
     },
 
