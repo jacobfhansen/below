@@ -702,7 +702,7 @@ var questHandlers = {
             medusa.position = { x: 10, y: 12 };
             showSplash({
                 image: "medusa_dialog.png",
-                text: "She leaps again, silent and furious. The three-lane river roars beneath her as she arcs across the glow.\n\nShe lands hard, fists clenched. The snakes on her head writhe in agitation.",
+                text: "She leaps again, silent and furious. The river of fire roars beneath her as she arcs across the glow.\n\nShe lands hard, fists clenched. The snakes on her head writhe in agitation.",
                 shake: true
             });
         }
@@ -715,7 +715,7 @@ var questHandlers = {
             medusa.position = { x: 10, y: 19 };
             showSplash({
                 image: "medusa_dialog.png",
-                text: "She clears the four-lane river in a single, desperate bound. The lava churns below as she stumbles on the landing, catching herself.\n\nShe stands still for a long moment. Then she sits on a rock and buries her face in her hands.",
+                text: "She clears the next river of fire in a single, desperate bound. The lava churns below as she stumbles on the landing, catching herself.\n\nShe stands still for a long moment. Then she sits on a rock and buries her face in her hands.",
                 shake: true
             });
         }
@@ -728,7 +728,7 @@ var questHandlers = {
             medusa.position = { x: 10, y: 27 };
             showSplash({
                 image: "medusa_dialog.png",
-                text: "One final leap — the widest and hottest of them all. Medusa's form is swallowed by the glow for a heartbeat before she emerges on the southern shore.\n\nShe stands at the edge, arms wrapped around herself, staring into the tunnel beyond. She does not turn around.",
+                text: "One final leap - the widest and hottest of them all. Medusa's form is swallowed by the glow for a heartbeat before she emerges on the southern shore.\n\nShe stands at the edge, arms wrapped around herself, staring into the tunnel beyond. She does not turn around.",
                 shake: true
             });
         }
