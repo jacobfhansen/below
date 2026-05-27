@@ -689,7 +689,7 @@ var questHandlers = {
             medusa.position = { x: 10, y: 6 };
             showSplash({
                 image: "medusa_dialog.png",
-                text: "Medusa crouches, her serpent hair writhing. She launches herself across the narrow river of fire, landing with a shockwave that rattles the stone. The embers dance around her feet.\n\nShe turns and grins. 'Still with me? The next one is wider.'",
+                text: "Medusa crouches, her serpent hair writhing. Without a word she launches herself across the narrow river of fire, landing with a shockwave that rattles the stone beneath your feet.\n\nThe embers settle. She does not look back.",
                 shake: true
             });
         }
@@ -702,7 +702,7 @@ var questHandlers = {
             medusa.position = { x: 10, y: 12 };
             showSplash({
                 image: "medusa_dialog.png",
-                text: "Medusa soars over the three-lane river, her form silhouetted against the inferno below. She lands with practiced ease, a spray of embers erupting where she touches down.\n\nShe straightens her dress. 'Three lanes. Getting warmer.'",
+                text: "She leaps again, silent and furious. The three-lane river roars beneath her as she arcs across the glow.\n\nShe lands hard, fists clenched. The snakes on her head writhe in agitation.",
                 shake: true
             });
         }
@@ -715,7 +715,7 @@ var questHandlers = {
             medusa.position = { x: 10, y: 19 };
             showSplash({
                 image: "medusa_dialog.png",
-                text: "A tremendous leap across four lanes of churning lava. Medusa spins mid-air and touches down softly, snake-hair writhing with excitement.\n\n'Four lanes. Used to be I'd turn anyone who stared into stone. Now I just enjoy the view.'",
+                text: "She clears the four-lane river in a single, desperate bound. The lava churns below as she stumbles on the landing, catching herself.\n\nShe stands still for a long moment. Then she sits on a rock and buries her face in her hands.",
                 shake: true
             });
         }
@@ -728,7 +728,7 @@ var questHandlers = {
             medusa.position = { x: 10, y: 27 };
             showSplash({
                 image: "medusa_dialog.png",
-                text: "One final, breathtaking leap. Medusa clears the five-lane river — the widest and hottest of them all — and lands on the southern shore, a gust of searing air sweeping past her.\n\nShe turns to face you, the glow of the river reflecting in her eyes. 'That never gets old.'",
+                text: "One final leap — the widest and hottest of them all. Medusa's form is swallowed by the glow for a heartbeat before she emerges on the southern shore.\n\nShe stands at the edge, arms wrapped around herself, staring into the tunnel beyond. She does not turn around.",
                 shake: true
             });
         }
