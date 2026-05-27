@@ -43,7 +43,7 @@ var map8Data = {
   "npcs": [
     {
       "type": "medusa",
-      "position": { "x": 10, "y": 27 },
+      "position": { "x": 10, "y": 1 },
       "movement": 0,
       "dialogOptions": [
         {
@@ -96,7 +96,7 @@ var map8Data = {
           "options": [
             {
               "id": "medusa_river_send_3",
-              "text": "Northward.",
+              "text": "Southward.",
               "available": true,
               
               "opens": ["medusa_river_4"],
@@ -173,8 +173,8 @@ var map8Data = {
   ],
   "exits": [
     {
-      "position": { "x": 10, "y": 0 },
-      "text": "You scramble to safety on the far shore. A cold draft blows from a narrow crack ahead. The heat fades behind you."
+      "position": { "x": 10, "y": 28 },
+      "text": "You scramble down into the depths below. The heat of the rivers fades above as the tunnel descends into darkness."
     }
   ]
 };
