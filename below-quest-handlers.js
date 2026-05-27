@@ -681,6 +681,47 @@ var questHandlers = {
         });
     },
 
+    // --- Medusa river leap handlers (map 8) ---
+    "medusa_river_send_0": function() {
+        var map8Npcs = below.gameData.mapData[8].npcs;
+        var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
+        if (medusa) {
+            medusa.position = { x: 10, y: 19 };
+            addMapMessage("Medusa crouches, then launches herself in a magnificent arc over the river of fire. She lands gracefully on the far side, her snakes hissing with excitement.");
+            maintainMapLog();
+        }
+    },
+
+    "medusa_river_send_1": function() {
+        var map8Npcs = below.gameData.mapData[8].npcs;
+        var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
+        if (medusa) {
+            medusa.position = { x: 10, y: 12 };
+            addMapMessage("Another mighty leap. Medusa soars over the flames and lands with practiced ease.");
+            maintainMapLog();
+        }
+    },
+
+    "medusa_river_send_2": function() {
+        var map8Npcs = below.gameData.mapData[8].npcs;
+        var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
+        if (medusa) {
+            medusa.position = { x: 10, y: 6 };
+            addMapMessage("Medusa leaps again, her form silhouetted against the glow of the lava below. She touches down softly.");
+            maintainMapLog();
+        }
+    },
+
+    "medusa_river_send_3": function() {
+        var map8Npcs = below.gameData.mapData[8].npcs;
+        var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
+        if (medusa) {
+            medusa.position = { x: 10, y: 1 };
+            addMapMessage("One final, breathtaking leap. Medusa clears the last river and lands on the northern shore.");
+            maintainMapLog();
+        }
+    },
+
     "sisters_exit_reveal_close": function() {
         var map5 = below.gameData.mapData[5];        
 

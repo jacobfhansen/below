@@ -378,7 +378,7 @@ below._checkpoints.deeper_depths = {
 };
 
 below._checkpoints.river_of_fire = {
-    map: 8, pos: { x: 10, y: 9 },
+    map: 8, pos: { x: 10, y: 27 },
     title: "The River of Fire",
     apply: function() {
         below.gameData.player.inventory = ["flashlight"];
