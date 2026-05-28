@@ -224,6 +224,114 @@ var belowCutSceneData = {
       }
     ]
   },
+  "after_map1": {
+    "cuts": [
+      {
+        "type": "image",
+        "src": "medusa_dialog.png",
+        "x": 15,
+        "y": 15,
+        "width": 250,
+        "fadeIn": 1500,
+        "hold": 4700,
+        "fadeOut": 1500,
+        "driftX": 3,
+        "driftY": -1,
+        "start": 0
+      },
+      {
+        "type": "text",
+        "text": "In the caves beyond the hermit's home, you found Medusa - a gorgon who once turned the curious to stone. But she has renounced that life. She drifts through the dark now, chasing memories of sunlight she can never reach.",
+        "x": 42,
+        "y": 20,
+        "fontSize": 22,
+        "fadeIn": 1500,
+        "hold": 4400,
+        "fadeOut": 1000,
+        "driftX": -2,
+        "driftY": -1,
+        "start": 0
+      },
+      {
+        "type": "text",
+        "text": "Six statues stood frozen in the caves. Each held a piece of a word. You deciphered their silent testimony and unlocked the door that barred your way.",
+        "x": 10,
+        "y": 35,
+        "fontSize": 22,
+        "fadeIn": 1000,
+        "hold": 3000,
+        "fadeOut": 1000,
+        "start": 7000
+      },
+      {
+        "type": "image",
+        "src": "jester_cut.png",
+        "x": 20,
+        "y": 15,
+        "width": 240,
+        "fadeIn": 1500,
+        "hold": 4000,
+        "fadeOut": 1000,
+        "driftX": 4,
+        "driftY": -2,
+        "start": 12000
+      },
+      {
+        "type": "text",
+        "text": "The Jester's work. He and Medusa built the puzzle together - a joke at your expense, or a test you were never meant to pass.",
+        "x": 45,
+        "y": 18,
+        "fontSize": 22,
+        "fadeIn": 1500,
+        "hold": 3000,
+        "fadeOut": 1000,
+        "start": 12200
+      },
+      {
+        "type": "text",
+        "text": "\"Word locks, key locks... six of one, half-dozen of the other. The real fun's ahead.\"",
+        "x": 15,
+        "y": 50,
+        "fontSize": 20,
+        "fontStyle": "italic",
+        "fadeIn": 1500,
+        "hold": 3000,
+        "fadeOut": 1000,
+        "start": 16500
+      },
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 800,
+        "hold": 500,
+        "fadeOut": 200,
+        "start": 21000
+      },
+      {
+        "type": "text",
+        "text": "Beyond the door lies the Maze. A labyrinth of winding tunnels, dug by something that speaks in forgotten tongues...",
+        "x": 15,
+        "y": 30,
+        "fontSize": 22,
+        "fadeIn": 2000,
+        "hold": 3000,
+        "fadeOut": 1000,
+        "start": 22000
+      },
+      {
+        "type": "text",
+        "text": "\"Hark, thou foolish child! Thou should not have ventured here!\"",
+        "x": 20,
+        "y": 58,
+        "fontSize": 20,
+        "fontStyle": "italic",
+        "fadeIn": 2000,
+        "hold": 3000,
+        "fadeOut": 2000,
+        "start": 26000
+      }
+    ]
+  },
   "after_map5": {
     "cuts": [
       {

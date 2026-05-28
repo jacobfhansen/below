@@ -748,6 +748,13 @@ function mapGameLoop() {
                         playCutScene("after_map5", function() {
                             changeMap(exit.targetMap, targetX, targetY, exit.text);
                         });
+                    }
+                    // Trigger "after_map1" cut-scene when leaving map 1 for map 2 the first time
+                    else if (curMap === 1 && exit.targetMap === 2 && !below.gameData.player.cutScenePlayed.after_map1) {
+                        below.gameData.player.cutScenePlayed.after_map1 = true;
+                        playCutScene("after_map1", function() {
+                            changeMap(exit.targetMap, targetX, targetY, exit.text);
+                        });
                     } else {
                         changeMap(exit.targetMap, targetX, targetY, exit.text);
                     }
