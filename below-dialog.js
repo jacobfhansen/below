@@ -826,6 +826,24 @@ function handleBlockedInteraction(x, y) {
         }
     }
     
+    // Password door first bump - unlock Medusa dialog option about the door
+    if (!below.passwordDoorBumped) {
+        var bumpedObstacle = below.gameData.mapData[curMap].obstacles.find(function(o) {
+            return obstacleOccupies(o, x, y);
+        });
+        if (bumpedObstacle && bumpedObstacle.type === "password_door" && curMap === 1) {
+            below.passwordDoorBumped = true;
+            var medusa = below.gameData.mapData[1].npcs.find(function(n) { return n.type === "medusa"; });
+            if (medusa && medusa.dialogOptions) {
+                var hub = medusa.dialogOptions.find(function(d) { return d.id === "medusaq0"; });
+                if (hub && hub.options) {
+                    var pwdOpt = hub.options.find(function(o) { return o.id === "medusaa1pwd"; });
+                    if (pwdOpt) pwdOpt.available = true;
+                }
+            }
+        }
+    }
+    
     // Fall back to old choice events system
     var choiceEvents = getBlockedChoiceEvents(x, y);
     if (choiceEvents) {

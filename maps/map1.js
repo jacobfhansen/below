@@ -785,6 +785,15 @@ var map1Data = {
         "y": 4
       },
       "destPos": {},
+      "allowedTiles": [
+        {"x": -1, "y": -1}, {"x": 0, "y": -1}, {"x": 1, "y": -1}, {"x": 2, "y": -1}, {"x": 3, "y": -1}, {"x": 4, "y": -1}, {"x": 5, "y": -1},
+        {"x": -1, "y": 0}, {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0}, {"x": 3, "y": 0}, {"x": 4, "y": 0}, {"x": 5, "y": 0},
+        {"x": -1, "y": 1}, {"x": 0, "y": 1}, {"x": 1, "y": 1}, {"x": 2, "y": 1}, {"x": 3, "y": 1}, {"x": 4, "y": 1}, {"x": 5, "y": 1},
+        {"x": -1, "y": 2}, {"x": 0, "y": 2}, {"x": 1, "y": 2}, {"x": 2, "y": 2}, {"x": 3, "y": 2}, {"x": 4, "y": 2}, {"x": 5, "y": 2},
+        {"x": -1, "y": 3}, {"x": 0, "y": 3}, {"x": 1, "y": 3}, {"x": 2, "y": 3}, {"x": 3, "y": 3}, {"x": 4, "y": 3}, {"x": 5, "y": 3},
+        {"x": -1, "y": 4}, {"x": 0, "y": 4}, {"x": 1, "y": 4}, {"x": 2, "y": 4}, {"x": 3, "y": 4}, {"x": 4, "y": 4}, {"x": 5, "y": 4},
+        {"x": -1, "y": 5}, {"x": 0, "y": 5}, {"x": 1, "y": 5}, {"x": 2, "y": 5}, {"x": 3, "y": 5}, {"x": 4, "y": 5}, {"x": 5, "y": 5}
+      ],
       "dialogOptions": [
         {
           "id": "medusaq0",
@@ -917,6 +926,20 @@ var map1Data = {
               ],
               "chains": [
                 "medusaj1"
+              ]
+            },
+            {
+              "id": "medusaa1pwd",
+              "text": "I found a strange door - it has a lock that asks for a word, not a key.",
+              "available": false,
+              "opens": [
+                "medusap1"
+              ],
+              "closes": [
+                "medusaq1"
+              ],
+              "chains": [
+                "medusap1"
               ]
             }
           ]
@@ -1252,6 +1275,24 @@ var map1Data = {
               "available": true,
               "closes": [
                 "medusaj1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "medusap1",
+          "available": false,
+          "text": "Oh, the word-locked door! Yes, I know the one. The Jester came up with the idea - he thought it would be amusing to lock something with a word instead of a key. I helped him set it up. Seemed like harmless fun at the time...",
+          "options": [
+            {
+              "id": "medusap1r",
+              "text": "I see...",
+              "available": true,
+              "opens": [
+                "medusaq0"
+              ],
+              "closes": [
+                "medusap1"
               ]
             }
           ]
