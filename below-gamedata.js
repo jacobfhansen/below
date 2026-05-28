@@ -298,6 +298,39 @@ var belowGameData = {
       "choiceEvents": [7, 3],
       "openChoiceEvents": [8, 3]
     },
+    "gold_door": {
+      "name": "Gold Door",
+      "description": "A gleaming door adorned with gold fittings",
+      "color": "#DAA520",
+      "icon": "gold_door_closed.png",
+      "blocking": true,
+      "closed": true,
+      "keyId": "gold_key",
+      "choiceEvents": [7, 3],
+      "openChoiceEvents": [8, 3]
+    },
+    "silver_door": {
+      "name": "Silver Door",
+      "description": "A door inlaid with polished silver",
+      "color": "#C0C0C0",
+      "icon": "silver_door_closed.png",
+      "blocking": true,
+      "closed": true,
+      "keyId": "silver_key",
+      "choiceEvents": [7, 3],
+      "openChoiceEvents": [8, 3]
+    },
+    "bronze_door": {
+      "name": "Bronze Door",
+      "description": "A door reinforced with bronze bands",
+      "color": "#CD7F32",
+      "icon": "bronze_door_closed.png",
+      "blocking": true,
+      "closed": true,
+      "keyId": "bronze_key",
+      "choiceEvents": [7, 3],
+      "openChoiceEvents": [8, 3]
+    },
     "shimmering_wall": {
       "name": "Shimmering Wall",
       "description": "A wall of shimmering energy pulses with a faint blue light",
@@ -444,6 +477,13 @@ var belowGameData = {
       "icon": "key2.png",
       "choiceEvents": [],
       "useText": "You turn the bronze key over in your hand, looking for a lock."
+    },
+    "gold_key": {
+      "name": "Gold Key",
+      "description": "A gleaming golden key",
+      "icon": "gold_key.png",
+      "choiceEvents": [],
+      "useText": "The gold key glimmers in your hand, but there's nothing here to unlock."
     },
     "herbs": {
       "name": "Herbs",

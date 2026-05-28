@@ -387,7 +387,7 @@ below._checkpoints.river_exit = {
 };
 
 below._checkpoints.devil_lair = {
-    map: 8, pos: { x: 5, y: 4 },
+    map: 8, pos: { x: 5, y: 9 },
     title: "The Devil's Lair",
     apply: function() {
         below.gameData.player.inventory = ["flashlight"];

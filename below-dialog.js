@@ -613,7 +613,8 @@ return n.type === "medusa";
                             });
                             if (hasKey && isClosed) {
                                 obstacle.closed = false;
-                                obstacle.icon = "door_open.png";
+                                var iconName = obstacle.icon || obstacleType.icon;
+                                obstacle.icon = iconName.replace('_closed.png', '_open.png');
                                 obstacle.blocking = false;
                                 obstacle.choiceEvents = obstacle.openChoiceEvents || obstacleType.openChoiceEvents;
                                 addMapMessage("You unlocked the door!");
@@ -906,7 +907,8 @@ function submitPassword() {
     if (obstacle && entered === (obstacle.password || "").toLowerCase()) {
         obstacle.closed = false;
         obstacle.blocking = false;
-        obstacle.icon = "door_open.png";
+        var iconName = obstacle.icon || below.gameData.obstacleTypes[obstacle.type].icon;
+        obstacle.icon = iconName.replace('_closed.png', '_open.png');
         var obsType = below.gameData.obstacleTypes[obstacle.type];
         obstacle.choiceEvents = (obsType ? obsType.openChoiceEvents : null) || [8, 3];
         addMapMessage("The door swings open!");
