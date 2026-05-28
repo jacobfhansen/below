@@ -683,7 +683,7 @@ var questHandlers = {
 
     // --- Medusa river leap handlers (map 8) ---
     "medusa_river_send_0": function() {
-        var map8Npcs = below.gameData.mapData[8].npcs;
+        var map8Npcs = below.gameData.mapData[7].npcs;
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 6 };
@@ -696,7 +696,7 @@ var questHandlers = {
     },
 
     "medusa_river_send_1": function() {
-        var map8Npcs = below.gameData.mapData[8].npcs;
+        var map8Npcs = below.gameData.mapData[7].npcs;
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 12 };
@@ -709,7 +709,7 @@ var questHandlers = {
     },
 
     "medusa_river_send_2": function() {
-        var map8Npcs = below.gameData.mapData[8].npcs;
+        var map8Npcs = below.gameData.mapData[7].npcs;
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 19 };
@@ -722,7 +722,7 @@ var questHandlers = {
     },
 
     "medusa_river_send_3": function() {
-        var map8Npcs = below.gameData.mapData[8].npcs;
+        var map8Npcs = below.gameData.mapData[7].npcs;
         var medusa = map8Npcs.find(function(n) { return n.type === "medusa"; });
         if (medusa) {
             medusa.position = { x: 10, y: 27 };

@@ -1114,7 +1114,7 @@ var map6Data = {
       "targetMap": 7,
       "targetPosition": {
         "x": 5,
-        "y": 5
+        "y": 1
       },
       "text": "You descend the stairs into the darkness below..."
     }

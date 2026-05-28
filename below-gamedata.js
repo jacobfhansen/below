@@ -642,6 +642,20 @@ var belowGameData = {
       "agenda": "A very old and forgetful boatman who has no short term memory. Speaks in dactylic hexameter.",
       "personality": "forgetful"
     },
+    "devil": {
+      "name": "The Devil",
+      "description": "A ancient entity waiting in the darkness",
+      "icon": "devil.png",
+      "dialogImg": "devil_dialog.png",
+      "dialog": {
+        "greeting": "The Devil watches you in silence.",
+        "agitated": "The Devil's smile widens."
+      },
+      "choiceEvents": [],
+      "agenda": "Waiting. Always waiting.",
+      "personality": "malevolent",
+      "movement": 0
+    },
     "rotten_sisters": {
       "name": "The Rotten Sisters",
       "description": "Two decaying figures lounging in the fissure",

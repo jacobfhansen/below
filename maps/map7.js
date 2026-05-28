@@ -1,685 +1,188 @@
 var map7Data = {
   "id": 7,
-  "name": "The Deeper Depths",
-  "defaultDescription": "An alien cavern stretches before you. The air shimmers with heat from somewhere below.",
+  "name": "The River of Fire",
+  "defaultDescription": "A river of lava stretches before you. Stone rafts drift across the burning surface.",
+  "noVisionLimit": true,
   "areaDescriptions": [],
-  "tiles": {
-    "x0y0": {
-      "x": 0,
-      "y": 0,
-      "type": 4
-    },
-    "x1y0": {
-      "x": 1,
-      "y": 0,
-      "type": 4
-    },
-    "x2y0": {
-      "x": 2,
-      "y": 0,
-      "type": 4
-    },
-    "x3y0": {
-      "x": 3,
-      "y": 0,
-      "type": 4
-    },
-    "x4y0": {
-      "x": 4,
-      "y": 0,
-      "type": 4
-    },
-    "x5y0": {
-      "x": 5,
-      "y": 0,
-      "type": 4
-    },
-    "x6y0": {
-      "x": 6,
-      "y": 0,
-      "type": 4
-    },
-    "x7y0": {
-      "x": 7,
-      "y": 0,
-      "type": 4
-    },
-    "x8y0": {
-      "x": 8,
-      "y": 0,
-      "type": 4
-    },
-    "x9y0": {
-      "x": 9,
-      "y": 0,
-      "type": 4
-    },
-    "x0y1": {
-      "x": 0,
-      "y": 1,
-      "type": 4
-    },
-    "x1y1": {
-      "x": 1,
-      "y": 1,
-      "type": 4
-    },
-    "x2y1": {
-      "x": 2,
-      "y": 1,
-      "type": 4
-    },
-    "x3y1": {
-      "x": 3,
-      "y": 1,
-      "type": 4
-    },
-    "x4y1": {
-      "x": 4,
-      "y": 1,
-      "type": 4
-    },
-    "x5y1": {
-      "x": 5,
-      "y": 1,
-      "type": 4
-    },
-    "x6y1": {
-      "x": 6,
-      "y": 1,
-      "type": 4
-    },
-    "x7y1": {
-      "x": 7,
-      "y": 1,
-      "type": 4
-    },
-    "x8y1": {
-      "x": 8,
-      "y": 1,
-      "type": 4
-    },
-    "x9y1": {
-      "x": 9,
-      "y": 1,
-      "type": 4
-    },
-    "x0y2": {
-      "x": 0,
-      "y": 2,
-      "type": 4
-    },
-    "x1y2": {
-      "x": 1,
-      "y": 2,
-      "type": 4
-    },
-    "x2y2": {
-      "x": 2,
-      "y": 2,
-      "type": 4
-    },
-    "x3y2": {
-      "x": 3,
-      "y": 2,
-      "type": 4
-    },
-    "x4y2": {
-      "x": 4,
-      "y": 2,
-      "type": 4
-    },
-    "x5y2": {
-      "x": 5,
-      "y": 2,
-      "type": 4
-    },
-    "x6y2": {
-      "x": 6,
-      "y": 2,
-      "type": 4
-    },
-    "x7y2": {
-      "x": 7,
-      "y": 2,
-      "type": 4
-    },
-    "x8y2": {
-      "x": 8,
-      "y": 2,
-      "type": 4
-    },
-    "x9y2": {
-      "x": 9,
-      "y": 2,
-      "type": 4
-    },
-    "x9y4": {
-      "x": 9,
-      "y": 4,
-      "type": 18
-    },
-    "x9y5": {
-      "x": 9,
-      "y": 5,
-      "type": 18
-    },
-    "x8y6": {
-      "x": 8,
-      "y": 6,
-      "type": 18
-    },
-    "x9y6": {
-      "x": 9,
-      "y": 6,
-      "type": 18
-    },
-    "x0y7": {
-      "x": 0,
-      "y": 7,
-      "type": 4
-    },
-    "x1y7": {
-      "x": 1,
-      "y": 7,
-      "type": 4
-    },
-    "x2y7": {
-      "x": 2,
-      "y": 7,
-      "type": 4
-    },
-    "x3y7": {
-      "x": 3,
-      "y": 7,
-      "type": 4
-    },
-    "x4y7": {
-      "x": 4,
-      "y": 7,
-      "type": 4
-    },
-    "x5y7": {
-      "x": 5,
-      "y": 7,
-      "type": 4
-    },
-    "x6y7": {
-      "x": 6,
-      "y": 7,
-      "type": 4
-    },
-    "x7y7": {
-      "x": 7,
-      "y": 7,
-      "type": 4
-    },
-    "x8y7": {
-      "x": 8,
-      "y": 7,
-      "type": 4
-    },
-    "x9y7": {
-      "x": 9,
-      "y": 7,
-      "type": 4
-    },
-    "x0y8": {
-      "x": 0,
-      "y": 8,
-      "type": 4
-    },
-    "x1y8": {
-      "x": 1,
-      "y": 8,
-      "type": 4
-    },
-    "x2y8": {
-      "x": 2,
-      "y": 8,
-      "type": 4
-    },
-    "x3y8": {
-      "x": 3,
-      "y": 8,
-      "type": 4
-    },
-    "x4y8": {
-      "x": 4,
-      "y": 8,
-      "type": 4
-    },
-    "x5y8": {
-      "x": 5,
-      "y": 8,
-      "type": 4
-    },
-    "x6y8": {
-      "x": 6,
-      "y": 8,
-      "type": 4
-    },
-    "x7y8": {
-      "x": 7,
-      "y": 8,
-      "type": 4
-    },
-    "x8y8": {
-      "x": 8,
-      "y": 8,
-      "type": 4
-    },
-    "x9y8": {
-      "x": 9,
-      "y": 8,
-      "type": 4
-    },
-    "x0y9": {
-      "x": 0,
-      "y": 9,
-      "type": 4
-    },
-    "x1y9": {
-      "x": 1,
-      "y": 9,
-      "type": 4
-    },
-    "x2y9": {
-      "x": 2,
-      "y": 9,
-      "type": 4
-    },
-    "x3y9": {
-      "x": 3,
-      "y": 9,
-      "type": 4
-    },
-    "x4y9": {
-      "x": 4,
-      "y": 9,
-      "type": 4
-    },
-    "x5y9": {
-      "x": 5,
-      "y": 9,
-      "type": 4
-    },
-    "x6y9": {
-      "x": 6,
-      "y": 9,
-      "type": 4
-    },
-    "x7y9": {
-      "x": 7,
-      "y": 9,
-      "type": 4
-    },
-    "x8y9": {
-      "x": 8,
-      "y": 9,
-      "type": 4
-    },
-    "x9y9": {
-      "x": 9,
-      "y": 9,
-      "type": 4
-    },
-    "xm1y8": {
-      "x": -1,
-      "y": 8,
-      "type": 4
-    },
-    "xm1y9": {
-      "x": -1,
-      "y": 9,
-      "type": 4
-    },
-    "xm1y7": {
-      "x": -1,
-      "y": 7,
-      "type": 4
-    },
-    "xm1y2": {
-      "x": -1,
-      "y": 2,
-      "type": 4
-    },
-    "xm1y1": {
-      "x": -1,
-      "y": 1,
-      "type": 4
-    },
-    "xm1y0": {
-      "x": -1,
-      "y": 0,
-      "type": 4
-    },
-    "xm1ym1": {
-      "x": -1,
-      "y": -1,
-      "type": 4
-    },
-    "x0ym1": {
-      "x": 0,
-      "y": -1,
-      "type": 4
-    },
-    "x1ym1": {
-      "x": 1,
-      "y": -1,
-      "type": 4
-    },
-    "x2ym1": {
-      "x": 2,
-      "y": -1,
-      "type": 4
-    },
-    "x3ym1": {
-      "x": 3,
-      "y": -1,
-      "type": 4
-    },
-    "x4ym1": {
-      "x": 4,
-      "y": -1,
-      "type": 4
-    },
-    "x5ym1": {
-      "x": 5,
-      "y": -1,
-      "type": 4
-    },
-    "x6ym1": {
-      "x": 6,
-      "y": -1,
-      "type": 4
-    },
-    "x7ym1": {
-      "x": 7,
-      "y": -1,
-      "type": 4
-    },
-    "x8ym1": {
-      "x": 8,
-      "y": -1,
-      "type": 4
-    },
-    "x9ym1": {
-      "x": 9,
-      "y": -1,
-      "type": 4
-    },
-    "x10y9": {
-      "x": 10,
-      "y": 9,
-      "type": 4
-    },
-    "x10y7": {
-      "x": 10,
-      "y": 7,
-      "type": 4
-    },
-    "x10y8": {
-      "x": 10,
-      "y": 8,
-      "type": 4
-    },
-    "x10y6": {
-      "x": 10,
-      "y": 6,
-      "type": 18
-    },
-    "x10y4": {
-      "x": 10,
-      "y": 4,
-      "type": 18
-    },
-    "x10y5": {
-      "x": 10,
-      "y": 5,
-      "type": 18
-    },
-    "x10y2": {
-      "x": 10,
-      "y": 2,
-      "type": 4
-    },
-    "x10y1": {
-      "x": 10,
-      "y": 1,
-      "type": 4
-    },
-    "x10y0": {
-      "x": 10,
-      "y": 0,
-      "type": 4
-    },
-    "x10ym1": {
-      "x": 10,
-      "y": -1,
-      "type": 4
-    },
-    "x6y4": {
-      "x": 6,
-      "y": 4,
-      "type": 18
-    },
-    "x8y4": {
-      "x": 8,
-      "y": 4,
-      "type": 18
-    },
-    "x7y4": {
-      "x": 7,
-      "y": 4,
-      "type": 18
-    },
-    "x8y5": {
-      "x": 8,
-      "y": 5,
-      "type": 18
-    },
-    "x6y5": {
-      "x": 6,
-      "y": 5,
-      "type": 18
-    },
-    "x7y5": {
-      "x": 7,
-      "y": 5,
-      "type": 18
-    },
-    "x7y6": {
-      "x": 7,
-      "y": 6,
-      "type": 18
-    },
-    "x6y6": {
-      "x": 6,
-      "y": 6,
-      "type": 18
-    },
-    "x5y4": {
-      "x": 5,
-      "y": 4,
-      "type": 18
-    },
-    "x5y5": {
-      "x": 5,
-      "y": 5,
-      "type": 18
-    },
-    "x5y6": {
-      "x": 5,
-      "y": 6,
-      "type": 18
-    },
-    "x4y5": {
-      "x": 4,
-      "y": 5,
-      "type": 18
-    },
-    "x4y4": {
-      "x": 4,
-      "y": 4,
-      "type": 18
-    },
-    "x4y6": {
-      "x": 4,
-      "y": 6,
-      "type": 18
-    },
-    "x3y6": {
-      "x": 3,
-      "y": 6,
-      "type": 18
-    },
-    "x3y4": {
-      "x": 3,
-      "y": 4,
-      "type": 18
-    },
-    "x3y5": {
-      "x": 3,
-      "y": 5,
-      "type": 18
-    },
-    "x2y4": {
-      "x": 2,
-      "y": 4,
-      "type": 18
-    },
-    "x2y5": {
-      "x": 2,
-      "y": 5,
-      "type": 18
-    },
-    "x2y6": {
-      "x": 2,
-      "y": 6,
-      "type": 18
-    },
-    "x1y6": {
-      "x": 1,
-      "y": 6,
-      "type": 18
-    },
-    "x1y5": {
-      "x": 1,
-      "y": 5,
-      "type": 18
-    },
-    "x1y4": {
-      "x": 1,
-      "y": 4,
-      "type": 18
-    },
-    "x0y4": {
-      "x": 0,
-      "y": 4,
-      "type": 18
-    },
-    "x0y5": {
-      "x": 0,
-      "y": 5,
-      "type": 18
-    },
-    "x0y6": {
-      "x": 0,
-      "y": 6,
-      "type": 18
-    },
-    "xm1y6": {
-      "x": -1,
-      "y": 6,
-      "type": 18
-    },
-    "xm1y5": {
-      "x": -1,
-      "y": 5,
-      "type": 18
-    },
-    "xm1y4": {
-      "x": -1,
-      "y": 4,
-      "type": 18
-    },
-    "x10y3": {
-      "x": 10,
-      "y": 3,
-      "type": 18
-    },
-    "x8y3": {
-      "x": 8,
-      "y": 3,
-      "type": 18
-    },
-    "x9y3": {
-      "x": 9,
-      "y": 3,
-      "type": 18
-    },
-    "x7y3": {
-      "x": 7,
-      "y": 3,
-      "type": 18
-    },
-    "x6y3": {
-      "x": 6,
-      "y": 3,
-      "type": 18
-    },
-    "x5y3": {
-      "x": 5,
-      "y": 3,
-      "type": 18
-    },
-    "x4y3": {
-      "x": 4,
-      "y": 3,
-      "type": 18
-    },
-    "x3y3": {
-      "x": 3,
-      "y": 3,
-      "type": 18
-    },
-    "x2y3": {
-      "x": 2,
-      "y": 3,
-      "type": 18
-    },
-    "x1y3": {
-      "x": 1,
-      "y": 3,
-      "type": 18
-    },
-    "x0y3": {
-      "x": 0,
-      "y": 3,
-      "type": 18
-    },
-    "xm1y3": {
-      "x": -1,
-      "y": 3,
-      "type": 18
+  "tiles": (function() {
+    var tiles = {};
+    function addTile(x, y, type) {
+      var key = 'x' + (x < 0 ? 'm' : '') + Math.abs(x) + 'y' + (y < 0 ? 'm' : '') + Math.abs(y);
+      tiles[key] = { x: x, y: y, type: type };
     }
-  },
-  "monsters": [],
-  "npcs": [],
+    // Safe zones: 5 zones, 3 tiles each (stone type 4)
+    // Zone 0 (north, stair up to map6): y=0-2
+    // Zone 1: y=5-7
+    // Zone 2: y=11-13
+    // Zone 3: y=18-20
+    // Zone 4 (south, stair down to map8): y=26-28
+    var safeZones = [[0,2],[5,7],[11,13],[18,20],[26,28]];
+    for (var zi = 0; zi < safeZones.length; zi++) {
+      for (var x = 0; x < 20; x++) {
+        for (var y = safeZones[zi][0]; y <= safeZones[zi][1]; y++) {
+          addTile(x, y, 4);
+        }
+      }
+    }
+    // Lava rivers: 4 rivers of varying heights
+    // River 1: y=3-4 (2 lanes)
+    // River 2: y=8-10 (3 lanes)
+    // River 3: y=14-17 (4 lanes)
+    // River 4: y=21-25 (5 lanes)
+    var rivers = [[3,4],[8,10],[14,17],[21,25]];
+    for (var ri = 0; ri < rivers.length; ri++) {
+      for (var x = 0; x < 20; x++) {
+        for (var y = rivers[ri][0]; y <= rivers[ri][1]; y++) {
+          addTile(x, y, 18);
+        }
+      }
+    }
+    return tiles;
+  })(),
   "obstacles": [],
+  "npcs": [
+    {
+      "type": "medusa",
+      "position": { "x": 10, "y": 1 },
+      "movement": 0,
+      "dialogOptions": [
+        {
+          "id": "medusa_river_0",
+          "available": true,
+          "text": "Medusa stands at the edge of a river of fire, arms crossed. She looks you over - then her expression hardens.\n\n'A child. They sent a child to me.' She sighs, pinching the bridge of her nose. 'Everyone down here whispers my name like it's a key to a locked door. \"Medusa knows the way out. Ask Medusa.\"'\n\nShe crouches down to your eye level. Her voice is low, firm.\n\n'I do know the way out. That's the problem. The way out is not the kind of thing you want to hear, and I'm not going to tell you yet. Not because I'm cruel - because once you know, you won't be able to un-know it.'\n\nShe straightens, staring down at the rivers of fire below.\n\n'There's something past these rivers. It's been waiting a long time and it knows you're coming. It wants to... meet you. And I can't stop it. I can only delay you.'\n\nA pause. The fire crackles.\n\n'So here's what I'm offering: watch me cross these rivers. Take your time. Think about whether you really want to go deeper. And maybe - maybe - you'll change your mind before it's too late.'",
+          "options": [
+            {
+              "id": "medusa_river_send_0",
+              "text": "Show me.",
+              "available": true,
+              "opens": ["medusa_river_1"],
+              "closes": ["medusa_river_0"]
+            }
+          ]
+        },
+        {
+          "id": "medusa_river_1",
+          "available": false,
+          "text": "She lands hard, spins around, and jabs a finger at you.\n\n'You followed me. After everything I just told you, you FOLLOWED me.'\n\nHer voice is sharp, cutting. The snakes on her head hiss in agitation.\n\n'I gave you an out. A chance to sit down, think it through, maybe come to your senses. And you threw it away in five minutes.'\n\nShe turns away, fists clenched.\n\n'I'm not a taxi service across the underworld. I'm trying to PROTECT you, you stubborn little-'\n\nShe stops herself. Takes a breath. When she speaks again, it's quieter, but no less stern.\n\n'Go back. Please. While you still can.'",
+          "options": [
+            {
+              "id": "medusa_river_send_1",
+              "text": "Keep going.",
+              "available": true,              
+              "opens": ["medusa_river_2"],
+              "closes": ["medusa_river_1"]
+            }
+          ]
+        },
+        {
+          "id": "medusa_river_2",
+          "available": false,
+          "text": "She doesn't turn around this time. She just stands at the edge of the next river, staring into the glow.\n\n'I was angry. I'm still angry. But I'm also...' She struggles with the word. 'Worried. That's the truth of it.'\n\nShe finally looks at you. The stern mask is cracking.\n\n'You don't understand what's down there. You can't. And I can't explain it without-' She stops. Shakes her head.\n\n'Look. I've seen things in this cave system that would break grown adults. And you're just a kid with a lantern and too much courage for your own good.'\n\nHer voice wavers. 'Please. I'm begging you. Turn around before I have to watch you-'\n\nShe can't finish the sentence.",
+          "options": [
+            {
+              "id": "medusa_river_send_2",
+              "text": "Continue.",
+              "available": true,
+              
+              "opens": ["medusa_river_3"],
+              "closes": ["medusa_river_2"]
+            }
+          ]
+        },
+        {
+          "id": "medusa_river_3",
+          "available": false,
+          "text": "She's waiting for you on the other side, sitting on a rock with her head in her hands. The snakes hang limp and still.\n\n'I haven't begged anyone for anything in a very long time. Used to be I'd just turn them to stone if they annoyed me. Simpler times.'\n\nA hollow laugh.\n\n'I'm begging you now. On my knees if I have to. Whatever's waiting for you past these rivers - it's patient, it's ancient, and it's hungry in ways you can't imagine.'\n\nShe looks up at you, eyes glistening.\n\n'I can't follow you past here. I won't. Because I don't want to see what happens next.'\n\nShe wipes her face roughly with the back of her hand.\n\n'So this is it. This is where I make my stand. Please. Stay. Or go back. Just don't go forward.'",
+          "options": [
+            {
+              "id": "medusa_river_send_3",
+              "text": "Southward.",
+              "available": true,
+              
+              "opens": ["medusa_river_4"],
+              "closes": ["medusa_river_3"]
+            }
+          ]
+        },
+        {
+          "id": "medusa_river_4",
+          "available": false,
+          "text": "She's standing at the southern edge, arms wrapped around herself, watching the tunnel that descends into darkness beyond.\n\n'I tried. I really tried.'\n\nHer voice is flat. Exhausted.\n\n'You're determined. Stubborn. Honest. You'd have made a terrible gorgon.' A sad smile. 'You'd have let everyone go.'\n\nShe turns to face you fully.\n\n'I'm not going to stop you anymore. I can't. You've made your choice, and I've said my piece, and neither of us is going to change the other's mind.'\n\nShe reaches out and straightens your collar - a strangely maternal gesture.\n\n'But listen. When you get to the other side of whatever's waiting - if you get there - remember that somebody down here tried to warn you because they cared. Not because they wanted something. Not because they were paid. Because they cared.'\n\nShe steps back.\n\n'I'll be here. If you come back this way. I'll be here.'",
+          "options": [
+            {
+              "id": "medusa_river_done",
+              "text": "Thank you.",
+              "available": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "monsters": [],
+  "movingPlatforms": [
+    // --- River 1 (y=3-4, 2 lanes) ---
+    // Lane y=3
+    { "position": { "x": -4, "y": 3 }, "path": [{ "x": -4, "y": 3 }, { "x": 24, "y": 3 }], "speed": 0.05, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 3 }, "path": [{ "x": -4, "y": 3 }, { "x": 24, "y": 3 }], "speed": 0.05, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0.5 },
+    // Lane y=4
+    { "position": { "x": -4, "y": 4 }, "path": [{ "x": -4, "y": 4 }, { "x": 24, "y": 4 }], "speed": 0.07, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 4 }, "path": [{ "x": -4, "y": 4 }, { "x": 24, "y": 4 }], "speed": 0.07, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+
+    // --- River 2 (y=8-10, 3 lanes) ---
+    // Lane y=8
+    { "position": { "x": -4, "y": 8 }, "path": [{ "x": -4, "y": 8 }, { "x": 24, "y": 8 }], "speed": 0.04, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 8 }, "path": [{ "x": -4, "y": 8 }, { "x": 24, "y": 8 }], "speed": 0.04, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0.5 },
+    // Lane y=9
+    { "position": { "x": -4, "y": 9 }, "path": [{ "x": -4, "y": 9 }, { "x": 24, "y": 9 }], "speed": 0.06, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 9 }, "path": [{ "x": -4, "y": 9 }, { "x": 24, "y": 9 }], "speed": 0.06, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+    // Lane y=10
+    { "position": { "x": -4, "y": 10 }, "path": [{ "x": -4, "y": 10 }, { "x": 24, "y": 10 }], "speed": 0.08, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 10 }, "path": [{ "x": -4, "y": 10 }, { "x": 24, "y": 10 }], "speed": 0.08, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+
+    // --- River 3 (y=14-17, 4 lanes) ---
+    // Lane y=14
+    { "position": { "x": -4, "y": 14 }, "path": [{ "x": -4, "y": 14 }, { "x": 24, "y": 14 }], "speed": 0.045, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 14 }, "path": [{ "x": -4, "y": 14 }, { "x": 24, "y": 14 }], "speed": 0.045, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0.5 },
+    // Lane y=15
+    { "position": { "x": -4, "y": 15 }, "path": [{ "x": -4, "y": 15 }, { "x": 24, "y": 15 }], "speed": 0.065, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 15 }, "path": [{ "x": -4, "y": 15 }, { "x": 24, "y": 15 }], "speed": 0.065, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+    // Lane y=16
+    { "position": { "x": -4, "y": 16 }, "path": [{ "x": -4, "y": 16 }, { "x": 24, "y": 16 }], "speed": 0.055, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 16 }, "path": [{ "x": -4, "y": 16 }, { "x": 24, "y": 16 }], "speed": 0.055, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+    // Lane y=17
+    { "position": { "x": -4, "y": 17 }, "path": [{ "x": -4, "y": 17 }, { "x": 24, "y": 17 }], "speed": 0.075, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 17 }, "path": [{ "x": -4, "y": 17 }, { "x": 24, "y": 17 }], "speed": 0.075, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+
+    // --- River 4 (y=21-25, 5 lanes) ---
+    // Lane y=21
+    { "position": { "x": -4, "y": 21 }, "path": [{ "x": -4, "y": 21 }, { "x": 24, "y": 21 }], "speed": 0.05, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 21 }, "path": [{ "x": -4, "y": 21 }, { "x": 24, "y": 21 }], "speed": 0.05, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0.5 },
+    // Lane y=22
+    { "position": { "x": -4, "y": 22 }, "path": [{ "x": -4, "y": 22 }, { "x": 24, "y": 22 }], "speed": 0.08, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 22 }, "path": [{ "x": -4, "y": 22 }, { "x": 24, "y": 22 }], "speed": 0.08, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+    // Lane y=23
+    { "position": { "x": -4, "y": 23 }, "path": [{ "x": -4, "y": 23 }, { "x": 24, "y": 23 }], "speed": 0.04, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 23 }, "path": [{ "x": -4, "y": 23 }, { "x": 24, "y": 23 }], "speed": 0.04, "loop": true, "icon": "stone_raft.png", "width": 3, "height": 1, "_progress": 0.5 },
+    // Lane y=24
+    { "position": { "x": -4, "y": 24 }, "path": [{ "x": -4, "y": 24 }, { "x": 24, "y": 24 }], "speed": 0.07, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 24 }, "path": [{ "x": -4, "y": 24 }, { "x": 24, "y": 24 }], "speed": 0.07, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 },
+    // Lane y=25
+    { "position": { "x": -4, "y": 25 }, "path": [{ "x": -4, "y": 25 }, { "x": 24, "y": 25 }], "speed": 0.06, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0 },
+    { "position": { "x": -4, "y": 25 }, "path": [{ "x": -4, "y": 25 }, { "x": 24, "y": 25 }], "speed": 0.06, "loop": true, "icon": "stone_raft.png", "width": 2, "height": 1, "_progress": 0.5 }
+  ],
   "exits": [
     {
-      "position": {
-        "x": 5,
-        "y": 9
-      },
+      "position": { "x": 10, "y": 0 },
       "targetMap": 6,
-      "targetPosition": {
-        "x": 5,
-        "y": -13
-      },
-      "text": "You climb back up the stairs."
+      "targetPosition": { "x": 5, "y": -13 },
+      "text": "You climb back up the stairs into the darkness above."
+    },
+    {
+      "position": { "x": 10, "y": 28 },
+      "targetMap": 8,
+      "targetPosition": { "x": 5, "y": 0 },
+      "text": "You descend the stairs into a dark chamber below."
     }
   ]
 };

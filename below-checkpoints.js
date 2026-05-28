@@ -16,7 +16,8 @@ below._checkpointsOrder = [
     "fissure_games_done",
     "deeper_dark",
     "deeper_depths",
-    "river_of_fire"
+    "river_exit",
+    "devil_lair"
 ];
 
 // --- Helper functions for checkpoint mutations ---
@@ -355,7 +356,7 @@ below._checkpoints.deeper_dark = {
 };
 
 below._checkpoints.deeper_depths = {
-    map: 7, pos: { x: 5, y: 5 },
+    map: 7, pos: { x: 5, y: 1 },
     title: "The Deeper Depths",
     apply: function() {
         below._checkpoints.deeper_dark.apply();
@@ -377,9 +378,17 @@ below._checkpoints.deeper_depths = {
     }
 };
 
-below._checkpoints.river_of_fire = {
-    map: 8, pos: { x: 10, y: 1 },
-    title: "The River of Fire",
+below._checkpoints.river_exit = {
+    map: 7, pos: { x: 10, y: 28 },
+    title: "The River's End",
+    apply: function() {
+        below.gameData.player.inventory = ["flashlight"];
+    }
+};
+
+below._checkpoints.devil_lair = {
+    map: 8, pos: { x: 5, y: 4 },
+    title: "The Devil's Lair",
     apply: function() {
         below.gameData.player.inventory = ["flashlight"];
     }
