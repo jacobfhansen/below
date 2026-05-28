@@ -332,6 +332,97 @@ var belowCutSceneData = {
       }
     ]
   },
+  "after_map2": {
+    "cuts": [
+      {
+        "type": "image",
+        "src": "mole_dialog.png",
+        "x": 20,
+        "y": 15,
+        "width": 250,
+        "fadeIn": 1500,
+        "hold": 4000,
+        "fadeOut": 1500,
+        "driftX": 3,
+        "driftY": -1,
+        "start": 0
+      },
+      {
+        "type": "text",
+        "text": "The Maze was a gauntlet of winding tunnels and hidden traps. The Mole watched from the shadows, testing you with every misstep — speaking in tongues long forgotten.",
+        "x": 45,
+        "y": 20,
+        "fontSize": 22,
+        "fadeIn": 1500,
+        "hold": 3500,
+        "fadeOut": 1000,
+        "driftX": -2,
+        "driftY": -1,
+        "start": 0
+      },
+      {
+        "type": "text",
+        "text": "In the end, even he recognized your resolve. He revealed the shimmering walls, the stone doors, and the passage they guard — stairs leading deeper than even he dares go.",
+        "x": 15,
+        "y": 35,
+        "fontSize": 22,
+        "fadeIn": 1000,
+        "hold": 3500,
+        "fadeOut": 1000,
+        "start": 7000
+      },
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 1000,
+        "hold": 500,
+        "fadeOut": 500,
+        "start": 12000
+      },
+      {
+        "type": "text",
+        "text": "You descend the ancient stairs. The air changes — grows still, grows old. The sound of dripping water echoes from somewhere far below...",
+        "x": 20,
+        "y": 30,
+        "fontSize": 22,
+        "fadeIn": 2000,
+        "hold": 3000,
+        "fadeOut": 1000,
+        "start": 14000
+      },
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 800,
+        "hold": 500,
+        "fadeOut": 200,
+        "start": 18500
+      },
+      {
+        "type": "text",
+        "text": "Below lies the Depths. A strange city carved from the rock itself — dark alleys, dim lampposts, and the faint wail of a saxophone drifting through the underground air.",
+        "x": 15,
+        "y": 20,
+        "fontSize": 22,
+        "fadeIn": 2000,
+        "hold": 3500,
+        "fadeOut": 1000,
+        "start": 19500
+      },
+      {
+        "type": "text",
+        "text": "Someone is waiting.",
+        "x": 40,
+        "y": 50,
+        "fontSize": 22,
+        "fontStyle": "italic",
+        "fadeIn": 1500,
+        "hold": 2000,
+        "fadeOut": 1500,
+        "start": 24500
+      }
+    ]
+  },
   "after_map5": {
     "cuts": [
       {
