@@ -374,7 +374,7 @@ var map8Data = {
       "targetMap": 7,
       "targetPosition": {
         "x": 10,
-        "y": 28
+        "y": 27
       },
       "text": "You climb back up the stairs. The heat of the rivers returns."
     }
