@@ -113,8 +113,6 @@ function endCutScene() {
     if (overlay) overlay.remove();
     var gd = document.getElementById("gameDiv");
     if (gd) {
-        var clone = gd.cloneNode(true);
-        clone.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;display:flex;";
-        gd.parentNode.replaceChild(clone, gd);
+        gd.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;display:flex;";
     }
 }

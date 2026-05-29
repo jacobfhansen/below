@@ -184,41 +184,7 @@ var map2Data = {
       "x": 7,
       "y": 6,
       "text": "A sparkling gem draws you closer...",
-      "splash": {
-        "image": "mole_dialog.png",
-        "text": "Hark, thou foolish child! Thou hast wandered into mine own domain! Bwa ha ha! Now shalt thou know the meaning of true despair!",
-        "shake": true,
-        "rockDrop": [
-          {
-            "dx": 0,
-            "dy": -1
-          },
-          {
-            "dx": 1,
-            "dy": 0
-          },
-          {
-            "dx": 0,
-            "dy": 1
-          },
-          {
-            "dx": -1,
-            "dy": 0
-          },
-          {
-            "dx": -1,
-            "dy": -1
-          },
-          {
-            "dx": 1,
-            "dy": 1
-          }
-        ],
-        "moleTeleport": {
-          "x": 17,
-          "y": 7
-        }
-      }
+      "splashHandler": "mole_gem_trap"
     },
     "x8y6": {
       "x": 8,

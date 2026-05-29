@@ -198,15 +198,22 @@ function showSplash(splash) {
         y: below.gameData.player.currentLocation.y
     };
     below.splashData = splash;
-    document.getElementById("splashImage").src = "images/" + splash.image;
-    document.getElementById("splashText").textContent = splash.text;
+    var imgEl = document.getElementById("splashImage");
+    var txtEl = document.getElementById("splashText");
+    var ovEl = document.getElementById("splashOverlay");
+    if (imgEl) imgEl.src = "images/" + splash.image;
+    if (txtEl) txtEl.textContent = splash.text;
     var el = document.getElementById("splashContent");
-    el.classList.remove("splash-shake");
-    if (splash.shake) {
-        void el.offsetWidth;
-        el.classList.add("splash-shake");
+    if (el) {
+        el.classList.remove("splash-shake");
+        if (splash.shake) {
+            void el.offsetWidth;
+            el.classList.add("splash-shake");
+        }
     }
-    document.getElementById("splashOverlay").style.display = "flex";
+    if (ovEl) {
+        ovEl.style.display = "flex";
+    }
 }
 
 function hideSplash() {
@@ -281,7 +288,7 @@ function dropTrapRocks(rockDrop, playerX, playerY, moleTeleport) {
         var ry = playerY + offset.dy;
         if (foundTile(rx, ry)) {
             below.gameData.mapData[curMap].obstacles.push({
-                type: 9,
+                type: "pushable_rock",
                 position: { x: rx, y: ry }
             });
         }

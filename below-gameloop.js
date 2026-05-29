@@ -274,9 +274,14 @@ function changeMap(mapId, entryX, entryY, text) {
   updateAreaDescription();
   // Check tile splash on map entry
   var splashTile = foundTile(entryX, entryY);
-  if (splashTile && splashTile.splash && !splashTile.splashSeen) {
-      splashTile.splashSeen = true;
-      showSplash(splashTile.splash);
+  if (splashTile) {
+      if (splashTile.splashHandler && !splashTile.splashSeen) {
+          splashTile.splashSeen = true;
+          var handler = questHandlers[splashTile.splashHandler];
+          if (handler) handler();
+      } else if (splashTile.splash) {
+          showSplash(splashTile.splash);
+      }
   }
   drawMapCanvas();
 }
@@ -675,9 +680,14 @@ function mapGameLoop() {
                 updateAreaDescription();
                 // Check tile splash on arrival
                 var splashTile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
-                if (splashTile && splashTile.splash && !splashTile.splashSeen) {
-                    splashTile.splashSeen = true;
-                    showSplash(splashTile.splash);
+                if (splashTile) {
+                    if (splashTile.splashHandler && !splashTile.splashSeen) {
+                        splashTile.splashSeen = true;
+                        var handler = questHandlers[splashTile.splashHandler];
+                        if (handler) handler();
+                    } else if (splashTile.splash) {
+                        showSplash(splashTile.splash);
+                    }
                 }
                 saveCurrentGame();
             }
@@ -695,9 +705,14 @@ function mapGameLoop() {
                 updateAreaDescription();
                 // Check tile splash on arrival
                 var splashTile = foundTile(below.gameData.player.currentLocation.x, below.gameData.player.currentLocation.y);
-                if (splashTile && splashTile.splash && !splashTile.splashSeen) {
-                    splashTile.splashSeen = true;
-                    showSplash(splashTile.splash);
+                if (splashTile) {
+                    if (splashTile.splashHandler && !splashTile.splashSeen) {
+                        splashTile.splashSeen = true;
+                        var handler = questHandlers[splashTile.splashHandler];
+                        if (handler) handler();
+                    } else if (splashTile.splash) {
+                        showSplash(splashTile.splash);
+                    }
                 }
                 saveCurrentGame();
             }

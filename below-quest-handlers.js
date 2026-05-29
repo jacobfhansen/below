@@ -263,6 +263,24 @@ var questHandlers = {
         setTimeout(function() { showInventory([12]); }, 50);
     },
 
+    // --- Mole gem trap (map2) ---
+    "mole_gem_trap": function() {
+        showSplash({
+            image: "mole_dialog.png",
+            text: "Hark, thou foolish child! Thou hast wandered into mine own domain! Bwa ha ha! Now shalt thou know the meaning of true despair!",
+            shake: true,
+            rockDrop: [
+                {dx: 0, dy: -1},
+                {dx: 1, dy: 0},
+                {dx: 0, dy: 1},
+                {dx: -1, dy: 0},
+                {dx: -1, dy: -1},
+                {dx: 1, dy: 1}
+            ],
+            moleTeleport: {x: 17, y: 7}
+        });
+    },
+
     // --- Mole ---
     "molea1q": function() {
         var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === "medusa"; });
@@ -286,7 +304,7 @@ var questHandlers = {
     "mole_post_a3_give": function() {
         var herbIdx = -1;
         for (var hi = 0; hi < below.gameData.player.inventory.length; hi++) {
-            if (below.gameData.player.inventory[hi] === 6) {
+            if (below.gameData.player.inventory[hi] === "herbs") {
                 herbIdx = hi;
                 break;
             }
