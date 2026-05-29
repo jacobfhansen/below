@@ -1355,10 +1355,10 @@ var map4Data = {
             },
             {
               "id": "charon_intro_exit",
-              "text": "How do I get off this beach?",
+              "text": "Can you ferry me out of here?",
               "available": true,
               "chains": [
-                "charon_exit"
+                "charon_no_ferry"
               ]
             },
             {
@@ -1389,6 +1389,21 @@ var map4Data = {
               "available": true,
               "closes": [
                 "charon_self"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "charon_no_ferry",
+          "available": false,
+          "text": "A hollow laugh escapes his weathered lips.\n'The coin? Have you brought the coin, wanderer,\nThe one they place upon the eyes of the departed\nTo pay the ferryman for his labor?\nI see no gold between your fingers,\nNo obol for the ancient toll.\nAnd more than that - you breathe.\nMy boat carries those who have left the world above,\nNot those who still draw breath and dream of sunlight.\nI am no taxi to the surface, no guide to the upper world.\nI ferry souls. And you, my friend, are still alive.'",
+          "options": [
+            {
+              "id": "charon_no_ferry_ask",
+              "text": "Is there then any other way of this beach?",
+              "available": true,
+              "chains": [
+                "charon_exit"
               ]
             }
           ]

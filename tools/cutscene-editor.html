@@ -152,7 +152,7 @@ header button:hover, .btn:hover { background: #45475a; }
     position: absolute; height: 14px; top: 2px; border-radius: 3px;
     min-width: 2px; overflow: hidden; font-size: 9px; line-height: 14px;
     padding-left: 4px; white-space: nowrap; text-overflow: ellipsis;
-    cursor: pointer;
+    cursor: ew-resize;
 }
 .gantt-bar.type-image { background: #cba6f7; color: #1e1e2e; }
 .gantt-bar.type-text { background: #89b4fa; color: #1e1e2e; }
@@ -420,7 +420,36 @@ function renderGantt(container) {
             bar.appendChild(foDiv);
         }
 
-        bar.onclick = function(i) { return function() { selectCut(i); }; }(b.idx);
+        bar.onmousedown = function(i, _barW) { return function(ev) {
+            var cut = cuts[i];
+            var startX = ev.clientX;
+            var initStart = cut.start || 0;
+            var snapPxPerMs = pxPerMs;
+            var dragged = false;
+            var moved = false;
+
+            function onMove(e) {
+                var dx = e.clientX - startX;
+                if (!moved && Math.abs(dx) > 3) moved = true;
+                var newMs = initStart + dx / snapPxPerMs;
+                cut.start = Math.max(0, Math.round(newMs));
+                var left = Math.max(0, cut.start) * snapPxPerMs;
+                bar.style.left = left + "px";
+                dragged = true;
+                e.preventDefault();
+            }
+            function onUp(e) {
+                document.removeEventListener("mousemove", onMove);
+                document.removeEventListener("mouseup", onUp);
+                if (!moved) { selectCut(i); return; }
+                renderGantt(document.getElementById("ganttContainer"));
+                if (selectedCut === i) selectCut(i);
+                e.preventDefault();
+            }
+            document.addEventListener("mousemove", onMove);
+            document.addEventListener("mouseup", onUp);
+            ev.preventDefault();
+        }; }(b.idx, barW);
         track.appendChild(bar);
         row.appendChild(track);
         table.appendChild(row);

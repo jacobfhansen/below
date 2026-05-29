@@ -2604,7 +2604,7 @@ var map3Data = {
             "x": 2,
             "y": 2
           },
-          "movement": 0.15,
+          "movement": 0,
           "dialogOptions": [
             {
               "id": "detective_hair_goodbye",
@@ -2669,7 +2669,7 @@ var map3Data = {
             {
               "id": "detective_jester",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "A cackling laugh echoes from the shadows. The Jester steps forward, twirling his bauble. 'The great Sam Shale! Still chasing dames through the underworld! He's been looking for Medusa since before these tunnels were dug. Won't ever find her, but it's fun to watch!' He winks and vanishes back into the darkness.",
               "options": [
                 {
@@ -2781,7 +2781,7 @@ var map3Data = {
             {
               "id": "detective_precinct_sgt",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "'(Jester attempting a gruff cop voice) Shale! You're still alive. That's either good police work or bad luck.' The Sergeant shuffles a stack of papers noisily. 'What do you want?'",
               "options": [
                 {
@@ -2797,7 +2797,7 @@ var map3Data = {
             {
               "id": "detective_precinct_info",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "'Let me check my... uh... report file.' More shuffling. 'Yeah, I got something. A guy was brought in - vagrant - kept rambling about the snake woman. Said she was heading west. Through the maintenance tunnels.'",
               "options": [
                 {
@@ -2828,7 +2828,7 @@ var map3Data = {
             {
               "id": "detective_precinct_sgt_final",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "'That's what I'm here for. Serving. Protecting. Filing.'",
               "options": [
                 {
@@ -2891,7 +2891,7 @@ var map3Data = {
             {
               "id": "detective_abe_char",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "From behind a mountain of mismatched lamps, a voice replies in a bad Yiddish-coded accent, clearly the Jester having fun: 'Sammy Shale! Long time no pawn! You here to sell or to stare at my magnificent collection of stuff?' Abe emerges, grinning too wide. 'I got information. I got misinformation. I got stuff that looks like information but is actually just a potato. You gotta be specific.'",
               "options": [
                 {
@@ -2907,7 +2907,7 @@ var map3Data = {
             {
               "id": "detective_abe_medusa",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "'Medusa! The name I know, the face I don't. Very mysterious. Very dangerous. Very overrated, if you ask me.' Abe leans on the counter conspiratorially. 'She came through. Bought a compass. Old-fashioned one. Paid with a gold coin that was definitely not minted anywhere official. Asked about the Rooftop. Specifically. Said she needed to see the stars.' He laughs. 'Don't ask me why - there ain't no stars down here.'",
               "options": [
                 {
@@ -2970,7 +2970,7 @@ var map3Data = {
             {
               "id": "detective_rooftop_mouse",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "A figure emerges from behind a crate, hunched and twitchy, doing a squeaky voice. 'Shale! Man, you're late! I been standing here for like... a really long time! I got a life, you know!' He glances around nervously. 'The snake woman. I saw her. Three nights ago. She was heading toward the diner - The Last Stop. Met with somebody there. Couldn't see who. But when she left... she was crying.' He shivers. 'Weird, right? What's a dame with snakes for hair got to cry about? I'm out. Don't find me again.' He scurries off.",
               "options": [
                 {
@@ -3013,7 +3013,7 @@ var map3Data = {
             {
               "id": "detective_diner_flo",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "A figure in a stained apron appears, wiping the counter with a rag that's seen better days. 'Sam Shale. If it ain't my favorite customer who never orders anything. Coffee's fresh. By which I mean it was made sometime this week.' She leans in. 'You're here about her, ain't you? The snake-eyed dame. Came in three nights ago. Looked like she hadn't slept in a week. Ordered pie. Didn't eat it. Just pushed it around with her fork. Talked to some fella in a long coat. Private booth.' She pulls a photograph from her apron. 'Left this behind.'",
               "options": [
                 {
@@ -3056,7 +3056,7 @@ var map3Data = {
             {
               "id": "detective_jazz_piano",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "Inside, a figure in a beret plays a upright piano without ever looking up. He speaks in a rambling stream, never missing a note. 'Sam Shale. Heard you was asking around about the Gorgon. She came through. Told me something funny. Said she was looking for a way out. Not the tunnels, not the surface. A way out of something inside her head. Then she ordered a drink. Paid for it. Didn't drink it. Just left. Looked at me when she left. Like she was saying goodbye to everybody, man. To the whole scene.' He finally glances up. 'She had that look. The look of someone who's about to do something they can't take back. Dig?'",
               "options": [
                 {
@@ -3099,7 +3099,7 @@ var map3Data = {
             {
               "id": "detective_dockmaster_char",
               "available": false,
-              "speaker": 2,
+              "speaker": "jester",
               "text": "The Dock Master swings his boots off the desk and reaches into a drawer. 'She talked about nothing but you for about twenty minutes. Said if anyone came looking, it'd be you. Knew you'd follow. Knew you'd never give up.' He slides a folded letter across the desk. 'Gave me this. Said to give it to the detective with the tired eyes.'",
               "options": [
                 {
