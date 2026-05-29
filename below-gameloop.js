@@ -57,6 +57,10 @@ function checkKey(e) {
     }
     // Map div
     else if (document.getElementById("gameDiv").style.display !== 'none') {
+        if (below.cutScene) {
+            if (e.keyCode === 27) endCutScene();
+            return;
+        }
         if (below.splashActive) {
             if (e.keyCode === 13 || e.keyCode === 32 || e.keyCode === 27) {
                 hideSplash();
@@ -500,7 +504,7 @@ function mapGameLoop() {
     below.tick = window.requestAnimationFrame(mapGameLoop);
     var curMap = below.gameData.player.currentMap;
     // Don't process any movement if choice event or splash is active
-    if (below.choiceEvent || below.splashActive) return;
+    if (below.choiceEvent || below.splashActive || below.cutScene) return;
     
     // Update fog particles (drift left to right, screen-space independent of player)
     if (below.fogParticles && (curMap === 3 || curMap === 5)) {

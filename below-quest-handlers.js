@@ -281,6 +281,71 @@ var questHandlers = {
         });
     },
 
+    "mole_gem_2": function() {
+        showSplash({
+            image: "mole_dialog.png",
+            text: "Didst thou truly believe fortune would favour thee twice?\nThese walls of stone shall be thy cage!",
+            shake: true,
+            rockDrop: [
+                {dx: 0, dy: -1}, {dx: 1, dy: 0}, {dx: 0, dy: 1},
+                {dx: -1, dy: 0}, {dx: -1, dy: -1}, {dx: 1, dy: 1}
+            ],
+            moleTeleport: {x: 10, y: 16}
+        });
+    },
+
+    "mole_gem_3": function() {
+        showSplash({
+            image: "mole_dialog.png",
+            text: "Thou art caught in my snare once more!\nThe stones shall hold thee fast, thou meddling imp!",
+            shake: true,
+            rockDrop: [
+                {dx: 0, dy: -1}, {dx: 1, dy: 0}, {dx: 0, dy: 1},
+                {dx: -1, dy: 0}, {dx: -1, dy: -1}, {dx: 1, dy: 1}
+            ],
+            moleTeleport: {x: 32, y: 18}
+        });
+    },
+
+    "mole_gem_4": function() {
+        showSplash({
+            image: "mole_dialog.png",
+            text: "Forsooth, thou art persistent!\nBut grit alone shall not free thee from this prison!",
+            shake: true,
+            rockDrop: [
+                {dx: 0, dy: -1}, {dx: 1, dy: 0}, {dx: 0, dy: 1},
+                {dx: -1, dy: 0}, {dx: -1, dy: -1}, {dx: 1, dy: 1}
+            ],
+            moleTeleport: {x: 27, y: 5}
+        });
+    },
+
+    "mole_gem_5": function() {
+        showSplash({
+            image: "mole_dialog.png",
+            text: "Five times now thou dost trespass!\nMy tunnels grow weary of thy meddlesome feet!",
+            shake: true,
+            rockDrop: [
+                {dx: 0, dy: -1}, {dx: 1, dy: 0}, {dx: 0, dy: 1},
+                {dx: -1, dy: 0}, {dx: -1, dy: -1}, {dx: 1, dy: 1}
+            ],
+            moleTeleport: {x: 21, y: 27}
+        });
+    },
+
+    "mole_gem_6": function() {
+        showSplash({
+            image: "mole_dialog.png",
+            text: "One final snare awaits, child!\nLet us see if thou canst outwit the Mole himself!",
+            shake: true,
+            rockDrop: [
+                {dx: 0, dy: -1}, {dx: 1, dy: 0}, {dx: 0, dy: 1},
+                {dx: -1, dy: 0}, {dx: -1, dy: -1}, {dx: 1, dy: 1}
+            ],
+            moleTeleport: {x: 18, y: 28}
+        });
+    },
+
     // --- Mole ---
     "molea1q": function() {
         var medusaNpc = below.gameData.mapData[1].npcs.find(function(n) { return n.type === "medusa"; });

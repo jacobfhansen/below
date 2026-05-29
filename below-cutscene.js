@@ -28,7 +28,7 @@ function playCutScene(sceneId, callback) {
     var ce = document.getElementById("cutsceneOverlay");
     ce.style.display = "flex";
     ce.style.opacity = "1";
-    ce.style.zIndex = "5000";
+    ce.style.zIndex = "100000";
     ce.style.pointerEvents = "auto";
     cutSceneLoop();
 }
