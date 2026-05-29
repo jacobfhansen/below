@@ -1,6 +1,7 @@
 var map4Data = {
   "id": 4,
   "name": "The Beach",
+  "music": "song0",
   "defaultDescription": "A vast underground lake stretches before you. The water is still and black, but there is a sandy shore here - the Beach.",
   "tiles": {
     "x0y0": {

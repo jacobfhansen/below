@@ -1,6 +1,7 @@
 var map1Data = {
   "id": 1,
   "name": "The Caves",
+  "music": "song0",
   "defaultDescription": "A dark dusty place",
   "tiles": {
     "x0y2": {

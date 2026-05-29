@@ -1,6 +1,7 @@
 var map2Data = {
   "id": 2,
   "name": "The Maze",
+  "music": "song0",
   "defaultDescription": "A dark and damp place",
   "tiles": {
     "x8y3": {

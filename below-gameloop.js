@@ -74,6 +74,12 @@ function checkKey(e) {
             if (e.keyCode === 27 || e.keyCode === 81) {
                 closeInventory();
             }
+        } else if (e.keyCode === 77) {
+            if (typeof belowMusic !== 'undefined') {
+                var muted = belowMusic.toggleMute();
+                addMapMessage(muted ? "Music: OFF" : "Music: ON");
+                maintainMapLog();
+            }
         } else {
             moveOnMap(e);
         }
@@ -288,6 +294,14 @@ function changeMap(mapId, entryX, entryY, text) {
       }
   }
   drawMapCanvas();
+  // Switch music when entering a map with a different song
+  if (typeof belowMusic !== 'undefined') {
+      var mapData = below.gameData.mapData[mapId];
+      var song = mapData && mapData.music;
+      if (song) {
+          belowMusic.start(song);
+      }
+  }
 }
 
 function moveOnMap(e) {
@@ -1102,6 +1116,13 @@ function startGame() {
         if(visible) {
             drawMapCanvas();
             mapGameLoop();
+            if (typeof belowMusic !== 'undefined') {
+                belowMusic.start();
+            }
+        } else {
+            if (typeof belowMusic !== 'undefined') {
+                belowMusic.stop();
+            }
         }
     });
 }
