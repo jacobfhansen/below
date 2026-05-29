@@ -1117,7 +1117,10 @@ function startGame() {
             drawMapCanvas();
             mapGameLoop();
             if (typeof belowMusic !== 'undefined') {
-                belowMusic.start();
+                var curMap = below.gameData.player.currentMap;
+                var mapData = below.gameData.mapData[curMap];
+                var song = mapData && mapData.music;
+                belowMusic.start(song || "song0");
             }
         } else {
             if (typeof belowMusic !== 'undefined') {

@@ -88,16 +88,24 @@ var belowMusic = (function() {
                     var ev = events[localStep];
                     if (ev) {
                         osc.frequency.setValueAtTime(ev.freq, t);
-                        var attack = 0.005;
-                        var release = ev.legato ? stepDuration * 0.98 : stepDuration * 0.8;
-                        gain.gain.cancelScheduledValues(t);
-                        if (ev.freq > 0) {
-                            gain.gain.setValueAtTime(0, t);
-                            gain.gain.linearRampToValueAtTime(vol, t + attack);
-                            gain.gain.setValueAtTime(vol, t + release - 0.01);
-                            gain.gain.linearRampToValueAtTime(0, t + release);
-                        } else {
-                            gain.gain.setValueAtTime(0, t);
+                        var prevEv = localStep > 0 ? events[localStep - 1] : null;
+                        var isLegatoContinuation = ev.legato && ev.freq > 0 && prevEv && prevEv.freq === ev.freq;
+                        if (!isLegatoContinuation) {
+                            var attack = 0.005;
+                            gain.gain.cancelScheduledValues(t);
+                            if (ev.freq > 0) {
+                                gain.gain.setValueAtTime(0, t);
+                                gain.gain.linearRampToValueAtTime(vol, t + attack);
+                                if (ev.legato) {
+                                    gain.gain.setValueAtTime(vol, t + stepDuration + 0.01);
+                                } else {
+                                    var release = stepDuration * 0.8;
+                                    gain.gain.setValueAtTime(vol, t + release - 0.01);
+                                    gain.gain.linearRampToValueAtTime(0, t + release);
+                                }
+                            } else {
+                                gain.gain.setValueAtTime(0, t);
+                            }
                         }
                     }
                     t += stepDuration;

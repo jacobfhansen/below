@@ -1,7 +1,7 @@
 var map0Data = {
   "id": 0,
   "name": "Start",
-  "music": "song0",
+  "music": "song2",
   "exits": [
     {
       "position": {

@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Music Editor</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #1e1e2e; color: #cdd6f4; height: 100vh;
+    display: flex; flex-direction: column;
+}
+header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px; background: #181825;
+    border-bottom: 1px solid #313244; flex-shrink: 0; flex-wrap: wrap;
+}
+header h1 { font-size: 16px; font-weight: 600; color: #cba6f7; margin-right: auto; }
+header .sep { width: 1px; height: 24px; background: #313244; }
+header label { font-size: 12px; color: #a6adc8; }
+header input[type="number"] {
+    width: 60px; padding: 4px 6px; border: 1px solid #45475a; border-radius: 4px;
+    background: #313244; color: #cdd6f4; font-size: 13px;
+}
+header button {
+    padding: 5px 12px; border: 1px solid #45475a; border-radius: 6px;
+    background: #313244; color: #cdd6f4; cursor: pointer; font-size: 12px;
+}
+header button:hover { background: #45475a; }
+.btn-primary { background: #cba6f7; color: #1e1e2e; border-color: #cba6f7; font-weight: 600; }
+.btn-primary:hover { background: #b4befe !important; }
+.btn-play { background: #2a6a3a; border-color: #3a9a4a; color: #9ad284; }
+.btn-play:hover { background: #3a9a4a !important; }
+.btn-stop { background: #6a2a2a; border-color: #9a3a3a; color: #f38ba8; }
+.btn-stop:hover { background: #9a3a3a !important; }
+.btn-danger { border-color: #f38ba8; color: #f38ba8; }
+.btn-danger:hover { background: #f38ba8; color: #1e1e2e; }
+#main { display: flex; flex: 1; overflow: hidden; }
+.panel { display: flex; flex-direction: column; border-right: 1px solid #313244; overflow: hidden; }
+.panel:last-child { border-right: none; }
+.panel h2 {
+    font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 8px 12px; background: #181825; color: #a6adc8;
+    border-bottom: 1px solid #313244; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.scroll { flex: 1; overflow-y: auto; padding: 4px 0; }
+#song-panel { flex: 0 0 200px; }
+#voice-panel { flex: 1; display: flex; flex-direction: column; }
+#note-panel { flex: 0 0 260px; }
+
+.song-item {
+    padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+    border-left: 3px solid transparent; font-size: 13px;
+}
+.song-item:hover { background: #313244; }
+.song-item.active { background: #313244; border-left-color: #cba6f7; }
+.song-item .label { font-weight: 500; }
+.song-item .total { margin-left: auto; color: #a6adc8; font-size: 11px; }
+
+.voice-tabs {
+    display: flex; gap: 0; background: #11111b; border-bottom: 1px solid #313244; flex-shrink: 0;
+}
+.voice-tab {
+    padding: 6px 14px; cursor: pointer; font-size: 12px; color: #a6adc8;
+    border-bottom: 2px solid transparent;
+}
+.voice-tab:hover { background: #313244; }
+.voice-tab.active { color: #cdd6f4; border-bottom-color: #cba6f7; }
+
+.voice-controls {
+    display: flex; align-items: center; gap: 12px;
+    padding: 6px 12px; background: #181825; border-bottom: 1px solid #313244; flex-shrink: 0;
+    font-size: 12px;
+}
+.voice-controls label { color: #a6adc8; }
+.voice-controls select, .voice-controls input[type="range"] {
+    padding: 2px 4px; border: 1px solid #45475a; border-radius: 4px;
+    background: #313244; color: #cdd6f4; font-size: 12px;
+}
+.voice-controls .vol-val { color: #cba6f7; font-weight: 600; min-width: 30px; text-align: right; }
+
+.note-grid-wrap { flex: 1; overflow: auto; }
+.note-grid {
+    width: 100%; border-collapse: collapse; font-size: 12px;
+}
+.note-grid { table-layout: fixed; }
+.note-grid th {
+    position: sticky; top: 0; background: #11111b; padding: 6px 8px;
+    text-align: left; font-weight: 600; color: #a6adc8;
+    border-bottom: 1px solid #313244; z-index: 1;
+}
+.note-grid td { padding: 3px 6px; border-bottom: 1px solid #222; vertical-align: middle; }
+.note-grid tr:hover { background: #262637; }
+.note-grid tr.rest td { opacity: 0.5; }
+.note-grid select, .note-grid input[type="number"] {
+    padding: 2px 4px; border: 1px solid #45475a; border-radius: 3px;
+    background: #313244; color: #cdd6f4; font-size: 12px; width: 100%;
+}
+.note-grid input[type="number"] { width: 50px; }
+.note-grid .note-sel { width: 55px; }
+.note-grid .oct-sel { width: 55px; }
+.note-grid .row-num { color: #585b70; font-size: 11px; text-align: right; width: 30px; }
+.note-grid input[type="checkbox"] { 
+    width: 16px; height: 16px; cursor: pointer; accent-color: #cba6f7;
+    margin: 2px auto; display: block;
+}
+.note-grid .btn-sm {
+    padding: 2px 6px; border: 1px solid #45475a; border-radius: 3px;
+    background: #313244; color: #cdd6f4; cursor: pointer; font-size: 11px;
+}
+.note-grid .btn-sm:hover { background: #45475a; }
+.note-grid .btn-move { color: #a6adc8; }
+.note-grid .btn-del { color: #f38ba8; border-color: #f38ba8; }
+.note-grid .btn-del:hover { background: #f38ba8; color: #1e1e2e; }
+.note-grid .btn-add {
+    padding: 4px 12px; border: 1px dashed #45475a; border-radius: 4px;
+    background: transparent; color: #a6adc8; cursor: pointer; font-size: 12px; margin: 6px;
+}
+.note-grid .btn-add:hover { border-color: #cba6f7; color: #cba6f7; }
+
+#export-box {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center;
+}
+#export-box.show { display: flex; }
+#export-inner {
+    background: #1e1e2e; border: 1px solid #313244; border-radius: 8px;
+    padding: 16px; width: 80%; max-width: 900px; max-height: 80vh;
+    display: flex; flex-direction: column;
+}
+#export-inner h3 { margin-bottom: 8px; color: #cba6f7; }
+#export-inner textarea {
+    flex: 1; min-height: 300px; padding: 10px; border: 1px solid #45475a; border-radius: 4px;
+    background: #11111b; color: #cdd6f4; font-family: "Courier New", monospace; font-size: 12px;
+    resize: vertical;
+}
+#export-inner .bar { display: flex; gap: 8px; margin-top: 8px; justify-content: flex-end; }
+.bar span.info { color: #a6adc8; font-size: 12px; margin-right: auto; }
+
+.note-props { padding: 10px; font-size: 12px; }
+.note-props .row { margin-bottom: 8px; }
+.note-props label { display: block; color: #a6adc8; margin-bottom: 3px; }
+.note-props .val { color: #cdd6f4; font-family: monospace; }
+</style>
+</head>
+<body>
+<header>
+    <h1>Music Editor</h1>
+    <label>Tempo: <input type="number" id="tempoInp" min="30" max="300" value="100"></label>
+    <span class="sep"></span>
+    <button id="playBtn" class="btn-play">Play</button>
+    <button id="stopBtn" class="btn-stop">Stop</button>
+    <span class="sep"></span>
+    <button id="exportBtn" class="btn-primary">Export</button>
+</header>
+<div id="main">
+    <div id="song-panel" class="panel">
+        <h2>Songs</h2>
+        <div class="scroll" id="songList"></div>
+        <div style="padding:8px;border-top:1px solid #313244;flex-shrink:0;">
+            <button id="addSongBtn" class="btn-primary" style="width:100%;">+ Add Song</button>
+        </div>
+    </div>
+    <div id="voice-panel" class="panel">
+        <div class="voice-tabs" id="voiceTabs"></div>
+        <div class="voice-controls" id="voiceControls">
+            <label>Waveform: <select id="waveformSel">
+                <option value="square">square</option>
+                <option value="triangle">triangle</option>
+                <option value="sawtooth">sawtooth</option>
+            </select></label>
+            <label>Volume: <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.20"></label>
+            <span class="vol-val" id="volDisplay">0.20</span>
+            <label style="margin-left:auto;color:#585b70;" id="stepTotal">0 steps</label>
+        </div>
+        <div class="note-grid-wrap" id="noteGridWrap">
+            <table class="note-grid">
+                <thead><tr>
+                    <th style="width:30px;">#</th><th style="width:65px;">Note</th><th style="width:50px;">Oct</th><th style="width:50px;">Dur</th><th style="width:60px;">Legato</th><th style="width:50px;">Move</th><th style="width:30px;"></th>
+                </tr></thead>
+                <tbody id="noteBody"></tbody>
+            </table>
+        </div>
+        <canvas id="ganttCanvas" style="display:block;width:100%;height:150px;background:#11111b;border-top:1px solid #313244;cursor:crosshair;flex-shrink:0;"></canvas>
+        <div style="padding:4px 8px;border-top:1px solid #313244;flex-shrink:0;">
+            <button id="addNoteBtn" class="btn-add">+ Add Note</button>
+            <button id="addVoiceBtn" style="margin-left:6px;" class="btn-add">+ Add Voice</button>
+        </div>
+    </div>
+    <div id="note-panel" class="panel">
+        <h2>Note Properties</h2>
+        <div class="note-props">
+            <div class="row"><label>Row</label><span class="val" id="propRow">—</span></div>
+            <div class="row"><label>Note</label><span class="val" id="propNote">—</span></div>
+            <div class="row"><label>Octave</label><span class="val" id="propOctave">—</span></div>
+            <div class="row"><label>Duration</label><span class="val" id="propDur">—</span></div>
+            <div class="row"><label>Frequency</label><span class="val" id="propFreq">—</span></div>
+            <div class="row" style="margin-top:12px;"><label>Hint</label><span class="val" style="color:#585b70;">Dur in 16th-note steps. Quarter note = 4 at 100 BPM.</span></div>
+        </div>
+    </div>
+</div>
+<div id="export-box">
+    <div id="export-inner">
+        <h3>Export Song Files</h3>
+        <div id="exportFileList" style="margin-bottom:12px;"></div>
+        <div class="bar">
+            <span class="info">Download each song as songs/songN.js</span>
+            <button id="exportClose" style="padding:4px 12px;border:1px solid #45475a;border-radius:4px;background:#313244;color:#cdd6f4;cursor:pointer;">Close</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../songs/song0.js"></script>
+<script type="text/javascript" src="../songs/song1.js"></script>
+<script type="text/javascript" src="../songs/song2.js"></script>
+<script type="text/javascript" src="../below-songs.js"></script>
+<script>
+// ---------- state ----------
+var editorSongs = {};
+var currentSongIdx = "song0";
+var currentVoiceIdx = 0;
+var NOTES = { 'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11 };
+var NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function deepClone(o) { return JSON.parse(JSON.stringify(o)); }
+
+function init() {
+    if (typeof belowSongs !== 'undefined') {
+        editorSongs = deepClone(belowSongs);
+    }
+    if (Object.keys(editorSongs).length === 0) {
+        editorSongs = { "song0": { tempo: 100, voices: [{ waveform: 'triangle', volume: 0.20, seq: [["C4",4]] }] } };
+    }
+    ensureSongCount();
+    renderSongList();
+    selectSong(currentSongIdx);
+}
+
+function ensureSongCount() {
+    var keys = Object.keys(editorSongs);
+    if (keys.length === 0) {
+        editorSongs["song0"] = emptySong();
+    }
+    currentSongIdx = keys[0];
+}
+
+function emptySong() {
+    return { tempo: 100, voices: [{ waveform: 'square', volume: 0.15, seq: [["C4",4],["r",4]] }] };
+}
+
+function nextSongKey() {
+    var max = -1;
+    Object.keys(editorSongs).forEach(function(k) {
+        var m = k.match(/^song(\d+)$/);
+        if (m) { var n = parseInt(m[1]); if (n > max) max = n; }
+    });
+    return "song" + (max + 1);
+}
+
+// ---------- note helpers ----------
+function parseNote(str) {
+    if (!str || str === 'r') return { note: 'r', oct: 4 };
+    var m = str.match(/^([A-G][#b]?)(\d)$/);
+    if (!m) return { note: 'r', oct: 4 };
+    return { note: m[1], oct: parseInt(m[2]) };
+}
+
+function makeNoteStr(note, oct) {
+    if (note === 'r') return 'r';
+    return note + oct;
+}
+
+function noteToFreq(str) {
+    if (!str || str === 'r') return 0;
+    var p = parseNote(str);
+    if (p.note === 'r') return 0;
+    var n = p.note;
+    if (n.length === 2 && n[1] === 'b') {
+        n = { 'Db':'C#','Eb':'D#','Gb':'F#','Ab':'G#','Bb':'A#' }[n] || n;
+    }
+    var semi = NOTES[n];
+    if (semi === undefined) return 0;
+    var midi = semi + (p.oct + 1) * 12;
+    return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+function getTotalSteps(seq) {
+    var t = 0;
+    for (var i = 0; i < seq.length; i++) t += seq[i][1];
+    return t;
+}
+
+// ---------- preview player ----------
+var previewCtx = null;
+var previewPlaying = false;
+var previewMasterGain = null;
+var previewVoices = [];
+var previewTimerId = null;
+
+function ensurePreviewCtx() {
+    if (!previewCtx) {
+        try { previewCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return false; }
+    }
+    if (previewCtx.state === 'suspended') previewCtx.resume();
+    return true;
+}
+
+function previewStop() {
+    previewPlaying = false;
+    if (previewTimerId) { clearTimeout(previewTimerId); previewTimerId = null; }
+    for (var v = 0; v < previewVoices.length; v++) {
+        if (previewVoices[v]) {
+            try { previewVoices[v].osc.stop(); } catch(e) {}
+            try { previewVoices[v].gain.disconnect(); } catch(e) {}
+        }
+    }
+    previewVoices = [];
+}
+
+function previewPlay() {
+    previewStop();
+    if (!ensurePreviewCtx()) return;
+    var songName = currentSongIdx;
+    var song = editorSongs[songName];
+    if (!song) return;
+
+    if (previewMasterGain) previewMasterGain.disconnect();
+    previewMasterGain = previewCtx.createGain();
+    previewMasterGain.gain.value = 0.4;
+    previewMasterGain.connect(previewCtx.destination);
+
+    previewStepDuration = (60 / song.tempo) / 4;
+    var stepDuration = previewStepDuration;
+    previewStartTime = previewCtx.currentTime + 0.1;
+    var startTime = previewStartTime;
+    previewTotalSteps = 0;
+    var totalSteps = 0;
+
+    previewVoices = [];
+    for (var v = 0; v < song.voices.length; v++) {
+        var data = song.voices[v];
+        var osc = previewCtx.createOscillator();
+        var gain = previewCtx.createGain();
+        osc.type = data.waveform;
+        osc.frequency.value = 200;
+        gain.gain.value = 0;
+        osc.connect(gain);
+        gain.connect(previewMasterGain);
+        osc.start(startTime);
+
+        var events = [];
+        var step = 0;
+        for (var i = 0; i < data.seq.length; i++) {
+            var nn = data.seq[i][0];
+            var d = data.seq[i][1];
+            var legato = data.seq[i][2] === true;
+            var freq = noteToFreq(nn);
+            for (var s = 0; s < d; s++) { events[step + s] = { freq: freq, legato: legato }; }
+            step += d;
+        }
+        if (v === 0) { totalSteps = step; previewTotalSteps = step; }
+
+        previewVoices[v] = { osc: osc, gain: gain, volume: data.volume, events: events, scheduledUntil: startTime };
+    }
+
+    previewPlaying = true;
+
+    function schedule() {
+        if (!previewPlaying) return;
+        var now = previewCtx.currentTime;
+        var lookAhead = 0.5;
+
+        for (var v = 0; v < previewVoices.length; v++) {
+            if (!previewVoices[v]) continue;
+            var evts = previewVoices[v].events;
+            var vol = previewVoices[v].volume;
+            var osc = previewVoices[v].osc;
+            var gain = previewVoices[v].gain;
+            var sched = previewVoices[v].scheduledUntil || 0;
+
+            if (now + lookAhead > sched) {
+                var t = Math.max(now, sched);
+
+                while (t < now + lookAhead) {
+                    var localStep = Math.floor((t - startTime) / stepDuration) % totalSteps;
+                    var ev = evts[localStep];
+                    if (ev) {
+                        osc.frequency.setValueAtTime(ev.freq, t);
+                        var prevEv = localStep > 0 ? evts[localStep - 1] : null;
+                        var isLegatoContinuation = ev.legato && ev.freq > 0 && prevEv && prevEv.freq === ev.freq;
+                        if (!isLegatoContinuation) {
+                            var attack = 0.005;
+                            gain.gain.cancelScheduledValues(t);
+                            if (ev.freq > 0) {
+                                gain.gain.setValueAtTime(0, t);
+                                gain.gain.linearRampToValueAtTime(vol, t + attack);
+                                if (ev.legato) {
+                                    gain.gain.setValueAtTime(vol, t + stepDuration + 0.01);
+                                } else {
+                                    var release = stepDuration * 0.8;
+                                    gain.gain.setValueAtTime(vol, t + release - 0.01);
+                                    gain.gain.linearRampToValueAtTime(0, t + release);
+                                }
+                            } else {
+                                gain.gain.setValueAtTime(0, t);
+                            }
+                        }
+                    }
+                    t += stepDuration;
+                }
+                previewVoices[v].scheduledUntil = t;
+            }
+        }
+        if (previewPlaying) previewTimerId = setTimeout(schedule, 100);
+    }
+    schedule();
+}
+
+// ---------- rendering ----------
+function renderSongList() {
+    var el = document.getElementById("songList");
+    el.innerHTML = "";
+    var keys = Object.keys(editorSongs);
+    if (keys.length === 0) return;
+    keys.sort(function(a,b) {
+        var ma = a.match(/^song(\d+)$/), mb = b.match(/^song(\d+)$/);
+        if (ma && mb) return parseInt(ma[1]) - parseInt(mb[1]);
+        return a < b ? -1 : 1;
+    });
+    keys.forEach(function(k) {
+        var div = document.createElement("div");
+        div.className = "song-item" + (k === currentSongIdx ? " active" : "");
+        div.innerHTML = '<span class="label">' + k + '</span>';
+        div.addEventListener("click", function() { selectSong(k); });
+        el.appendChild(div);
+    });
+}
+
+function selectSong(key) {
+    currentSongIdx = key;
+    currentVoiceIdx = 0;
+    var song = editorSongs[key];
+    if (!song) return;
+    document.getElementById("tempoInp").value = song.tempo || 100;
+    renderSongList();
+    renderVoiceTabs();
+    selectVoice(0);
+    updateProps();
+}
+
+function renderVoiceTabs() {
+    var el = document.getElementById("voiceTabs");
+    el.innerHTML = "";
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    song.voices.forEach(function(v, i) {
+        var tab = document.createElement("div");
+        tab.className = "voice-tab" + (i === currentVoiceIdx ? " active" : "");
+        tab.textContent = "Voice " + (i + 1);
+        tab.addEventListener("click", function() { selectVoice(i); });
+        el.appendChild(tab);
+    });
+    if (song.voices.length === 0) {
+        el.textContent = "No voices — add one below.";
+    }
+}
+
+function selectVoice(idx) {
+    currentVoiceIdx = idx;
+    var song = editorSongs[currentSongIdx];
+    if (!song || !song.voices[idx]) return;
+    renderVoiceTabs();
+    var v = song.voices[idx];
+    document.getElementById("waveformSel").value = v.waveform;
+    document.getElementById("volumeSlider").value = v.volume;
+    document.getElementById("volDisplay").textContent = v.volume.toFixed(2);
+    renderNoteGrid();
+}
+
+function renderNoteGrid() {
+    var tbody = document.getElementById("noteBody");
+    tbody.innerHTML = "";
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    var v = song.voices[currentVoiceIdx];
+    if (!v) return;
+
+    var total = getTotalSteps(v.seq);
+    document.getElementById("stepTotal").textContent = total + " steps";
+
+    v.seq.forEach(function(row, i) {
+        var tr = document.createElement("tr");
+        var noteInfo = parseNote(row[0]);
+
+        var numTd = document.createElement("td");
+        numTd.className = "row-num";
+        numTd.textContent = i + 1;
+
+        var noteTd = document.createElement("td");
+        var noteSel = document.createElement("select");
+        noteSel.className = "note-sel";
+        var allNotes = ['r','C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+        allNotes.forEach(function(n) {
+            var opt = document.createElement("option");
+            opt.value = n;
+            opt.textContent = n === 'r' ? 'rest' : n;
+            if (n === noteInfo.note) opt.selected = true;
+            noteSel.appendChild(opt);
+        });
+        noteSel.addEventListener("change", function() {
+            var newNote = noteSel.value;
+            var rowData = v.seq[i];
+            if (newNote === 'r') rowData[0] = 'r';
+            else rowData[0] = makeNoteStr(newNote, noteInfo.oct);
+            renderNoteGrid();
+            updateProps();
+        });
+        noteTd.appendChild(noteSel);
+
+        var octTd = document.createElement("td");
+        var octSel = document.createElement("select");
+        octSel.className = "oct-sel";
+        octSel.disabled = noteInfo.note === 'r';
+        for (var o = 1; o <= 6; o++) {
+            var opt = document.createElement("option");
+            opt.value = o;
+            opt.textContent = o;
+            if (o === noteInfo.oct) opt.selected = true;
+            octSel.appendChild(opt);
+        }
+        octSel.addEventListener("change", function() {
+            var rowData = v.seq[i];
+            var cur = parseNote(rowData[0]);
+            if (cur.note !== 'r') rowData[0] = makeNoteStr(cur.note, parseInt(octSel.value));
+            renderNoteGrid();
+            updateProps();
+        });
+        octTd.appendChild(octSel);
+
+        var durTd = document.createElement("td");
+        var durInp = document.createElement("input");
+        durInp.type = "number";
+        durInp.min = 1;
+        durInp.max = 64;
+        durInp.value = row[1];
+        durInp.addEventListener("change", function() {
+            var d = parseInt(durInp.value);
+            if (d < 1) d = 1;
+            v.seq[i][1] = d;
+            renderNoteGrid();
+            updateProps();
+        });
+        durTd.appendChild(durInp);
+
+        var legTd = document.createElement("td");
+        legTd.style.textAlign = "center";
+        var legCb = document.createElement("input");
+        legCb.type = "checkbox";
+        legCb.checked = row[2] === true;
+        legCb.addEventListener("change", function() {
+            if (legCb.checked) {
+                v.seq[i][2] = true;
+            } else {
+                delete v.seq[i][2];
+                if (v.seq[i].length === 2) v.seq[i] = v.seq[i].slice(0, 2);
+            }
+            drawGantt();
+        });
+        legTd.appendChild(legCb);
+
+        var moveTd = document.createElement("td");
+        var upBtn = document.createElement("button");
+        upBtn.className = "btn-sm btn-move";
+        upBtn.textContent = "↑";
+        upBtn.disabled = i === 0;
+        upBtn.addEventListener("click", function() { moveNote(i, -1); });
+        var downBtn = document.createElement("button");
+        downBtn.className = "btn-sm btn-move";
+        downBtn.textContent = "↓";
+        downBtn.disabled = i === v.seq.length - 1;
+        downBtn.addEventListener("click", function() { moveNote(i, 1); });
+        moveTd.appendChild(upBtn);
+        moveTd.appendChild(downBtn);
+
+        var delTd = document.createElement("td");
+        var delBtn = document.createElement("button");
+        delBtn.className = "btn-sm btn-del";
+        delBtn.textContent = "✕";
+        delBtn.addEventListener("click", function() { deleteNote(i); });
+        delTd.appendChild(delBtn);
+
+        tr.appendChild(numTd);
+        tr.appendChild(noteTd);
+        tr.appendChild(octTd);
+        tr.appendChild(durTd);
+        tr.appendChild(legTd);
+        tr.appendChild(moveTd);
+        tr.appendChild(delTd);
+
+        if (noteInfo.note === 'r') tr.className = 'rest';
+        tbody.appendChild(tr);
+    });
+}
+
+function moveNote(idx, dir) {
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    var v = song.voices[currentVoiceIdx];
+    if (!v) return;
+    var newIdx = idx + dir;
+    if (newIdx < 0 || newIdx >= v.seq.length) return;
+    var tmp = v.seq[idx];
+    v.seq[idx] = v.seq[newIdx];
+    v.seq[newIdx] = tmp;
+    renderNoteGrid();
+}
+
+function deleteNote(idx) {
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    var v = song.voices[currentVoiceIdx];
+    if (!v) return;
+    if (v.seq.length <= 1) return;
+    v.seq.splice(idx, 1);
+    renderNoteGrid();
+}
+
+function addNote() {
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    var v = song.voices[currentVoiceIdx];
+    if (!v) return;
+    v.seq.push(["C4", 4]);
+    renderNoteGrid();
+}
+
+function addVoice() {
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    song.voices.push({ waveform: 'square', volume: 0.15, seq: [["C4",4],["r",4]] });
+    renderVoiceTabs();
+    selectVoice(song.voices.length - 1);
+}
+
+function addSong() {
+    var key = nextSongKey();
+    editorSongs[key] = emptySong();
+    renderSongList();
+    selectSong(key);
+}
+
+function deleteSong() {
+    var keys = Object.keys(editorSongs);
+    if (keys.length <= 1) return;
+    delete editorSongs[currentSongIdx];
+    var remaining = Object.keys(editorSongs);
+    remaining.sort();
+    renderSongList();
+    selectSong(remaining[0]);
+}
+
+function updateProps() {
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    var v = song.voices[currentVoiceIdx];
+    if (!v || v.seq.length === 0) {
+        document.getElementById("propRow").textContent = "—";
+        document.getElementById("propNote").textContent = "—";
+        document.getElementById("propOctave").textContent = "—";
+        document.getElementById("propDur").textContent = "—";
+        document.getElementById("propFreq").textContent = "—";
+        return;
+    }
+    // Show last selected property (click just shows first row info for now)
+    var row = v.seq[0];
+    var info = parseNote(row[0]);
+    document.getElementById("propRow").textContent = "1";
+    document.getElementById("propNote").textContent = info.note === 'r' ? 'rest' : info.note;
+    document.getElementById("propOctave").textContent = info.note === 'r' ? '—' : info.oct;
+    document.getElementById("propDur").textContent = row[1] + " steps";
+    document.getElementById("propFreq").textContent = info.note === 'r' ? '—' : noteToFreq(row[0]).toFixed(2) + " Hz";
+}
+
+// ---------- tempo change ----------
+document.getElementById("tempoInp").addEventListener("change", function() {
+    var song = editorSongs[currentSongIdx];
+    if (song) { song.tempo = parseInt(this.value) || 100; }
+});
+
+// ---------- waveform / volume changes ----------
+document.getElementById("waveformSel").addEventListener("change", function() {
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    var v = song.voices[currentVoiceIdx];
+    if (v) v.waveform = this.value;
+});
+
+document.getElementById("volumeSlider").addEventListener("input", function() {
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    var v = song.voices[currentVoiceIdx];
+    if (v) { v.volume = parseFloat(this.value); document.getElementById("volDisplay").textContent = v.volume.toFixed(2); }
+});
+
+// ---------- button bindings ----------
+document.getElementById("playBtn").addEventListener("click", previewPlay);
+document.getElementById("stopBtn").addEventListener("click", previewStop);
+document.getElementById("addNoteBtn").addEventListener("click", addNote);
+document.getElementById("addVoiceBtn").addEventListener("click", addVoice);
+document.getElementById("addSongBtn").addEventListener("click", addSong);
+
+// ---------- export ----------
+function cleanSongSeq(song) {
+    var out = JSON.parse(JSON.stringify(song));
+    out.voices.forEach(function(voice) {
+        for (var i = 0; i < voice.seq.length; i++) {
+            var row = voice.seq[i];
+            if (row.length >= 3 && !row[2]) {
+                delete row[2];
+                if (row.length === 2) voice.seq[i] = row.slice(0, 2);
+            }
+        }
+    });
+    return out;
+}
+
+function generateSongFile(songKey) {
+    var song = cleanSongSeq(editorSongs[songKey]);
+    return "var " + songKey + "Data = " + JSON.stringify(song, null, 4) + ";\n";
+}
+
+function downloadFile(filename, content) {
+    var blob = new Blob([content], { type: "text/javascript" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+}
+
+document.getElementById("exportBtn").addEventListener("click", function() {
+    var list = document.getElementById("exportFileList");
+    list.innerHTML = "";
+    var keys = Object.keys(editorSongs).sort(function(a,b) {
+        var ma = a.match(/^song(\d+)$/), mb = b.match(/^song(\d+)$/);
+        if (ma && mb) return parseInt(ma[1]) - parseInt(mb[1]);
+        return a < b ? -1 : 1;
+    });
+    keys.forEach(function(key) {
+        var row = document.createElement("div");
+        row.style.display = "flex";
+        row.style.alignItems = "center";
+        row.style.gap = "10px";
+        row.style.marginBottom = "6px";
+
+        var name = document.createElement("span");
+        name.style.fontFamily = "monospace";
+        name.style.color = "#fab387";
+        name.style.minWidth = "100px";
+        name.textContent = key + ".js";
+
+        var dl = document.createElement("button");
+        dl.className = "btn-primary";
+        dl.textContent = "Download";
+        dl.addEventListener("click", function() {
+            downloadFile(key + ".js", generateSongFile(key));
+        });
+
+        row.appendChild(name);
+        row.appendChild(dl);
+        list.appendChild(row);
+    });
+    document.getElementById("export-box").classList.add("show");
+});
+
+document.getElementById("exportClose").addEventListener("click", function() {
+    document.getElementById("export-box").classList.remove("show");
+});
+
+document.getElementById("export-box").addEventListener("click", function(e) {
+    if (e.target === this) this.classList.remove("show");
+});
+
+// ---------- Gantt chart ----------
+var ganttRAF = null;
+var ganttTimerId = null;
+
+function drawGantt() {
+    var canvas = document.getElementById("ganttCanvas");
+    if (!canvas) return;
+    var rect = canvas.parentElement.getBoundingClientRect();
+    var w = rect.width - 2;
+    var h = 150;
+    canvas.width = w * (window.devicePixelRatio || 1);
+    canvas.height = h * (window.devicePixelRatio || 1);
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    var ctx = canvas.getContext("2d");
+    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+
+    var song = editorSongs[currentSongIdx];
+    if (!song || !song.voices || song.voices.length === 0) {
+        ctx.fillStyle = "#585b70";
+        ctx.font = "12px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("No voices", w / 2, h / 2);
+        return;
+    }
+
+    var voices = song.voices;
+    var numVoices = voices.length;
+    var totalSteps = 0;
+    for (var vi = 0; vi < numVoices; vi++) {
+        var t = 0;
+        for (var si = 0; si < voices[vi].seq.length; si++) t += voices[vi].seq[si][1];
+        if (vi === 0 || t > totalSteps) totalSteps = t;
+    }
+    if (totalSteps === 0) totalSteps = 128;
+
+    var marginL = 65;
+    var marginR = 10;
+    var marginT = 22;
+    var laneH = Math.min(35, Math.floor((h - marginT - 8) / numVoices));
+    var chartW = w - marginL - marginR;
+    var chartH = laneH * numVoices;
+
+    // Clear
+    ctx.fillStyle = "#11111b";
+    ctx.fillRect(0, 0, w, h);
+
+    // Bar markers
+    ctx.strokeStyle = "#313244";
+    ctx.lineWidth = 1;
+    var barsPerSong = Math.ceil(totalSteps / 16);
+    for (var b = 0; b <= totalSteps; b += 4) {
+        var bx = marginL + (b / totalSteps) * chartW;
+        ctx.beginPath();
+        ctx.moveTo(bx, marginT);
+        ctx.lineTo(bx, marginT + chartH);
+        ctx.strokeStyle = (b % 16 === 0) ? "#45475a" : "#2a2a3e";
+        ctx.lineWidth = (b % 16 === 0) ? 1 : 0.5;
+        ctx.stroke();
+    }
+
+    // Bar labels
+    ctx.fillStyle = "#585b70";
+    ctx.font = "10px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    for (var b = 1; b <= barsPerSong; b++) {
+        var bx = marginL + ((b * 16) / totalSteps) * chartW;
+        ctx.fillText(b, bx - (16 / totalSteps) * chartW / 2, 2);
+    }
+
+    // Lanes and bars
+    for (var vi = 0; vi < numVoices; vi++) {
+        var laneY = marginT + vi * laneH;
+
+        // Lane background
+        ctx.fillStyle = vi % 2 === 0 ? "#1e1e2e" : "#191926";
+        ctx.fillRect(marginL, laneY, chartW, laneH);
+
+        // Voice label
+        ctx.fillStyle = "#a6adc8";
+        ctx.font = "11px sans-serif";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText("Voice " + (vi + 1), marginL - 8, laneY + laneH / 2);
+
+        // Note bars
+        var seq = voices[vi].seq;
+        var stepOff = 0;
+        for (var si = 0; si < seq.length; si++) {
+            var noteStr = seq[si][0];
+            var dur = seq[si][1];
+
+            if (noteStr !== 'r') {
+                var freq = noteToFreq(noteStr);
+                if (freq > 0) {
+                    var midi = Math.round(69 + 12 * Math.log(freq / 440) / Math.LN2);
+                    var hue = 240 - ((midi - 36) / 60) * 240;
+                    if (hue < 0) hue = 0;
+                    if (hue > 240) hue = 240;
+                    var lightness = 45 + ((midi - 24) / 72) * 20;
+                    ctx.fillStyle = "hsl(" + hue + ", 60%, " + Math.min(lightness, 65) + "%)";
+
+                    var bx = marginL + (stepOff / totalSteps) * chartW;
+                    var bw = Math.max(2, (dur / totalSteps) * chartW);
+                    var by = laneY + 3;
+                    var bh = laneH - 6;
+
+                    ctx.fillRect(bx, by, bw, bh);
+
+                    // Legato bars get a bright center stripe
+                    if (seq[si][2] === true) {
+                        ctx.fillStyle = "rgba(255,255,255,0.3)";
+                        ctx.fillRect(bx + 2, by + 2, bw - 4, bh - 4);
+                    }
+
+                    ctx.strokeStyle = "rgba(0,0,0,0.3)";
+                    ctx.lineWidth = 0.5;
+                    ctx.strokeRect(bx, by, bw, bh);
+
+                    // Note label on bar
+                    if (bw > 18) {
+                        ctx.fillStyle = "rgba(255,255,255,0.85)";
+                        ctx.font = (bw > 30 ? "10px" : "8px") + " sans-serif";
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+                        ctx.fillText(noteStr, bx + bw / 2, by + bh / 2);
+                    }
+                }
+            }
+            stepOff += dur;
+        }
+
+        // Lane bottom border
+        ctx.strokeStyle = "#2a2a3e";
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(marginL, laneY + laneH);
+        ctx.lineTo(marginL + chartW, laneY + laneH);
+        ctx.stroke();
+    }
+
+    // Playhead (during preview)
+    if (typeof previewStartTime !== 'undefined' && previewPlaying && previewCtx) {
+        var elapsed = previewCtx.currentTime - previewStartTime;
+        var loopDur = previewStepDuration * previewTotalSteps;
+        if (loopDur > 0) {
+            var songPos = elapsed % loopDur;
+            var phX = marginL + (songPos / loopDur) * chartW;
+            ctx.strokeStyle = "#cba6f7";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(phX, marginT);
+            ctx.lineTo(phX, marginT + chartH);
+            ctx.stroke();
+        }
+    }
+}
+
+function ganttClick(e) {
+    var canvas = document.getElementById("ganttCanvas");
+    if (!canvas) return;
+    var rect = canvas.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+
+    var song = editorSongs[currentSongIdx];
+    if (!song || !song.voices || song.voices.length === 0) return;
+
+    var voices = song.voices;
+    var numVoices = voices.length;
+    var totalSteps = 0;
+    for (var vi = 0; vi < numVoices; vi++) {
+        var t = 0;
+        for (var si = 0; si < voices[vi].seq.length; si++) t += voices[vi].seq[si][1];
+        if (vi === 0 || t > totalSteps) totalSteps = t;
+    }
+    if (totalSteps === 0) totalSteps = 128;
+
+    var marginL = 65;
+    var marginR = 10;
+    var marginT = 22;
+    var laneH = Math.min(35, Math.floor((150 - marginT - 8) / numVoices));
+
+    if (x < marginL || x > rect.width - marginR) return;
+
+    var vi = Math.floor((y - marginT) / laneH);
+    if (vi < 0 || vi >= numVoices) return;
+
+    var step = ((x - marginL) / (rect.width - marginL - marginR)) * totalSteps;
+    step = Math.round(step);
+
+    // Find which seq entry contains this step
+    var seq = voices[vi].seq;
+    var accum = 0;
+    for (var si = 0; si < seq.length; si++) {
+        accum += seq[si][1];
+        if (step < accum) {
+            // Select this voice and note
+            selectVoice(vi);
+            // Scroll to the row in the grid
+            var tbody = document.getElementById("noteBody");
+            if (tbody) {
+                var rows = tbody.querySelectorAll("tr");
+                if (rows[si]) {
+                    rows[si].scrollIntoView({ block: "nearest" });
+                    rows[si].style.outline = "2px solid #cba6f7";
+                    setTimeout(function() { if (rows[si]) rows[si].style.outline = ""; }, 1000);
+                }
+            }
+            updateProps();
+            return;
+        }
+    }
+}
+
+// Hook gantt click (script runs at end of body, canvas already exists)
+var ganttCanvas = document.getElementById("ganttCanvas");
+if (ganttCanvas) ganttCanvas.addEventListener("click", ganttClick);
+
+// RAF loop for playhead
+function ganttRAFStep() {
+    drawGantt();
+    if (previewPlaying) {
+        ganttRAF = requestAnimationFrame(ganttRAFStep);
+    }
+}
+
+// Hook into preview Play/Stop
+var _origPreviewPlay = previewPlay;
+previewPlay = function() {
+    _origPreviewPlay.call(this);
+    if (ganttRAF) cancelAnimationFrame(ganttRAF);
+    ganttRAF = requestAnimationFrame(ganttRAFStep);
+};
+
+var _origPreviewStop = previewStop;
+previewStop = function() {
+    _origPreviewStop.call(this);
+    if (ganttRAF) { cancelAnimationFrame(ganttRAF); ganttRAF = null; }
+};
+
+// Add global timing vars for gantt
+var previewStartTime = 0;
+var previewStepDuration = 0;
+var previewTotalSteps = 0;
+
+// Hook into note data changes to redraw gantt
+var _origRenderNoteGrid = renderNoteGrid;
+renderNoteGrid = function() {
+    _origRenderNoteGrid();
+    setTimeout(drawGantt, 10);
+};
+
+// ---------- init ----------
+init();
+setTimeout(drawGantt, 50);
+</script>
+</body>
+</html>
