@@ -587,6 +587,99 @@ var belowCutSceneData = {
         "start": 27000
       }
     ]
+  },
+  "after_map3": {
+    "cuts": [
+      {
+        "type": "image",
+        "src": "detective_dialog.png",
+        "x": 10,
+        "y": 15,
+        "width": 260,
+        "fadeIn": 1500,
+        "hold": 4000,
+        "fadeOut": 1000,
+        "driftX": 4,
+        "driftY": -1,
+        "start": 0
+      },
+      {
+        "type": "text",
+        "text": "The Depths was a city of lies \u2014 a film noir stage built by a jester\u2019s whim. Sam Shale chased a phantom through alleys that never saw the sun. Every clue a planted thread. Every lead a dead end.",
+        "x": 42,
+        "y": 18,
+        "fontSize": 22,
+        "fadeIn": 1500,
+        "hold": 4000,
+        "fadeOut": 1000,
+        "driftX": -2,
+        "driftY": -1,
+        "start": 0
+      },
+      {
+        "type": "text",
+        "text": "The Jester had been writing Shale\u2019s story all along \u2014 feeding him a Medusa that never was, a case that never existed. And Shale played his part perfectly.",
+        "x": 15,
+        "y": 38,
+        "fontSize": 22,
+        "fadeIn": 1000,
+        "hold": 3500,
+        "fadeOut": 1000,
+        "start": 6500
+      },
+      {
+        "type": "image",
+        "src": "jester_cut.png",
+        "x": 20,
+        "y": 15,
+        "width": 240,
+        "fadeIn": 1500,
+        "hold": 3500,
+        "fadeOut": 1000,
+        "driftX": 5,
+        "driftY": -2,
+        "start": 11500
+      },
+      {
+        "type": "text",
+        "text": "\"You think you\u2019re leaving? Oh no, detective drama\u2019s over \u2014 but the real show\u2019s just getting started. Deep down, where the light doesn\u2019t reach. That\u2019s where the fun lives.\"",
+        "x": 15,
+        "y": 38,
+        "fontSize": 20,
+        "fontStyle": "italic",
+        "fadeIn": 2000,
+        "hold": 3500,
+        "fadeOut": 1500,
+        "start": 11700
+      },
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 1500,
+        "hold": 800,
+        "fadeOut": 500,
+        "start": 17000
+      },
+      {
+        "type": "text",
+        "text": "Beyond the detective\u2019s stage lies an underground shore. Charon waits by his ferry \u2014 and the water goes deeper than any light can reach.",
+        "x": 15,
+        "y": 25,
+        "fontSize": 22,
+        "fadeIn": 2500,
+        "hold": 3500,
+        "fadeOut": 1000,
+        "start": 19200
+      },
+      {
+        "type": "fade",
+        "color": "#000000",
+        "fadeIn": 1500,
+        "hold": 500,
+        "fadeOut": 300,
+        "start": 26300
+      }
+    ]
   }
 }
 };

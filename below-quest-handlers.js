@@ -673,9 +673,14 @@ var questHandlers = {
             var sickD = moleNpc.dialogOptions.find(function(d) { return d.id === "mole_sick"; });
             if (sickD) sickD.available = true;
         }
-        setTimeout(function() {
+        if (below.gameData.player.cutScenePlayed.after_map3) {
             changeMap(4, 2, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
-        }, 10);
+            return;
+        }
+        below.gameData.player.cutScenePlayed.after_map3 = true;
+        playCutScene("after_map3", function() {
+            changeMap(4, 2, 0, "The ship reaches the shore of a vast underground beach. As you step onto the sand, the dark lake stretches behind you, still and silent.");
+        });
     },
 
     // --- Sisters ---
