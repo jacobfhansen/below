@@ -265,7 +265,7 @@ function changeMap(mapId, entryX, entryY, text) {
       }
     }
     below.gameData.mapData[5].npcs.push({
-      type: 2,
+      type: "jester",
       position: { x: 12, y: 10 },
       movement: 0,
       dialogOptions: [{

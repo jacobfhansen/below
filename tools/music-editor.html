@@ -161,6 +161,10 @@ header button:hover { background: #45475a; }
         <div style="padding:8px;border-top:1px solid #313244;flex-shrink:0;">
             <button id="addSongBtn" class="btn-primary" style="width:100%;">+ Add Song</button>
         </div>
+        <div style="padding:8px;border-top:1px solid #313244;flex-shrink:0;">
+            <label style="font-size:11px;color:#a6adc8;display:block;margin-bottom:4px;">Notes</label>
+            <textarea id="songNotes" style="width:100%;height:80px;padding:6px;border:1px solid #45475a;border-radius:4px;background:#313244;color:#cdd6f4;font-size:12px;resize:vertical;font-family:inherit;"></textarea>
+        </div>
     </div>
     <div id="voice-panel" class="panel">
         <div class="voice-tabs" id="voiceTabs"></div>
@@ -246,7 +250,7 @@ function ensureSongCount() {
 }
 
 function emptySong() {
-    return { tempo: 100, voices: [{ waveform: 'square', volume: 0.15, seq: [["C4",4],["r",4]] }] };
+    return { tempo: 100, voices: [{ waveform: 'square', volume: 0.15, seq: [["C4",4],["r",4]] }], notes: "" };
 }
 
 function nextSongKey() {
@@ -443,6 +447,8 @@ function selectSong(key) {
     var song = editorSongs[key];
     if (!song) return;
     document.getElementById("tempoInp").value = song.tempo || 100;
+    var notesEl = document.getElementById("songNotes");
+    notesEl.value = song.notes || "";
     renderSongList();
     renderVoiceTabs();
     selectVoice(0);
@@ -709,6 +715,11 @@ document.getElementById("stopBtn").addEventListener("click", previewStop);
 document.getElementById("addNoteBtn").addEventListener("click", addNote);
 document.getElementById("addVoiceBtn").addEventListener("click", addVoice);
 document.getElementById("addSongBtn").addEventListener("click", addSong);
+
+document.getElementById("songNotes").addEventListener("input", function() {
+    var song = editorSongs[currentSongIdx];
+    if (song) song.notes = this.value;
+});
 
 // ---------- export ----------
 function cleanSongSeq(song) {
