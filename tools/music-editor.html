@@ -336,7 +336,12 @@ function previewPlay() {
 
     previewStepDuration = (60 / song.tempo) / 4;
     var stepDuration = previewStepDuration;
-    previewStartTime = previewCtx.currentTime + 0.1;
+    if (previewSeekStep >= 0) {
+        previewStartTime = previewCtx.currentTime - (previewSeekStep * stepDuration);
+        previewSeekStep = -1;
+    } else {
+        previewStartTime = previewCtx.currentTime + 0.1;
+    }
     var startTime = previewStartTime;
     previewTotalSteps = 0;
     var totalSteps = 0;
@@ -351,7 +356,7 @@ function previewPlay() {
         gain.gain.value = 0;
         osc.connect(gain);
         gain.connect(previewMasterGain);
-        osc.start(startTime);
+        osc.start();
 
         var events = [];
         var step = 0;
@@ -979,9 +984,15 @@ function ganttClick(e) {
     // Find which seq entry contains this step
     var seq = voices[vi].seq;
     var accum = 0;
+    var rowStart = 0;
     for (var si = 0; si < seq.length; si++) {
         accum += seq[si][1];
         if (step < accum) {
+            rowStart = accum - seq[si][1];
+            // Seek to this position if preview is playing
+            if (previewPlaying) {
+                previewSeekTo(rowStart);
+            }
             // Select this voice and note
             selectVoice(vi);
             // Scroll to the row in the grid
@@ -997,6 +1008,10 @@ function ganttClick(e) {
             updateProps();
             return;
         }
+    }
+    // Click beyond all rows — seek to that step if playing
+    if (previewPlaying) {
+        previewSeekTo(Math.min(step, totalSteps - 1));
     }
 }
 
@@ -1026,10 +1041,20 @@ previewStop = function() {
     if (ganttRAF) { cancelAnimationFrame(ganttRAF); ganttRAF = null; }
 };
 
+// Seek to a given step within the current preview
+function previewSeekTo(step) {
+    if (!previewPlaying || !previewCtx) return;
+    var song = editorSongs[currentSongIdx];
+    if (!song) return;
+    previewSeekStep = step;
+    previewPlay();
+}
+
 // Add global timing vars for gantt
 var previewStartTime = 0;
 var previewStepDuration = 0;
 var previewTotalSteps = 0;
+var previewSeekStep = -1;
 
 // Hook into note data changes to redraw gantt
 var _origRenderNoteGrid = renderNoteGrid;
