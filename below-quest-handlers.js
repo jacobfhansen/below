@@ -668,6 +668,12 @@ var questHandlers = {
     },
 
     "ship_departure_go": function() {
+        // Re-open the ship's beach dialog so it's available on return
+        var shipNpc = below.gameData.mapData[4].npcs ? below.gameData.mapData[4].npcs.find(function(n) { return n.type === "derelict_ship"; }) : null;
+        if (shipNpc && shipNpc.dialogOptions) {
+            var sb = shipNpc.dialogOptions.find(function(d) { return d.id === "ship_beach"; });
+            if (sb) sb.available = true;
+        }
         var moleNpc = below.gameData.mapData[2].npcs ? below.gameData.mapData[2].npcs.find(function(n) { return n.type === "mole"; }) : null;
         if (moleNpc && moleNpc.dialogOptions) {
             var sickD = moleNpc.dialogOptions.find(function(d) { return d.id === "mole_sick"; });

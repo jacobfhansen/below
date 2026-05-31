@@ -1,7 +1,7 @@
 var map3Data = {
       "id": 3,
       "name": "The Depths",
-  "music": "song0",
+  "music": "song2",
       "defaultDescription": "A black and white depiction of a 1950s underground city. Dark alleys, dim street lamps, and the faint sound of distant dripping water.",
       "areaDescriptions": [
         {

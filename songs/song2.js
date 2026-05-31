@@ -111,12 +111,12 @@ var song2Data = {
                     true
                 ],
                 [
-                    "E2",
+                    "D2",
                     8,
                     true
                 ],
                 [
-                    "C2",
+                    "A2",
                     8,
                     true
                 ],
@@ -518,7 +518,7 @@ var song2Data = {
                     2
                 ],
                 [
-                    "G3",
+                    "F#3",
                     2,
                     true
                 ],
@@ -527,7 +527,16 @@ var song2Data = {
                     2
                 ],
                 [
-                    "B3",
+                    "A3",
+                    2,
+                    true
+                ],
+                [
+                    "r",
+                    2
+                ],
+                [
+                    "C#3",
                     2,
                     true
                 ],
@@ -537,15 +546,6 @@ var song2Data = {
                 ],
                 [
                     "E3",
-                    2,
-                    true
-                ],
-                [
-                    "r",
-                    2
-                ],
-                [
-                    "G3",
                     2,
                     true
                 ],
@@ -570,5 +570,5 @@ var song2Data = {
             ]
         }
     ],
-    "notes": "A: Bm - A7 - F - D\nB1: G-mol - Dm - Bb-dur - A7\nB2: G-dur - Em - C-dur - F#7"
+    "notes": "A: Bm - A7 - F - D\nB1: G-mol - Dm - Bb-dur - A7\nB2: G-dur - D-dur - A-dur - F#7"
 };

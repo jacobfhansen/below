@@ -1,7 +1,7 @@
 var map4Data = {
   "id": 4,
   "name": "The Beach",
-  "music": "song0",
+  "music": "song2",
   "defaultDescription": "A vast underground lake stretches before you. The water is still and black, but there is a sandy shore here - the Beach.",
   "tiles": {
     "x0y0": {
@@ -1412,7 +1412,7 @@ var map4Data = {
         {
           "id": "charon_exit",
           "available": false,
-          "text": "He gestures vaguely at the cave wall behind him.\n'Leave? The word itself has lost its meaning here.\nThere is no exit that I have found in my crossings.\nOnly deeper shores, darker waters.\nIf you seek a way from this underground world,\nYou must go down before you can go up.\nSpeak to the Mole - he knows the cracks in the stone.\nSpeak to Medusa - she has walked where few dare follow.\nSpeak to the Hermit - he has keys you have not imagined.\nAs for me, I will be here when you return.\nI am always here.\nAlways.'\nHe turns back to the water and does not speak again.",
+          "text": "He gestures vaguely at the cave wall behind him.\n'Leave? The word itself has lost its meaning here.\nThere is no exit that I have found in my crossings.\nOnly deeper shores, darker waters.\nIf you seek a way from this underground world,\nYou must go down before you can go up.\nAs for me, I will be here when you return.\nI am always here.\nAlways.'\nHe turns back to the water and does not speak again.",
           "options": [
             {
               "id": "charon_exit_self",

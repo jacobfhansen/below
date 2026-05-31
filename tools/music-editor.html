@@ -709,18 +709,6 @@ document.getElementById("volumeSlider").addEventListener("input", function() {
     if (v) { v.volume = parseFloat(this.value); document.getElementById("volDisplay").textContent = v.volume.toFixed(2); }
 });
 
-// ---------- button bindings ----------
-document.getElementById("playBtn").addEventListener("click", previewPlay);
-document.getElementById("stopBtn").addEventListener("click", previewStop);
-document.getElementById("addNoteBtn").addEventListener("click", addNote);
-document.getElementById("addVoiceBtn").addEventListener("click", addVoice);
-document.getElementById("addSongBtn").addEventListener("click", addSong);
-
-document.getElementById("songNotes").addEventListener("input", function() {
-    var song = editorSongs[currentSongIdx];
-    if (song) song.notes = this.value;
-});
-
 // ---------- export ----------
 function cleanSongSeq(song) {
     var out = JSON.parse(JSON.stringify(song));
@@ -1049,6 +1037,18 @@ renderNoteGrid = function() {
     _origRenderNoteGrid();
     setTimeout(drawGantt, 10);
 };
+
+// ---------- button bindings ----------
+document.getElementById("playBtn").addEventListener("click", previewPlay);
+document.getElementById("stopBtn").addEventListener("click", previewStop);
+document.getElementById("addNoteBtn").addEventListener("click", addNote);
+document.getElementById("addVoiceBtn").addEventListener("click", addVoice);
+document.getElementById("addSongBtn").addEventListener("click", addSong);
+
+document.getElementById("songNotes").addEventListener("input", function() {
+    var song = editorSongs[currentSongIdx];
+    if (song) song.notes = this.value;
+});
 
 // ---------- init ----------
 init();

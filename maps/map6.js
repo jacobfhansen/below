@@ -1,7 +1,7 @@
 var map6Data = {
   "id": 6,
   "name": "The Deeper Dark",
-  "music": "song0",
+  "music": "song2",
   "defaultDescription": "The air grows colder. The walls close in. Something ancient stirs far below.",
   "areaDescriptions": [],
   "tiles": {

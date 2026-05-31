@@ -1,7 +1,7 @@
 var map8Data = {
   "id": 8,
   "name": "The Devil's Lair",
-  "music": "song0",
+  "music": "song2",
   "defaultDescription": "A dark chamber. The air is thick and still.",
   "noVisionLimit": true,
   "areaDescriptions": [],

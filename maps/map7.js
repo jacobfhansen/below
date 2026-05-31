@@ -1,7 +1,7 @@
 var map7Data = {
   "id": 7,
   "name": "The River of Fire",
-  "music": "song0",
+  "music": "song2",
   "defaultDescription": "A river of lava stretches before you. Stone rafts drift across the burning surface.",
   "noVisionLimit": true,
   "areaDescriptions": [],
