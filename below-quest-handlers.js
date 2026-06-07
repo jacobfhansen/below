@@ -154,7 +154,7 @@ var questHandlers = {
             }
             showSplash({
                 image: "rats_dialog.png",
-                text: "The old stone door grinds open. Beyond it, a dark chamber stirs with movement - rats scatter in the shadows, their eyes glinting like tiny jewels.",
+                text: "The old oak door grinds open. Beyond it, a dark chamber stirs with movement - rats scatter in the shadows, their eyes glinting like tiny jewels.",
                 shake: false
             });
             var hermitNpcArr = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });

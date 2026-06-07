@@ -260,6 +260,26 @@ function hideSplash() {
         });
         maintainMapLog();
     }
+    // Handle post-centipede-clear actions (move Hermit, toggle dialogs)
+    if (below.pendingCentipedeClear) {
+        below.pendingCentipedeClear = false;
+        var curMap = below.gameData.player.currentMap;
+        var hermitNpc = below.gameData.mapData[curMap].npcs.find(function(n) { return n.type === "hermit"; });
+        if (hermitNpc) {
+            hermitNpc.position.x = 2;
+            hermitNpc.position.y = -7;
+            var doneD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_done"; });
+            if (doneD) doneD.available = true;
+            var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
+            if (introD) introD.available = false;
+            var askD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_ask_wayout"; });
+            if (askD) askD.available = false;
+            var insistD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_insist_help"; });
+            if (insistD) insistD.available = false;
+        }
+        maintainMapLog();
+        drawMapCanvas();
+    }
     // Handle shadow catch teleport
     if (below._shadowCatchHandled) {
         below._shadowCatchHandled = false;

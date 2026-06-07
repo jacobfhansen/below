@@ -1831,7 +1831,7 @@ var map0Data = {
       "type": "table",
       "position": {
         "x": -6,
-        "y": 2
+        "y": 1
       },
       "itemType": "bat_swatter"
     },
@@ -2899,7 +2899,7 @@ var map0Data = {
         {
           "id": "jesterq8",
           "available": false,
-          "text": "Anyway, I'm bored of being helpful now. It's making me itch. If you want my advice - not that you asked - find a key, give it to the hermit, and take his herbs. They'll show you the way out of here. Or they'll give you a stomach ache. One of the two! Now GO, I need to practice my juggling.",
+          "text": "Anyway, I'm bored of being helpful now. It's making me itch. If you want my advice - not that you asked - take his herbs. They'll show you the way out of here. Or they'll give you a stomach ache. One of the two! Now GO, I need to practice my juggling.",
           "options": [
             {
               "id": "jestera8p",

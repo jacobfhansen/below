@@ -5,16 +5,6 @@ var map6Data = {
   "defaultDescription": "The air grows colder. The walls close in. Something ancient stirs far below.",
   "areaDescriptions": [],
   "tiles": {
-    "x0y0": {
-      "x": 0,
-      "y": 0,
-      "type": 4
-    },
-    "x1y0": {
-      "x": 1,
-      "y": 0,
-      "type": 4
-    },
     "x0y1": {
       "x": 0,
       "y": 1,
@@ -163,21 +153,6 @@ var map6Data = {
     "xm3y6": {
       "x": -3,
       "y": 6,
-      "type": 4
-    },
-    "x1ym1": {
-      "x": 1,
-      "y": -1,
-      "type": 4
-    },
-    "x1ym2": {
-      "x": 1,
-      "y": -2,
-      "type": 4
-    },
-    "x1ym3": {
-      "x": 1,
-      "y": -3,
       "type": 4
     },
     "x1ym4": {
@@ -1030,8 +1005,8 @@ var map6Data = {
     {
       "type": "floor_item",
       "position": {
-        "x": 16,
-        "y": -4
+        "x": 5,
+        "y": -11
       },
       "itemType": "medusa_hair"
     },

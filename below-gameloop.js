@@ -499,18 +499,12 @@ function handleAllCentipedesCleared() {
     var remaining = map0.monsters.filter(function(m) { return m.type === "centipede"; });
     if (remaining.length > 0) return;
     below.centipedesHandled = true;
-    addMapMessage("All centipedes have been cleared from the storage room!");
-    maintainMapLog();
-    var hermitNpc = map0.npcs.find(function(n) { return n.type === "hermit"; });
-    if (hermitNpc) {
-        hermitNpc.position.x = 2;
-        hermitNpc.position.y = -7;
-        var doneD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_done"; });
-        if (doneD) doneD.available = true;
-        var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
-        if (introD) introD.available = false;
-    }
-    drawMapCanvas();
+    showSplash({
+        image: "centipedes_dialog.png",
+        text: "You spray the last centipede with Crawl-End. It shrivels and dissolves into a pungent puddle. The sudden silence draws the Hermit from his corner. He peers at the empty shelves, blinks slowly, and shuffles toward you. 'Well now... seems you've been busy. Suppose I ought to thank you properly.'",
+        shake: true
+    });
+    below.pendingCentipedeClear = true;
 }
 
 function mapGameLoop() {
