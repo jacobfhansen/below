@@ -272,10 +272,15 @@ function hideSplash() {
             if (doneD) doneD.available = true;
             var introD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
             if (introD) introD.available = false;
-            var askD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_ask_wayout"; });
-            if (askD) askD.available = false;
-            var insistD = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_insist_help"; });
-            if (insistD) insistD.available = false;
+            // Disable quest-starting options inside hermitq0
+            var hermitq0 = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermitq0"; });
+            if (hermitq0 && hermitq0.options) {
+                hermitq0.options.forEach(function(opt) {
+                    if (opt.id === "hermit_ask_wayout" || opt.id === "hermit_insist_help") {
+                        opt.available = false;
+                    }
+                });
+            }
         }
         maintainMapLog();
         drawMapCanvas();
