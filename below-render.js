@@ -373,6 +373,26 @@ function drawMapCanvas() {
                 context.fillStyle = "#ffffff";
                 context.fillText("!", alertX, alertY);
             }
+            // Pop effect for centipede death
+            if (monster._popTimer && monster._popTimer > 0) {
+                var popProgress = 1 - (monster._popTimer / 60);
+                var cx = (monster.position.x * width) + verticalCenter - horizontalOffset;
+                var cy = (monster.position.y * width) + horizontalCenter - verticalOffset;
+                var popRadius = popProgress * (width * 0.7);
+                var popAlpha = 1 - popProgress;
+                context.globalAlpha = popAlpha * 0.8;
+                context.strokeStyle = "#ffcc00";
+                context.lineWidth = 3;
+                context.beginPath();
+                context.arc(cx, cy, popRadius, 0, Math.PI * 2);
+                context.stroke();
+                context.fillStyle = "#ffffff";
+                context.globalAlpha = popAlpha * 0.5;
+                context.beginPath();
+                context.arc(cx, cy, popRadius * 0.3, 0, Math.PI * 2);
+                context.fill();
+                context.globalAlpha = 1.0;
+            }
         }
     });
     // NPCs

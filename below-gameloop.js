@@ -343,10 +343,10 @@ function moveOnMap(e) {
                 }
             }
             if (centipede) {
-                below.gameData.mapData[curMap].monsters.splice(centIdx, 1);
+                centipede._fadingTimer = 180;
+                centipede._popTimer = 60;
                 addMapMessage("You squirt the centipede with Crawl-End. It shrivels and dissolves.");
                 maintainMapLog();
-                handleAllCentipedesCleared();
             } else {
                 addMapMessage("You squirt the Crawl-End on the floor. Nothing happens. There are no centipedes here.");
                 maintainMapLog();
@@ -496,7 +496,7 @@ function moveOnMap(e) {
 function handleAllCentipedesCleared() {
     if (below.centipedesHandled) return;
     var map0 = below.gameData.mapData[0];
-    var remaining = map0.monsters.filter(function(m) { return m.type === "centipede"; });
+    var remaining = map0.monsters.filter(function(m) { return m.type === "centipede" && !m.removeMe; });
     if (remaining.length > 0) return;
     below.centipedesHandled = true;
     showSplash({
@@ -809,6 +809,17 @@ function mapGameLoop() {
             var type = below.gameData.monsterTypes[monster.type];
             if (!type || !type.movement) return;
 
+            // Centipede fading after Crawl-End
+            if (monster.type === "centipede" && monster._fadingTimer && monster._fadingTimer > 0) {
+                monster._fadingTimer--;
+                if (monster._popTimer && monster._popTimer > 0) monster._popTimer--;
+                if (monster._fadingTimer <= 0) {
+                    monster.removeMe = true;
+                    handleAllCentipedesCleared();
+                }
+                return;
+            }
+
             // Flashlight destroys Living Shadows
             if (monster.type === "living_shadow") {
                 if (monster._fadingTimer > 0) {
@@ -988,18 +999,18 @@ function mapGameLoop() {
             }
         });
 
-        // Remove bats that reached the light
-        var removedCount = 0;
+        // Remove monsters with removeMe flag (bats reaching light, fading centipedes, fading shadows)
+        var removedBat = false;
         if (below.gameData.mapData[curMap].monsters) {
             below.gameData.mapData[curMap].monsters = below.gameData.mapData[curMap].monsters.filter(function(m) {
                 if (m.removeMe) {
-                    removedCount++;
+                    if (m.type === "bat") removedBat = true;
                     return false;
                 }
                 return true;
             });
         }
-        if (removedCount > 0) {
+        if (removedBat) {
             var remaining = (below.gameData.mapData[curMap].monsters || []).filter(function(m) { return m.type === "bat"; });
             if (remaining.length === 0) {
                 showSplash({
