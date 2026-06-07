@@ -412,6 +412,7 @@ below.fastForward = function(id) {
     below.ratsCleared = false;
     below.centipedesHandled = false;
     below.pendingCentipedeClear = false;
+    below.pendingBatClear = false;
     below.pendingRatClear = false;
     below.tagActive = false;
     below.sistersReturnContext = null;

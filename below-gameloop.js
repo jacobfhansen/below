@@ -1002,17 +1002,12 @@ function mapGameLoop() {
         if (removedCount > 0) {
             var remaining = (below.gameData.mapData[curMap].monsters || []).filter(function(m) { return m.type === "bat"; });
             if (remaining.length === 0) {
-                addMapMessage("The last bat vanishes into the light. The passage is clear.");
-                maintainMapLog();
-                // Move Hermit to centipede quest position
-                var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
-                if (hermitNpc) {
-                    hermitNpc.position.x = -4;
-                    hermitNpc.position.y = -3;
-                    hermitNpc.dialogOptions.forEach(function(d) { d.available = false; });
-                    var centIntro = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
-                    if (centIntro) centIntro.available = true;
-                }
+                showSplash({
+                    image: "bats_dialog.png",
+                    text: "The last bat streaks toward the distant light and vanishes into it like a whisper. The flapping fades. The marble room falls still. From the corridor behind you, the Hermit's voice echoes: 'Well now... the light's getting through proper. Never seen it this bright in here. Maybe there's hope for this old place yet. Thank you, friend.'",
+                    shake: false
+                });
+                below.pendingBatClear = true;
             }
         }
         // Safety check: centipedes all cleared (fires once)

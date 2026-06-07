@@ -280,6 +280,20 @@ function hideSplash() {
         maintainMapLog();
         drawMapCanvas();
     }
+    // Handle post-bat-clear actions (move Hermit, enable centipede quest)
+    if (below.pendingBatClear) {
+        below.pendingBatClear = false;
+        var hermitNpc = below.gameData.mapData[0].npcs.find(function(n) { return n.type === "hermit"; });
+        if (hermitNpc) {
+            hermitNpc.position.x = -4;
+            hermitNpc.position.y = -3;
+            hermitNpc.dialogOptions.forEach(function(d) { d.available = false; });
+            var centIntro = hermitNpc.dialogOptions.find(function(d) { return d.id === "hermit_centipede_intro"; });
+            if (centIntro) centIntro.available = true;
+        }
+        maintainMapLog();
+        drawMapCanvas();
+    }
     // Handle shadow catch teleport
     if (below._shadowCatchHandled) {
         below._shadowCatchHandled = false;
